@@ -63,7 +63,7 @@ PDF.
 > An independent judge re-derived all eight metrics from the packaged files alone and every
 > reported value reproduced. The problems are in conventions and prose, not in the data.
 
-**Challenge 2: a pilot exists, nothing is submittable.** RFantibody ran end to end on a rented
+**Challenge 2 — SUPERSEDED, see the 2026-09-22 status above. A design was subsequently packaged and validated.** *(kept as the record of where the project stood on 2026-09-21)*  RFantibody ran end to end on a rented
 RTX 3090 (2026-09-21, $2.82): 18 conditioned + 18 unconditioned backbones, 30 sequences, 30 RF2
 predictions, zero failures. **Hotspot conditioning works** — 71.2% vs 50.1% of interface on the
 PD-L1 footprint, d=1.47, p=0.0016 — though that test was **optional stopping** (interim look at
@@ -122,7 +122,7 @@ constrains every number above:
 a same-fold human checkpoint receptor — ipSAE **0.513** (n=8) against pembrolizumab's
 **0.331** and a real TIM-3 binder's **0.682** (p=0.038, bootstrap CI [+0.045, +0.320]).
 
-**Challenge 2: not attempted; Route A blocked locally, off-machine plan written.**
+**Challenge 2 — SUPERSEDED (2026-09-20 status). Not attempted at that date; subsequently run and packaged.**
 RFantibody is the right method (§3.2 asks for de novo) but pins CUDA 11.8 while this GPU is
 `sm_120`. Measured, not assumed: both cuBLAS and a plain ReLU fail with `no kernel image`,
 the wheels ship **no PTX**, DGL tops out at cu124, and DGL's exact `torch==2.4.0` pin closes

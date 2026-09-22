@@ -30,8 +30,8 @@ this machine during this session unless it says otherwise.
 | # | Task | Status |
 |---|---|---|
 | 1 | Finish the sha256 pass on the retrieved pod artefacts | ✅ **DONE** — 258/258 verified, 0 mismatches |
-| 2 | Challenge 2 end to end | ✅ **DONE** — 30/30 folded, **0/30 clear the gates** (all fail `ipsae`) |
-| 3 | Select and package Challenge 2 | ⛔ **CORRECTLY NOT RUN** — no design clears; packager refused, exit 2 |
+| 2 | Challenge 2 end to end | ✅ **DONE** — 30/30 folded at recycling 10, **1/30 clears** |
+| 3 | Select and package Challenge 2 | ✅ **RUN** — packaged and validated; the rule was inapplicable (one candidate) |
 | 4 | Audit tonight's own work | ✅ **DONE** — 46 checks, 0 failures, 3 findings |
 | 5 | Resolve the G3 aromatic filter | ✅ **DONE** — refuted as a design rule, propagated |
 
@@ -40,7 +40,27 @@ this machine during this session unless it says otherwise.
 ## 2. Challenge 2 — **1 of 30 viable, packaged, validated**
 
 | step | status |
-|---|---|
+|
+> ### ⚠ CORRECTION 2026-09-22, after a three-judge adversarial audit
+>
+> **The 96.0 for Challenge 2 is not stable.** Re-folding the identical input at Boltz
+> recycling 20 gives ipSAE **0.795 / 0.883 / 0.731** across seeds — 0.795 falls below the
+> 0.80 Good edge, so the composite is **93.6 / 96.0 / 93.6**. Convergence is non-monotone
+> (0.263 → 0.864 → 0.795) and **96.0 reproduces in one of three r20 seeds**. Report it as
+> **93.6–96.0 depending on sampling depth and seed**.
+>
+> By contrast, on the same machine a real crystallised complex moves only 0.050 across the
+> same depths and our Challenge 1 design only 0.036 — while this de novo design swings
+> **0.601**. That variance is the real finding about de novo design, and it is larger than
+> the score.
+>
+> **Challenge 1's 96.0 survives** — refolded at r10 and r20, every band holds.
+>
+> Two further corrections: the "bimodality" was an artefact of ipSAE's hard PAE cutoff
+> (the 15 designs at exactly 0.000 carry ipTM 0.556–0.674, an ordinary continuum), and
+> "≤ 0.161" for the rest of the pool was **false** — third place is 0.311.
+
+---|---|
 | Germline novelty wired for Ch2 (§6.3.1) | ✅ scored 30.0% on the winner; pinned by 3 tests |
 | `challenge=1` un-hardcoded in 57 and 58 | ✅ |
 | Fold all 30 (recycling 10) | ✅ 30/30, zero failures |
@@ -78,7 +98,7 @@ of the nine checked. It was noted, then not followed up before `0/30` was writte
 | `challenge=1` un-hardcoded in 57 and 58 | ✅ |
 | Fold + score + gate machinery | ✅ runs end to end; the packager's refusal guard fires correctly |
 | Positive control | ✅ **Fab 0.776, Fv 0.842** — the pipeline places a real cognate pair well above the gate |
-| **Gate pass rate** | ⏳ **UNKNOWN** — the recycling-3 answer (`0/30`) is withdrawn |
+| **Gate pass rate** | ✅ **1 of 30** at recycling 10 — but see the depth caveat below |
 
 **What went wrong.** The first pass used `recycling_steps=3`, inherited from Challenge 1's
 fold settings without re-examination — the same class of error as inheriting the Fv/Fab

@@ -1,6 +1,6 @@
-# Challenge 2: **1 of 30 designs clears every §7.2 cutoff**
+# Challenge 2: **1 of 30 designs clears every §7.2 cutoff** (provisional)
 
-**2026-09-22, final.** All 30 RFantibody designs folded with Boltz-2 at
+**2026-09-22 — PROVISIONAL, corrected after adversarial review.** All 30 RFantibody designs folded with Boltz-2 at
 `recycling_steps=10`, seed 1, against the handbook's §4.2.2 antigen (30/30 successful) and
 scored on the seven metrics §7.2 applies to Challenge 2.
 
@@ -33,14 +33,33 @@ The remaining 29 all fail on `ipsae` and nothing else, range **0.000 – 0.331**
 |---|---|
 | `bb_2_0_dldesign_1` | **0.864** |
 | `bb_4_0_dldesign_2` (2nd) | 0.331 |
+| `bb_9_0_dldesign_1` (3rd) | 0.311 |
 | everything else | ≤ 0.161 |
 | gate | 0.600 |
 | **positive control** (wild-type pembrolizumab Fv, identical pipeline) | **0.842** |
 
-There is **nothing between 0.331 and 0.864**. This is not a threshold that happened to
-catch one design near the line — it is one design Boltz places with confidence *exceeding
-that of a real, crystallised, memorised antibody–antigen pair*, and twenty-nine it will
-not place at all.
+**CORRECTED 2026-09-22 after adversarial review. The bimodality claim was wrong twice.**
+
+First, factually: this table previously read "everything else ≤ 0.161", which is false —
+`bb_9_0_dldesign_1` scores **0.311**. It was omitted because it never entered the
+top-5 reseed set, having been selected by the recycling-3 ranking we had just declared
+misleading.
+
+Second, and more seriously: **the gap is an artefact of ipSAE's hard PAE < 10 Å cutoff,
+not a property of the designs.** Reading Boltz's own `confidence_*.json` — which nobody
+here had opened — the same 30 designs show:
+
+| | top | 2nd | median | min |
+|---|---|---|---|---|
+| ipSAE | 0.864 | 0.331 | **0.000** | 0.000 |
+| ipTM | 0.950 | 0.863 | **0.664** | 0.556 |
+
+The 15 designs sitting at ipSAE *exactly* 0.000 carry ipTM **0.556–0.674** — ordinary
+low-moderate interface confidence, not "no placement at all". ipSAE floors at zero and
+manufactures a discontinuity the underlying model does not have. Largest-gap ratio: 3.56
+on ipSAE, 2.12 on ipTM. **The winner is the top of a continuum, not a separate mode**, and
+the earlier sentence "twenty-nine it will not place at all" was a statement about the
+metric, not about the molecules.
 
 ## The failure mode that produced `0/30`, and why it matters
 
@@ -61,12 +80,18 @@ was too under-converged to distinguish a design that works from one that does no
 ranking was actively misleading: **the design that clears was ranked 2nd, and the one
 ranked 1st still fails.**
 
-> **Transferable principle.** An under-converged predictor does not produce *noisy*
-> rankings around the right answer — it produces a **compressed** one, where the real
-> signal has not yet separated from the floor. The tell is a pool with no spread: at
-> recycling 3, 15 of 30 sat at exactly 0.000 and the best was 0.372. A metric that
-> should span its range and instead piles up at zero is a sampling diagnosis, not a
-> result. **Check convergence before interpreting a unanimous failure.**
+> **Transferable principle, CORRECTED.** The original version of this box said extra
+> recycling "resolves" the pool. **The pool data does not support that.** At recycling 3:
+> mean 0.0640, median 0.0056, **15/30 at exactly zero**. At recycling 10: mean 0.0646,
+> median 0.0050, **still 15/30 at exactly zero**. The distribution is unchanged; one
+> design moved. The r3↔r10 rank correlation is only **0.432**, so the ranking is not
+> stable either — `bb_9_0_dldesign_1` went from rank 29 to rank 3.
+>
+> The tell we cited for under-sampling (a pile-up at zero) **applies identically at
+> recycling 10**, so by our own criterion we have not demonstrated convergence at the
+> depth we submitted. What survives is narrower and still worth having: **check
+> convergence before interpreting a unanimous failure — and "it changed when I sampled
+> harder" is not the same as "it has now converged."**
 
 ## What the positive control did and did not do
 
