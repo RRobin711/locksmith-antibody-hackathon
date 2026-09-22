@@ -33,7 +33,11 @@ from locksmith.submit import Design, build_challenge, build_zip
 TEAM = "LOCKSMITH_DEV"
 CHALLENGE = 2
 ROOT = Path("submission")
-FOLD = Path("runs/challenge2_fold")
+# THE RECYCLING-10 RUN, not the original. The first pass folded at recycling_steps=3
+# and returned 0/30; re-folding the whole pool at recycling 10 returns 1/30. Pointing
+# this at the old directory would package a structure whose ipSAE is 0.263 while the
+# metrics table said 0.864 -- the artefact and the number coming from different files.
+FOLD = Path("runs/challenge2_fold_r10")
 SCORES = FOLD / "scores.jsonl"
 POD = Path("runs/challenge2_pod/c2")
 
