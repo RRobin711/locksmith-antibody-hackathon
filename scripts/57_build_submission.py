@@ -29,6 +29,14 @@ from locksmith.types import Provenance, Structure
 # and the folder names are derived, so a rename is one edit plus a rebuild.
 TEAM = "LOCKSMITH_DEV"
 ROOT = Path("submission")
+
+# The challenge this driver packages. `build_challenge()` and `build_zip()` in
+# `submit/package.py` are already generic in the challenge number -- only this driver's
+# INPUTS are Challenge 1 specific (the handbook constructs, the 5GGS native, the named
+# winner), so the number lives here as a constant rather than as a literal buried at two
+# call sites. Challenge 2 is packaged by `scripts/75_challenge2_package.py`, which
+# reuses the same `build_challenge()`.
+CHALLENGE = 1
 WINNER = "mpnn_T0.5_s104_036"
 NATIVE = Structure(pdb=Path("data/refs/prepared/5ggs_ABZ.pdb"),
                    provenance=Provenance.EXPERIMENT, label="5GGS")
@@ -104,8 +112,8 @@ def main() -> int:
                                  interface_agg=c["dockq_interface_agg"])["dockq"].value
     raw["netsolp"] = netsolp.compute(hbc["heavy"], hbc["light"],
                                      construct=c.get("netsolp_construct", "fv"))["netsolp"].value
-    raw["cdrh3_identity"] = novelty.compute(hbc["heavy"]).value
-    sc = evaluate(raw, challenge=1, cfg=cfg)
+    raw["cdrh3_identity"] = novelty.compute(hbc["heavy"], challenge=CHALLENGE).value
+    sc = evaluate(raw, challenge=CHALLENGE, cfg=cfg)
 
     metrics_md = ["# Our own recomputation of the eight scored metrics", "",
                   "**To reproduce the DockQ number below you MUST pass two flags.** At its",
@@ -342,7 +350,7 @@ problem or failed cutoff.
     d = Design(name="design_1", heavy=hbc["heavy"], light=hbc["light"],
                antigen=hbc["antigen"], pdb=pdb, pae_npz=pae, plddt_npz=plddt_npz,
                confidence_json=conf if conf.exists() else None)
-    base = build_challenge(ROOT, TEAM, 1, d, metrics_md="\n".join(metrics_md),
+    base = build_challenge(ROOT, TEAM, CHALLENGE, d, metrics_md="\n".join(metrics_md),
                            docs_md=docs_md,
                            extra_docs={"reproducing_our_numbers.md": repro_md})
     print(f"built {base}")

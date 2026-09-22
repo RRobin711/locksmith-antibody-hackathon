@@ -66,8 +66,14 @@ def validate_design(struct_dir: Path, seq_dir: Path, name: str, ref: Path,
     raw["cdr_sasa"] = sasa.compute(st)[f"cdr_sasa_{c['cdr_sasa_state']}"].value
     raw["netsolp"] = netsolp.compute(seqs["heavy"], seqs["light"],
                                      construct=c.get("netsolp_construct", "fv"))["netsolp"].value
-    raw["cdrh3_identity"] = novelty.compute(seqs["heavy"]).value
-    if challenge == 1:
+    # S6.3.1: Keytruda for Ch1, human germline for Ch2. Passing the challenge through
+    # is the whole point -- validating a Ch2 package against Keytruda's CDR-H3 would
+    # produce a plausible number for the wrong question.
+    raw["cdrh3_identity"] = novelty.compute(seqs["heavy"], challenge=challenge).value
+    # Which metrics a challenge scores is a property of the RUBRIC, so read it from
+    # config rather than hardcoding `challenge == 1`. S5.2 excludes DockQ from
+    # Challenge 2 (there is no reference structure for a de novo design).
+    if challenge in cfg.bands()["dockq"].challenges:
         native = Structure(pdb=ref, provenance=Provenance.EXPERIMENT, label="reference")
         raw["dockq"] = dockq.compute(st, native,
                                      allowed_mismatches=c["dockq_allowed_mismatches"],
