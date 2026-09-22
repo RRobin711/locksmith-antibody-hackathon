@@ -296,3 +296,33 @@ def test_challenge2_scores_seven_metrics_not_eight():
     ch1 = {n for n, b in CFG.bands().items() if 1 in b.challenges}
     assert len(ch2) == 7 and len(ch1) == 8
     assert ch1 - ch2 == {"dockq"}
+
+
+# --------------------------------------------------------------------------------
+# 8. Viability must never be silently optimistic.
+# --------------------------------------------------------------------------------
+# §7.2: a design failing ANY minimum is non-viable and ranks below every viable one.
+# `scripts/75_challenge2_package.py` refuses to build a folder unless a design is
+# viable, so `viable` is what stands between us and packaging a non-viable design in
+# the handbook's tree -- which would look like a submission and score below nothing.
+
+def test_a_single_failed_cutoff_makes_a_design_non_viable():
+    for name, b in CFG.bands().items():
+        if 1 not in b.challenges:
+            continue
+        raw = _on_anchor(1, "good")
+        # push exactly this one metric just past its cutoff, in the failing direction
+        raw[name] = b.cutoff + (-1.0 if b.direction == "high" else 1.0)
+        sc = evaluate(raw, challenge=1, cfg=CFG)
+        assert sc.viable is False, f"{name} below its cutoff must make the design non-viable"
+        assert name in sc.failing
+
+
+def test_an_unmeasurable_metric_leaves_viability_UNKNOWN_not_true():
+    """`None`, never `True`. A metric we could not compute is not a metric that passed."""
+    raw = _on_anchor(1, "good")
+    del raw["ipsae"]
+    sc = evaluate(raw, challenge=1, cfg=CFG)
+    assert sc.viable is None, "a missing metric must not yield viable=True"
+    assert sc.final is None, "and must not yield a final score"
+    assert "ipsae" in sc.unknown
