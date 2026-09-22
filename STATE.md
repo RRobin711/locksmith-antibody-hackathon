@@ -5,11 +5,22 @@ It records what is **verified**, what is **taken on trust**, what is **blocked**
 shortest path to a complete submission. Every number below was recomputed from files on
 this machine during this session unless it says otherwise.
 
-> ## ⚠ HEADLINE: Challenge 2 — status filled in at the end of this run
+> ## ⚠ HEADLINE: **ZERO of 30 Challenge 2 designs clear the §7.2 cutoffs.**
 >
-> *(This section is rewritten when scoring completes. If you are reading this line, the
-> run did not finish; see §2 for what was measured and `runs/challenge2_fold/scores.jsonl`
-> for whatever landed.)*
+> All 30 folded successfully. **All 30 fail on `ipsae` and nothing else** — best 0.372
+> against a ≥ 0.60 minimum (1.6× short), median 0.006, and 15 of 30 are exactly zero. The
+> other six metrics pass on every design, most by large margins.
+>
+> **Step 3 was therefore not run, and that is the correct outcome, not a failure.**
+> Nothing was selected and nothing was packaged; `scripts/75_challenge2_package.py`
+> refuses and exits 2. There is no `LOCKSMITH_DEV_Challenge2/` folder, deliberately —
+> §7.2 ranks a non-viable design below every viable one, so a folder would be worse than
+> no folder.
+>
+> **Do not quote the `final` scores (81.6–87.6).** A design that fails a hard cutoff does
+> not have a score; it has a disqualification.
+>
+> Full write-up: [[results/challenge2_gates|Challenge 2 gates]].
 
 ---
 
@@ -18,16 +29,63 @@ this machine during this session unless it says otherwise.
 | # | Task | Status |
 |---|---|---|
 | 1 | Finish the sha256 pass on the retrieved pod artefacts | ✅ **DONE** — 258/258 verified, 0 mismatches |
-| 2 | Challenge 2 end to end (wire germline novelty, un-hardcode challenge, fold 30, score 7 metrics, report gate pass rate) | see §2 |
-| 3 | Select and package Challenge 2 — **only if ≥1 design clears** | see §2 |
+| 2 | Challenge 2 end to end | ✅ **DONE** — 30/30 folded, **0/30 clear the gates** (all fail `ipsae`) |
+| 3 | Select and package Challenge 2 | ⛔ **CORRECTLY NOT RUN** — no design clears; packager refused, exit 2 |
 | 4 | Audit tonight's own work | ✅ **DONE** — 46 checks, 0 failures, 3 findings |
 | 5 | Resolve the G3 aromatic filter | ✅ **DONE** — refuted as a design rule, propagated |
 
 ---
 
-## 2. Challenge 2
+## 2. Challenge 2 — measured end to end, **0/30 viable**
 
-*(filled in at the end of the run)*
+**Done and verified:**
+
+| step | result |
+|---|---|
+| Germline novelty wired for Ch2 (§6.3.1) | ✅ `novelty.compute(..., challenge=2)` routes to `metrics/germline.py`; pinned by 3 tests |
+| `challenge=1` un-hardcoded in 57 and 58 | ✅ 57 uses a `CHALLENGE` constant; 58 passes `challenge=` to novelty and reads DockQ applicability from config instead of `if challenge == 1` |
+| Fold the 30 designs | ✅ **30/30, zero failures**, Boltz-2, seed 1, handbook §4.2.2 antigen |
+| PAE → submission format | ✅ `submit/pae.py` path exercised by the packager (which then refused) |
+| Seven Ch2 metrics + §7.2 gates | ✅ **0 of 30 clear** |
+
+**Which metric failed, by how much, on how many designs:**
+
+| metric | cutoff | min | median | max | failed on |
+|---|---|---|---|---|---|
+| `cdr_sasa` | ≥ 250 Å² | 929.1 | 1344.6 | 2209.5 | 0/30 |
+| `cdrh3_identity` (germline) | < 95 % | 16.7 | 32.1 | 44.4 | 0/30 |
+| `contacts` | ≥ 10 | 44 | 77.5 | 114 | 0/30 |
+| `dg` | ≤ −6 | −14.0 | −10.95 | −8.0 | 0/30 |
+| `iface_plddt` | ≥ 65 | 65.91 | 73.74 | 94.29 | 0/30 |
+| `netsolp` | ≥ 0.50 | 0.552 | 0.586 | 0.629 | 0/30 |
+| **`ipsae`** | **≥ 0.60** | **0.000** | **0.006** | **0.372** | **30/30** |
+
+**The shortfall is not marginal.** Best design 0.372 vs 0.60 needed — **0.228 short,
+1.6×**. Median 0.006. Exactly zero on 15 of 30. Only one design reaches 0.3.
+
+**Why, mechanically.** `ipsae` is the only metric computed from the **PAE** — the model's
+uncertainty about where the chains sit relative to each other. The other six read
+coordinates or sequence. On `bb_10_0_dldesign_0`: 61 heavy-atom contacts, ΔG −9.6,
+interface pLDDT 75.7, **ipSAE 0.000**, because not one cross-chain residue pair has PAE
+below 10 Å (minimum 18.40 Å). Verified this is genuine and not the known empty-table
+failure: ipsae wrote a full 14-line table and scored the heavy–light interface at 0.876.
+
+**This confirms a prediction rather than discovering a surprise.**
+`results/challenge2_scope.md` declined Challenge 2 in part because Boltz-2's median Fab
+DockQ on post-cutoff complexes is **0.291**, and these designs are more novel than that
+test set.
+
+**Does NOT establish that the designs fail to bind** — ipSAE is a statement about the
+predictor's uncertainty, and `results/skempi_validity.md` shows this stack does not track
+affinity in either direction. **Does NOT establish that conditioning failed** — it
+demonstrably worked (17/18 backbones beat a contiguous-patch null).
+
+### Step 3 — not run, deliberately
+
+No selection was made, no folder built, no zip changed. The packager refused with exit 2
+and printed its reason. The pre-registered selection rule (hotspot contacts, tie-broken on
+`frac_iface_on_epitope`) is implemented in `scripts/75_challenge2_package.py` and ready
+should a future run produce a viable design; it was **not** applied to a non-viable pool.
 
 ---
 
@@ -175,3 +233,29 @@ submitted design for `mpnn_T0.2_s102_032`. The winner-change finding is document
 | **Shape-matching the patch null** to the real epitope's spread | nothing — it is cheap, and §4 finding 3 says why it matters. |
 | **The reliability figure 0.629** in the record | the original script. Does not reproduce (plug-in gives 0.276 `midpoint` / 0.296 `top`). Flagged, not corrected. |
 | **Promoting the last LEARNINGS entry over cap** | `assert_artefacts()` fixtures. 41 bullets against a 40 cap. |
+
+---
+
+## 9. Shortest path to a complete submission from here
+
+**Challenge 1 is complete and viable** (96.0, validates from its own files). Nothing on
+this list is required for it.
+
+**Challenge 2 needs a design its own predictor will place.** In rough order of
+cost-effectiveness:
+
+1. **Re-fold the existing 30 with more seeds and more recycling.** Cheapest possible test
+   of whether ipSAE ~0 is stable or sampling noise. We ran **one seed, 3 recycling steps**.
+   If the best design moves 0.372 → 0.6 on a better sample, everything downstream unblocks.
+   ~1 GPU-hour. **Do this first — it is the only step that could change the verdict without
+   new designs.**
+2. **Give the antibody chains an MSA.** Ours were folded with an antigen MSA only, which is
+   this project's standing convention for *redesigns of a known antibody*. A de novo VH/VL
+   is a different case and the convention was inherited without re-examination.
+3. **Generate more backbones.** 10 backbones × 3 sequences is a thin pool; the pilot was
+   sized as a tooling demonstration, not a campaign.
+4. **Run the decoy-patch control** before any Challenge 2 claim goes in the deck.
+
+**If none of that lifts ipSAE, the honest submission is no Challenge 2 folder plus the
+measurement** — which is what exists now, and is a stronger artefact than a packaged
+design that fails a hard cutoff.
