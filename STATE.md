@@ -5,28 +5,23 @@ It records what is **verified**, what is **taken on trust**, what is **blocked**
 shortest path to a complete submission. Every number below was recomputed from files on
 this machine during this session unless it says otherwise.
 
-> ## ⛔ HEADLINE: the earlier `0/30` result is **WITHDRAWN** — it was an under-sampling artefact
+> ## ✅ HEADLINE: **Both challenges are packaged, viable and validated.**
 >
-> The 30 designs were first folded at `recycling_steps=3`, seed 1, and returned **0 of 30
-> viable**, all failing ipSAE. Re-folding the top 5 at **recycling 10** moved
-> `bb_2_0_dldesign_1` from **0.263 → 0.864 / 0.842 / 0.856** across seeds 1/2/3 — above the
-> §7.2 gate of 0.60, and above the positive control (wild-type pembrolizumab Fv, 0.842).
-> Consistent across three seeds, so the driver is **recycling depth, not seed luck**.
+> | | design | score | viable |
+> |---|---|---|---|
+> | **Challenge 1** | `mpnn_T0.5_s104_036` | **96.0** | ✅ |
+> | **Challenge 2** | `bb_2_0_dldesign_1` | **96.0** | ✅ |
 >
-> **At least one design clears.** The full pool is being re-folded at recycling 10 and the
-> real gate result will replace this section. Until it lands, Challenge 2's pass rate is
-> **unknown**, and the previous write-ups
-> ([[results/challenge2_gates|gates]], [[results/challenge2_ipsae_zero|the ipSAE zero]])
-> carry withdrawal banners.
+> `submission/LOCKSMITH_DEV.zip` (0.9 MB) contains both. `VALIDATION PASSED` from the
+> packaged files alone, re-deriving every metric with no run directory and no cached score.
 >
-> **The positive control passed and was irrelevant to the real failure mode.** It ruled out
-> the Fv construct (arm A Fab 0.776, arm B Fv 0.842, both through the identical call) —
-> a well-grounded hypothesis drawn from this project's own failed G1c gate. The
-> configuration was never the problem; the *sampling* was. **A control that eliminates the
-> confound you thought of tells you nothing about the one you did not.**
+> **Challenge 2 is 1 of 30**, and the earlier `0/30` from the same night is **withdrawn**:
+> it was an artefact of folding at `recycling_steps=3`. Re-folded at recycling 10, the
+> winner scores ipSAE **0.864** — higher than the positive control's 0.842 on a real
+> crystallised pair — while all 29 others sit at **≤0.331**. Nothing in between.
 >
-> Step 3 remains not run — nothing has been selected or packaged — but now because the
-> measurement is in flight, not because nothing clears.
+> **Neither 96.0 is evidence of binding.** Both are self-consistency scores. This project's
+> own SKEMPI work shows the stack does not track measured affinity in either direction.
 
 ---
 
@@ -42,12 +37,43 @@ this machine during this session unless it says otherwise.
 
 ---
 
-## 2. Challenge 2 — **result withdrawn, re-measurement in flight**
-
-**What is settled:**
+## 2. Challenge 2 — **1 of 30 viable, packaged, validated**
 
 | step | status |
 |---|---|
+| Germline novelty wired for Ch2 (§6.3.1) | ✅ scored 30.0% on the winner; pinned by 3 tests |
+| `challenge=1` un-hardcoded in 57 and 58 | ✅ |
+| Fold all 30 (recycling 10) | ✅ 30/30, zero failures |
+| PAE → submission format | ✅ |
+| Seven metrics + §7.2 gates | ✅ **1 of 30 clears** |
+| Positive control | ✅ Fab 0.776 / **Fv 0.842** |
+| **Step 3 — select and package** | ✅ **RUN** — pre-registered rule, §4.3 tree, validated |
+
+**The winner, re-derived by the validator from the package alone:**
+
+`ipsae` **0.864** · `dg` −12.400 · `contacts` 98 · `iface_plddt` 83.580 ·
+`cdr_sasa` 1066.900 · `cdrh3_identity` 30.000 (germline) · `netsolp` 0.562 (medium)
+→ binding 10.0, developability 8.0, novelty 10.0 → **final 96.0, viable**.
+
+**The 29 others** all fail on `ipsae` alone, range 0.000–0.331.
+
+### The withdrawn `0/30`, and what it cost
+
+`recycling_steps=3` was inherited from Challenge 1 and never re-examined. At that setting
+15 of 30 designs scored exactly 0.000 and the best was 0.372 — a pool piled up at the
+floor, which is a convergence diagnosis, not a result. The ranking was actively
+misleading: **the design that clears ranked 2nd; the one ranked 1st still fails.**
+
+The positive control I built to test this **passed and was blind to it**, because it ran
+at recycling 3 too. It correctly exonerated the Fv construct and printed a verdict about
+Challenge 2 that was wrong within the hour. *A control eliminates the confound you thought
+of and is silent on the one you did not.*
+
+A signal was also available and dropped: my own PAE diagnostic flagged
+`bb_2_0_dldesign_1` at **81.4%** of cross-chain pairs under PAE 10 Å, by far the highest
+of the nine checked. It was noted, then not followed up before `0/30` was written up.
+
+---|---|
 | Germline novelty wired for Ch2 (§6.3.1) | ✅ pinned by 3 tests |
 | `challenge=1` un-hardcoded in 57 and 58 | ✅ |
 | Fold + score + gate machinery | ✅ runs end to end; the packager's refusal guard fires correctly |
