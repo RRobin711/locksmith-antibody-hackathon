@@ -1,0 +1,452 @@
+[
+ {
+  "mut": "YY20F",
+  "ddg": -2.024810024961225,
+  "idx": 19,
+  "chain": "Y",
+  "wt": "Y",
+  "to": "F",
+  "n_meas": 2,
+  "censored": false
+ },
+ {
+  "mut": "HY15A",
+  "ddg": -1.863103621757084,
+  "idx": 14,
+  "chain": "Y",
+  "wt": "H",
+  "to": "A",
+  "n_meas": 1,
+  "censored": false
+ },
+ {
+  "mut": "RY73A",
+  "ddg": -1.3864884069467411,
+  "idx": 72,
+  "chain": "Y",
+  "wt": "R",
+  "to": "A",
+  "n_meas": 1,
+  "censored": false
+ },
+ {
+  "mut": "NY19Q",
+  "ddg": -0.17775068984892914,
+  "idx": 18,
+  "chain": "Y",
+  "wt": "N",
+  "to": "Q",
+  "n_meas": 1,
+  "censored": false
+ },
+ {
+  "mut": "TY89A",
+  "ddg": 0.0,
+  "idx": 88,
+  "chain": "Y",
+  "wt": "T",
+  "to": "A",
+  "n_meas": 1,
+  "censored": false
+ },
+ {
+  "mut": "IY98A",
+  "ddg": 0.0,
+  "idx": 97,
+  "chain": "Y",
+  "wt": "I",
+  "to": "A",
+  "n_meas": 1,
+  "censored": false
+ },
+ {
+  "mut": "DH32N",
+  "ddg": 0.7127530476085036,
+  "idx": 31,
+  "chain": "H",
+  "wt": "D",
+  "to": "N",
+  "n_meas": 1,
+  "censored": false
+ },
+ {
+  "mut": "SH31A",
+  "ddg": 0.7127530476085036,
+  "idx": 30,
+  "chain": "H",
+  "wt": "S",
+  "to": "A",
+  "n_meas": 1,
+  "censored": false
+ },
+ {
+  "mut": "NY93A",
+  "ddg": 0.8836878542041731,
+  "idx": 92,
+  "chain": "Y",
+  "wt": "N",
+  "to": "A",
+  "n_meas": 1,
+  "censored": false
+ },
+ {
+  "mut": "NY19K",
+  "ddg": 1.004568998825761,
+  "idx": 18,
+  "chain": "Y",
+  "wt": "N",
+  "to": "K",
+  "n_meas": 1,
+  "censored": false
+ },
+ {
+  "mut": "SY100A",
+  "ddg": 1.1198256870023333,
+  "idx": 99,
+  "chain": "Y",
+  "wt": "S",
+  "to": "A",
+  "n_meas": 1,
+  "censored": false
+ },
+ {
+  "mut": "WY63A",
+  "ddg": 1.3354026383132844,
+  "idx": 62,
+  "chain": "Y",
+  "wt": "W",
+  "to": "A",
+  "n_meas": 1,
+  "censored": false
+ },
+ {
+  "mut": "DY101G",
+  "ddg": 1.5013355113867342,
+  "idx": 100,
+  "chain": "Y",
+  "wt": "D",
+  "to": "G",
+  "n_meas": 2,
+  "censored": false
+ },
+ {
+  "mut": "YH58F",
+  "ddg": 1.5192324620347037,
+  "idx": 57,
+  "chain": "H",
+  "wt": "Y",
+  "to": "F",
+  "n_meas": 1,
+  "censored": false
+ },
+ {
+  "mut": "GY102V",
+  "ddg": 1.6537806314530887,
+  "idx": 101,
+  "chain": "Y",
+  "wt": "G",
+  "to": "V",
+  "n_meas": 2,
+  "censored": false
+ },
+ {
+  "mut": "NY19D",
+  "ddg": 1.7173220464342647,
+  "idx": 18,
+  "chain": "Y",
+  "wt": "N",
+  "to": "D",
+  "n_meas": 1,
+  "censored": false
+ },
+ {
+  "mut": "YH53F",
+  "ddg": 2.59602463243387,
+  "idx": 52,
+  "chain": "H",
+  "wt": "Y",
+  "to": "F",
+  "n_meas": 1,
+  "censored": false
+ },
+ {
+  "mut": "LY75A",
+  "ddg": 2.9472801757327445,
+  "idx": 74,
+  "chain": "Y",
+  "wt": "L",
+  "to": "A",
+  "n_meas": 1,
+  "censored": false
+ },
+ {
+  "mut": "YH53W",
+  "ddg": 2.9545008656882805,
+  "idx": 52,
+  "chain": "H",
+  "wt": "Y",
+  "to": "W",
+  "n_meas": 1,
+  "censored": false
+ },
+ {
+  "mut": "YH53L",
+  "ddg": 3.3758377558223365,
+  "idx": 52,
+  "chain": "H",
+  "wt": "Y",
+  "to": "L",
+  "n_meas": 1,
+  "censored": false
+ },
+ {
+  "mut": "RY21A",
+  "ddg": 3.6055788994641986,
+  "idx": 20,
+  "chain": "Y",
+  "wt": "R",
+  "to": "A",
+  "n_meas": 3,
+  "censored": false
+ },
+ {
+  "mut": "KY97M",
+  "ddg": 3.961909541455819,
+  "idx": 96,
+  "chain": "Y",
+  "wt": "K",
+  "to": "M",
+  "n_meas": 2,
+  "censored": false
+ },
+ {
+  "mut": "QL53A",
+  "ddg": 3.9874983075851786,
+  "idx": 52,
+  "chain": "L",
+  "wt": "Q",
+  "to": "A",
+  "n_meas": 1,
+  "censored": false
+ },
+ {
+  "mut": "YH33F",
+  "ddg": 4.4817408146881395,
+  "idx": 32,
+  "chain": "H",
+  "wt": "Y",
+  "to": "F",
+  "n_meas": 1,
+  "censored": false
+ },
+ {
+  "mut": "DY101A",
+  "ddg": 5.054793998574192,
+  "idx": 100,
+  "chain": "Y",
+  "wt": "D",
+  "to": "A",
+  "n_meas": 3,
+  "censored": false
+ },
+ {
+  "mut": "NL31D",
+  "ddg": 5.620826818831222,
+  "idx": 30,
+  "chain": "L",
+  "wt": "N",
+  "to": "D",
+  "n_meas": 1,
+  "censored": false
+ },
+ {
+  "mut": "YL96F",
+  "ddg": 5.864719186911298,
+  "idx": 95,
+  "chain": "L",
+  "wt": "Y",
+  "to": "F",
+  "n_meas": 1,
+  "censored": false
+ },
+ {
+  "mut": "YH58L",
+  "ddg": 6.332856429174201,
+  "idx": 57,
+  "chain": "H",
+  "wt": "Y",
+  "to": "L",
+  "n_meas": 1,
+  "censored": true
+ },
+ {
+  "mut": "YH58A",
+  "ddg": 7.012177246545497,
+  "idx": 57,
+  "chain": "H",
+  "wt": "Y",
+  "to": "A",
+  "n_meas": 1,
+  "censored": true
+ },
+ {
+  "mut": "DY101S",
+  "ddg": 7.821134930055418,
+  "idx": 100,
+  "chain": "Y",
+  "wt": "D",
+  "to": "S",
+  "n_meas": 2,
+  "censored": true
+ },
+ {
+  "mut": "YH33L",
+  "ddg": 8.396563448769076,
+  "idx": 32,
+  "chain": "H",
+  "wt": "Y",
+  "to": "L",
+  "n_meas": 1,
+  "censored": true
+ },
+ {
+  "mut": "DY101K",
+  "ddg": 8.888580223846375,
+  "idx": 100,
+  "chain": "Y",
+  "wt": "D",
+  "to": "K",
+  "n_meas": 2,
+  "censored": true
+ },
+ {
+  "mut": "RY21W",
+  "ddg": 8.923477911840443,
+  "idx": 20,
+  "chain": "Y",
+  "wt": "R",
+  "to": "W",
+  "n_meas": 2,
+  "censored": true
+ },
+ {
+  "mut": "YY20L",
+  "ddg": 9.139464446887972,
+  "idx": 19,
+  "chain": "Y",
+  "wt": "Y",
+  "to": "L",
+  "n_meas": 1,
+  "censored": true
+ },
+ {
+  "mut": "RY21N",
+  "ddg": 9.740904731968923,
+  "idx": 20,
+  "chain": "Y",
+  "wt": "R",
+  "to": "N",
+  "n_meas": 2,
+  "censored": true
+ },
+ {
+  "mut": "RY21Q",
+  "ddg": 10.030726983206351,
+  "idx": 20,
+  "chain": "Y",
+  "wt": "R",
+  "to": "Q",
+  "n_meas": 2,
+  "censored": true
+ },
+ {
+  "mut": "YL96A",
+  "ddg": 11.325647172850667,
+  "idx": 95,
+  "chain": "L",
+  "wt": "Y",
+  "to": "A",
+  "n_meas": 1,
+  "censored": true
+ },
+ {
+  "mut": "KY97R",
+  "ddg": 12.772420111092641,
+  "idx": 96,
+  "chain": "Y",
+  "wt": "K",
+  "to": "R",
+  "n_meas": 1,
+  "censored": true
+ },
+ {
+  "mut": "KY97E",
+  "ddg": 15.080422633705576,
+  "idx": 96,
+  "chain": "Y",
+  "wt": "K",
+  "to": "E",
+  "n_meas": 1,
+  "censored": true
+ },
+ {
+  "mut": "YL50A",
+  "ddg": 19.067920941290755,
+  "idx": 49,
+  "chain": "L",
+  "wt": "Y",
+  "to": "A",
+  "n_meas": 1,
+  "censored": true
+ },
+ {
+  "mut": "NL31A",
+  "ddg": 21.81471241725201,
+  "idx": 30,
+  "chain": "L",
+  "wt": "N",
+  "to": "A",
+  "n_meas": 1,
+  "censored": true
+ },
+ {
+  "mut": "WH98A",
+  "ddg": 23.055419248875936,
+  "idx": 97,
+  "chain": "H",
+  "wt": "W",
+  "to": "A",
+  "n_meas": 1,
+  "censored": true
+ },
+ {
+  "mut": "KY97A",
+  "ddg": 24.522762134157286,
+  "idx": 96,
+  "chain": "Y",
+  "wt": "K",
+  "to": "A",
+  "n_meas": 2,
+  "censored": true
+ },
+ {
+  "mut": "KY96A",
+  "ddg": 28.1872340904281,
+  "idx": 95,
+  "chain": "Y",
+  "wt": "K",
+  "to": "A",
+  "n_meas": 2,
+  "censored": true
+ },
+ {
+  "mut": "KY96M",
+  "ddg": 28.353166963501547,
+  "idx": 95,
+  "chain": "Y",
+  "wt": "K",
+  "to": "M",
+  "n_meas": 1,
+  "censored": true
+ }
+]

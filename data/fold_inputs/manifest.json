@@ -1,0 +1,14 @@
+{
+  "fab": {
+    "heavy": 219,
+    "light": 217,
+    "antigen": 113,
+    "total_residues": 549
+  },
+  "fv": {
+    "heavy": 119,
+    "light": 111,
+    "antigen": 113,
+    "total_residues": 343
+  }
+}

@@ -1,0 +1,245 @@
+"""Executable versions of lessons this project had only written down.
+
+WHY THIS FILE EXISTS. Every correction this project made between 2026-09-14 and
+2026-09-21 went into prose, and prose cannot fail a build. Four independent audits
+then found four conventions that had silently drifted out of sync -- the surrogate's
+band anchors, the DockQ aggregator's default, a reliability figure, and a claim about
+seed allocation -- in a codebase that is otherwise obsessive about silent failure.
+`LEARNINGS.md` named "no test suite" as the blocker on promoting four entries out of
+prose. This is that file.
+
+The rule for what belongs here: an invariant whose violation is INVISIBLE. A crash
+does not need a test. A number that quietly becomes wrong does.
+"""
+from __future__ import annotations
+
+import inspect
+from pathlib import Path
+
+import pytest
+
+from locksmith.config import load
+from locksmith.metrics import dockq
+from locksmith.score import evaluate
+from locksmith.select import surrogate
+
+CFG = load()
+
+
+# --------------------------------------------------------------------------------
+# 1. A config value and a hardcoded constant encoding the same convention.
+# --------------------------------------------------------------------------------
+# `config/metrics.yaml:7` was switched from `midpoint` to `top` on 2026-09-20.
+# `select/surrogate.py` kept the midpoint anchors (2.5/7.0/9.5) because it never reads
+# the config. The submitted winner was selected on the surrogate. Nothing failed.
+
+def test_surrogate_anchors_match_config_band_values():
+    bs = CFG.band_scores
+    assert (surrogate.ANCHOR_POOR, surrogate.ANCHOR_MEDIUM, surrogate.ANCHOR_GOOD) == (
+        bs["poor"], bs["medium"], bs["good"]
+    ), (
+        f"surrogate anchors {(surrogate.ANCHOR_POOR, surrogate.ANCHOR_MEDIUM, surrogate.ANCHOR_GOOD)} "
+        f"disagree with config band_value={CFG.band_value} -> "
+        f"{(bs['poor'], bs['medium'], bs['good'])}. The surrogate is what we RANK on; "
+        f"`final` is what we REPORT. When they disagree the ranking is on a scale "
+        f"nobody declared."
+    )
+
+
+def _on_anchor(challenge: int, which: str) -> dict[str, float]:
+    """Raw metrics placed exactly on one band anchor for every scored metric.
+
+    `good` anchors are nudged one resolution step INTO the Good band for the four
+    metrics whose good-edge the handbook writes strictly -- otherwise the design is
+    Medium by the rubric and we would be asserting the wrong thing. See
+    `test_surrogate_diverges_only_at_strict_edges` for that case on its own.
+    """
+    out = {}
+    for n, b in CFG.bands().items():
+        if challenge not in b.challenges:
+            continue
+        v = getattr(b, which)
+        if which == "good" and b.strict_good:
+            v += 1e-6 if b.direction == "high" else -1e-6
+        out[n] = v
+    return out
+
+
+@pytest.mark.parametrize("challenge", [1, 2])
+@pytest.mark.parametrize("which", ["good", "medium"])
+def test_surrogate_equals_final_at_the_anchors(challenge: int, which: str):
+    """The surrogate's whole contract: interpolate BETWEEN anchors, agree ON them.
+
+    This is the behavioural form of the test above -- it fails even if someone
+    reintroduces the divergence somewhere other than the three module constants.
+    """
+    raw = _on_anchor(challenge, which)
+    sc = evaluate(raw, challenge=challenge, cfg=CFG)
+    sg = surrogate.compute(raw, challenge=challenge, cfg=CFG)
+    assert sc.final == pytest.approx(sg.value, abs=1e-4), (
+        f"challenge {challenge}, every metric exactly on its `{which}` anchor: "
+        f"reported final={sc.final} but surrogate={sg.value}"
+    )
+
+
+def test_surrogate_diverges_only_at_strict_edges_and_only_upward():
+    """No continuous function agrees with a step function AT the step.
+
+    `contacts` is an integer count with a `> 25` Good edge, so "exactly 25" is an
+    ordinary outcome: the rubric calls it Medium, the surrogate has already reached
+    the Good anchor. Documented rather than fixed, because the alternative is a
+    non-monotone surrogate. What must stay true is the DIRECTION and the SET.
+    """
+    strict = {n for n, b in CFG.bands().items() if b.strict_good}
+    assert strict == {"contacts", "iface_plddt", "cdr_sasa", "cdrh3_identity"}
+    anchors = surrogate._anchors(CFG)
+    for n, b in CFG.bands().items():
+        s = surrogate._interp(b.good, b.cutoff, b.medium, b.good, anchors)
+        reported = CFG.band_scores[b.band_of(b.good)]
+        if n in strict:
+            assert s > reported, f"{n}: expected the known upward divergence at its edge"
+            assert (s, reported) == (anchors[2], CFG.band_scores["medium"])
+        else:
+            assert s == pytest.approx(reported, abs=1e-9), f"{n} must agree at its anchor"
+
+
+# --------------------------------------------------------------------------------
+# 2. A missing metric must never improve a design's rank.
+# --------------------------------------------------------------------------------
+# `score.evaluate` refuses to produce `final` when any metric is unknown. The
+# surrogate averaged over whatever was present, so dropping the worst metric RAISED
+# the score -- and selection ran on the surrogate.
+
+def test_surrogate_refuses_a_design_with_a_missing_metric():
+    raw = _on_anchor(1, "good")
+    worst = "netsolp"
+    raw[worst] = CFG.bands()[worst].cutoff          # its poor anchor
+    full = surrogate.compute(raw, challenge=1, cfg=CFG).value
+    del raw[worst]
+    pruned = surrogate.compute(raw, challenge=1, cfg=CFG)
+    assert pruned.value != pruned.value or pruned.value <= full, (
+        f"deleting the limiting metric moved the surrogate {full} -> {pruned.value}. "
+        f"A design we could not measure must not outrank one we could."
+    )
+
+
+def test_score_and_surrogate_agree_on_which_metrics_challenge2_scores():
+    """DockQ is Challenge 1 only (§5.2). Both paths must apply that identically."""
+    ch2 = {n for n, b in CFG.bands().items() if 2 in b.challenges}
+    assert "dockq" not in ch2, "DockQ must be excluded from Challenge 2 (§5.2)"
+    raw = _on_anchor(2, "good")
+    assert set(surrogate.compute(raw, challenge=2, cfg=CFG).sub) == ch2
+
+
+# --------------------------------------------------------------------------------
+# 3. A tool default that silently disagrees with the declared convention.
+# --------------------------------------------------------------------------------
+# `dockq.compute` defaults to interface_agg="min" while config says `global`. Every
+# caller currently passes the config value explicitly; the next one to forget gets a
+# different number with no error.
+
+def test_dockq_module_defaults_match_the_declared_conventions():
+    sig = inspect.signature(dockq.compute).parameters
+    assert sig["interface_agg"].default is None, (
+        "the aggregator must be resolved from config at call time, not restated as a "
+        "signature default -- a default that copies a convention is a second source "
+        "of truth and the second one rots"
+    )
+    assert sig["allowed_mismatches"].default is None
+    assert dockq._convention("dockq_interface_agg", "min") == \
+        CFG.conventions["dockq_interface_agg"]
+    assert dockq._convention("dockq_allowed_mismatches", 0) == \
+        CFG.conventions["dockq_allowed_mismatches"]
+
+
+def test_dockq_is_invoked_with_the_flags_the_submission_documents():
+    """At its DEFAULTS DockQ exits 1 on our package. The flags are load-bearing."""
+    src = Path(dockq.__file__).read_text()
+    assert "--allowed_mismatches" in src and "--mapping" in src
+    assert '"ABC:ABC"' in src, (
+        "chain mapping must be pinned; left free, DockQ searches and a wrong mapping "
+        "scores a good design badly"
+    )
+
+
+# --------------------------------------------------------------------------------
+# 4. Reliability arithmetic. A quoted figure that no longer follows from its inputs.
+# --------------------------------------------------------------------------------
+# Spearman-Brown: r_k = k*r_1 / (1 + (k-1)*r_1). The project quoted single-seed
+# reliability 0.689 alongside a 3-seed 0.849. Those two are not consistent; 0.653 is
+# the r_1 that reproduces 0.849. The tell was free and went unchecked for two days.
+
+def spearman_brown(r1: float, k: int) -> float:
+    return k * r1 / (1 + (k - 1) * r1)
+
+
+@pytest.mark.parametrize("r1,k,rk", [(0.653, 3, 0.849), (0.602, 3, 0.819)])
+def test_spearman_brown_roundtrip(r1: float, k: int, rk: float):
+    assert spearman_brown(r1, k) == pytest.approx(rk, abs=0.002)
+
+
+def test_the_published_single_seed_reliability_is_the_consistent_one():
+    """0.689 does not reproduce the published 3-seed 0.849; 0.653 does."""
+    assert spearman_brown(0.689, 3) == pytest.approx(0.869, abs=0.002)
+    assert spearman_brown(0.653, 3) == pytest.approx(0.849, abs=0.002)
+
+
+# --------------------------------------------------------------------------------
+# 5. Band-edge strictness. Worth 5 final points on one metric.
+# --------------------------------------------------------------------------------
+# The handbook writes four band edges and two cutoffs with STRICT inequalities. A
+# 10-residue CDR-H3 with 7 matches lands on exactly 70.0%.
+
+def test_strict_band_edges_are_exclusive():
+    b = CFG.bands()["cdrh3_identity"]
+    assert b.strict_good, "§6.3.1 writes '< 70%'"
+    assert b.band_of(70.0) == "medium", "70.0 is NOT Good; that edge is worth 5 points"
+    assert b.band_of(69.9) == "good"
+    assert not b.passes_cutoff(95.0), "§7.2 writes '< 95%'"
+
+
+def test_every_metric_band_is_monotone_in_its_direction():
+    """cutoff -> medium -> good must improve, or band_of() silently misclassifies."""
+    for name, b in CFG.bands().items():
+        order = [b.cutoff, b.medium, b.good]
+        assert order == (sorted(order) if b.direction == "high"
+                         else sorted(order, reverse=True)), f"{name}: {order}"
+
+
+# --------------------------------------------------------------------------------
+# 6. Two LEARNINGS entries whose mechanism already existed but was unfindable.
+# --------------------------------------------------------------------------------
+
+def test_msa_path_with_space_is_staged(tmp_path, monkeypatch):
+    """A path inside a FASTA field splits on whitespace; argv does not. The vault
+    lives under '.../Obsidian Personal/...', so this fires on every real fold."""
+    from locksmith.fold import boltz
+    spaced = tmp_path / "a dir with spaces"
+    spaced.mkdir()
+    msa = spaced / "pd1.a3m"
+    msa.write_text(">q\nPEPTIDE\n")
+    monkeypatch.setattr(boltz, "MSA_STAGE", tmp_path / "stage")
+    staged = boltz._stage(msa)
+    assert " " not in str(staged)
+    assert staged.read_bytes() == msa.read_bytes()
+
+
+def test_seq_for_folding_refuses_a_spliced_chimera(tmp_path):
+    """Folding a coordinate-derived sequence with an internal gap predicts a protein
+    that does not exist. It moved one DockQ 0.064 -> 0.370 and flipped a verdict."""
+    from locksmith.io import pdb as pdbio
+
+    def atom(i: int, resi: int) -> str:
+        return (f"ATOM  {i:5d}  CA  ALA A{resi:4d}    "
+                f"{0.0:8.3f}{0.0:8.3f}{float(i):8.3f}  1.00  0.00           C")
+
+    gapped = tmp_path / "gapped.pdb"
+    gapped.write_text("\n".join(atom(i, r) for i, r in
+                                enumerate([1, 2, 3, 40, 41, 42], 1)) + "\nEND\n")
+    with pytest.raises(pdbio.SplicedSequenceError):
+        pdbio.seq_for_folding(gapped, "A")
+
+    contiguous = tmp_path / "ok.pdb"
+    contiguous.write_text("\n".join(atom(i, r) for i, r in
+                                    enumerate([1, 2, 3, 4, 5, 6], 1)) + "\nEND\n")
+    assert pdbio.seq_for_folding(contiguous, "A") == "AAAAAA"

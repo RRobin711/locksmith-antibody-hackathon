@@ -1,0 +1,120 @@
+# Pitch deck — structured outline
+**3 minutes. 5 slides, ~35 s each.** Outline only: the numbers are fixed, the argument and
+the wording are Ryan's. Written 2026-09-21, before the Challenge 2 run.
+
+**Spine:** we built the standard pipeline, then built the controls nobody runs, and found
+the scoring stack cannot rank binders. That is a capability demonstration — building the
+thing *and* interrogating it — and per audit 10.4 it only reads as rigour with Challenge 1's
+finished package on the table. **So the package goes first. Credibility, then the critique.**
+
+**Do not use the old spine.** "Loop pLDDT is blind to conformational heterogeneity" was
+measured at n=8 (rho -0.168, p=0.69) and **refuted at n=239** (rho -0.432, p=2.9e-12).
+It must not reappear anywhere.
+
+---
+
+## Slide 1 — We finished Challenge 1 (~35 s)
+
+**Lands:** we can do the task. Nothing here is hedged.
+
+- 239 ProteinMPNN designs over pembrolizumab's heavy-chain CDRs, folded with Boltz-2,
+  scored on all eight rubric metrics
+- Winner **`mpnn_T0.5_s104_036`**, CDR-H3 `ALRPRDVDRGFYK`, **38.5%** identity to Keytruda
+- Shortlisted to 20, re-folded at 7 seeds, winner's-curse shrinkage applied
+- **`submission/LOCKSMITH_DEV.zip` validates from its own files — no run directory, no
+  cached scores — and re-derives all eight metrics: viable, final 96.0**
+
+*Visual:* the package tree + the validator's output line.
+*Say once, do not dwell:* 96.0 is convention-dependent (84.0/90.0/96.0 under
+bottom/mid/top band values); the handbook never says how to pick inside a band. It is a
+monotone relabelling and cannot reorder designs.
+
+## Slide 2 — Then we asked whether the score means anything (~35 s)
+
+**Lands:** the pivot. This is the slide that makes the talk different from everyone else's.
+
+> **A licensed $25bn/year therapeutic scores NON-VIABLE under this rubric.**
+> Pembrolizumab fails the novelty gate against its own reference.
+
+Supporting, in one breath each:
+
+- **20/20** naive ProteinMPNN designs cleared all eight gates on the first attempt
+- the composite took only **three distinct values** across 40 designs
+- structurally, seven of the eight metrics are computed **from the prediction alone** —
+  only DockQ reaches out to an experimental structure, so the rubric is largely
+  **the model grading its own homework**
+
+*The line worth landing:* three separate signals that the judge wasn't discriminating,
+and we had been optimising against it for a week.
+
+## Slide 3 — The controls the rubric never asks for (~45 s, the heart)
+
+**Lands:** evidence, not opinion. Three rows, SKEMPI first and given room.
+
+| Control | What it did | Result |
+|---|---|---|
+| **SKEMPI retrospective** | 45 mutants of an antibody-lysozyme complex with **experimentally measured** ΔΔG | **Nothing in the stack tracks affinity.** `NL31A` abolishes binding — ΔΔG **+21.8 kcal/mol**, undetectable in the lab — and scores ipSAE **0.917** against the wild type's **0.903**. It scores *higher* than the real complex. |
+| **Epitope knockout** | alanine-mutate PD-1's binding face, with a matched off-interface control | interface pLDDT **64×** its seed noise, ipSAE **17×** — both see it. **PRODIGY ΔG 0.9×, contacts blind** — and ΔG carries the largest share of ranking variance |
+| **Composition-matched scramble** | shuffle CDR-H3 order, same residues, refold | **No scramble exceeds the pool median (0/30)** — the bottom half of our own pool is indistinguishable from a shuffled loop. The top half *is* genuinely design-dependent: designs beat their own scramble **28/30**, p=2.4e-06. *(Separately: contacts and CDR SASA are pure sampler noise — the eight-metric harness ranks on three.)* |
+
+*If one number survives the talk, make it NL31A.* A mutation that abolishes binding
+scoring higher than the real complex is the whole thesis in one row.
+
+## Slide 4 — What this pipeline can and cannot claim (~30 s)
+
+**Lands:** the boundary, stated by us before anyone asks.
+
+> **It distinguishes a destroyed interface from an intact one.
+> It cannot rank two intact ones by affinity.**
+
+- Every ranking claim in this field sits in the second category
+- So we report our winner **without** claiming it is the best of the 239
+- The novelty gate is free: pembrolizumab's own CDR-H3 scores **53.8%** to human germline
+  against a **<95%** cutoff — nothing a design campaign can produce comes near the bar
+
+*Tone: this is the confident slide, not the apologetic one.* Naming your own limits
+precisely is the demonstration.
+
+**TIM-3 cross-reactivity stays in the submission docs, NOT on this slide.** It is carried
+openly there and qualified properly. On a slide that has just argued the pipeline cannot
+rank intact interfaces, an ipSAE comparison at p=0.038 invites "so why is *that* ipSAE
+trustworthy?" — and there is no room for the half-sentence that answers it.
+
+## Slide 5 — Challenge 2, and what we'd do differently (~35 s)
+
+**Lands:** we drove the real tooling, and we know what we'd fix.
+
+- Challenge 2 via **RFantibody** — target-conditioned CDR backbone diffusion onto a fixed
+  framework, hotspots = the **26-residue PD-L1 competitive footprint** from 5IUS mapped to
+  5GGS by alignment
+- **A pilot, not a campaign** — RFantibody's own campaigns run ~10,000 backbones. Say it plainly.
+- **State the deliverable exactly as it is:** a structure and sequence produced by
+  target-conditioned backbone diffusion, filtered by an independent predictor, scored under
+  the handbook's rubric, with controls the rubric does not require — and **no binding
+  evidence claimed**. The handbook (§1.1) asks whether designs "look like real drugs", not
+  whether they are. **Saying so plainly is the strongest position available, not a hedge.**
+- *(fill after the run: N backbones, gate pass rate, the selected design, its hotspot
+  contact count, and the epitope-knockout result on it)*
+- **What we'd do differently:** validate the measurand before optimising against it. We
+  spent a week estimating a quantity precisely before testing whether it measured anything.
+  That is the most common failure in ML-for-science and it looks exactly like diligence
+  while it is happening.
+
+*Close on the transferable line, not on the molecule.*
+
+---
+
+## Notes for delivery
+
+- **Budget is brutal at 3 min.** Slide 3 is the content; slides 1 and 5 are scaffolding and
+  can each lose 10 s if needed. Do not cut slide 4.
+- **Every number above is measured and on disk** — sources in `results/validity.md`,
+  `results/skempi_validity.md`, `results/metric_validity.md`,
+  `results/germline_metric_validation.md`.
+- **One framing risk to avoid** (audit 10.4): "we spent a week proving we couldn't do the
+  task." The defence is slide 1 existing at all — the audit reads as rigour next to a
+  finished design and as excuse-making without one. Never present slides 2-4 before slide 1.
+- **Do not present RF2 agreement as validation** (audit 10.5). Two models agreeing is not
+  binding evidence; they share training data and correlated errors are expected.
+- **Do not blur the hotspot contact check with binding** (audit 10.6). It answers "did the
+  diffusion aim where it was told", never "does this bind".

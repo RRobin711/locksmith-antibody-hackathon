@@ -1,0 +1,12 @@
+runs/
+data/refs/*.pdb
+data/refs/*.cif
+data/msa_cache/
+results/*.parquet
+__pycache__/
+*.pyc
+.venv/
+vendor/
+submission/*.zip
+*.egg-info/
+.pytest_cache/

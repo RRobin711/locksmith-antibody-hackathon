@@ -1,0 +1,168 @@
+# The scoring rubric, as data.
+#
+# Five conventions are NOT specified by the handbook. They are switches here, not
+# constants in code, so that resolving one costs a re-run of 06_score.py rather
+# than re-folding every design. See PLAN.md 3.3 and the session doc for 2026-09-15.
+conventions:
+  band_value: top              # bottom | midpoint | top -- AMBIGUOUS IN HANDBOOK.
+                               # S5.2 gives only ranges: "Good (9-10)", "Medium (6-8)",
+                               # "Poor (0-5)", and never says how to pick within one.
+                               # `top` is the default because S7.3 states the Challenge
+                               # score range as "0 - 100" and only `top` attains it
+                               # (midpoint caps at 95, bottom at 90). Caveat recorded in
+                               # results/handbook_conformance.md: this is also the most
+                               # FLATTERING reading, "0 - 100" is a scale label rather
+                               # than a claim of attainability, and within-band
+                               # interpolation is a fourth reading the text permits.
+                               # The choice is a uniform monotone relabelling, so it
+                               # moves the headline number and never the ranking.
+  cdr_sasa_chains: AB          # AB | A -- AMBIGUOUS. S6.1.6: SASA of "the CDR loops
+                               # (paratope) on the antibody". Plural loops and "paratope"
+                               # favour all six CDRs (heavy+light), which is what the code
+                               # does. Heavy-only is reported alongside; see conformance.
+  cdr_sasa_state: bound        # bound | unbound  -- UNRESOLVED
+  submission_form: fab         # fab | fv         -- UNRESOLVED (their example FASTA is Fab-length)
+  ipsae_pae_cutoff: 10         # UNRESOLVED; ipsae.py repo examples use 10
+  ipsae_dist_cutoff: 15        # UNRESOLVED; ipsae.py repo examples use 15
+  ipsae_row_type: max          # handbook: "rows with Type = max", best over Ab-vs-Ag chain pairs
+  numbering_scheme: imgt       # handbook specifies IMGT
+  interface_dist_cutoff: 5.0   # angstrom, heavy-atom, for interface pLDDT residue set
+  dockq_allowed_mismatches: 40 # DockQ defaults to 0 and then REFUSES to score any design
+                               # with mutated CDRs. A full heavy redesign spans 29 positions.
+  dockq_interface_agg: global # DEFAULT CHANGED 2026-09-20: DockQ v2's own Total DockQ,
+                               # i.e. what an evaluator gets running the tool. Was `min`,
+                               # which appears nowhere in the handbook. Alternatives:
+                               # min | mean | max | global.
+  _dockq_agg_note: |          # min | mean | max | global -- UNRESOLVED, and worth a full
+                               # band. A 3-chain complex has three interfaces and the
+                               # handbook says only that DockQ "returns a docking quality
+                               # score between 0 and 1". On mpnn_T0.5_s104_036: min 0.755
+                               # (Medium), mean 0.805, global 0.850, max 0.855 (all Good).
+                               # `global` is DockQ v2's own Total DockQ, i.e. what an
+                               # organiser gets by running the tool and reading the summary
+                               # -- arguably the most likely external number.
+                               # NOTE (corrected 2026-09-22): this comment previously read
+                               # "Kept at `min` so historical results stay comparable" while
+                               # the live value was already `global`. The value is `global`.
+                               # CAVEAT worth stating wherever the band is quoted: `global`
+                               # averages in the heavy-light FRAMEWORK interface, which no
+                               # design touches and which is near-perfect by construction.
+                               # The interface the design actually creates is A-C = 0.755
+                               # (Medium). Quote the A-C number as the DESIGN result and
+                               # `global` only as "what an organiser running the tool gets".
+                               # Every result that depends on the DockQ band must state its agg.
+  dockq_chain_mapping: ABC:ABC # pin it; a wrong auto-mapping silently scores a good design badly
+  netsolp_model_type: ESM1b    # ESM1b | ESM12 | Distilled. RESOLVED 2026-09-16 by positive
+                               # control: ESM12 (0.35/0.31) and Distilled (0.49/0.45) BOTH fail
+                               # pembrolizumab's Fab chains against the 0.50 cutoff; the ESM1b
+                               # 5-fold ensemble passes under every convention (0.57-0.73).
+                               # Costs ~11 s/seq vs ~2 s, on CPU, off the GPU critical path.
+  netsolp_construct: fv        # fv | fab. RESOLVED 2026-09-20 against the handbook, which
+                               # says Fv twice ("the Fv (VH + VL) region", "run on the Fv
+                               # sequence"). The project fed it full Fab chains until then.
+                               # Fv flips which chain limits: pembrolizumab Fv VH 0.733 /
+                               # VL 0.569 (light limits) vs Fab 0.623 / 0.626 (heavy limits).
+  netsolp_chain_agg: min       # min | mean over VH,VL -- a design is only as soluble as its
+                               # worst chain. min(0.733, 0.569) = 0.569 for pembrolizumab.
+  selection_key: final        # final | dockq. RESOLVED 2026-09-17.
+                               # Rank on the RUBRIC COMPOSITE, not on DockQ, with DockQ as
+                               # tiebreaker. Measured against these very bands: one band step
+                               # on cdrh3_identity moves `final` by 14.0 points, one band step
+                               # on dockq by 7.0 — the rubric already prices novelty at 2x
+                               # DockQ. A faithful design (96% id, DockQ 0.88) scores 81.0 and
+                               # is NON-VIABLE (novelty gate); a divergent one (55% id, DockQ
+                               # 0.55) scores 92.5 and is viable. Ranking on DockQ would invert
+                               # that and promote near-copies of pembrolizumab.
+                               # Banding also blunts ipSAE's known non-discrimination: a metric
+                               # in the same band for every live design contributes a CONSTANT,
+                               # so it adds no signal but injects no noise either.
+  selection_tiebreak: [dockq, cdrh3_identity]   # dockq high-better, identity LOW-better
+
+weights:
+  binding: 0.60
+  developability: 0.20
+  novelty: 0.20
+
+# Clear each gate by this fraction of the distance from cutoff to the next band
+# edge. Sized for convention/version risk, NOT prediction noise -- the organisers
+# recompute from our files, so their numbers are deterministic given our input.
+# See PLAN.md 14-C1.
+margin_fraction: 0.20
+
+# direction: 'high' = larger is better, 'low' = smaller is better.
+# Bands map a raw value to a 0-10 sub-score.
+metrics:
+  ipsae:
+    direction: high
+    good: 0.80
+    medium: 0.60
+    cutoff: 0.60
+    challenges: [1, 2]
+    requires: [pae]
+  dockq:
+    direction: high
+    good: 0.80
+    medium: 0.49
+    cutoff: 0.23
+    challenges: [1]
+    requires: [reference]
+  dg:
+    direction: low
+    good: -12.0
+    medium: -10.0
+    cutoff: -6.0
+    challenges: [1, 2]
+    requires: []
+  contacts:
+    direction: high
+    good: 25
+    strict_good: true      # handbook: "> 25"
+    medium: 15
+    cutoff: 10
+    challenges: [1, 2]
+    requires: []
+  iface_plddt:
+    direction: high
+    good: 80
+    strict_good: true      # handbook: "> 80"
+    medium: 70
+    cutoff: 65
+    challenges: [1, 2]
+    requires: [plddt]
+  cdr_sasa:
+    direction: high
+    good: 600
+    strict_good: true      # handbook: "> 600"
+    medium: 300
+    cutoff: 250
+    strict_cutoff: true    # handbook: "> 250"
+    challenges: [1, 2]
+    requires: []
+  netsolp:
+    direction: high
+    good: 0.70
+    medium: 0.50
+    cutoff: 0.50
+    challenges: [1, 2]
+    requires: []
+  cdrh3_identity:
+    direction: low
+    good: 70
+    strict_good: true      # handbook: "< 70%"; worth 5.0 final points at exactly 70.0
+    medium: 90
+    cutoff: 95
+    strict_cutoff: true    # handbook: "< 95%"
+    challenges: [1, 2]
+    requires: []
+
+categories:
+  binding: [ipsae, dockq, dg, contacts, iface_plddt, cdr_sasa]
+  developability: [netsolp]
+  novelty: [cdrh3_identity]
+
+# Retained for reference only. `conventions.band_value` selects the mapping now;
+# see Config.BAND_VALUES. These were the midpoints used until 2026-09-20.
+band_scores:
+  good: 9.5
+  medium: 7.0
+  poor: 2.5
