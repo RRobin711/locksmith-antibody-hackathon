@@ -27,21 +27,33 @@ PDF.
 | `designs/` | Candidate designs — structures, PAE files, sequences. Empty. |
 | `scripts/` | Local re-implementation of the scoring pipeline. Empty. |
 
-## Status — 2026-09-21
+## Status — 2026-09-22
 
-> ### ⚠ Three things found by independent audit on 2026-09-21 — read before trusting any number here
+> ### The 2026-09-21 audit findings are closed — see [[results/audit_response_2026-09-22|the full response]]
 >
-> 1. **DockQ at its defaults REFUSES this submission.** `DockQ design_1_complex.pdb 5ggs_ABZ.pdb`
->    → `ERROR: For chains ['A'] no identical corresponding chain was found`. It needs
->    `--allowed_mismatches 40 --mapping ABC:ABC`, and **those flags appear nowhere in the
->    submitted package**. If the organisers' §7.1 pipeline runs defaults, DockQ is unavailable,
->    the §7.2 minimum is unmet and Challenge 1 is **non-viable**. Highest-priority fix.
-> 2. **The selection surrogate diverged from the score it stands in for.**
->    `src/locksmith/select/surrogate.py:46` hardcodes midpoint anchors (2.5/7.0/9.5) while
->    `config/metrics.yaml:7` is `band_value: top`. The surrogate never reads the config.
->    **The submitted winner was selected on this surrogate.**
-> 3. **Team name is still the placeholder `LOCKSMITH_DEV`.** §4.1 requires the master folder
->    named *exactly* the team name.
+> 1. **DockQ's required flags now ship inside the package** (`docs/reproducing_our_numbers.md`),
+>    verified by running them: defaults exit 1 with no output, `--allowed_mismatches 40
+>    --mapping ABC:ABC` reproduces **0.816**. The disqualification risk is closed.
+> 2. **The selection surrogate now reads `config/metrics.yaml`** instead of hardcoding
+>    midpoint anchors — and the consequence was larger than the audit found:
+>    **under the declared convention the winner changes**, `mpnn_T0.5_s104_036` → 4th,
+>    `mpnn_T0.2_s102_032` → 1st, with 18/20 designs changing rank (Spearman 0.755).
+>    We did **not** swap the design: the 1st–4th gap is 0.191 surrogate points against a
+>    0.226 seed sd, so the change is inside the noise and swapping would mean acting on a
+>    ranking we have measured as unable to rank.
+> 3. **`LOCKSMITH_DEV` is a deliberate placeholder**, not an unfixed §4.1 failure — this
+>    project is not submitting (see [[PLAN|§15]]), so there is no team name. Recorded at
+>    `scripts/57_build_submission.py:23`, which is the single place to change it.
+> 4. **The project has tests and version control for the first time.**
+>    `tests/test_invariants.py` (17 passing) makes findings 1 and 2 impossible rather than
+>    merely documented; the repo is under git.
+>
+> ⚠ **Two claims are withdrawn or flagged pending re-examination.** The **G3 aromatic
+> filter** is no longer presented as validated — it selects against Tyr/Trp, and it passed
+> against an outcome variable (pose retention to the parent crystal) that is not binding.
+> The **germline inversion** on pitch slide 4 is corrected: pembrolizumab at 53.8% is the
+> **maximum** of 2000 scrambles (~+5.3 sd, p ≈ 1/2000), so the metric discriminates
+> decisively; the surviving true claim is only that the <95% gate is free.
 >
 > An independent judge re-derived all eight metrics from the packaged files alone and every
 > reported value reproduced. The problems are in conventions and prose, not in the data.

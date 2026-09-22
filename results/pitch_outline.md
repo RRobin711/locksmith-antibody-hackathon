@@ -116,5 +116,23 @@ trustworthy?" — and there is no room for the half-sentence that answers it.
   finished design and as excuse-making without one. Never present slides 2-4 before slide 1.
 - **Do not present RF2 agreement as validation** (audit 10.5). Two models agreeing is not
   binding evidence; they share training data and correlated errors are expected.
+- **Do not present the G3 aromatic filter as validated** (2026-09-22). The statistics are
+  sound but the outcome variable is pose-retention-to-the-parent-crystal, not binding, and
+  the rule selects *against* Tyr/Trp. See [[audit_response_2026-09-22|§B5]].
+- **Do not group `pred_lddt` with "constant and useless"** (2026-09-22). Measured on the
+  retrieved RF2 outputs its **ICC is +0.836**, the highest of the four and the only one
+  clearing the 0.317 detectable floor. Its small sd (0.012) is because the complex is ~85%
+  fixed framework — low variance is not uninformativeness.
+- **Do not say `interaction_pae` "cannot rank" or is "deleted"** (2026-09-22). Measured
+  ICC is −0.113 against a **detectable floor of 0.317 at n=10, k=3**. The claim the data
+  supports is "no signal larger than ≈0.32 detected", which is a different sentence.
+- **Do not re-read the 24.9 Å as a filtering artefact** (2026-09-22). It was tested: only
+  1 of 30 designs passes the conventional `interaction_pae < 10` filter, and **that design
+  sits at 32.86 Å**, worse than the 28.94 Å median. The re-reading is not supported.
+- **If the conditioning result appears at all, use the patch null, not d=1.47.** The
+  d=1.47 comparison was optional stopping. The deterministic per-backbone test — real
+  epitope **0.712** vs a contiguous same-size patch elsewhere at **0.154**, 17/18
+  backbones at p<0.05 — is the defensible number. See
+  [[challenge2_patch_null|the patch null]].
 - **Do not blur the hotspot contact check with binding** (audit 10.6). It answers "did the
   diffusion aim where it was told", never "does this bind".
