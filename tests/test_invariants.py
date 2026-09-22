@@ -243,3 +243,56 @@ def test_seq_for_folding_refuses_a_spliced_chimera(tmp_path):
     contiguous.write_text("\n".join(atom(i, r) for i, r in
                                     enumerate([1, 2, 3, 4, 5, 6], 1)) + "\nEND\n")
     assert pdbio.seq_for_folding(contiguous, "A") == "AAAAAA"
+
+
+# --------------------------------------------------------------------------------
+# 7. Challenge 2 must not be scored against Challenge 1's reference.
+# --------------------------------------------------------------------------------
+# §6.3.1 gives ONE metric with TWO references: Keytruda's CDR-H3 for Challenge 1, human
+# germline for Challenge 2. Until 2026-09-22 every caller got Keytruda, so a Challenge 2
+# design would have been scored against the wrong reference and produced a perfectly
+# plausible number for the wrong question -- the failure mode with no error message.
+
+PEMBRO_CDRH3_IN_CONTEXT = (
+    "QVQLVQSGVEVKKPGASVKVSCKASGYTFTNYYMYWVRQAPGQGLEWMGGINPSNGGTNFNEKFKN"
+    "RVTLTTDSSTTTAYMELKSLQFDDTAVYYCARRDYRFDMGFDYWGQGTTVTVSS"
+)
+
+
+def test_novelty_uses_a_different_reference_per_challenge():
+    from locksmith.metrics import novelty
+    c1 = novelty.compute(PEMBRO_CDRH3_IN_CONTEXT, challenge=1)
+    c2 = novelty.compute(PEMBRO_CDRH3_IN_CONTEXT, challenge=2)
+    assert c1.value == pytest.approx(100.0), (
+        "pembrolizumab against its own CDR-H3 must be 100% identical; got "
+        f"{c1.value} -- the Challenge 1 reference is wrong"
+    )
+    assert c2.value != c1.value, (
+        "Challenge 2 returned the Challenge 1 number, so the germline reference is not "
+        "wired in and a de novo design would be scored against Keytruda"
+    )
+    assert "vdj_coverage" in (c2.detail or ""), \
+        "Challenge 2 must route through metrics/germline.py"
+
+
+def test_pembrolizumab_fails_challenge1_novelty_and_passes_challenge2():
+    """The positive control, in both directions.
+
+    Keytruda is 100% identical to itself, so it must FAIL Challenge 1's <95% cutoff --
+    that is the gate doing its job. Against germline it scores 53.8% and PASSES, which is
+    why `results/germline_metric_validation.md` calls the Challenge 2 novelty gate free.
+    """
+    from locksmith.metrics import novelty
+    b = CFG.bands()["cdrh3_identity"]
+    c1 = novelty.compute(PEMBRO_CDRH3_IN_CONTEXT, challenge=1).value
+    c2 = novelty.compute(PEMBRO_CDRH3_IN_CONTEXT, challenge=2).value
+    assert not b.passes_cutoff(c1), f"Ch1: {c1}% must fail the <95% cutoff"
+    assert b.passes_cutoff(c2), f"Ch2: {c2}% must pass the <95% cutoff"
+
+
+def test_challenge2_scores_seven_metrics_not_eight():
+    """§5.2 excludes DockQ from Challenge 2 — there is no reference structure."""
+    ch2 = {n for n, b in CFG.bands().items() if 2 in b.challenges}
+    ch1 = {n for n, b in CFG.bands().items() if 1 in b.challenges}
+    assert len(ch2) == 7 and len(ch1) == 8
+    assert ch1 - ch2 == {"dockq"}
