@@ -36,7 +36,10 @@ conventions:
   _dockq_agg_note: |          # min | mean | max | global -- UNRESOLVED, and worth a full
                                # band. A 3-chain complex has three interfaces and the
                                # handbook says only that DockQ "returns a docking quality
-                               # score between 0 and 1". On mpnn_T0.5_s104_036: min 0.755
+                               # score between 0 and 1". STALE NUMBERS BELOW (kept for the reasoning trail):
+                               # these came from an earlier fold. The SHIPPED structure
+                               # measures A-C 0.723, B-C 0.794, global 0.816.
+                               # On an earlier mpnn_T0.5_s104_036 fold: min 0.755
                                # (Medium), mean 0.805, global 0.850, max 0.855 (all Good).
                                # `global` is DockQ v2's own Total DockQ, i.e. what an
                                # organiser gets by running the tool and reading the summary
@@ -47,7 +50,7 @@ conventions:
                                # CAVEAT worth stating wherever the band is quoted: `global`
                                # averages in the heavy-light FRAMEWORK interface, which no
                                # design touches and which is near-perfect by construction.
-                               # The interface the design actually creates is A-C = 0.755
+                               # The interface the design actually creates is A-C = 0.723 (shipped)
                                # (Medium). Quote the A-C number as the DESIGN result and
                                # `global` only as "what an organiser running the tool gets".
                                # Every result that depends on the DockQ band must state its agg.

@@ -1,7 +1,9 @@
 # Our own recomputation of the eight scored metrics
 
-**To reproduce the DockQ number below you MUST pass two flags.** At its
-defaults DockQ exits 1 with no output on this submission:
+**DockQ will not score this submission at its defaults.** It exits 1
+with no output. `--allowed_mismatches` is required and the minimum
+value that works is **15**, exactly the number of substitutions in this
+design; we pass 40 for headroom:
 
 ```
 $ DockQ structures/design_1_complex.pdb 5ggs_ABZ.pdb

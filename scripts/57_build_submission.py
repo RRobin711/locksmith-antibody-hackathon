@@ -84,8 +84,9 @@ def build_deck(path: Path, final: float, raw: dict) -> Path:
           ["Redesign the light-chain CDRs — the NetSolP deficit sits there. VL is pembrolizumab's 0.569 in all 239 designs and `min()` pins the score to it.",
            "   (This design's VH is 0.699, just under the 0.70 Good edge — 168/239 of the pool clear it; this one does not.)",
            "Validate any ranking claim against measured affinity before making it.",
-           "Challenge 2 (de novo): RFantibody pilot run — 36 backbones, hotspot conditioning works (71.2% vs 50.1% interface on the PD-L1 footprint).",
-           "   No design submitted: nothing in the Ch2 rubric can detect a wrong pose, and Boltz-2 is at median DockQ 0.291 on novel pairs."])
+           "Challenge 2 (de novo): RFantibody + ProteinMPNN, 30 designs, folded with Boltz-2. ONE clears all seven gates — 96.0/100, ipSAE 0.864.",
+           "   Targeting is evidenced: 17/18 backbones beat a contiguous same-size patch null (0.712 vs 0.154). Binding is NOT evidenced by anything here.",
+           "   The other 29 fail ipSAE alone, all at <=0.331. At recycling 3 we measured 0/30 — an under-sampling artefact we caught and withdrew."])
     path.parent.mkdir(parents=True, exist_ok=True)
     prs.save(str(path))
     return path
@@ -116,8 +117,10 @@ def main() -> int:
     sc = evaluate(raw, challenge=CHALLENGE, cfg=cfg)
 
     metrics_md = ["# Our own recomputation of the eight scored metrics", "",
-                  "**To reproduce the DockQ number below you MUST pass two flags.** At its",
-                  "defaults DockQ exits 1 with no output on this submission:",
+                  "**DockQ will not score this submission at its defaults.** It exits 1",
+                  "with no output. `--allowed_mismatches` is required and the minimum",
+                  "value that works is **15**, exactly the number of substitutions in this",
+                  "design; we pass 40 for headroom:",
                   "",
                   "```",
                   "$ DockQ structures/design_1_complex.pdb 5ggs_ABZ.pdb",
@@ -296,7 +299,12 @@ $ echo $?
 1
 ```
 
-Exit status **1**, no score printed. The two flags are mandatory:
+Exit status **1**, no score printed. **`--allowed_mismatches` is mandatory and the
+minimum value that works is 15** — exactly the number of substitutions in this
+design, so the flag is not arbitrary. We pass 40 for headroom. `--mapping ABC:ABC`
+is *not* strictly required (DockQ resolves the same mapping on its own and returns
+the identical 0.816), but we pass it because leaving the search free means a
+different input could silently be scored under a different correspondence:
 
 ```
 $ DockQ structures/design_1_complex.pdb 5ggs_ABZ.pdb \\
@@ -345,7 +353,12 @@ the handbook, and therefore change the number:
 **NetSolP model choice is not cosmetic.** NetSolP ships three predictors and on
 pembrolizumab -- a licensed antibody that must pass developability -- they score
 0.733 / 0.637 / 0.379 on VH against a 0.50 cutoff. Only the full ESM1b 5-fold ensemble
-clears it. The CLI default would fail a marketed drug and look like a design problem.
+clears it. **`predict.py` does default to `ESM1b`, so the tool's own default is the
+one that passes** — an earlier version of this document claimed the default would
+fail a marketed drug, which is wrong. The point that survives is that the *choice*
+is load-bearing: run the same sequence under `Distilled` or `ESM12` and both this
+design and pembrolizumab drop below the 0.50 cutoff. The variant belongs in the
+config with its evidence, which is where we put it.
 We use **ESM1b**.
 
 ## Validating the package itself

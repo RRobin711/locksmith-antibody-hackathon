@@ -14,7 +14,12 @@ $ echo $?
 1
 ```
 
-Exit status **1**, no score printed. The two flags are mandatory:
+Exit status **1**, no score printed. **`--allowed_mismatches` is mandatory and the
+minimum value that works is 15** — exactly the number of substitutions in this
+design, so the flag is not arbitrary. We pass 40 for headroom. `--mapping ABC:ABC`
+is *not* strictly required (DockQ resolves the same mapping on its own and returns
+the identical 0.816), but we pass it because leaving the search free means a
+different input could silently be scored under a different correspondence:
 
 ```
 $ DockQ structures/design_1_complex.pdb 5ggs_ABZ.pdb \
@@ -63,7 +68,12 @@ the handbook, and therefore change the number:
 **NetSolP model choice is not cosmetic.** NetSolP ships three predictors and on
 pembrolizumab -- a licensed antibody that must pass developability -- they score
 0.733 / 0.637 / 0.379 on VH against a 0.50 cutoff. Only the full ESM1b 5-fold ensemble
-clears it. The CLI default would fail a marketed drug and look like a design problem.
+clears it. **`predict.py` does default to `ESM1b`, so the tool's own default is the
+one that passes** — an earlier version of this document claimed the default would
+fail a marketed drug, which is wrong. The point that survives is that the *choice*
+is load-bearing: run the same sequence under `Distilled` or `ESM12` and both this
+design and pembrolizumab drop below the 0.50 cutoff. The variant belongs in the
+config with its evidence, which is where we put it.
 We use **ESM1b**.
 
 ## Validating the package itself
