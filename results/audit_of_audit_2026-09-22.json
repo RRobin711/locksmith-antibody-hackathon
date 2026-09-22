@@ -1,0 +1,232 @@
+[
+ {
+  "check": "A1 DockQ refuses at defaults",
+  "ok": true,
+  "detail": "exit=1, stdout=0 chars (claim: exit 1, no output)"
+ },
+ {
+  "check": "A1 DockQ reproduces 0.816 with flags",
+  "ok": true,
+  "detail": "measured 0.816 (claim 0.816)"
+ },
+ {
+  "check": "A1 A-C interface = 0.723",
+  "ok": true,
+  "detail": "measured 0.723 (claim 0.723)"
+ },
+ {
+  "check": "A1 A-B framework interface = 0.931",
+  "ok": true,
+  "detail": "measured 0.931 (claim 0.931)"
+ },
+ {
+  "check": "A2 checksum pass complete",
+  "ok": true,
+  "detail": "258/258 verified, 0 mismatched"
+ },
+ {
+  "check": "A2 conditioned mean 0.7119",
+  "ok": true,
+  "detail": "0.7119"
+ },
+ {
+  "check": "A2 unconditioned mean 0.5005",
+  "ok": true,
+  "detail": "0.5005"
+ },
+ {
+  "check": "A2 Cohen d = 1.4747",
+  "ok": true,
+  "detail": "1.4747"
+ },
+ {
+  "check": "A2 CI = [0.733, 2.216]",
+  "ok": true,
+  "detail": "[0.733, 2.216]"
+ },
+ {
+  "check": "B0 old winner = mpnn_T0.5_s104_036",
+  "ok": true,
+  "detail": "mpnn_T0.5_s104_036"
+ },
+ {
+  "check": "B0 new winner = mpnn_T0.2_s102_032",
+  "ok": true,
+  "detail": "mpnn_T0.2_s102_032"
+ },
+ {
+  "check": "B0 shipped design falls to 4th",
+  "ok": true,
+  "detail": "rank 4"
+ },
+ {
+  "check": "B0 18/20 designs change rank",
+  "ok": true,
+  "detail": "18/20"
+ },
+ {
+  "check": "B0 Spearman 0.755",
+  "ok": true,
+  "detail": "0.7549"
+ },
+ {
+  "check": "B0 1st-4th gap 0.191",
+  "ok": true,
+  "detail": "0.1908"
+ },
+ {
+  "check": "B0 within-design sd 0.226",
+  "ok": true,
+  "detail": "0.2263"
+ },
+ {
+  "check": "B0 shortlist reliability ~0.28",
+  "ok": true,
+  "detail": "0.2962"
+ },
+ {
+  "check": "B0 cross-check: midpoint within-sd reproduces the recorded 0.467",
+  "ok": true,
+  "detail": "0.4667"
+ },
+ {
+  "check": "B1 docstring claims 2000 draws",
+  "ok": true,
+  "detail": "N_DRAWS=2000"
+ },
+ {
+  "check": "B1 epitope is 26 residues",
+  "ok": true,
+  "detail": "26"
+ },
+ {
+  "check": "B1 patch size equals epitope size",
+  "ok": true,
+  "detail": "k=26"
+ },
+ {
+  "check": "B1 target chain is 113 residues",
+  "ok": true,
+  "detail": "113"
+ },
+ {
+  "check": "B1 contiguous patches are compact vs uniform draws",
+  "ok": true,
+  "detail": "contiguous RMS spread 7.73 A vs uniform 13.21 A"
+ },
+ {
+  "check": "B1 the real epitope is itself compact (same family as the null)",
+  "ok": true,
+  "detail": "epitope spread 10.08 A vs uniform mean 13.21 A"
+ },
+ {
+  "check": "B1 real epitope pooled 0.712",
+  "ok": true,
+  "detail": "0.7120"
+ },
+ {
+  "check": "B1 contiguous null 0.154",
+  "ok": true,
+  "detail": "0.1539"
+ },
+ {
+  "check": "B1 uniform null ~0.231",
+  "ok": true,
+  "detail": "0.2295"
+ },
+ {
+  "check": "B1 17/18 backbones beat their null",
+  "ok": true,
+  "detail": "17/18"
+ },
+ {
+  "check": "B2 interaction_pae ICC = -0.113",
+  "ok": true,
+  "detail": "-0.1128"
+ },
+ {
+  "check": "B4 pred_lddt ICC = +0.836",
+  "ok": true,
+  "detail": "+0.8357"
+ },
+ {
+  "check": "B2 detectable ICC floor = 0.317",
+  "ok": true,
+  "detail": "0.3171"
+ },
+ {
+  "check": "B3 mean rmsd 24.87",
+  "ok": true,
+  "detail": "24.8707"
+ },
+ {
+  "check": "B3 exactly 1 of 30 passes interaction_pae<10",
+  "ok": true,
+  "detail": "1/30"
+ },
+ {
+  "check": "B3 that design sits at 32.86 A",
+  "ok": true,
+  "detail": "32.86"
+ },
+ {
+  "check": "B3 median rmsd 28.94",
+  "ok": true,
+  "detail": "28.9400"
+ },
+ {
+  "check": "B3 Spearman +0.415 (p=0.023)",
+  "ok": true,
+  "detail": "rho=+0.4147 p=0.0227"
+ },
+ {
+  "check": "B6 15 substitutions",
+  "ok": true,
+  "detail": "15"
+ },
+ {
+  "check": "B6 93.5% whole-chain identity",
+  "ok": true,
+  "detail": "93.53%"
+ },
+ {
+  "check": "B6 CDR-H2 differs by exactly 1",
+  "ok": true,
+  "detail": "1 (INPSNGGT -> INPLNGGT)"
+ },
+ {
+  "check": "B8 design CDR-H3 net charge +2",
+  "ok": true,
+  "detail": "2 (ALRPRDVDRGFYK)"
+ },
+ {
+  "check": "B8 pembrolizumab CDR-H3 net charge 0",
+  "ok": true,
+  "detail": "0 (ARRDYRFDMGFDY)"
+ },
+ {
+  "check": "B5 design CDR-H3 has 2 aromatics",
+  "ok": true,
+  "detail": "2"
+ },
+ {
+  "check": "B5 pembrolizumab CDR-H3 has 4 aromatics",
+  "ok": true,
+  "detail": "4"
+ },
+ {
+  "check": "B7 shipped design VH = 0.699",
+  "ok": true,
+  "detail": "0.699"
+ },
+ {
+  "check": "B7 shipped design VL = 0.569",
+  "ok": true,
+  "detail": "0.569"
+ },
+ {
+  "check": "B7 VH is BELOW the 0.70 Good edge",
+  "ok": true,
+  "detail": "0.699 < 0.70"
+ }
+]

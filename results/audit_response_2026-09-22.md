@@ -149,7 +149,7 @@ to 3.0/2.0 = 1.5 (top). Non-uniform slopes reorder.
 **We are not swapping the submitted design, and the reason is the point.** The 1st–4th
 gap is **0.191** surrogate points against a pooled within-design seed sd of **0.226**
 and a 7-seed standard error of **0.086**. The whole top six spans 0.205 — less than one
-seed. Single-seed reliability on this shortlist is **0.28**. Swapping now would mean
+seed. Single-seed reliability on this shortlist is **0.296**. Swapping now would mean
 acting on a ranking this project has already measured as unable to rank. The correct
 reading is that **the winner changing is itself further evidence for the claim we
 already make**: within the viable pool, our metrics do not discriminate.
@@ -309,5 +309,5 @@ before any structure existed, and nothing in the rubric would ever have surfaced
    for any of them, and that is unchanged by tonight.
 5. **The reliability figure 0.629** quoted for the 20-design shortlist does not
    reproduce from the recorded inputs under any standard estimator we tried (the
-   plug-in variance ratio on these data gives 0.28). Flagged rather than corrected,
+   plug-in variance ratio on these data gives 0.276 under `midpoint` and 0.296 under `top` — scale-invariant, as it should be). Flagged rather than corrected,
    because the original script would settle it and guessing would add a fifth number.
