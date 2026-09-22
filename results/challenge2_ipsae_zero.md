@@ -1,3 +1,20 @@
+> # ⛔ WITHDRAWN 2026-09-22 — `0/30` WAS A SAMPLING ARTEFACT
+>
+> This document reported 0 of 30 designs clearing, all failing ipSAE, at
+> `recycling_steps=3`, seed 1. **That conclusion is withdrawn.**
+>
+> `scripts/78_challenge2_reseed.py` re-folded the top 5 at **recycling 10**:
+> `bb_2_0_dldesign_1` moved **0.263 → 0.864 / 0.842 / 0.856** across seeds 1/2/3 —
+> above the §7.2 gate of 0.60 and above the positive control (0.842). Consistency across
+> three seeds says the driver is **recycling, not seed luck**.
+>
+> The positive control passed and was **irrelevant to the actual failure mode**: the
+> configuration was fine, the *sampling* was not. A control that rules out one confound
+> says nothing about the confounds you did not think of.
+>
+> The full pool is being re-folded at recycling 10; the real gate result replaces this.
+> Everything below is kept as the record of what an under-sampled fold produced.
+
 # Boltz-2 assigns these de novo designs **no interface confidence at all**
 
 **2026-09-22.** The first Challenge 2 design to be scored returned `ipsae = 0.000`

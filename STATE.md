@@ -5,22 +5,28 @@ It records what is **verified**, what is **taken on trust**, what is **blocked**
 shortest path to a complete submission. Every number below was recomputed from files on
 this machine during this session unless it says otherwise.
 
-> ## ⚠ HEADLINE: **ZERO of 30 Challenge 2 designs clear the §7.2 cutoffs.**
+> ## ⛔ HEADLINE: the earlier `0/30` result is **WITHDRAWN** — it was an under-sampling artefact
 >
-> All 30 folded successfully. **All 30 fail on `ipsae` and nothing else** — best 0.372
-> against a ≥ 0.60 minimum (1.6× short), median 0.006, and 15 of 30 are exactly zero. The
-> other six metrics pass on every design, most by large margins.
+> The 30 designs were first folded at `recycling_steps=3`, seed 1, and returned **0 of 30
+> viable**, all failing ipSAE. Re-folding the top 5 at **recycling 10** moved
+> `bb_2_0_dldesign_1` from **0.263 → 0.864 / 0.842 / 0.856** across seeds 1/2/3 — above the
+> §7.2 gate of 0.60, and above the positive control (wild-type pembrolizumab Fv, 0.842).
+> Consistent across three seeds, so the driver is **recycling depth, not seed luck**.
 >
-> **Step 3 was therefore not run, and that is the correct outcome, not a failure.**
-> Nothing was selected and nothing was packaged; `scripts/75_challenge2_package.py`
-> refuses and exits 2. There is no `LOCKSMITH_DEV_Challenge2/` folder, deliberately —
-> §7.2 ranks a non-viable design below every viable one, so a folder would be worse than
-> no folder.
+> **At least one design clears.** The full pool is being re-folded at recycling 10 and the
+> real gate result will replace this section. Until it lands, Challenge 2's pass rate is
+> **unknown**, and the previous write-ups
+> ([[results/challenge2_gates|gates]], [[results/challenge2_ipsae_zero|the ipSAE zero]])
+> carry withdrawal banners.
 >
-> **Do not quote the `final` scores (81.6–87.6).** A design that fails a hard cutoff does
-> not have a score; it has a disqualification.
+> **The positive control passed and was irrelevant to the real failure mode.** It ruled out
+> the Fv construct (arm A Fab 0.776, arm B Fv 0.842, both through the identical call) —
+> a well-grounded hypothesis drawn from this project's own failed G1c gate. The
+> configuration was never the problem; the *sampling* was. **A control that eliminates the
+> confound you thought of tells you nothing about the one you did not.**
 >
-> Full write-up: [[results/challenge2_gates|Challenge 2 gates]].
+> Step 3 remains not run — nothing has been selected or packaged — but now because the
+> measurement is in flight, not because nothing clears.
 
 ---
 
@@ -36,12 +42,43 @@ this machine during this session unless it says otherwise.
 
 ---
 
-## 2. Challenge 2 — measured end to end, **0/30 viable**
+## 2. Challenge 2 — **result withdrawn, re-measurement in flight**
 
-**Done and verified:**
+**What is settled:**
 
-| step | result |
+| step | status |
 |---|---|
+| Germline novelty wired for Ch2 (§6.3.1) | ✅ pinned by 3 tests |
+| `challenge=1` un-hardcoded in 57 and 58 | ✅ |
+| Fold + score + gate machinery | ✅ runs end to end; the packager's refusal guard fires correctly |
+| Positive control | ✅ **Fab 0.776, Fv 0.842** — the pipeline places a real cognate pair well above the gate |
+| **Gate pass rate** | ⏳ **UNKNOWN** — the recycling-3 answer (`0/30`) is withdrawn |
+
+**What went wrong.** The first pass used `recycling_steps=3`, inherited from Challenge 1's
+fold settings without re-examination — the same class of error as inheriting the Fv/Fab
+decision, which is what the positive control was built to check. Recycling depth turns out
+to matter enormously for these complexes:
+
+| design | recycling 3, seed 1 | recycling 10, seeds 1/2/3 |
+|---|---|---|
+| `bb_2_0_dldesign_1` | 0.263 | **0.864 / 0.842 / 0.856** |
+| `bb_4_0_dldesign_2` | 0.372 | 0.331 / 0.416 / 0.361 |
+| `bb_6_0_dldesign_2` | 0.242 | 0.011 / 0.267 / 0.105 |
+| `bb_4_0_dldesign_0` | 0.235 | 0.000 / 0.000 / 0.000 |
+| `bb_7_0_dldesign_1` | 0.234 | 0.161 / 0.169 / 0.000 |
+
+**Note it is not a uniform lift.** Four of the five got no better or worse; one moved
+decisively and reproducibly. Extra recycling does not rescue bad designs — it **resolves**
+which are which, and at recycling 3 the pool was too noisy to tell them apart. The
+single-seed ranking at recycling 3 was near-worthless: the design that clears was ranked
+**2nd**, and the one ranked 1st does not clear.
+
+**A signal I had and under-weighted.** My own PAE diagnostic, run hours earlier, flagged
+`bb_2_0_dldesign_1` as having **81.4%** of cross-chain residue pairs under PAE 10 Å — by
+far the highest of the nine I checked. I noted it, said the gate outcome was "genuinely
+open", and then reported `0/30` without going back to it.
+
+---|---|
 | Germline novelty wired for Ch2 (§6.3.1) | ✅ `novelty.compute(..., challenge=2)` routes to `metrics/germline.py`; pinned by 3 tests |
 | `challenge=1` un-hardcoded in 57 and 58 | ✅ 57 uses a `CHALLENGE` constant; 58 passes `challenge=` to novelty and reads DockQ applicability from config instead of `if challenge == 1` |
 | Fold the 30 designs | ✅ **30/30, zero failures**, Boltz-2, seed 1, handbook §4.2.2 antigen |
