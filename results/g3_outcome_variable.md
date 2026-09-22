@@ -41,3 +41,27 @@ The filter beats its equal-budget null on **2 of 6** outcomes: ['dockq', 'iface_
 **The prior it inverts.** Tyr and Trp dominate natural paratopes; selecting for ≤1 aromatic in a 13-residue CDR-H3 selects against them. Our own named winner carries aromatic count **2**, so the filter at its pre-registered threshold would have discarded it.
 
 **What is NOT refuted.** The statistics were sound and the null was the right one for the question asked. Nothing here says the original analysis was sloppy; it says the outcome variable does not support the conclusion that was drawn from it. This is the same error class as `results/metric_validity.md` §on outcome choice.
+
+---
+
+## 4. What downstream rested on this — checked, not assumed
+
+**The shortlist and the named winner did NOT.** `scripts/32_shortlist_and_reseed.py:76`
+sorts on `-x["surrogate"]`; aromatic count appears only in a reporting line
+(`by aromatic count:` at line 86). The filter was never applied as a selection step, so
+refuting it **does not disturb the Challenge 1 selection**. This was verified by reading
+the sort key, not inferred from memory — and it is the reason the winner carries aromatic
+count 2 despite a pre-registered threshold of ≤1.
+
+**Documents changed in this pass:** `PLAN.md` (G3 status ✅→❌), `README.md` (status
+block), `results/pitch_outline.md` (moved from "do not present as validated" to "refuted;
+if mentioned, mention it as a finding about the metric"), `results/m3_g3_verdict.md`
+(SUPERSEDED banner at the top), `LEARNINGS.md` (entry rewritten with the resolution), and
+`scripts/57_build_submission.py` — which carried a **dangling reference to
+`results/g3_verdict_reexamined.md`, a file that never existed**. That reference was
+written into the shipped `methods_and_limitations.md` last session and would have sent a
+grader to a missing file; it is now replaced with the result itself, inline.
+
+*That dangling reference is itself an instance of the night's pattern: the newest claim
+carried the error. It was written in the same pass that added the "if a number cannot be
+reproduced from the artefact you hand over, you have not handed over the number" language.*

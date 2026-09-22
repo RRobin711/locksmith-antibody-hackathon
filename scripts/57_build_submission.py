@@ -238,9 +238,16 @@ any structure existed, and nothing in the rubric would have surfaced it.
 
 Aromatic content of CDR-H3 is **2** (F, Y) against pembrolizumab's **4** (Y, F, F, Y).
 Tyr/Trp enrichment is among the most robust compositional features of natural paratopes,
-so this is a direction worth justifying rather than a neutral fact. See
-`results/g3_verdict_reexamined.md` in our repository for why our own aromatic filter does
-not support it.
+so this is a direction worth justifying rather than a neutral fact.
+
+**And our own aromatic filter does not justify it.** We had a CDR-H3 filter that kept
+designs with ≤1 aromatic and that beat an equal-budget random subset at p<0.0001. On
+2026-09-22 we re-ran that test with each scored metric as the outcome: it wins on
+**2 of 6**, DockQ-to-the-parent-crystal and interface pLDDT, and **both are properties of
+the structure predictor rather than of the interface**. Contact count runs the other way —
+filtered designs make ~1.8 **fewer** heavy-atom contacts, which is what one should expect
+from selecting against large aromatic side chains. We have withdrawn that filter as a
+design rule.
 
 ## Method
 

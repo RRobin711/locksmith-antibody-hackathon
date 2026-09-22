@@ -1,3 +1,12 @@
+> ## ❌ SUPERSEDED 2026-09-22 — this verdict does not license a design rule
+>
+> The statistics below stand. What they were measured ON does not support the conclusion.
+> Re-running this document's own equal-budget test with each scored metric as the outcome
+> shows the filter beats its null on **2 of 6** — `dockq` and `iface_plddt` — and **both
+> are properties of the predictor, not the interface**. `contacts` runs the wrong way
+> (−1.80, p=0.988 for 'more contacts'). See [[g3_outcome_variable|the outcome-variable
+> test]]. Read what follows as a record of the method, not as a validated filter.
+
 # G3 — verdict
 
 Adjudicated on **239 designs, single Boltz seed each**, `scripts/33_g3_verdict.py`. 10,000 random subsets.

@@ -48,9 +48,14 @@ PDF.
 >    `tests/test_invariants.py` (17 passing) makes findings 1 and 2 impossible rather than
 >    merely documented; the repo is under git.
 >
-> ⚠ **Two claims are withdrawn or flagged pending re-examination.** The **G3 aromatic
-> filter** is no longer presented as validated — it selects against Tyr/Trp, and it passed
-> against an outcome variable (pose retention to the parent crystal) that is not binding.
+> ❌ **The G3 aromatic filter is REFUTED as a design rule** (2026-09-22, resolved — no
+> longer merely flagged). Re-running G3's own equal-budget test with every scored metric as
+> the outcome: it beats its null on **2 of 6**, `dockq` and `iface_plddt`, and **both are
+> properties of the predictor rather than the interface**. Every interface quantity is null
+> or against it — and **`contacts` runs the wrong way**, filtered designs making 1.80 fewer
+> heavy-atom contacts, exactly as the chemistry predicts for selecting against Tyr/Trp.
+> The filter selects for designs Boltz places confidently; neither surviving quantity exists
+> for a de novo target. See [[results/g3_outcome_variable|the outcome-variable test]].
 > The **germline inversion** on pitch slide 4 is corrected: pembrolizumab at 53.8% is the
 > **maximum** of 2000 scrambles (~+5.3 sd, p ≈ 1/2000), so the metric discriminates
 > decisively; the surviving true claim is only that the <95% gate is free.

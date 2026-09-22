@@ -116,9 +116,14 @@ trustworthy?" — and there is no room for the half-sentence that answers it.
   finished design and as excuse-making without one. Never present slides 2-4 before slide 1.
 - **Do not present RF2 agreement as validation** (audit 10.5). Two models agreeing is not
   binding evidence; they share training data and correlated errors are expected.
-- **Do not present the G3 aromatic filter as validated** (2026-09-22). The statistics are
-  sound but the outcome variable is pose-retention-to-the-parent-crystal, not binding, and
-  the rule selects *against* Tyr/Trp. See [[audit_response_2026-09-22|§B5]].
+- **The G3 aromatic filter is REFUTED as a design rule — do not present it at all**
+  (2026-09-22, resolved). It beats its equal-budget null on 2 of 6 outcomes, `dockq` and
+  `iface_plddt`, both properties of the *predictor*; `contacts` runs the wrong way
+  (−1.80, filtered designs make FEWER contacts). It selects for what Boltz finds easy to
+  place. See [[g3_outcome_variable|the outcome-variable test]].
+  **If it is mentioned, mention it as a finding about the metric, not about antibodies** —
+  "our own validated filter turned out to be selecting for predictability" is a stronger
+  and more honest slide than the filter ever was.
 - **Do not group `pred_lddt` with "constant and useless"** (2026-09-22). Measured on the
   retrieved RF2 outputs its **ICC is +0.836**, the highest of the four and the only one
   clearing the 0.317 detectable floor. Its small sd (0.012) is because the complex is ~85%
