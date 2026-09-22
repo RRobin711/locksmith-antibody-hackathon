@@ -55,6 +55,46 @@ are *more* novel than that test set — a de novo backbone against a target the 
 was never co-evolved with. `results/challenge2_scope.md` named this as the standing reason
 to be sceptical of any Challenge 2 score. It was right.
 
-**The honest reading: our own structure predictor does not believe these designs bind.**
-That is a result, not a failure of the pipeline, and it is worth more than a score would
-have been.
+## CORRECTION, same session — this does NOT generalise to all 30
+
+The paragraph that stood here read *"our own structure predictor does not believe these
+designs bind"*. **That was an extrapolation from n=1 and it is wrong.** It is precisely
+the error this project has catalogued four times: a single observation stated as a
+property of the pool.
+
+Measured across the folds available at the time of writing, with per-design chain
+boundaries (the first attempt hardcoded the antibody/antigen split at residue 226, which
+is only correct for designs whose chains happen to be 119+107 — an error that mixed
+intra-antibody pairs into the "cross-chain" block and inflated the apparent confidence):
+
+| design | H | L | Ag | min cross-chain PAE | fraction < 10 Å |
+|---|---|---|---|---|---|
+| `bb_10_0_dldesign_0` | 119 | 107 | 123 | 18.40 | 0.0000 |
+| `bb_10_0_dldesign_1` | 119 | 107 | 123 | 17.08 | 0.0000 |
+| `bb_10_0_dldesign_2` | 119 | 107 | 123 | 17.22 | 0.0000 |
+| `bb_1_0_dldesign_0` | 122 | 109 | 123 | 7.02 | 0.0487 |
+| `bb_1_0_dldesign_1` | 122 | 109 | 123 | **4.34** | **0.4264** |
+| `bb_1_0_dldesign_2` | 122 | 109 | 123 | 10.65 | 0.0000 |
+| `bb_2_0_dldesign_0` | 117 | 108 | 123 | 5.97 | 0.2464 |
+| `bb_2_0_dldesign_1` | 117 | 108 | 123 | **4.76** | **0.8142** |
+| `bb_2_0_dldesign_2` | 117 | 108 | 123 | 8.15 | 0.0145 |
+
+**Some designs have a strongly confident predicted interface.** `bb_2_0_dldesign_1` has
+81% of its cross-chain residue pairs below PAE 10 Å. The `bb_10_*` family has none, and
+that family is what the original paragraph was written from.
+
+**What survives from the section above:** the ipSAE zero on `bb_10_0_dldesign_0` is
+genuine and not the empty-table failure — that check stands, and the mechanism (zero pairs
+under the cutoff) is exactly right for *that design*. The distinction between `contacts`
+(computed from coordinates, blind to uncertainty) and `ipsae` (computed from the PAE) also
+stands, and is if anything sharpened: `bb_10_0_dldesign_0` has **61 heavy-atom contacts and
+zero interface confidence**, which is the cleanest single illustration of that gap in the
+whole project.
+
+**What does not survive:** any claim about whether *these designs* are believed by the
+predictor. The gate pass rate is the measurement that answers it, and it is reported in
+`STATE.md` §2 from all 30 designs rather than from the first one scored.
+
+*The lesson is the project's own, and I repeated it inside the document warning about it:
+state a null or a negative as a property of the observation until the pool has been
+measured.*
