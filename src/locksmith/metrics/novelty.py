@@ -30,9 +30,30 @@ def identity(query: str, reference: str) -> float:
     return 100.0 * matches / max(len(query), len(reference))
 
 
-def compute(heavy_seq: str, *, reference: str = PEMBROLIZUMAB_CDRH3) -> MetricResult:
+def compute(heavy_seq: str, *, reference: str | None = None,
+            challenge: int = 1) -> MetricResult:
+    """CDR-H3 percent identity against the reference THIS CHALLENGE specifies.
+
+    §6.3.1 is explicit that the metric is the same and only the reference changes:
+    "Challenge 1: Compared to Keytruda's CDR-H3 / Challenge 2: Compared to human
+    germline CDR sequences". The band triple and the <95% cutoff are shared (§5.2,
+    §7.2), so this is ONE metric with two references, not two metrics -- encoding it
+    as two would duplicate the bands and give them somewhere to diverge.
+
+    Challenge 2 has no single germline string to compare against: CDR-H3 spans the
+    V(D)J junction and the N-region insertions have no germline counterpart at all, so
+    the germline side is a best-match search over IGHV/IGHD/IGHJ. See
+    `metrics/germline.py`, which is validated in `results/germline_metric_validation.md`.
+
+    An explicit `reference` overrides the challenge dispatch and is used only by the
+    Challenge 1 path and by tests.
+    """
     n = number(heavy_seq)
     if n is None:
         return MetricResult(None, skipped_reason="heavy chain is not a V domain")
-    pct = identity(n.cdr3, reference)
-    return MetricResult(round(pct, 1), detail=f"CDR-H3 {n.cdr3} ({len(n.cdr3)}aa) vs {reference}")
+    if reference is None and challenge == 2:
+        from locksmith.metrics import germline
+        return germline.compute_from_cdr3(n.cdr3)
+    ref = reference if reference is not None else PEMBROLIZUMAB_CDRH3
+    pct = identity(n.cdr3, ref)
+    return MetricResult(round(pct, 1), detail=f"CDR-H3 {n.cdr3} ({len(n.cdr3)}aa) vs {ref}")

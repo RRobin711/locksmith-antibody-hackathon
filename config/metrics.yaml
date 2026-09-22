@@ -154,6 +154,17 @@ metrics:
     strict_cutoff: true    # handbook: "< 95%"
     challenges: [1, 2]
     requires: []
+    # ONE metric, TWO references -- S6.3.1: "Challenge 1: Compared to Keytruda's
+    # CDR-H3 / Challenge 2: Compared to human germline CDR sequences". The bands and
+    # the cutoff are shared, so encoding this as two metrics would duplicate the band
+    # triple and give it somewhere to diverge (which is exactly how the surrogate
+    # anchors rotted). The reference is dispatched in `metrics/novelty.compute`
+    # on `challenge=`; Challenge 2 routes to `metrics/germline.py`.
+    # Until 2026-09-22 every caller got Keytruda, so a Challenge 2 design would have
+    # been scored against the WRONG reference with no error.
+    reference_by_challenge:
+      1: pembrolizumab_cdrh3     # metrics/novelty.PEMBROLIZUMAB_CDRH3, from 5GGS
+      2: human_igh_germline      # metrics/germline.py, vdj_coverage convention
 
 categories:
   binding: [ipsae, dockq, dg, contacts, iface_plddt, cdr_sasa]

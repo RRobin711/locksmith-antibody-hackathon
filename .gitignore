@@ -10,3 +10,4 @@ vendor/
 submission/*.zip
 *.egg-info/
 .pytest_cache/
+runs/challenge2_pod/
