@@ -95,6 +95,33 @@ filtered designs make ~1.8 **fewer** heavy-atom contacts, which is what one shou
 from selecting against large aromatic side chains. We have withdrawn that filter as a
 design rule.
 
+## This score is an envelope too, and we measured it
+
+Boltz's `--diffusion_samples` defaults to 1, so every pose-derived metric here came from a
+single diffusion draw. Five samples from one run (MSA shared, so this is pure diffusion
+variability):
+
+| diffusion sample | 0 (submitted) | 1 | 2 | 3 | 4 | spread |
+|---|---|---|---|---|---|---|
+| ipSAE | 0.822 | 0.841 | 0.827 | 0.840 | 0.861 | 0.039 |
+| **DockQ** | **0.816** | 0.798 | 0.801 | 0.820 | **0.711** | **0.109** |
+| composite | **96.0** | 94.0 | 96.0 | 96.0 | 94.0 | **94.0–96.0** |
+
+**ipSAE is stable and DockQ is not.** We expected the opposite — this complex is nearly
+invariant to Boltz recycling depth (ipSAE range 0.036 over depths 3→20), and we predicted
+in advance that it would be equally invariant here. It is not. Recycling refines a
+representation the trunk has already committed to; the diffusion head **generates the
+coordinates**. A memorised complex can have a confidently-determined interface and still
+place its atoms differently enough between draws to move a structural comparison by 0.109
+DockQ. **Confidence stability does not imply coordinate stability**, and DockQ is the only
+metric scored here that reads coordinates against an external reference.
+
+Read the score as **94.0–96.0**. The design is viable under every sample; no metric
+approaches a §7.2 cutoff in any of them.
+
+Note also that `model_0` — the submitted one — is joint-best of the five. Boltz ranks its
+output by confidence, so what we submit is an argmax rather than a sample.
+
 ## Developability liabilities in this design, found by our own scan
 
 Handbook §9.2 asks for no NG/DG deamidation motifs in CDRs. **This design carries `NG` at

@@ -23,8 +23,29 @@ and our Challenge 1 design moves 0.824 → 0.850 → 0.859, a range of 0.036. **
 design swings 0.601, twelve to seventeen times more.** A near-native complex is
 essentially invariant in sampling depth; this one is not converged at any depth we tested.
 
-Read the 96.0 as **93.6–96.0 depending on sampling depth and seed**, and read the variance
-as the real result about de novo design.
+**A second axis, measured the same day and cheaper still.** Boltz's `--diffusion_samples`
+defaults to 1, so this and every other pose-derived number here came from a single
+diffusion draw. Asking for five (2m54s against ~2m — the MSA, trunk and recycling are
+shared, only the diffusion head reruns):
+
+| diffusion sample | 0 (submitted) | 1 | 2 | 3 | 4 |
+|---|---|---|---|---|---|
+| ipSAE | **0.864** | 0.773 | 0.757 | 0.859 | 0.736 |
+| composite | **96.0** | 93.6 | 91.2 | 96.0 | 91.2 |
+
+**Three of five fall to the Medium band.** No sample goes near the 0.60 viability cutoff —
+the lowest is 0.736 — so the design is viable under every draw we took. What moves is the
+score.
+
+**And the submitted model is the best of the five.** Boltz orders its output by its own
+confidence, so `model_0` is the argmax *by construction*. With one diffusion sample you do
+not get a draw from the distribution, you get the model's best guess reported as if it
+were the estimate. That is true of every pose-derived number in this submission and, we
+suspect, of most submissions scored this way.
+
+Read the headline as **91.2–96.0 across diffusion samples and 93.6–96.0 across recycling
+depth**, on a design that is viable throughout. The variance is the real result about de
+novo design; the score is a point on it.
 
 **We can support exactly one claim about this molecule, and it is not binding.**
 

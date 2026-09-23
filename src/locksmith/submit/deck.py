@@ -127,7 +127,7 @@ def build(path: Path, *, c1: dict, c2: dict) -> Path:
     ch.value_axis.tick_labels.font.size = Pt(11)
     ch.category_axis.tick_labels.font.size = Pt(11)
     bullets(s, [
-        ("Range across depth", 0, True, INK),
+        ("ipSAE range across recycling depth", 0, True, INK),
         ("crystallised   0.050", 1, False, MUTED),
         ("Challenge 1    0.036", 1, False, MUTED),
         ("Challenge 2    0.601   ← 12–17×", 1, True, WARN),
@@ -135,9 +135,13 @@ def build(path: Path, *, c1: dict, c2: dict) -> Path:
         ("A near-native complex is essentially invariant in sampling depth.", 0, False, INK),
         ("Ours is not converged at any depth we tested.", 0, True, INK),
         ("", 0, False, INK),
-        ("So our own headline is 93.6–96.0 depending on depth and seed, and we report "
-         "it that way.", 0, False, MUTED),
-        ("The variance is a better result than the score.", 0, True, ACCENT),
+        ("A second axis, same story:", 0, True, INK),
+        ("Boltz returns its models RANKED. With diffusion_samples=1 you get the argmax, "
+         "not a sample. Asking for five costs 2m54s vs 2m.", 1, False, MUTED),
+        ("Ch1 94.0–96.0 · Ch2 91.2–96.0", 1, True, WARN),
+        ("", 0, False, INK),
+        ("Every pose-derived number we have ever reported sat at the top of a "
+         "distribution we never sampled.", 0, True, ACCENT),
     ], top=1.95, width=4.6, size=14)
 
     # ---------------------------------------------------------------- 4
