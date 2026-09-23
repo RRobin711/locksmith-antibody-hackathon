@@ -29,8 +29,10 @@ number and hides the variance that matters.
 from __future__ import annotations
 
 import json
+import os
 import statistics as stats
 import sys
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import gemmi
@@ -184,29 +186,57 @@ def collapse(rows: list[dict]) -> dict:
     return out
 
 
+# Scoring one complex means 5 DockQ invocations plus PRODIGY, freeSASA and ipSAE: 40
+# complexes take roughly an hour serially. Every one of those is either a subprocess or
+# pure Python over per-model paths, so THREADS are safe here where processes would be
+# awkward -- subprocess calls release the GIL, `sasa` uses a fresh TemporaryDirectory per
+# call, DockQ takes explicit paths, and ipsae keys its output off the PAE path, which is
+# unique per (complex, model). Nothing shares a mutable structure.
+#
+# Processes would be the wrong tool anyway: this project has already killed 239/239
+# workers with `Cannot re-initialize CUDA in forked subprocess` by adding a
+# ProcessPoolExecutor to a script that had touched CUDA in the parent.
+WORKERS = int(os.environ.get("LOCKSMITH_SCORE_WORKERS", "6"))
+
+
 def main() -> int:
     cfg = load()
     panel = json.loads(PANEL.read_text())
     results: dict = {"panel": {}, "negctrl": {}, "negctrl_nloop": {}}
 
-    print("=== calibration panel ===", flush=True)
-    for e in panel:
+    print(f"=== calibration panel ({WORKERS} workers) ===", flush=True)
+
+    def one(e: dict):
         label = f"cal_{e['arm']}_{e['pdb_id'].lower()}"
         pred = FOLDS / label / f"boltz_results_{label}" / "predictions" / label
         if not pred.is_dir():
-            continue
+            return None
         native = build_native(e)
         rows = score_models(pred, label, cfg, native)
         if not rows:
-            print(f"  {e['pdb_id']}: no scorable models", flush=True)
-            continue
-        c = collapse(rows) | {"arm": e["arm"], "pdb_id": e["pdb_id"],
-                              "n_res": e["n_res"], "rows": rows,
-                              "native": str(native) if native else None}
-        results["panel"][e["pdb_id"]] = c
-        print(f"  {e['pdb_id']:<6} {e['arm']:<5} ipSAE {c.get('ipsae', float('nan')):.3f} "
-              f"(spread {c.get('ipsae_spread', 0):.3f})  "
-              f"DockQ {c.get('dockq', float('nan')):.3f}", flush=True)
+            return None
+        return collapse(rows) | {"arm": e["arm"], "pdb_id": e["pdb_id"],
+                                 "n_res": e["n_res"], "rows": rows,
+                                 "native": str(native) if native else None}
+
+    # natives are built serially first: build_native writes a shared cache directory and
+    # two threads racing on the same output path is a real collision, unlike the metrics
+    for e in panel:
+        try:
+            build_native(e)
+        except Exception:                                    # noqa: BLE001
+            pass
+
+    with ThreadPoolExecutor(max_workers=WORKERS) as ex:
+        for e, c in zip(panel, ex.map(one, panel)):
+            if c is None:
+                print(f"  {e['pdb_id']}: no scorable models", flush=True)
+                continue
+            results["panel"][e["pdb_id"]] = c
+            print(f"  {e['pdb_id']:<6} {e['arm']:<5} "
+                  f"ipSAE {c.get('ipsae', float('nan')):.3f} "
+                  f"(spread {c.get('ipsae_spread', 0):.3f})  "
+                  f"DockQ {c.get('dockq', float('nan')):.3f}", flush=True)
 
     for key, root, title in (("negctrl", NEG, "negative control"),
                              ("negctrl_nloop", NEG_NLOOP,

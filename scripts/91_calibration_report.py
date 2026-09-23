@@ -12,7 +12,7 @@ import json
 import statistics as stats
 from pathlib import Path
 
-from scipy.stats import mannwhitneyu
+from scipy.stats import mannwhitneyu, spearmanr
 
 from locksmith.config import load
 
@@ -522,6 +522,83 @@ def calibration(d: dict, cfg) -> str:
                 w(f"| {LABEL[m]} | **{v:.3f}** | {rank} of {len(pool)} | "
                   f"{pc:.0f}th | {stats.median(pool):.3f} |")
             w("")
+    # ---- THE VALIDITY TEST: does the gate agree with ground truth? ----
+    paired = [r for r in panel
+              if r.get("ipsae") is not None and r.get("dockq") is not None]
+    if len(paired) >= 10:
+        w("## Does the gate agree with the crystal?")
+        w("")
+        w("This is the question the panel exists to answer and the one the submission "
+          "cannot answer about itself. For every complex here there is a **real "
+          "structure**, so we have both the number the rubric gates on (ipSAE) and the "
+          "accuracy of the predicted pose against ground truth (DockQ). On our own de "
+          "novo design there is no crystal, so this comparison is impossible — which is "
+          "exactly why it has to be made somewhere.")
+        w("")
+        ip = [r["ipsae"] for r in paired]
+        dq = [r["dockq"] for r in paired]
+        rho, pv = spearmanr(ip, dq)
+        w(f"Across **n={len(paired)}** real complexes, Spearman "
+          f"**rho = {rho:+.3f}** (p = {pv:.4f}) between ipSAE and DockQ.")
+        w("")
+        for arm_name, arm in (("pre-cutoff", pre), ("post-cutoff", post)):
+            sub = [r for r in arm if r.get("ipsae") is not None
+                   and r.get("dockq") is not None]
+            if len(sub) >= 6:
+                rr, pp = spearmanr([r["ipsae"] for r in sub], [r["dockq"] for r in sub])
+                w(f"- {arm_name} (n={len(sub)}): rho = **{rr:+.3f}** (p = {pp:.4f})")
+        w("")
+        w("*Caveat on the correlation, stated rather than left for a reader to find:* at "
+          f"n={len(paired)} the Fisher-z standard error is "
+          f"{1/max(len(paired)-3,1)**0.5:.2f}, so the 95% CI on rho is roughly "
+          f"±{1.96/max(len(paired)-3,1)**0.5:.2f} — wide. This establishes direction and "
+          "rough magnitude, not a precise value.")
+        w("")
+        w("### The gate scored against ground truth")
+        w("")
+        w("Taking the CAPRI convention as truth — DockQ ≥ 0.49 is a *Medium or better* "
+          "pose, DockQ < 0.23 is *Incorrect* — and the handbook's ipSAE ≥ 0.60 as the "
+          "gate:")
+        w("")
+        good = [r for r in paired if r["dockq"] >= 0.49]
+        bad = [r for r in paired if r["dockq"] < 0.23]
+        fn = [r for r in good if r["ipsae"] < GATE]
+        fp = [r for r in bad if r["ipsae"] >= GATE]
+        w("| | complexes | gate says | |")
+        w("|---|---|---|---|")
+        w(f"| **Good pose** (DockQ ≥ 0.49) | {len(good)} | "
+          f"{len(good)-len(fn)} pass, **{len(fn)} FAIL** | "
+          f"false-negative rate **{100.0*len(fn)/max(len(good),1):.0f}%** |")
+        w(f"| **Incorrect pose** (DockQ < 0.23) | {len(bad)} | "
+          f"{len(bad)-len(fp)} fail, **{len(fp)} PASS** | "
+          f"false-positive rate **{100.0*len(fp)/max(len(bad),1):.0f}%** |")
+        w("")
+        if fn:
+            w(f"**{len(fn)} complexes with a genuinely good predicted pose are rejected "
+              f"by the gate:** " +
+              ", ".join(f"{r['pdb_id']} (DockQ {r['dockq']:.3f}, ipSAE {r['ipsae']:.3f})"
+                        for r in sorted(fn, key=lambda x: -x["dockq"])[:6]) +
+              ("…" if len(fn) > 6 else "") + ".")
+            w("")
+            w("These are real, crystallised antibody–antigen complexes whose structure "
+              "Boltz reproduced correctly, and the rubric would discard every one of "
+              "them. A false negative here is not a near miss — it is the gate refusing "
+              "a right answer.")
+            w("")
+        if fp:
+            w(f"**{len(fp)} complexes with an incorrect pose pass the gate:** " +
+              ", ".join(f"{r['pdb_id']} (DockQ {r['dockq']:.3f}, ipSAE {r['ipsae']:.3f})"
+                        for r in sorted(fp, key=lambda x: x["dockq"])[:6]) + ".")
+            w("")
+        w("**Why this matters more than the percentiles.** A percentile says where our "
+          "number sits among other numbers. This says whether the number tracks the thing "
+          "it claims to measure. Note also that both error rates are computed against "
+          "DockQ, which is itself a *prediction-versus-crystal* comparison and not a "
+          "binding assay — so this validates the gate against pose accuracy, not against "
+          "affinity. Nothing in this project measures affinity, and the SKEMPI arm "
+          "already showed no metric in the stack tracks it.")
+        w("")
+
     # ---- is ipSAE continuous, or a per-sample coin flip? ----
     allrows = [r for r in panel if r.get("rows")]
     if len(allrows) >= 8:
