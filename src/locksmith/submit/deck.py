@@ -165,26 +165,47 @@ def build(path: Path, *, c1: dict, c2: dict) -> Path:
     ], size=15)
 
     # ---------------------------------------------------------------- 5
+    s = slide("Two textbook fixes for the same liability. They differ by 60×.",
+              "Our Challenge 2 design had two N-glycosylation sequons in its paratope — "
+              "handbook §9.2 forbids them")
+    bullets(s, [
+        ("§9 prescribes two remedies and presents them as interchangeable: N→Q or S→A.", 0, True, INK),
+        ("The structure said which, before we folded anything:", 0, True, INK),
+        ("the glycosylation acceptors ARE the binding residues — H N52 and L N49 carry 29 "
+         "antigen contacts between them. The serines completing the motifs carry ZERO.", 1, False, MUTED),
+        ("", 0, False, INK),
+        ("N→Q  (mutate the asparagines):  ipSAE 0.864 → 0.014.  Dead, ±0.001 over 5 samples.",
+         0, True, WARN),
+        ("S→A  (mutate the serines):      viable 5/5, both sequons gone, §9.2 passes.",
+         0, True, ACCENT),
+        ("", 0, False, INK),
+        ("A developability fix is a DESIGN CHANGE. Prescribed fixes are not "
+         "interchangeable, and the structure tells you which one in a minute.", 0, True, INK),
+        ("", 0, False, INK),
+        ("We submitted S→A — and it costs us 4.8 points, because its best sample falls "
+         "below the ipSAE Good edge. §9.2 asks for it; §5.2 does not pay for it.", 0, False, MUTED),
+        ("A candidate with glycans in its binding site is not a candidate.", 0, True, ACCENT),
+    ], size=15)
+
+    # ---------------------------------------------------------------- 6
     s = slide("What the designs honestly are, and what we would do next",
               "Stated at the front of both submissions, not the back")
     bullets(s, [
-        (f"Challenge 1 — {c1['final']:.1f}/100. 15 substitutions, 93.5% identical to Keytruda; "
-         f"CDR-H2 changed at ONE position. One loop genuinely redesigned.", 0, True, INK),
-        (f"ipSAE {c1['ipsae']:.3f} · DockQ {c1['dockq']:.3f} (the antibody–antigen interface alone is "
-         f"0.723) · predicted TIM-3 cross-reactivity, disclosed against our interest.", 1, False, MUTED),
-        (f"Challenge 2 — {c2['final']:.1f}/100, the ONE design of 30 that cleared.", 0, True, INK),
-        ("All six CDRs designed de novo — onto RFantibody's fixed trastuzumab framework, carried over "
-         "unchanged. Targeting is evidenced (17/18 backbones beat a contiguous-patch null). "
-         "Binding is evidenced by nothing here.", 1, False, MUTED),
-        ("Liabilities we found in our own designs, with the scanner we had promised and not written:",
-         0, True, INK),
-        ("Two N-glycosylation sequons in the Challenge 2 paratope; an NG deamidation motif left in "
-         "Challenge 1's CDR-H2. Both violate §9.2. The scanner now exists and is regression-tested.",
-         1, False, MUTED),
+        (f"Challenge 1 — {c1['final']:.1f}/100 (94.0–96.0 across diffusion samples). "
+         f"15 substitutions, 93.5% identical to Keytruda; CDR-H2 changed at ONE position. "
+         f"One loop genuinely redesigned.", 0, True, INK),
+        ("It also fails §9.2 — an NG deamidation motif in CDR-H2, at a position we made "
+         "designable and left alone. Found by the scanner we built after missing the "
+         "Challenge 2 sequons.", 1, False, MUTED),
+        ("Challenge 2 — 91.2/100, the ONE design of 30 that cleared, sequon-fixed.", 0, True, INK),
+        ("All six CDRs designed de novo — onto RFantibody's fixed trastuzumab framework, "
+         "carried over unchanged. Targeting is evidenced: 17/18 backbones beat a "
+         "contiguous-patch null. Binding is evidenced by nothing here.", 1, False, MUTED),
+        ("Viable in 5 of 5 diffusion samples — with the lowest 0.019 above the cutoff.", 1, True, WARN),
         ("", 0, False, INK),
-        ("Next: redesign the light-chain CDRs (the whole NetSolP deficit sits there), fix the "
-         "sequons, and validate any ranking claim against measured affinity before making it.",
-         0, False, MUTED),
+        ("Next: redesign Challenge 1's light chain (the entire NetSolP deficit sits there, "
+         "untouched), remove the NG motif, and validate any ranking claim against measured "
+         "affinity before making it.", 0, False, MUTED),
         ("We would rather hand you a design we can characterise than one we can only score.",
          0, True, ACCENT),
     ], size=15)

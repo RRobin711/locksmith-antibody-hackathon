@@ -7,12 +7,12 @@ Conventions: `band_value=top`, `netsolp_construct=fv`, `netsolp_chain_agg=min`.
 
 | metric | value | band | sub-score |
 |---|---|---|---|
-| `cdr_sasa` | 1066.900 | good | 10.0 |
+| `cdr_sasa` | 1066.500 | good | 10.0 |
 | `cdrh3_identity` | 30.000 | good | 10.0 |
-| `contacts` | 98.000 | good | 10.0 |
-| `dg` | -12.400 | good | 10.0 |
-| `iface_plddt` | 83.580 | good | 10.0 |
-| `ipsae` | 0.864 | good | 10.0 |
-| `netsolp` | 0.562 | medium | 8.0 |
+| `contacts` | 97.000 | good | 10.0 |
+| `dg` | -11.000 | medium | 8.0 |
+| `iface_plddt` | 85.170 | good | 10.0 |
+| `ipsae` | 0.781 | medium | 8.0 |
+| `netsolp` | 0.570 | medium | 8.0 |
 
-**Final: 96.0 / 100. Viable: True.**
+**Final: 91.2 / 100. Viable: True.**

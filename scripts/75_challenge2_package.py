@@ -28,6 +28,7 @@ import sys
 from pathlib import Path
 
 from locksmith.config import load
+from locksmith.score import evaluate
 from locksmith.submit import Design, build_challenge, build_zip
 
 TEAM = "LOCKSMITH_DEV"
@@ -40,6 +41,7 @@ ROOT = Path("submission")
 FOLD = Path("runs/challenge2_fold_r10")
 SCORES = FOLD / "scores.jsonl"
 POD = Path("runs/challenge2_pod/c2")
+VARIANT = Path("runs/sequon_fix/results.json")
 
 
 def conditioning_by_backbone() -> dict[str, dict]:
@@ -100,6 +102,34 @@ def main() -> int:
              if l.strip() and json.loads(l).get("ok")}
     d = designs[win["design_id"]]
     f = folds[win["design_id"]]
+
+    # ---- SUBMIT THE SEQUON-FIXED VARIANT --------------------------------------
+    # Decided 2026-09-22 after `scripts/82_sequon_fix.py`. The gate-clearing design
+    # carried two N-glycosylation sequons in its CDRs, both on antigen-contacting
+    # residues, against handbook §9.2. `S->A` removes both, touches zero interface
+    # contacts, and stays viable across all five diffusion samples -- at a cost of
+    # 4.8 composite points, because the best sample falls below the ipSAE Good edge.
+    # We take that trade deliberately: §9.2 asks for it, §5.2 does not pay for it, and
+    # a candidate with glycans in its paratope is not a candidate. The unfixed design
+    # and its measurements stay documented below; this replaces what we submit, not
+    # the record of what we submitted first.
+    if VARIANT.exists():
+        vres = json.loads(VARIANT.read_text())["sq_sa"]
+        vpred = (Path("runs/sequon_fix/sq_sa/boltz_results_sq_sa/predictions/sq_sa"))
+        d = dict(d, heavy=vres["heavy"], light=vres["light"])
+        vrow = [r for r in vres["rows"] if r["model"] == 0][0]
+        win = dict(win, **{k: vrow[k] for k in
+                           ("ipsae", "dg", "contacts", "iface_plddt", "cdr_sasa",
+                            "netsolp", "cdrh3_identity", "final", "viable")})
+        win["bands"] = evaluate(
+            {k: vrow[k] for k in ("ipsae", "dg", "contacts", "iface_plddt",
+                                  "cdr_sasa", "netsolp", "cdrh3_identity")},
+            challenge=CHALLENGE, cfg=cfg).bands
+        f = {"pdb": str(vpred / "sq_sa_model_0.pdb"),
+             "pae": str(vpred / "pae_sq_sa_model_0.npz"),
+             "plddt": str(vpred / "plddt_sq_sa_model_0.npz")}
+        print(f"  submitting the S->A sequon-fixed variant "
+              f"(ipSAE {vrow['ipsae']:.3f}, final {vrow['final']})", flush=True)
     pdb = Path(f["pdb"])
     conf = pdb.parent / f"confidence_{pdb.stem.replace('_model_0','')}_model_0.json"
 
@@ -251,38 +281,79 @@ pose. But "designed de novo" without this sentence would let a reader assume mor
 designed than was, so the sentence belongs here. It also explains why the humanness and
 framework metrics look excellent: they are a marketed antibody's.
 
-## Developability liabilities we found in our own design
+## The liability we found, the fix we made, and the one that killed the antibody
 
-**Two N-linked glycosylation sequons are present in the CDRs, and both sit on
-antigen-contacting residues.** Handbook §9.2 lists "No N-glycosylation sequons (N-X-S/T)
-in Fv region" as an explicit checklist item, and this design fails it:
+The design that cleared the gates carried **two N-linked glycosylation sequons in its
+CDRs**, both on antigen-contacting residues — `N52-V53-S54` (CDR-H2) and `N49-A50-S51`
+(CDR-L2). Neither exists in the parent scaffold; ProteinMPNN introduced both. Handbook
+§9.2: *"No N-glycosylation sequons (N-X-S/T) in Fv region."*
 
-| chain | motif | position | contacts to PD-1 |
-|---|---|---|---|
-| VH, CDR-H2 | **N-V-S** | N52 | 10 heavy-atom contacts |
-| VL, CDR-L2 | **N-A-S** | N49 | 19 heavy-atom contacts |
+**The submitted design is the fixed one.** What follows is the whole loop, including the
+arm that failed.
 
-Neither exists in the parent 4D5-8 scaffold (`RIYPTNGYT`, `SASFLYS`) — **ProteinMPNN
-introduced both**. In a CHO expression system these sites would plausibly be occupied, and
-a glycan at either would sit in the middle of the paratope. §9 gives the fix (N→Q or
-S→A); we have not applied it, because changing the sequence after scoring it is precisely
-what the rest of this document argues against.
+### The structure said which fix to use, before we folded anything
 
-**Why we did not catch this ourselves, and what we did about it.** Our own build plan
-(`BUILD.md:62`) specifies a `liabilities.py` scanner for exactly this — N-X-S/T, NG/DG
-motifs, exposed Met, pI, net charge. It was never written. A planned check that does not
-exist is indistinguishable from a check that passed, which is the failure mode this
-project spent a week cataloguing and then committed.
+§9 Pillar 4 prescribes two remedies — `N→Q` or `S→A` — and presents them as
+interchangeable. Heavy-atom contacts to PD-1 in the unfixed complex say otherwise:
 
-**It exists now** (`src/locksmith/metrics/liabilities.py`), it reproduces both sequons at
-the exact positions above, and it is pinned by regression tests against this specific
-defect — including that `N-P-S/T` is *not* a sequon, the commonest way such a scan cries
-wolf. Running it also found a liability in our **Challenge 1** design that no reviewer had
-flagged as a §9.2 failure (an `NG` deamidation motif in CDR-H2), which is the argument for
-mechanisms over prose in one line.
+| residue | contacts to PD-1 |
+|---|---|
+| H **N52** | **10** |
+| H S54 | **0** |
+| L **N49** | **19** |
+| L S51 | **0** |
 
-Also present, lower severity: CDR-H3 `SRSFAGSHLL` is short (8 residues by Kabat) and its
-exposed surface is ~88% hydrophobic, a recognised aggregation and polyreactivity risk.
+**The glycosylation acceptors are the binding residues.** The two asparagines carry 29
+antigen contacts between them; the serines completing the motifs carry none.
+
+### Both fixes, measured over five diffusion samples each
+
+| | mutations | sequons | §9.2 | ipSAE range | final | viable |
+|---|---|---|---|---|---|---|
+| unfixed (first packaged) | — | 2 | FAIL | 0.736 – 0.864 | 96.0 | 5/5 |
+| **S→A — SUBMITTED** | H S54A + L S51A | **0** | **PASS** | **0.619 – 0.781** | **91.2** | **5/5** |
+| N→Q | H N52Q + L N49Q | 0 | PASS | **0.013 – 0.014** | — | **0/5** |
+
+**`N→Q` collapses ipSAE sixty-fold, reproducibly to ±0.001 across five independent
+diffusion samples.** Two of the most conservative substitutions available in protein
+engineering — asparagine to glutamine, one methylene longer, identical amide chemistry —
+produce a dead interface. We predicted this from the contact table above before folding.
+
+> **The transferable point, and the most useful thing we learned this week:** a
+> developability fix is a *design change*, and prescribed fixes are not interchangeable.
+> Here the liability motif and the binding site are the same residue, the two textbook
+> remedies differ by a factor of **sixty** in outcome, and the structure tells you which
+> one in about a minute. "Conservative substitution" is a claim about chemistry, not
+> about a particular interface.
+
+### What the fix cost, stated precisely
+
+`S→A` touches zero interface contacts and removes both sequons. It is still not free:
+
+- **Viable in 5 of 5 diffusion samples, with the lowest sample 0.019 above the §7.2
+  cutoff** (0.619 vs 0.60). The unfixed design had 0.136 of headroom. Five samples is
+  five samples — that margin means a further draw could plausibly land underneath, and
+  we have not taken one.
+- The best sample, 0.781, falls **below the 0.80 ipSAE Good edge**, so the composite drops
+  **96.0 → 91.2**.
+
+**Why the cost is unexplained.** Removing a hydroxyl at a position making *zero* antigen
+contacts should not have moved the envelope, and it did — 0.736–0.864 down to 0.619–0.781.
+The plausible story is that Ser54 and Ser51 were doing conformational work on the loops
+rather than making contacts. **We did not test that and we are not asserting it.** It is
+an unexplained cost, recorded as one.
+
+### Why we submitted the lower-scoring design
+
+Submitting `S→A` **costs 4.8 rubric points to remove a liability the rubric does not
+measure.** §9.2 asks for it; §5.2 does not pay for it. We think a therapeutic candidate
+with two glycosylation sequons in the middle of its paratope is not a candidate, and a
+submission arguing that this rubric is gameable should not then optimise it.
+
+The unfixed design, its measurements and its liabilities remain documented above. This
+records what we submitted first; it does not replace it.
+
+## Other developability observations
 
 ## Novelty
 
