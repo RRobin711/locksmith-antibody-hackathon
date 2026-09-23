@@ -43,9 +43,25 @@ not get a draw from the distribution, you get the model's best guess reported as
 were the estimate. That is true of every pose-derived number in this submission and, we
 suspect, of most submissions scored this way.
 
-Read the headline as **91.2–96.0 across diffusion samples and 93.6–96.0 across recycling
-depth**, on a design that is viable throughout. The variance is the real result about de
-novo design; the score is a point on it.
+**Corrected 2026-09-23.** An earlier version of this paragraph read the headline as
+"91.2–96.0 across diffusion samples". That envelope belongs to the design this one
+replaced — the pre-sequon-fix variant, whose ipSAE 0.736–0.864 straddles the 0.80 Good
+edge and so oscillates between two composites. **It is not this design's envelope, and
+quoting it here overstated the submission.**
+
+Measured on the design actually in this package, five diffusion samples from one trunk
+pass: ipSAE **0.619 / 0.667 / 0.686 / 0.746 / 0.781** — every sample inside the Medium
+band, so the composite is **91.2 on all five**. The submitted number is not the top of a
+range here; it is the whole range. The best sample, 0.781, sits **below** the 0.80 Good
+edge, so 96.0 is not reachable for this molecule, and the worst, 0.619, clears the §7.2
+viability cutoff by **0.019**.
+
+The recycling-depth envelope of 93.6–96.0 was likewise measured on the pre-fix design and
+**has not been re-measured for this one**; treat it as unknown rather than inherited.
+
+The variance is still the real result about de novo design. It simply runs the other way
+than the earlier text implied: this design is stable across the diffusion axis and thin
+against the viability cutoff, rather than swinging five points.
 
 **We can support exactly one claim about this molecule, and it is not binding.**
 
