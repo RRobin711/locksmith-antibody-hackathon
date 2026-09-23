@@ -332,13 +332,38 @@ def negative_control(d: dict, cfg) -> str:
                     w("")
                 sub = niv.get("submitted", {})
                 if sub:
-                    w(f"**A second consequence, worth more than the first: the construct "
-                      f"we fold is not the construct we submit.** The submitted FASTA "
-                      f"carries a longer PD-1 including `DSPDRP`, covering "
-                      f"{sub['pct']}% of nivolumab's epitope against the folded "
-                      f"construct's {f['pct']}%. Every number in this submission was "
-                      f"measured on a molecule 6 residues shorter than the one shipped "
-                      f"beside it. Nothing in the pipeline compared the two.")
+                    w(f"**Which construct is used where — corrected 2026-09-23, because an "
+                      f"earlier version of this document got it wrong.** This paragraph "
+                      f"previously claimed *every* fold in the project used the 113-mer. "
+                      f"It does not. The **screening and selection** folds did "
+                      f"(`runs/batch_verify`, `runs/challenge2_fold_r10`), and so does "
+                      f"the negative control above. The **shipped structures** were "
+                      f"folded on the handbook's 123-residue construct, which covers "
+                      f"{sub['pct']}% of nivolumab's epitope against the 113-mer's "
+                      f"{f['pct']}%.")
+                    w("")
+                    w("So the defect is not that the submission was measured on a short "
+                      "antigen. It is that **selection and final scoring were done on "
+                      "different constructs** — candidates were ranked against a "
+                      "113-residue PD-1 and the winner was then re-folded and scored "
+                      "against a 123-residue one. Nothing in the pipeline compared them, "
+                      "and the difference is invisible to pembrolizumab, the only "
+                      "reference ever folded.")
+                    w("")
+                    w("**And there is a worse consequence, under investigation rather "
+                      "than concluded.** `data/msa_cache/pd1_5ggs.csv` is aligned to the "
+                      "**113-residue** query. The shipped Challenge 2 fold passed that "
+                      "cache alongside the **123-residue** antigen, and Boltz did not "
+                      "complain: the processed alignment in "
+                      "`runs/sequon_fix/sq_sa/.../processed/msa/sq_sa_0.npz` is **113 "
+                      "columns wide for a 123-residue chain**, with the cached query "
+                      "sitting at offset 5 within the folded sequence. Whether Boltz "
+                      "re-aligns by sequence or maps positionally — in which case the "
+                      "antigen alignment is out of register by five residues for the "
+                      "whole chain — is not something to settle by reading the number. "
+                      "It is being settled by re-folding the shipped design with a "
+                      "matched alignment and comparing; the result is reported wherever "
+                      "it lands.")
                     w("")
             w("**The transferable point.** A positive control can fail for a reason that "
               "has nothing to do with the thing being controlled for. \"The positive "

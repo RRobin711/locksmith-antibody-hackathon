@@ -161,12 +161,55 @@ it — so *the only reference antibody ever folded was the one incapable of dete
 truncation.* A control eliminates the confound you thought of and is silent on the one you
 did not.
 
-### The second consequence, which is worse
+### The second consequence — and my own error in stating it
 
-**The construct we fold is not the construct we submit.** The submitted FASTA ships a
-123-residue PD-1 including `DSPDRP` (92.9% of nivolumab's epitope); every fold used the
-113-mer (57.1%). Every number in the submission was measured on a molecule six residues
-shorter than the one shipped beside it, and nothing in the pipeline ever compared them.
+I first wrote that **every** fold in this project used the 113-mer, so that "every number
+in the submission was measured on a molecule six residues shorter than the one shipped
+beside it." **That is false and is corrected here.** The packaged Challenge 2 structure has
+a 123-residue antigen; the sequon-fix run that produced it
+(`runs/sequon_fix/sq_sa/sq_sa.fasta`) folded the handbook's 123-mer. I inferred "every
+fold" from the screening FASTAs without checking the one that actually produced the
+deliverable — the same failure I had just documented in someone else's code, committed
+within the hour.
+
+The accurate statement is narrower and still a defect:
+
+- **screening and selection** ran on the 113-mer (`runs/batch_verify`,
+  `runs/challenge2_fold_r10`), and so does tonight's negative control;
+- the **shipped structures** were folded on the 123-mer.
+
+So candidates were *ranked* against one antigen and the winner *scored* against a
+different one. Nothing compared them, and the difference is invisible to pembrolizumab —
+the only reference ever folded — because its epitope lies entirely within both.
+
+### A worse consequence, and why it is being tested rather than asserted
+
+`data/msa_cache/pd1_5ggs.csv` is aligned to the **113-residue** query. The shipped fold
+passed that cache alongside the **123-residue** antigen. Boltz did not complain, and the
+alignment it wrote is **113 columns wide for a 123-residue chain**
+(`processed/msa/sq_sa_0.npz`, `res_end - res_start = 113`), with the cached query sitting
+at **offset 5** inside the folded sequence.
+
+Whether Boltz re-aligns the cached MSA by sequence or maps it positionally from index 0 —
+in which case the antigen alignment is out of register by five residues across the whole
+chain — **cannot be settled by reading the file**, which records widths and offsets but
+not the mapping policy. Inferring a policy from an artefact is precisely how the three
+wrong answers above were produced.
+
+`scripts/94_msa_register.py` settles it in three folds, all else identical:
+
+| arm | antigen | alignment | isolates |
+|---|---|---|---|
+| `as_shipped` | 123-mer | cached 113-column | reproduces the shipped fold |
+| `matched_113` | 113-mer | cached 113-column | the **register**, alignment held fixed |
+| `matched_123` | 123-mer | fresh query for that sequence | the **construct** |
+
+Decision rule, fixed before running: `~=` means inside this design's measured diffusion
+envelope (composite 91.2 on all five samples, ipSAE 0.619–0.781). If all three agree,
+Boltz re-aligns and the shipped structure is sound. If `as_shipped` differs from both
+others, the shipped Challenge 2 structure was predicted under a misaligned antigen
+alignment and every metric derived from it inherits that — which would be the most serious
+defect found in this submission.
 
 ### How far does the damage reach? Bounded, and in our favour
 
