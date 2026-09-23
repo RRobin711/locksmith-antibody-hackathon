@@ -1,3 +1,9 @@
+---
+date: 2026-09-23
+tags: [project, lecture, learning, statistics, pattern]
+status: review
+---
+
 # 05 — Experiment Design
 
 **What this chapter teaches.** One question, asked relentlessly: *what would have to be true for me

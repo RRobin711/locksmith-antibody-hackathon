@@ -1,3 +1,9 @@
+---
+date: 2026-09-23
+tags: [project, lecture, learning, index]
+status: review
+---
+
 # Chapter 11 — Study plan: how to actually learn this
 
 ## What this chapter teaches

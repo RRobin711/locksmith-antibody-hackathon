@@ -1,3 +1,9 @@
+---
+date: 2026-09-23
+tags: [project, lecture, learning, problem]
+status: living
+---
+
 # Corrections to this course
 
 **One fact, one place.** When something in this course is overtaken, the correction is
@@ -11,7 +17,7 @@ Read this file before trusting any Challenge 2 number anywhere in the course.
 
 ## C1 — Challenge 2's computational evidence is withdrawn
 
-**Raised 2026-09-23. Status: LIVE, re-screen in progress. Challenge 1 is unaffected.**
+**Raised 2026-09-23. Status: re-screen COMPLETE. Challenge 1 is unaffected.**
 
 ### What happened
 
@@ -43,11 +49,27 @@ the condition every prior fold was run in.
   **0.013**.
 - **The composite 91.2, and its "viable" status**, as evidence of anything. The number is
   still what the packaged files re-derive; it is no longer evidence about the molecule.
-- **The Challenge 2 ranking.** In the first 5 designs re-screened with a correct alignment
+- **The Challenge 2 ranking — completely.** The re-screen is now complete
+  (`results/challenge2_rescreen.md`). With a correct alignment
   (`data/msa_cache/pd1_123_handbook.csv`, 3407 sequences, query matching the antigen
-  exactly): **0 of 5 clear**, the packaged design falls **0.864 → 0.013**, and the worst of
-  the five *rises* from 0.116 to **0.440**. The old ranking carries no information about the
-  correct one.
+  exactly), **1 of 30 still clears — but it is a different molecule:**
+
+  | | design | ipSAE, correct MSA | 5-sample range | ipSAE, old (no MSA) | old rank |
+  |---|---|---|---|---|---|
+  | ✅ | `bb_1_0_dldesign_0` | **0.637** | 0.423–0.855 | 0.014 | **29th of 30** |
+  | | `bb_1_0_dldesign_1` | 0.440 | — | 0.116 | 18th |
+  | | `bb_4_0_dldesign_1` | 0.372 | — | 0.013 | 26th |
+  | ❌ | `bb_2_0_dldesign_1` *(packaged)* | **0.013** | 0.000–0.817 | 0.864 | **1st** |
+
+  The design that clears under a correct alignment ranked **29th of 30** under the broken
+  one; the design that was packaged and shipped ranked 1st and now scores **0.013**. The old
+  ranking was not merely noisy — over the top of the pool it was close to **inverted**.
+
+  The replacement winner is not a clean substitute: `bb_1_0_dldesign_0` clears the binding
+  gate but **fails handbook §9.2**, carrying two HIGH developability liabilities, and its
+  worst diffusion sample sits at **0.423**, so it clears without comfort. A liability fix
+  would cost interface quality it does not have to spare — see
+  [[01-the-biological-problem#6.3 N→Q versus S→A: the contact-count result|the contact-count result]] for why that trade is not free.
 
 ### What it does NOT invalidate
 
@@ -83,10 +105,18 @@ invisible in the output and visible only in a stream you are probably discarding
 tool stderr and stdout, and grep them for the words the tool uses when it gives up on
 something.*
 
-### Open
+### Where this leaves Challenge 2
 
-The re-screen covers 5 of 30 designs. Until it completes, treat every Challenge 2 figure in
-this course as **withdrawn, not replaced**. `STATE.md` carries the current status.
+All 30 designs have been re-screened. Treat every Challenge 2 figure printed in the body of
+this course as **superseded by the table above**. The packaged submission
+(`submission/LOCKSMITH_DEV.zip`) is stale and must not be sent as-is.
+
+The sharpest lesson is not that the number fell. It is that **the ranking inverted**: a
+silently degraded input did not add noise around a roughly-correct order, it produced an
+order that was actively misleading, with the eventual winner sitting 29th of 30. This is the
+same shape as the `recycling_steps=3` episode in
+[[06-allocation-and-selection#6. Compression versus noise in an under-converged sampler|compression versus noise]]
+— under-informed prediction compresses and scrambles a ranking rather than blurring it.
 
 ---
 

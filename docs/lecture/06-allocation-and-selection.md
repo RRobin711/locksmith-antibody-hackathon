@@ -1,3 +1,9 @@
+---
+date: 2026-09-23
+tags: [project, lecture, learning, statistics, pattern]
+status: review
+---
+
 # 06 — Allocation and Selection
 
 > ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [[CORRECTIONS|correction C1, and what it does and does not invalidate]]. Challenge 1 is unaffected.
