@@ -51,24 +51,29 @@ def build_deck(path: Path, final: float, raw: dict) -> Path:
     built here cannot contradict a package built by `scripts/75`.
     """
     import json
-    from locksmith.submit import deck
+    from locksmith.submit import deck, packaged_scores
 
-    c1 = dict(raw); c1["final"] = final
+    # READ THE PACKAGE, NOT THE RUN DIRECTORY. A run directory holds every candidate ever
+    # scored, including superseded ones; only the package holds what is being submitted.
+    # Reading the run artefact put a live contradiction in the deck on 2026-09-23 --
+    # slide 1 "Challenge 2 96.0/100" against slide 8 "91.2/100" -- because the first
+    # viable row of runs/challenge2_fold_r10/scores.jsonl is the design BEFORE the S->A
+    # sequon fix, while the package ships the fixed design.
+    c1 = packaged_scores(1)
+    c2 = packaged_scores(2)
+
+    # The run-derived score is still computed, purely so that a disagreement is LOUD.
+    # Silently preferring the package would fix this deck and hide the next drift.
     c2_path = Path("runs/challenge2_fold_r10/scores.jsonl")
-    c2 = {}
     if c2_path.exists():
         viable = [json.loads(l) for l in c2_path.read_text().splitlines()
                   if l.strip() and json.loads(l).get("viable") is True]
-        if viable:
-            c2 = viable[0]
-    if not c2:
-        raise RuntimeError(
-            "no viable Challenge 2 design found; the deck would have to state what "
-            "Challenge 2 contains and cannot guess. Run scripts/80 first, or edit "
-            "submit/deck.py deliberately.")
-    # The calibration panel and negative control, when they exist. Passed as data rather
-    # than transcribed into the slides, for the same reason as c1/c2: the deck went stale
-    # once already because a number lived in two places.
+        if viable and abs(viable[0].get("final", -1) - c2["final"]) > 1e-9:
+            print(f"    NOTE: run artefact says Challenge 2 = {viable[0]['final']}, the "
+                  f"package says {c2['final']}. Using the package. This is expected while "
+                  f"the shipped design differs from the top-scoring raw design (the S->A "
+                  f"sequon fix costs 4.8 points deliberately).", flush=True)
+
     calib_path = Path("runs/calibration/scores.json")
     calib = json.loads(calib_path.read_text()) if calib_path.exists() else None
     return deck.build(path, c1=c1, c2=c2, calib=calib)

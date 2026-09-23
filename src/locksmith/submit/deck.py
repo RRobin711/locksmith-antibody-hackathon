@@ -270,7 +270,10 @@ def build(path: Path, *, c1: dict, c2: dict, calib: dict | None = None) -> Path:
         ("A second axis, same story:", 0, True, INK),
         ("Boltz returns its models RANKED. With diffusion_samples=1 you get the argmax, "
          "not a sample. Asking for five costs 2m54s vs 2m.", 1, False, MUTED),
-        ("Ch1 94.0–96.0 · Ch2 91.2–96.0", 1, True, WARN),
+        ("Ch1 94.0–96.0 · the Ch2 design this replaced, 91.2–96.0", 1, True, WARN),
+        ("The SHIPPED Ch2 design scores 91.2 on all five — its ipSAE envelope "
+         "(0.619–0.781) sits entirely inside one band, so the sequon fix bought "
+         "band stability as well as removing the liability.", 1, False, MUTED),
         ("", 0, False, INK),
         ("Every pose-derived number we have ever reported sat at the top of a "
          "distribution we never sampled.", 0, True, ACCENT),
@@ -329,7 +332,8 @@ def build(path: Path, *, c1: dict, c2: dict, calib: dict | None = None) -> Path:
         ("It also fails §9.2 — an NG deamidation motif in CDR-H2, at a position we made "
          "designable and left alone. Found by the scanner we built after missing the "
          "Challenge 2 sequons.", 1, False, MUTED),
-        ("Challenge 2 — 91.2/100, the ONE design of 30 that cleared, sequon-fixed.", 0, True, INK),
+        (f"Challenge 2 — {c2['final']:.1f}/100, the ONE design of 30 that cleared, "
+         f"sequon-fixed.", 0, True, INK),
         ("All six CDRs designed de novo — onto RFantibody's fixed trastuzumab framework, "
          "carried over unchanged. Targeting is evidenced: 17/18 backbones beat a "
          "contiguous-patch null. Binding is evidenced by nothing here.", 1, False, MUTED),
