@@ -496,6 +496,16 @@ def calibration(d: dict, cfg) -> str:
           "points at the median — a decimal percentile would imply precision the sample "
           "size cannot support.")
         w("")
+        w("**One asymmetry to declare before reading the ranks.** Every panel row takes "
+          "its antigen alignment from a live MMseqs2 query; our own designs take theirs "
+          "from `data/msa_cache/pd1_5ggs.csv`, cached so that a ranking of designs could "
+          "not drift with the server. Both are the same pipeline and the same source, "
+          "built at different times — antibody chains carry `empty` in every row alike — "
+          "but they are not the *identical* operation, and alignment depth moves "
+          "confidence metrics. The negative control is free of this (every row there "
+          "shares the one cached alignment), which is why it, not this table, is the "
+          "experiment that isolates a single variable.")
+        w("")
         for name, t in tests.items():
             w(f"### {name}")
             w("")
