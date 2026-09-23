@@ -285,7 +285,8 @@ def negative_control(d: dict, cfg) -> str:
               "residues it contacts at 4.5 Å, and ask how many of them exist in the "
               "construct we fold.")
             w("")
-            w("| antibody | epitope size | covered by our folded 113-mer | missing |")
+            w("| binding partner | epitope on PD-1 | covered by our folded 113-mer | "
+              "missing |")
             w("|---|---|---|---|")
             for name, c in cov.items():
                 f = c["folded_113"]
@@ -302,13 +303,33 @@ def negative_control(d: dict, cfg) -> str:
                   f"pipeline is broken. It failed because **the molecule it was docked "
                   f"against does not contain the surface it binds.**")
                 w("")
-                w("Every fold in this project used a 113-residue PD-1 beginning at "
-                  "`PWNPP`, inherited from the 5GGS (pembrolizumab) construct and never "
-                  "re-examined. Pembrolizumab's 24-residue epitope is "
-                  f"{cov['pembrolizumab']['folded_113']['pct']}% inside it, which is why "
-                  "the truncation was invisible for the entire project — the only "
-                  "reference antibody ever folded was the one that cannot detect it.")
-                w("")
+                pem = cov.get("pembrolizumab", {})
+                if pem:
+                    w(f"Every fold in this project used a 113-residue PD-1 beginning at "
+                      f"`PWNPP`, inherited from the 5GGS (pembrolizumab) construct and "
+                      f"never re-examined. Pembrolizumab's {pem['n_epitope']}-residue "
+                      f"epitope is {pem['folded_113']['pct']}% inside it, which is why "
+                      f"the truncation was invisible for the entire project — **the only "
+                      f"reference antibody ever folded was the one incapable of detecting "
+                      f"it.**")
+                    w("")
+                pdl1 = next((v for k, v in cov.items() if "PD-L1" in k), None)
+                if pdl1:
+                    f1 = pdl1["folded_113"]
+                    w(f"**How far does the damage reach? Bounded, and in our favour.** "
+                      f"The same calculation against the PD-1/PD-L1 complex "
+                      f"({pdl1['pdb']}) — the face a checkpoint inhibitor must occlude, "
+                      f"and the face our Challenge 2 design was conditioned on — gives a "
+                      f"{pdl1['n_epitope']}-residue footprint of which the folded "
+                      f"construct contains **{f1['covered']}/{pdl1['n_epitope']} "
+                      f"({f1['pct']}%)**. The truncation damages nivolumab, which binds "
+                      f"the N-terminal loop, and touches neither pembrolizumab's epitope "
+                      f"nor the therapeutic target face. **Our own numbers are not "
+                      f"affected by it.** Worth computing rather than assuming: the "
+                      f"alternative — having folded against a construct missing part of "
+                      f"our own target epitope — would have invalidated the project, and "
+                      f"it takes one script to rule out.")
+                    w("")
                 sub = niv.get("submitted", {})
                 if sub:
                     w(f"**A second consequence, worth more than the first: the construct "

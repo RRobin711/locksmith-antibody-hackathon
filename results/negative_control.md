@@ -80,7 +80,7 @@ That is worth stating carefully, because it is a criticism of the rubric and not
 
 Both positives are licensed anti-PD-1 antibodies, so "the pipeline is broken" and "nivolumab is simply a hard case" are both available explanations and **neither is evidence**. The question is answerable with no folding at all: take each antibody's own crystal, list the PD-1 residues it contacts at 4.5 Å, and ask how many of them exist in the construct we fold.
 
-| antibody | epitope size | covered by our folded 113-mer | missing |
+| binding partner | epitope on PD-1 | covered by our folded 113-mer | missing |
 |---|---|---|---|
 | pembrolizumab (5GGS) | 26 residues | **26/26 (100.0%)** | — |
 | nivolumab (5WT9) | 14 residues | **8/14 (57.1%)** | LEU25 ASP26 SER27 PRO28 ASP29 ARG30 |
@@ -88,7 +88,9 @@ Both positives are licensed anti-PD-1 antibodies, so "the pipeline is broken" an
 
 **The construct is missing 6 of nivolumab's 14 contact residues** — the `LDSPDR` N-terminal segment, PD-1 residues 25–30. Nivolumab did not fail because the pipeline is broken. It failed because **the molecule it was docked against does not contain the surface it binds.**
 
-Every fold in this project used a 113-residue PD-1 beginning at `PWNPP`, inherited from the 5GGS (pembrolizumab) construct and never re-examined. Pembrolizumab's 24-residue epitope is 100.0% inside it, which is why the truncation was invisible for the entire project — the only reference antibody ever folded was the one that cannot detect it.
+Every fold in this project used a 113-residue PD-1 beginning at `PWNPP`, inherited from the 5GGS (pembrolizumab) construct and never re-examined. Pembrolizumab's 26-residue epitope is 100.0% inside it, which is why the truncation was invisible for the entire project — **the only reference antibody ever folded was the one incapable of detecting it.**
+
+**How far does the damage reach? Bounded, and in our favour.** The same calculation against the PD-1/PD-L1 complex (5IUS) — the face a checkpoint inhibitor must occlude, and the face our Challenge 2 design was conditioned on — gives a 23-residue footprint of which the folded construct contains **23/23 (100.0%)**. The truncation damages nivolumab, which binds the N-terminal loop, and touches neither pembrolizumab's epitope nor the therapeutic target face. **Our own numbers are not affected by it.** Worth computing rather than assuming: the alternative — having folded against a construct missing part of our own target epitope — would have invalidated the project, and it takes one script to rule out.
 
 **A second consequence, worth more than the first: the construct we fold is not the construct we submit.** The submitted FASTA carries a longer PD-1 including `DSPDRP`, covering 92.9% of nivolumab's epitope against the folded construct's 57.1%. Every number in this submission was measured on a molecule 6 residues shorter than the one shipped beside it. Nothing in the pipeline compared the two.
 
