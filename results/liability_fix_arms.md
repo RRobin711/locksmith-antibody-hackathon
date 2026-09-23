@@ -1,5 +1,11 @@
 # All three §9.2 fixes collapse the interface — including one at zero contacts
 
+> **Status: control landed 2026-09-23. The margin explanation is EXCLUDED and the
+> contact-count predictor is refuted — see §"The control" below.** Two framework arms,
+> `N77Q` and `N84Q`, both `N→Q`, both zero contacts in all five samples, hold at medians
+> **0.561** and **0.696** against the CDR arm's **0.128**. This design absorbs a
+> zero-contact `N→Q` in framework and does not in a CDR.
+
 **2026-09-23.** Three arms, folded under `pd1_123_handbook.csv`, recycling 10, five
 diffusion samples, seed 1 — identical to the re-screen in every respect except the
 substitution. The unfixed design stayed on disk throughout, so nothing here could cost it.
@@ -34,10 +40,10 @@ residue predicts whether a prescribed fix survives"*, resting on four instances:
 
 Two things follow and both matter.
 
-**1. Zero contacts did not protect the interface.** `fix91` mutates a residue with **no
+**1. Zero contacts did not protect the interface — in this design.** `fix91` mutates a residue with **no
 antigen contacts in any of the five samples** and the design still collapses 0.637 → 0.128,
 3/5 viable → 0/5. Contact count is therefore **not sufficient** to predict the outcome of
-a prescribed fix. The rule is refuted as a decision procedure, not merely qualified.
+a prescribed fix. Contact count alone therefore cannot license a fix here. Whether that refutes the rule or merely reflects this design's thin margin is exactly what the pending control decides; until it lands the rule is **under test**, not refuted.
 
 **2. Three of the four supporting instances were measured without an antigen alignment.**
 The Ch2 previous-design measurements — the 60× collapse and the "S→A free 5/5" that
@@ -84,3 +90,44 @@ more interesting reading.
 Three folds, 8.6 minutes, on a design that was never at risk. The information — that a
 zero-contact substitution can collapse an interface, and that three of the rule's four
 instances are unusable — is worth considerably more than the fix would have been.
+
+
+---
+
+## The control, and what it settles
+
+Two arms, chosen to match `fix91` on everything except location: the **same substitution**
+(`N→Q`), the **same contact count** (zero in all five samples), in **framework** rather than
+a CDR. `N77Q` and `N84Q` were the only two framework asparagines meeting both conditions.
+
+| arm | where | per-sample ipSAE | median | ≥0.60 |
+|---|---|---|---|---|
+| unfixed | — | 0.855 0.697 0.509 0.637 0.423 | **0.637** | 3/5 |
+| `fix91` N91Q | **CDR-L3**, 0 contacts | 0.271 0.284 0.128 0.012 0.011 | **0.128** | 0/5 |
+| `fix31` G32A | CDR-L1, 4 contacts | 0.348 0.304 0.140 0.012 0.012 | **0.140** | 0/5 |
+| `ctrl` N77Q | **framework**, 0 contacts | 0.654 0.732 0.513 0.553 0.561 | **0.561** | 2/5 |
+| `ctrl` N84Q | **framework**, 0 contacts | 0.780 0.730 0.696 0.578 0.559 | **0.696** | 3/5 |
+
+**The margin explanation is excluded.** "A design 0.037 above the cutoff cannot absorb any
+single-residue change" predicted both controls collapse. Neither did. `N84Q` finishes
+*above* the unfixed baseline (0.696 vs 0.637, both 3/5), and the two controls average
+**0.629** — the baseline to within noise. The design tolerates single-residue change fine;
+it is where you make it that matters.
+
+**So the contact-count predictor is refuted.** Contact count is **zero** for `fix91`,
+`N77Q` and `N84Q` alike, and the outcomes differ by roughly **5×** (0.128 against 0.561 and
+0.696). A quantity that is identical across cases with opposite outcomes cannot be the
+thing doing the predicting. What separates them is **region** — CDR versus framework — not
+contacts.
+
+**Two honest limits.** The controls are n=2, and `N77Q` did degrade (3/5 → 2/5, 0.637 →
+0.561), so framework substitutions are cheaper rather than free. The pre-registered bar was
+"both survive, ≥3/5 viable, median near 0.637"; `N84Q` clears it outright and `N77Q` sits
+just under. Neither is remotely near the fix arms, which is the comparison that matters.
+
+**What replaces the rule.** Nothing yet, and that is the point. "Check the contacts before
+choosing a fix" was cheap and structural and it does not work. The surviving statement is
+weaker: *a prescribed developability fix is a design change that must be measured on the
+design in question*, and a CDR position with no antigen contacts is still doing work the
+contact table cannot see — plausibly holding loop conformation for the residues that do
+contact. That is a hypothesis, not a measurement.
