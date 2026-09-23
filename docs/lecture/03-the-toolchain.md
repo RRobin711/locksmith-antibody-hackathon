@@ -1,5 +1,7 @@
 # 03 — The Toolchain
 
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [[CORRECTIONS|correction C1, and what it does and does not invalidate]]. Challenge 1 is unaffected.
+
 **What this chapter teaches.** Every piece of third-party software the campaign depended on: what it
 computes, exactly how it was invoked, and the specific way it goes wrong. The organising claim is
 that **a tool's defaults encode its author's assumed use case, not yours**, and that almost every
@@ -84,8 +86,8 @@ never on the exit code. (c) The returned heavy-chain length is asserted equal to
 because an indel means the design was built against the wrong frame. (d) Fixed-position lists are
 **1-based** over the chain's residues while `cdr_positions()` returns 0-based indices — an explicit,
 commented off-by-one boundary in the code. (e) **Solubility is not in its loss** — nor is
-glycosylation, deamidation, oxidation or charge. It proposes post-translational liabilities at
-roughly the rate they occur in the PDB, which is how two glycosylation sequons reached a shipped
+glycosylation, [[01-the-biological-problem#6.2 The NG deamidation motif in Challenge 1's CDR-H2|deamidation]], oxidation or charge. It proposes post-translational liabilities at
+roughly the rate they occur in the PDB, which is how two [[01-the-biological-problem#6.1 Two N-glycosylation sequons in the Challenge 2 paratope|glycosylation sequons]] reached a shipped
 paratope.
 
 A design-time trap worth carrying: `MpnnDesign` **names its fields by ROLE, not by chain**, so in the
@@ -148,7 +150,7 @@ scoring fold**, "so both challenges rest on one predictor and their numbers are 
 a deliberate comparability decision, not laziness.
 
 The pod-side finding that justified keeping RF2 out of the scoring: its `interaction_pae` **cannot
-rank docks** — intraclass correlation **−0.113** against a detectable floor of 0.317 at n=10, k=3 —
+rank docks** — [[04-measurement-theory#2. The intraclass correlation, and metrics that turn out to be constants|intraclass correlation]] **−0.113** against a detectable floor of 0.317 at n=10, k=3 —
 and it disagreed with the eventual Boltz pose by **24.9 Å** on one design. A metric with negative ICC
 is not a weak ranker; it is noise.
 
@@ -209,7 +211,7 @@ correlation of only **0.432**. What survives is: *check convergence before inter
 failure — and "it changed when I sampled harder" is not the same as "it has now converged."*
 
 **`diffusion_samples` defaults to 1, and Boltz orders its models by its own confidence.** Therefore
-`model_0` at `diffusion_samples=1` is an **argmax by construction** — the maximum of a distribution
+`model_0` at `diffusion_samples=1` is an **[[06-allocation-and-selection#5. Order statistics: when your prediction is silently a maximum|argmax by construction]]** — the maximum of a distribution
 that was never drawn. Every pose-derived number the project reported for a week (ipSAE, DockQ, ΔG,
 contacts, interface pLDDT, CDR SASA) was an order statistic. Measured at 5 samples: Challenge 1 moved
 ipSAE 0.039 but **DockQ 0.109**, turning 96.0 into a **94.0–96.0** envelope; the de novo design moved
@@ -222,7 +224,7 @@ because the MSA, trunk and recycling are shared and only the diffusion head reru
 single best cost-benefit ratio in the whole toolchain, and it went unclaimed for a week.
 
 **Fab, not Fv.** The planned "cheap Fv screen → expensive Fab confirm" funnel was killed by
-measurement: Fv ipSAE seed reliability **0.607** versus Fab **0.965** — the unclamped VH/VL elbow
+measurement: Fv ipSAE seed [[04-measurement-theory#1.3 Reliability|reliability]] **0.607** versus Fab **0.965** — the unclamped VH/VL elbow
 shows up directly as measurement noise. Matching Fab precision needs ≥4 Fv seeds, which is **2.9× the
 Fab's wall clock**, so the 2.5× residue saving inverts. *Any time a cheap proxy gates an expensive
 measurement, the proxy's failures are invisible by construction.*
@@ -450,7 +452,7 @@ docstring was never updated.
 structural element across antibodies of different loop length. Ranges used: **CDR1 27–38, CDR2 56–65,
 CDR3 105–117**.
 
-**The gotcha.** PD-1 is an immunoglobulin-superfamily member with an **IgV fold**, so ANARCII
+**The gotcha.** PD-1 is an immunoglobulin-superfamily member with an **[[01-the-biological-problem#2.5 The IgV fold, and the trap it set|IgV fold]]**, so ANARCII
 recognises it as antibody-like and happily assigns it CDRs. Measured on 5GGS and 5WT9: true V domains
 score **30.8–30.9**; PD-1 scores **15.8–16.2**. A permissive threshold silently classifies the
 *antigen* as an antibody chain and every downstream CDR metric is then computed on the wrong

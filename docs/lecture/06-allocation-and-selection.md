@@ -1,5 +1,7 @@
 # 06 — Allocation and Selection
 
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [[CORRECTIONS|correction C1, and what it does and does not invalidate]]. Challenge 1 is unaffected.
+
 **What this chapter teaches.** You have a noisy instrument, a pool of candidates, and a budget. Where
 does the next measurement go — a new candidate, or another replicate of an old one? The answer is not
 a matter of taste; it is derivable, and it **inverts** depending on what you are trying to estimate.
@@ -111,7 +113,7 @@ figure; the reconstruction of why is in
 
 A leverage check like this costs one line of code and it is the difference between "the ensemble axis
 carries signal" and "one design does". The question was then settled properly on the full 239-design
-pool: between-design variance **0.13720 Å²**, k = 2 reliability **0.686**; dropping the top three
+pool: between-design variance **0.13720 Å²**, k = 2 [[04-measurement-theory#1.3 Reliability|reliability]] **0.686**; dropping the top three
 spreads (2.58, 2.24, 2.09 Å) moves it to 0.10264 Å² and **0.620**. *"The variation survives, so it is
 a distribution, not an artefact of a few designs."*
 
@@ -274,7 +276,7 @@ Apply (6.3):
 Predicted 94.963; measured 94.962. One thousandth of a point apart.
 
 An earlier, cleaner instance is worth copying as a technique: on re-seeding, the seed-1 top design
-regressed **−0.0123** DockQ while the average of all 8 re-seeded designs regressed **−0.0045**, so the
+regressed **−0.0123** [[03-the-toolchain#4.1 DockQ 2.1.3 — two flags that both default wrong|DockQ]] while the average of all 8 re-seeded designs regressed **−0.0045**, so the
 **selection excess is −0.0079 DockQ**. Subtracting the shared drift from the winner's drift isolates
 the selection bias from whatever the re-run did to everything — that decomposition is the right way to
 measure a winner's curse empirically.
@@ -334,11 +336,11 @@ a threshold it is Good, in between Medium. Each band then contributes a fixed su
 A design far from an edge is perfectly reproducible. A design sitting on an edge flips on arbitrarily
 small noise, and the flip is worth a full 2.5 points of the composite under the midpoint convention.
 This is exactly the item-dependent, non-i.i.d. error component that made measured three-seed
-reliabilities fall below their Spearman–Brown predictions in
+reliabilities fall below their [[04-measurement-theory#3. Spearman–Brown: what averaging buys|Spearman–Brown]] predictions in
 [[04-measurement-theory|the measurement-theory chapter]].
 
 Measured (`results/m3_plan_review.md` §3.2): **22 of 40 designs (55%)** change their single-seed
-composite across 3 seeds; the flipping sub-scores are **ipSAE (16 designs)** and **ΔG (17 designs)**;
+composite across 3 seeds; the flipping sub-scores are **[[03-the-toolchain#4.3 ipSAE — interface confidence from the PAE|ipSAE]] (16 designs)** and **ΔG (17 designs)**;
 single-seed reliability **0.602**; and — the cost that no amount of extra compute repairs — the
 **40 designs collapse onto three distinct values, {82.5, 85.0, 87.5}**. *"Scaling generation to 200
 does not add resolution, because banding is what removed it."*

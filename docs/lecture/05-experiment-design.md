@@ -14,7 +14,7 @@ We close on the two integrity mechanisms: optional stopping, and pre-registratio
 committed the first and used the second, and the most interesting thing it did with
 pre-registration was document the contamination of its own.
 
-This chapter consumes the reliability numbers built in
+This chapter consumes the [[04-measurement-theory#1.3 Reliability|reliability]] numbers built in
 [[04-measurement-theory|the measurement-theory chapter]] and feeds
 [[06-allocation-and-selection|the allocation chapter]], which asks where the *next* measurement
 should go once you know how noisy the current one is. Failures referenced here are catalogued in
@@ -80,7 +80,7 @@ write down, and it is the honest one.
 Everything in §2 is what happens when you do not. Everything below is what it looks like when you
 do — the campaign applied it, pre-registered, in at least four places:
 
-- `results/ensemble_wide.md` §2: *"At n=239 and attenuation 0.828, the smallest true effect detectable
+- `results/ensemble_wide.md` §2: *"At n=239 and [[04-measurement-theory#4. Attenuation: why correlations between noisy things look weak|attenuation]] 0.828, the smallest true effect detectable
   at 80% power (α=0.05) is ρ_true ≈ **0.218**."* Check it: `2.80/√236 = 0.1823`, `tanh(0.1823) =
   0.1803` on the observed scale, and dividing by the attenuation ceiling 0.828 (see
   [[04-measurement-theory|the attenuation formula]]) gives `0.1803/0.828 = 0.2178`.
@@ -138,7 +138,7 @@ circularity inflated things "by roughly a third". **Then that correction was its
 comparing a 1-pair estimate to a 3-pair one without disattenuating both. Done properly it is about
 **13%**, and the honest value is ρ ≈ −0.28 to −0.32."* A further mechanical deflation is recorded
 separately: spread correlates with mean deviation-from-crystal at **+0.589**, and partialling that
-out collapses the spread→DockQ link to **−0.167**.
+out collapses the spread→[[03-the-toolchain#4.1 DockQ 2.1.3 — two flags that both default wrong|DockQ]] link to **−0.167**.
 
 Three passes, three different answers, converging. That is what a working correction process looks
 like — and note that the *second* pass erred in the opposite direction from the first, which is
@@ -276,7 +276,7 @@ the matched control barely moves. That is a dose–response against a matched co
 as close to a clean positive as this kind of experiment gets, and the monotonicity is doing real work:
 a single knockout arm could be explained by any disruption, while a graded response is hard to fake.
 
-And the sting. **PRODIGY ΔG is blind — and it carries the largest single share of the ranking
+And the sting. **[[03-the-toolchain#4.2 PRODIGY 2.4.0 — ΔG and contacts|PRODIGY]] ΔG is blind — and it carries the largest single share of the ranking
 variance.** The metric the selection leaned on hardest fails the specificity check outright.
 
 ### 4.2 The composition-matched scramble null
@@ -318,7 +318,7 @@ the identical cached alignment, and passed through the campaign's five hard viab
 result, run on day 9 of 9 (`results/negative_control.md`):
 
 **HyHEL-10 — an anti-hen-egg-lysozyme antibody, which has no business binding a human immune
-receptor — cleared all five cutoffs** on `model_0`: ipSAE **0.609**, ΔG **−12.4**, **77** contacts,
+receptor — cleared all five cutoffs** on `model_0`: [[03-the-toolchain#4.3 ipSAE — interface confidence from the PAE|ipSAE]] **0.609**, ΔG **−12.4**, **77** contacts,
 interface pLDDT **85.0**, CDR SASA **1084 Å²**. Its **median over five diffusion samples is ipSAE
 0.219**, which tells you exactly what happened and is the subject of
 [[06-allocation-and-selection|the order-statistics section of the next chapter]].

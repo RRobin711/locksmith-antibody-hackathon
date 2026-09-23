@@ -6,6 +6,8 @@ status: living
 
 # Designing a cancer drug on a laptop — a complete course
 
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [[CORRECTIONS|correction C1, and what it does and does not invalidate]]. Challenge 1 is unaffected.
+
 A twelve-chapter lecture course built from the nine-day Locksmith Bio antibody
 design campaign (2026-09-14 → 2026-09-22). It teaches the whole thing from first
 principles: the biology, the engineering, the mathematics, the nine-day
@@ -95,8 +97,8 @@ And five results that matter more than either score:
 1. Four of five hard cutoffs reject **0 of 6** known-wrong antibodies.
 2. **HyHEL-10, an anti-lysozyme antibody, cleared all five cutoffs as a PD-1 binder.**
 3. Five of eight metrics are constants; the harness ranks on three; one of those is blind to the epitope.
-4. Median DockQ on genuinely novel antibody–antigen pairs: **0.291**, against **0.818** on the memorised reference.
-5. A mutation that abolishes binding experimentally (ΔΔG **+21.8 kcal/mol**) scores ipSAE **0.917** against the wild type's **0.903**.
+4. Median [[03-the-toolchain#4.1 DockQ 2.1.3 — two flags that both default wrong|DockQ]] on genuinely novel antibody–antigen pairs: **0.291**, against **0.818** on the memorised reference.
+5. A mutation that abolishes binding experimentally (ΔΔG **+21.8 kcal/mol**) scores [[03-the-toolchain#4.3 ipSAE — interface confidence from the PAE|ipSAE]] **0.917** against the wild type's **0.903**.
 
 ---
 
@@ -116,8 +118,8 @@ project's own files and were produced while writing this course:
 - `STATE.md`, which declares itself the single source of truth, is **stale on a
   headline number** — it reports Challenge 2 at 96.0 where the shipped design
   scores 91.2.
-- The open `0.629` reliability question resolves as an estimand mismatch, but a
-  **real Spearman–Brown inconsistency survives underneath it**.
+- The open `0.629` [[04-measurement-theory#1.3 Reliability|reliability]] question resolves as an estimand mismatch, but a
+  **real [[04-measurement-theory#3. Spearman–Brown: what averaging buys|Spearman–Brown]] inconsistency survives underneath it**.
 
 Other live defects inherited from the record and flagged in
 [[08-what-broke|Chapter 08]]: `PROJECT-STORY.md` — the designated entry point —

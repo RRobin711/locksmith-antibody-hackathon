@@ -67,7 +67,7 @@ is what most people are missing and what pays back fastest.
 
 **Tier 1 — Measurement theory (highest leverage; start here).** Classical test
 theory: `observed = true + error`. Reliability as a variance ratio. The
-intraclass correlation. Spearman–Brown. Attenuation. Range restriction. If you
+[[04-measurement-theory#2. The intraclass correlation, and metrics that turn out to be constants|intraclass correlation]]. [[04-measurement-theory#3. Spearman–Brown: what averaging buys|Spearman–Brown]]. Attenuation. Range restriction. If you
 learn only one tier, learn this one; it is what
 [[04-measurement-theory|Chapter 04]] teaches and it is what the project spent
 five sessions discovering the hard way.
@@ -91,14 +91,14 @@ CDRs, framework regions, V(D)J recombination and why CDR-H3 is special, IMGT
 numbering.
 
 **Tier 6 — Structure prediction.** What a folding model does. MSAs and
-co-evolution. pLDDT, PAE, ipTM, ipSAE and what each is a statement *about*.
+co-evolution. pLDDT, PAE, ipTM, [[03-the-toolchain#4.3 ipSAE — interface confidence from the PAE|ipSAE]] and what each is a statement *about*.
 Recycling and diffusion sampling. Training cutoffs and memorisation.
 
-**Tier 7 — Design tools.** ProteinMPNN, RFdiffusion, and their limits — notably
+**Tier 7 — Design tools.** [[03-the-toolchain#2.1 ProteinMPNN|ProteinMPNN]], [[03-the-toolchain#2.2 RFdiffusion via RFantibody|RFdiffusion]], and their limits — notably
 that ProteinMPNN optimises sequence recovery given a backbone, which is not the
 same objective as anything you care about.
 
-**Tier 8 — Developability.** Glycosylation sequons, deamidation motifs,
+**Tier 8 — Developability.** Glycosylation sequons, [[01-the-biological-problem#6.2 The NG deamidation motif in Challenge 1's CDR-H2|deamidation]] motifs,
 isoelectric point, aggregation propensity, immunogenicity. Deferrable until you
 have a design worth criticising.
 
@@ -114,7 +114,7 @@ chapter. Answers are all recoverable from the repository.
 1. A metric has an intraclass correlation of 0.003 across random seeds. What does
    that tell you about using it to rank designs, and what does it tell you about
    the *designs*?
-2. Two noisy measurements each with reliability 0.75 have a true correlation of
+2. Two noisy measurements each with [[04-measurement-theory#1.3 Reliability|reliability]] 0.75 have a true correlation of
    0.80. What correlation will you observe? Why must you never report the
    corrected value as if it were observed?
 3. You measure reliability 0.965 on a panel spanning a wide quality range, then
@@ -131,7 +131,7 @@ chapter. Answers are all recoverable from the repository.
 6. A filter improves a pool's mean quality with p < 0.0001 but does not move the
    maximum, and the p-value for the maximum *rises monotonically* with retention
    fraction. What is that pattern the signature of?
-7. Your filter beats an equal-budget random null on the outcome you chose. What
+7. Your filter beats an [[05-experiment-design#6. Equal-budget resampling, and varying the outcome|equal-budget]] random null on the outcome you chose. What
    should you do before believing it, and what did doing so reveal here?
 8. Why is a null built from uniformly-drawn residues a strawman when testing
    whether a designed interface lands on a target epitope? What is the right null

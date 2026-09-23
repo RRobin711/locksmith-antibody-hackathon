@@ -1,5 +1,7 @@
 # Chapter 00 — Orientation: the four questions, answered
 
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [[CORRECTIONS|correction C1, and what it does and does not invalidate]]. Challenge 1 is unaffected.
+
 ## What this chapter teaches
 
 This chapter answers four questions about the Locksmith antibody-design campaign
@@ -63,7 +65,7 @@ must also be **specific** (it must not bind other human proteins), **developable
 (soluble, stable, expressible, free of chemical liabilities that degrade in a
 vial), **manufacturable**, and **non-immunogenic**. The project measured the
 first two and found problems in both: its named Challenge 1 design turned out to
-be cross-reactive against TIM-3, and both designs carried chemical liabilities in
+be cross-reactive against [[01-the-biological-problem#6.4 TIM-3 cross-reactivity — a specificity failure|TIM-3]], and both designs carried chemical liabilities in
 the binding site itself.
 
 ### 1.3 The programming question
@@ -101,35 +103,35 @@ whose answers are already known, including a deliberate fake that must fail.
 
 **Structural biology.** Protein structure; the PDB file format and the fact that
 `SEQRES` records and coordinate records disagree whenever a loop is unresolved in
-the crystal; that predicted structures reuse the B-factor column to store a
+the crystal; that predicted structures reuse the [[03-the-toolchain#4.7 gemmi, freesasa, and the interface definition|B-factor]] column to store a
 confidence score, so the same field means different things in two files with the
-same extension; residue numbering schemes, and that IMGT versus Kabat changes the
+same extension; residue numbering schemes, and that [[01-the-biological-problem#2.4 Numbering schemes, and why the novelty gate depends on one|IMGT versus Kabat]] changes the
 CDR-H3 identity **denominator from 11 to 13** — so a novelty gate's value depends
 on a scheme choice nobody thinks to record.
 
 **Antibody architecture.** Heavy and light chains; variable versus constant
 domains; Fv versus Fab versus full IgG; the six complementarity-determining
-regions (CDRs) that form the binding surface; why CDR-H3 dominates, being the
+regions (CDRs) that form the binding surface; why [[01-the-biological-problem#2.3 Why CDR-H3 dominates — and the reason is genetic, not structural|CDR-H3 dominates]], being the
 only loop built by V(D)J recombination with junctional diversity.
 
 **Machine learning for structure.** What a folding model does; multiple sequence
 alignments and co-evolution, and the counter-intuitive fact that **antibody
 chains want no alignment** because their diversity is somatic rather than
-evolutionary; pLDDT, PAE, ipTM and ipSAE, and that these are not interchangeable;
+evolutionary; pLDDT, PAE, ipTM and [[03-the-toolchain#4.3 ipSAE — interface confidence from the PAE|ipSAE]], and that these are not interchangeable;
 `recycling_steps` and `diffusion_samples` as first-class scientific parameters
-rather than defaults; training cutoffs, and that Boltz-2's is **2023-06-01 on PDB
+rather than defaults; training cutoffs, and that [[03-the-toolchain#3.1 Boltz-2 — the primary predictor|Boltz-2]]'s is **2023-06-01 on PDB
 release date** — release, not deposition, and read from the paper rather than a
 summary.
 
 **Statistics.** This is the deepest requirement and the one that separates a
 working pipeline from a trustworthy one. Reliability and the intraclass
-correlation; attenuation; range restriction; Spearman–Brown; partial correlation;
-resampling nulls; statistical power and the detectable-effect standard; order
-statistics; the winner's curse. Three chapters of this course are devoted to it.
+correlation; [[04-measurement-theory#4. Attenuation: why correlations between noisy things look weak|attenuation]]; [[04-measurement-theory#5. Range restriction — and the insight that selection is the restricting operation|range restriction]]; [[04-measurement-theory#3. Spearman–Brown: what averaging buys|Spearman–Brown]]; [[05-experiment-design#3. Partial correlation, and a result that half-reversed|partial correlation]];
+resampling nulls; statistical power and the [[05-experiment-design#1. Sampling error, and the detectable-effect standard|detectable-effect standard]]; order
+statistics; the [[06-allocation-and-selection#3. Winner's curse|winner's curse]]. Three chapters of this course are devoted to it.
 
 **Software engineering and systems.** Isolated Python environments; subprocess
 orchestration; multiprocessing start methods; GPU architecture compatibility,
-including the distinction between SASS (compiled for one chip) and PTX
+including the distinction between [[03-the-toolchain#6.2 SASS versus PTX — the mechanism you need|SASS]] (compiled for one chip) and PTX
 (intermediate code the driver can just-in-time compile for a newer chip);
 determinism; testing.
 
@@ -143,11 +145,11 @@ turn on it.
   designs are good" from "my gates do not bite."
 - **A confidence metric is not a truth metric.** The predictor's certainty is a
   statement about the predictor.
-- **Tool defaults are frequently wrong for your case.** NetSolP ships three model
+- **Tool defaults are frequently wrong for your case.** [[03-the-toolchain#4.4 NetSolP-1.0 — sequence-only solubility, and a positive control that chose the model|NetSolP]] ships three model
   variants that score a licensed antibody at 0.379, 0.463 and 0.733 against a
   0.50 cutoff — a spread wider than the distance from cutoff to "good". The CLI
   default would have failed every design and looked exactly like a design
-  problem. Separately, DockQ at its defaults **refuses to score the submission at
+  problem. Separately, [[03-the-toolchain#4.1 DockQ 2.1.3 — two flags that both default wrong|DockQ]] at its defaults **refuses to score the submission at
   all**, exiting 1 with no output.
 - **Full-chain identity is a useless novelty screen for antibodies.** Framework
   conservation puts every antibody at 86–94% identity to something. You must
@@ -200,7 +202,7 @@ test suite itself. Re-derivation of every published number from raw data.
 ### 3.3 Mathematics
 
 The intellectual core. Reliability as a variance ratio and the intraclass
-correlation; Spearman–Brown for the reliability of a k-replicate mean;
+correlation; Spearman–Brown for the [[04-measurement-theory#1.3 Reliability|reliability]] of a k-replicate mean;
 attenuation of correlations by unreliability; range restriction, and the
 realisation that **shortlisting is itself the range-restricting operation**;
 Fisher-z standard errors and the detectable-effect standard for nulls; partial
@@ -256,7 +258,7 @@ The designs:
 | Challenge 2 | `bb_2_0_dldesign_1` + S→A | **91.2** | viable; 1 of 30 |
 
 Challenge 2 ships **4.8 points below** its unfixed score on purpose, to remove
-two glycosylation sequons from the binding site.
+two [[01-the-biological-problem#6.1 Two N-glycosylation sequons in the Challenge 2 paratope|glycosylation sequons]] from the binding site.
 
 **The best result in the project** is a chemistry finding. Handbook §9 prescribes
 `N→Q` or `S→A` as interchangeable fixes for a glycosylation sequon. They are not.
@@ -281,7 +283,7 @@ measurement stack:
 2. **HyHEL-10, an anti-lysozyme antibody, cleared all five cutoffs as a PD-1
    binder.**
 3. Five of eight rubric metrics are constants across the design pool; the harness
-   ranks on three; one of those three (PRODIGY ΔG) is blind to the epitope while
+   ranks on three; one of those three ([[03-the-toolchain#4.2 PRODIGY 2.4.0 — ΔG and contacts|PRODIGY]] ΔG) is blind to the epitope while
    carrying the largest share of the ranking variance.
 4. On genuinely novel antibody–antigen pairs released after the predictor's
    training cutoff, median DockQ is **0.291**, against **0.818** on the memorised

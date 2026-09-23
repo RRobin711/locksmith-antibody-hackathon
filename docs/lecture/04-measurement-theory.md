@@ -1,5 +1,7 @@
 # 04 — Measurement Theory
 
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [[CORRECTIONS|correction C1, and what it does and does not invalidate]]. Challenge 1 is unaffected.
+
 **What this chapter teaches.** How good is my measurement? Not "is it accurate" — that question
 needs a truth to compare against, and this project never had one — but the prior question: *does
 this number carry any information about the thing I am ranking, or is it the instrument talking to
@@ -49,7 +51,7 @@ Three assumptions are packed in there and all three are testable, so name them:
    it fails here.
 
 Units: `x`, `τ` and `ε` all carry the metric's units — surrogate points on a 0–100 scale, ångströms
-of RMSD, kcal/mol of predicted free energy, or dimensionless in the case of ipSAE and DockQ.
+of RMSD, kcal/mol of predicted free energy, or dimensionless in the case of [[03-the-toolchain#4.3 ipSAE — interface confidence from the PAE|ipSAE]] and [[03-the-toolchain#4.1 DockQ 2.1.3 — two flags that both default wrong|DockQ]].
 `σ²_noise` carries the square of those units.
 
 ### 1.2 The variance identity
@@ -312,7 +314,7 @@ assumes independence.
 The mechanism is identifiable here: `final` is **banded**, so a design sitting near a band edge flips
 band on arbitrarily small noise, and a design far from an edge cannot flip at all. That is a
 structured, item-dependent error component, not an i.i.d. one, and it violates assumption 3 of §1.1
-directly. We take banding apart properly in
+directly. We take [[06-allocation-and-selection#4. Banding: what a step function costs, and what changes when you relabel it|banding]] apart properly in
 [[06-allocation-and-selection|the chapter on allocation and selection]].
 
 **The project never comments on this gap.** It matters because the allocation simulations of

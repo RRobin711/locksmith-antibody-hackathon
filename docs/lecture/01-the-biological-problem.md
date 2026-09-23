@@ -1,5 +1,7 @@
 # 01 — The Biological Problem
 
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [[CORRECTIONS|correction C1, and what it does and does not invalidate]]. Challenge 1 is unaffected.
+
 **What this chapter teaches.** Why anyone would want to design an anti-PD-1 antibody at all, and
 what "designing" one has to mean if the result is to be a drug rather than a number. We start from
 the cell biology — what a T cell is, what the PD-1 brake does, how a tumour pulls it — and build up
@@ -130,8 +132,8 @@ the VH/VL elbow angle**, so a bare Fv has an under-constrained wobble that a Fab
 not a theoretical worry: in the project's very first prediction, the VH/VL interface was the
 *worst*-scoring part of the model (`:57-58`), and the wobble later showed up as raw measurement
 noise — see [[04-measurement-theory|the Fv-versus-Fab reliability measurement]] , where
-Fv ipSAE
-seed reliability is 0.607 against the Fab's 0.965.
+Fv [[03-the-toolchain#4.3 ipSAE — interface confidence from the PAE|ipSAE]]
+seed [[04-measurement-theory#1.3 Reliability|reliability]] is 0.607 against the Fab's 0.965.
 
 ### 2.2 The six CDR loops
 
@@ -172,7 +174,7 @@ Both bind PD-1; both work in patients. The reading the project takes from this i
 encouraging for de novo design: **PD-1 can be bound by radically different loop architectures**, so
 there is not one narrow correct answer to find.
 
-(For completeness, pembrolizumab's light-chain CDRs as measured by ANARCII on both 5GGS copies:
+(For completeness, pembrolizumab's light-chain CDRs as measured by [[03-the-toolchain#4.5 ANARCII 2.0.8 — IMGT numbering, and the antigen it numbered as an antibody|ANARCII]] on both 5GGS copies:
 CDR-L1 `KGVSTSGYSY`, CDR-L2 `LAS`, CDR-L3 `QHSRDLPLT` — `docs/sessions/2026-09-15-...:133`.)
 
 The genetic story also explains why structure prediction struggles here, which becomes central in
@@ -283,7 +285,7 @@ across to 5GGS numbering by **explicit pairwise sequence alignment**, and all 26
 cleanly.
 
 Assuming transferability would have produced a wrong epitope with no error raised anywhere — one of
-the project's catalogued "silent failures". It also carries a caveat the project states rather than
+the project's catalogued "[[08-what-broke#Class 1 — Silent failures|silent failures]]". It also carries a caveat the project states rather than
 buries: if 5IUS uses an engineered or stabilised PD-1 variant, its PD-L1 binding mode may differ
 subtly from wild type.
 
@@ -353,12 +355,12 @@ non-binding**: binding 0.60, developability 0.20, novelty 0.20.
 
 Six requirements, and what the project could and could not measure against each:
 
-1. **Affinity** — bind tightly. Proxied by PRODIGY ΔG and, indirectly, by ipSAE and heavy-atom
+1. **Affinity** — bind tightly. Proxied by [[03-the-toolchain#4.2 PRODIGY 2.4.0 — ΔG and contacts|PRODIGY]] ΔG and, indirectly, by ipSAE and heavy-atom
    contact counts. §7 shows how badly these proxies track measured affinity.
 2. **Specificity** — bind *only* PD-1. Not in the rubric at all. The project added a five-antigen
    panel (§6.4) and failed it.
 3. **Functional mechanism** — occlude the PD-L1 site. Also not in the rubric. Added as §3.5.
-4. **Developability** — solubility and aggregation propensity (NetSolP), no N-glycosylation sequons
+4. **Developability** — solubility and aggregation propensity ([[03-the-toolchain#4.4 NetSolP-1.0 — sequence-only solubility, and a positive control that chose the model|NetSolP]]), no N-glycosylation sequons
    in the Fv, no NG/DG deamidation–isomerisation motifs in CDRs, no exposed Met/Trp in CDRs, sane pI
    and net charge (`src/locksmith/metrics/liabilities.py:34-48`).
 5. **Manufacturability** — NetSolP is the only proxy, and it is trained for solubility **in
@@ -401,12 +403,12 @@ no longer editing a known good answer; you are proposing one."*
 Challenge 1 hands you the answer to the hardest question: what shape the antibody should be, how it
 should be oriented against PD-1, which patch of PD-1 to touch. But the scoring builds in a real
 conflict. **Novelty** wants CDR-H3 rewritten as much as possible (top marks below 70% identity)
-while **DockQ** wants the pose unchanged (top marks at ≥0.80) — and CDR-H3 supplies 30–50% of the
+while **[[03-the-toolchain#4.1 DockQ 2.1.3 — two flags that both default wrong|DockQ]]** wants the pose unchanged (top marks at ≥0.80) — and CDR-H3 supplies 30–50% of the
 contact surface. *"So you are being asked to rewrite the most important part of the interface while
 leaving the interface intact. That tension is Challenge 1"* (`:64-73`).
 
 Concretely, the redesign target is the **29 IMGT heavy-chain CDR positions of pembrolizumab**
-(H1 = 8, H2 = 8, H3 = 13), sampled across four ProteinMPNN temperatures to give 239 designs; the
+(H1 = 8, H2 = 8, H3 = 13), sampled across four [[03-the-toolchain#2.1 ProteinMPNN|ProteinMPNN]] temperatures to give 239 designs; the
 light chain is pembrolizumab's, untouched, in all 239.
 
 One temptation was explicitly declined (`:126-136`). Because Challenge 1 is fixed-backbone redesign
@@ -428,7 +430,7 @@ Four independent reasons, all documented:
    correlated mutation across homologous sequences; a junctionally randomised loop has no
    homologues, so *"there is no evolutionary family of related sequences for the model to learn
    from"* (`knowledge/De Novo Design...:89-93`).
-3. **Measured, not assumed.** Five complexes released clear of Boltz-2's verified **2023-06-01**
+3. **Measured, not assumed.** Five complexes released clear of [[03-the-toolchain#3.1 Boltz-2 — the primary predictor|Boltz-2]]'s verified **2023-06-01**
    PDB-*release*-date cutoff, each with CDR-H3 ≤44.4% identical to anything pre-cutoff, gave a
    **median Fab DockQ of 0.157** against 5GGS's 0.818. That result was **partly withdrawn** when an
    input bug was found (antigen sequences built from coordinates had internal loops spliced out);
@@ -439,7 +441,7 @@ Four independent reasons, all documented:
 4. **Confidence is not correctness, and selection is optimisation.** Six of the eight metrics are
    computed from files the team generates itself, so "a confidently wrong answer scores well"; and
    generating thousands of candidates and picking the best-scoring one *is* a hill-climb executed in
-   one parallel step — the **winner's curse** — so "the score we report for our chosen design is
+   one parallel step — the **[[06-allocation-and-selection#3. Winner's curse|winner's curse]]** — so "the score we report for our chosen design is
    systematically optimistic, and the harder we screen, the worse it gets"
    (`knowledge/Confidence Is Not Truth.md:17-31, 57-70`). Quantified in
    [[06-allocation-and-selection|the selection chapter]].
@@ -452,7 +454,7 @@ the humanised 4D5-8 (trastuzumab) Fv; the frameworks were carried over unchanged
 humanised framework is standard practice and is what 'de novo antibody design' operationally means
 with current tooling — the novelty lives in the CDRs and the pose."
 
-For Challenge 2 the generative backbone model (RFdiffusion, via RFantibody) was **conditioned on the
+For Challenge 2 the generative backbone model ([[03-the-toolchain#2.2 RFdiffusion via RFantibody|RFdiffusion]], via RFantibody) was **conditioned on the
 26-residue PD-L1 competitive footprint**: you tell the model which residues on the target to aim at,
 and it proposes loops that reach them. Biologically, this is how you convert "bind PD-1" into "bind
 the functionally relevant face of PD-1" — the difference between a checkpoint inhibitor and an inert
@@ -665,7 +667,7 @@ mechanism. It is stated here because it was computable from the sequence for fre
 structure existed, and nothing in the rubric would have surfaced it."*
 
 And the project's own filter that would have *justified* fewer aromatics was **refuted**. The "G3"
-filter kept designs with ≤1 aromatic per 13-residue CDR-H3 and beat 10,000 equal-budget random
+filter kept designs with ≤1 aromatic per 13-residue CDR-H3 and beat 10,000 [[05-experiment-design#6. Equal-budget resampling, and varying the outcome|equal-budget]] random
 subsets at p<0.0001 on mean DockQ. Re-run with each of the six scored metrics as the outcome
 (n=239, 10,000 resamples) it wins on **2 of 6**: `dockq` (+0.0237, p=0.0001) and `iface_plddt`
 (+1.12, p=0.0001) — *both properties of the predictor rather than of the interface* — while `dg` is
