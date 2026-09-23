@@ -74,3 +74,113 @@ anything at all could put it under.
 30 folds × ~2.9 min = **87 minutes** on one laptop GPU, plus a 3-minute scoring pass. The
 alignment was built once from a server query Boltz had already performed, so no MSA
 queries were spent.
+
+---
+
+# Candidate readout — `bb_1_0_dldesign_0`
+
+**2026-09-23, no new folds.** Everything below is computed from the re-screen artefacts.
+
+## NetSolP (the §7.2 stop condition)
+
+**0.617** = `min(VH 0.617, VL 0.657)` under the declared conventions (ESM1b, Fv,
+`chain_agg=min`). Clears the 0.50 cutoff; **Medium** band, 8/10. Sequence-only, no fold.
+
+## §5.2 breakdown, per diffusion sample
+
+Challenge 2 scores **7 metrics** — DockQ is excluded because a de novo design has no
+reference structure.
+
+| metric | model_0 | model_1 | model_2 | model_3 | model_4 | **median** |
+|---|---|---|---|---|---|---|
+| `ipsae` | 0.855 | 0.697 | 0.509 | 0.637 | 0.423 | **0.637** |
+| `dg` | −9.50 | −12.60 | −11.90 | −12.10 | −12.30 | **−12.10** |
+| `contacts` | 71 | 99 | 98 | 104 | 115 | **99** |
+| `iface_plddt` | 81.40 | 79.55 | 80.34 | 77.74 | 76.99 | **79.55** |
+| `cdr_sasa` | 1265.4 | 1235.8 | 1226.7 | 1188.6 | 1084.5 | **1226.7** |
+| `netsolp` | 0.617 | — constant — | | | | **0.617** |
+| `cdrh3_identity` | 20.0 | — constant — | | | | **20.0** |
+| **composite** | **90.0** | **91.2** | **87.6** | **91.2** | **87.6** | |
+| **viable** | ✅ | ✅ | ❌ | ✅ | ❌ | **3 of 5** |
+
+**Two different medians, both reported rather than choosing the flattering one.**
+Evaluating the median of each metric gives **91.2**; the median of the five per-sample
+composites is **90.0**. They differ because banding is not linear in the underlying value.
+
+**Viable on 3 of 5 samples**, not 5 of 5. Models 2 and 4 fail on ipSAE.
+
+## Which metrics sit near a band edge
+
+| metric | median | band | nearest edge | distance |
+|---|---|---|---|---|
+| `ipsae` | 0.637 | medium | **cutoff 0.60** | **0.037** |
+| `dg` | −12.100 | good | **good −12.0** | **0.100** |
+| `iface_plddt` | 79.550 | medium | **good 80.0** | **0.450** |
+| `netsolp` | 0.617 | medium | good 0.70 | 0.083 |
+| `cdr_sasa` | 1226.7 | good | good 600 | 626.7 |
+| `contacts` | 99 | good | good 25 | 74 |
+| `cdrh3_identity` | 20.0 | good | good 70 | 50 |
+
+**Three metrics sit within half a band edge**, and one of them is the viability cutoff
+itself. This design is fragile to any change that costs anything at all.
+
+## The structure the package would ship
+
+`model_0`, because Boltz ranks by its own confidence and the package ships one structure.
+
+| metric | model_0 value | band | sub-score |
+|---|---|---|---|
+| `ipsae` | **0.855** | good | 10.0 |
+| `dg` | **−9.50** | **poor** | 5.0 |
+| `contacts` | 71 | good | 10.0 |
+| `iface_plddt` | 81.40 | good | 10.0 |
+| `cdr_sasa` | 1265.4 | good | 10.0 |
+| `netsolp` | 0.617 | medium | 8.0 |
+| `cdrh3_identity` | 20.0 | good | 10.0 |
+| **final** | **90.0** | | viable ✅ |
+
+Note the trade: **the sample with the best confidence has the worst interface energy.**
+`model_0` carries ipSAE 0.855 (the argmax) alongside ΔG −9.5, the only Poor band in the
+set. The central estimate is the median, **ipSAE 0.637 / composite 91.2 (or 90.0 by
+per-sample median)**; 0.855 is the top of a five-sample distribution and is reported as
+such wherever it appears.
+
+## Challenge 1, read from the package rather than inferred
+
+| metric | value | band | sub-score |
+|---|---|---|---|
+| `cdr_sasa` | 1596.5 | good | 10.0 |
+| `cdrh3_identity` | 38.5 | good | 10.0 |
+| `contacts` | 97.0 | good | 10.0 |
+| `dg` | −13.3 | good | 10.0 |
+| `dockq` | 0.800 | good | 10.0 |
+| `iface_plddt` | 88.63 | good | 10.0 |
+| `ipsae` | 0.821 | good | 10.0 |
+| `netsolp` | 0.569 | medium | 8.0 |
+
+Categories: binding 10.000, developability 8.000, novelty 10.000. **Final 96.0.**
+
+**Its margin is thinner than 96.0 suggests.** `dockq` **0.800 sits exactly on the Good
+edge** (distance 0.000) and `ipsae` 0.821 is **0.021** above it. Two of the seven tens are
+won by a hair, and both are on metrics that move with the diffusion draw — which is why
+the Challenge 1 envelope is 94.0–96.0 rather than a point.
+
+## Contacts, before any mutation
+
+Heavy-atom contacts to PD-1 (chain C) within 4.5 Å, **all five samples**:
+
+| residue | liability | model_0 | model_1 | model_2 | model_3 | model_4 | median | verdict |
+|---|---|---|---|---|---|---|---|---|
+| light **91** ASN | glycosylation `NKS`, CDR-L3 | 0 | 0 | 0 | 0 | 0 | **0** | **free** |
+| light **31** ASN | deamidation `NG`, CDR-L1 | 0 | 13 | 15 | 13 | 5 | **13** | **load-bearing** |
+
+**Measuring only the shipped sample would have given the wrong answer.** `model_0` shows
+**zero** contacts for light 31; the median across five is **13**. A single-structure
+contact analysis would have called a load-bearing residue free and licensed a mutation
+that this project has already watched destroy an interface.
+
+Against the precedent: `N→Q` on acceptors carrying **10 and 19** contacts collapsed ipSAE
+0.864 → 0.014, while the same substitution on a **3**-contact acceptor was free. Light 31
+at a median of **13** sits inside the fatal range, not the free one.
+
+**Stopped here. One residue is load-bearing, so the §9.2 fix is not proposed.**
