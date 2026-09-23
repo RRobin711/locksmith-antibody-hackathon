@@ -203,9 +203,12 @@ def build(path: Path, *, c1: dict, c2: dict) -> Path:
          "contiguous-patch null. Binding is evidenced by nothing here.", 1, False, MUTED),
         ("Viable in 5 of 5 diffusion samples — with the lowest 0.019 above the cutoff.", 1, True, WARN),
         ("", 0, False, INK),
-        ("Next: redesign Challenge 1's light chain (the entire NetSolP deficit sits there, "
-         "untouched), remove the NG motif, and validate any ranking claim against measured "
-         "affinity before making it.", 0, False, MUTED),
+        ("We tested our own advice and it failed: 24 ProteinMPNN light chains move VL "
+         "+0.023 against a required +0.131, 0/24 reach the edge, and 24/24 add new CDR "
+         "liabilities. The NetSolP ceiling is the HEAVY chain, by 0.001.", 0, True, WARN),
+        ("Next: a solubility-aware design objective — ProteinMPNN optimises sequence "
+         "recovery given a backbone, and solubility is not in its loss. Not: "
+         "more of the same sampler.", 0, False, MUTED),
         ("We would rather hand you a design we can characterise than one we can only score.",
          0, True, ACCENT),
     ], size=15)

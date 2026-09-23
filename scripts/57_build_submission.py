@@ -80,6 +80,25 @@ def main() -> int:
     pdb, pae, plddt_npz = Path(f["pdb"]), Path(f["pae"]), Path(f["plddt"])
     conf = pdb.parent / f"confidence_{pdb.stem.replace('_model_0','')}_model_0.json"
 
+    # ---- SUBMIT THE DEAMIDATION-FIXED VARIANT --------------------------------
+    # Decided 2026-09-22 after `scripts/83_ch1_ng_fix.py`. The design carried an `NG`
+    # deamidation motif at heavy 55-56 inside CDR-H2 (handbook §9.2), at positions that
+    # were inside our own 29 designable IMGT positions. `N55Q` removes it, keeps the
+    # composite at 96.0, and barely moves the envelope (0.044 vs the baseline's 0.039).
+    # Unlike Challenge 2's fix this one is free -- because N55 carries 3 antigen contacts
+    # where Challenge 2's acceptors carried 10 and 19.
+    NGFIX = Path("runs/ch1_ng_fix/results.json")
+    if NGFIX.exists():
+        import json as _json
+        v = _json.loads(NGFIX.read_text())["ng_n55q"]
+        vpred = Path("runs/ch1_ng_fix/ng_n55q/boltz_results_ng_n55q/predictions/ng_n55q")
+        hbc = dict(hbc, heavy=v["heavy"], light=v["light"])
+        pdb = vpred / "ng_n55q_model_0.pdb"
+        pae = vpred / "pae_ng_n55q_model_0.npz"
+        plddt_npz = vpred / "plddt_ng_n55q_model_0.npz"
+        conf = vpred / "confidence_ng_n55q_model_0.json"
+        print("  submitting the N55Q deamidation-fixed variant", flush=True)
+
     st = Structure(pdb=pdb, provenance=Provenance.PREDICTION, pae=pae, label=WINNER)
     raw = {k: v.value for k, v in prodigy.compute(st).items()}
     raw["ipsae"] = ipsae.compute(st, pae_cutoff=c["ipsae_pae_cutoff"],
@@ -175,6 +194,29 @@ This is mostly not a property of our design: ProteinMPNN redesigns only the heav
 CDRs, so the light chain is pembrolizumab's in all 239 designs and scores 0.569 on the Fv.
 Under `min` aggregation it caps every design we could ever make this way, so the composite
 is pinned at Medium regardless of the heavy chain.
+
+**And redesigning the light chain does NOT fix it — we tested the advice we were about
+to give.** Every previous version of this document recommended light-chain CDR redesign
+as the highest-value next step. Measured on 2026-09-22 with 24 ProteinMPNN light chains
+(NetSolP is sequence-only, so this cost **zero folds**):
+
+| | value |
+|---|---|
+| pembrolizumab VL (baseline) | 0.5690 |
+| best of 24 redesigns | **0.5920** (+0.0230) |
+| designs reaching VL ≥ 0.70 | **0 / 24** |
+| improvement still needed | **0.108** |
+
+The best design moves VL by **+0.023 against a required +0.131** — short by a factor of
+five. And **24 of 24 introduce new CDR liabilities** (3–5 each), the same behaviour that
+put two glycosylation sequons into our Challenge 2 paratope: unconstrained ProteinMPNN
+adds developability problems and nothing in the rubric penalises it.
+
+Worse, the ceiling is not the light chain at all. `min(VH, VL)` with **VH = 0.699**
+against a Good edge of **0.70** means a perfect light chain still leaves the band at
+Medium — **by 0.001**. The real requirement is a solubility-aware objective;
+ProteinMPNN optimises sequence recovery given a backbone, and solubility is not in its
+loss.
 
 **One correction we owe the reader, because our own earlier wording invited the wrong
 inference.** Across the 239-design pool, 168 (70%) have VH >= 0.70, the Good edge. **This

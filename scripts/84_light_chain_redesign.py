@@ -63,17 +63,42 @@ def main() -> int:
         got = mpnn.generate(SRC_PDB, n=N_DESIGNS, temperature=TEMPERATURE, seed=SEED,
                             design_chain="B", context_chains=("A", "C"),
                             out_root=OUT / "mpnn")
-        rows = [{"light": s, "mpnn": meta} for s, meta in got]
+        # `MpnnDesign` names its fields by ROLE, not by chain letter: with
+        # design_chain="B" the DESIGNED chain lands in `.heavy` and the context heavy
+        # chain in `.light`. Worth stating, because reading it the obvious way silently
+        # screens the wrong molecule.
+        rows = [{"light_coord": d.heavy, "score": d.score,
+                 "seq_recovery": d.seq_recovery, "sample": d.sample} for d in got]
         cache.write_text(json.dumps(rows, indent=1))
 
     # ---- screen on sequence alone. No folding. ----
     print(f"\nscreening {len(rows)} light chains on NetSolP (sequence-only, no folds)",
           flush=True)
+    # The designed chain comes from 5GGS COORDINATES (217 aa); the handbook construct is
+    # 218. Graft the designed positions onto the handbook light chain by locating the
+    # coordinate sequence inside it, rather than comparing two different constructs.
+    wt_coord = json.loads((OUT / "designs.json").read_text())
+    from locksmith.io.pdb import seq_for_folding
+    coord_l = seq_for_folding(SRC_PDB, "B")
+    off = light_wt.find(coord_l[:30])
+    if off < 0:
+        print("coordinate light chain not found in the handbook construct", file=sys.stderr)
+        return 1
+    print(f"grafting designed positions onto the handbook light chain at offset {off} "
+          f"(coord {len(coord_l)} aa, handbook {len(light_wt)} aa)\n", flush=True)
+
+    def graft(designed_coord: str) -> str:
+        out = list(light_wt)
+        for j, (a, b) in enumerate(zip(coord_l, designed_coord)):
+            if a != b:
+                out[off + j] = b
+        return "".join(out)
+
     scored = []
     for i, r in enumerate(rows):
-        l = r["light"]
+        l = graft(r["light_coord"])
         if len(l) != len(light_wt):
-            print(f"  [{i}] length {len(l)} != {len(light_wt)}; skipped", file=sys.stderr)
+            print(f"  [{i}] graft produced {len(l)} aa; skipped", file=sys.stderr)
             continue
         res = netsolp.compute(heavy, l, construct="fv")["netsolp"]
         v_l = float(res.detail.split("L=")[1].rstrip(")"))

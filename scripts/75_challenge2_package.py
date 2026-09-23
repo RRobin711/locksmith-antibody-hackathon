@@ -56,6 +56,7 @@ def conditioning_by_backbone() -> dict[str, dict]:
 
 def main() -> int:
     cfg = load()
+    conv = cfg.conventions
     rows = [json.loads(l) for l in SCORES.read_text().splitlines()
             if l.strip() and "ipsae" in json.loads(l)]
     viable = [r for r in rows if r.get("viable") is True]
@@ -389,11 +390,11 @@ prediction to anything external.** Every number below is computed from the two f
 
 | metric | source | our value |
 |---|---|---|
-| `ipsae` | `vendor/ipsae/ipsae.py` on the PAE JSON + PDB, cutoffs {c['ipsae_pae_cutoff']}/{c['ipsae_dist_cutoff']} | {win['ipsae']:.3f} |
+| `ipsae` | `vendor/ipsae/ipsae.py` on the PAE JSON + PDB, cutoffs {conv['ipsae_pae_cutoff']}/{conv['ipsae_dist_cutoff']} | {win['ipsae']:.3f} |
 | `dg`, `contacts` | PRODIGY, chain selection `A,B` vs `C` | {win['dg']:.1f}, {win['contacts']:.0f} |
-| `iface_plddt` | mean B-factor over interface residues, {c['interface_dist_cutoff']} Å heavy-atom | {win['iface_plddt']:.2f} |
-| `cdr_sasa` | freesasa over the six CDRs, `{c['cdr_sasa_state']}` state | {win['cdr_sasa']:.1f} |
-| `netsolp` | NetSolP **ESM1b** (the tool's own default), Fv, `{c['netsolp_chain_agg']}` over chains | {win['netsolp']:.3f} |
+| `iface_plddt` | mean B-factor over interface residues, {conv['interface_dist_cutoff']} Å heavy-atom | {win['iface_plddt']:.2f} |
+| `cdr_sasa` | freesasa over the six CDRs, `{conv['cdr_sasa_state']}` state | {win['cdr_sasa']:.1f} |
+| `netsolp` | NetSolP **ESM1b** (the tool's own default), Fv, `{conv['netsolp_chain_agg']}` over chains | {win['netsolp']:.3f} |
 | `cdrh3_identity` | **human germline**, not Keytruda — see below | {win['cdrh3_identity']:.1f}% |
 
 ## The one that needs explaining: novelty against germline

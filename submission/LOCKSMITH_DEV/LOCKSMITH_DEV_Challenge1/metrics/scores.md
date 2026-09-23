@@ -28,13 +28,13 @@ Conventions: `band_value=top`, `dockq_interface_agg=global`, `netsolp_construct=
 
 | metric | value | band | sub-score |
 |---|---|---|---|
-| `cdr_sasa` | 1565.000 | good | 10.0 |
+| `cdr_sasa` | 1596.500 | good | 10.0 |
 | `cdrh3_identity` | 38.500 | good | 10.0 |
-| `contacts` | 94.000 | good | 10.0 |
-| `dg` | -12.700 | good | 10.0 |
-| `dockq` | 0.816 | good | 10.0 |
-| `iface_plddt` | 89.430 | good | 10.0 |
-| `ipsae` | 0.824 | good | 10.0 |
+| `contacts` | 97.000 | good | 10.0 |
+| `dg` | -13.300 | good | 10.0 |
+| `dockq` | 0.800 | good | 10.0 |
+| `iface_plddt` | 88.630 | good | 10.0 |
+| `ipsae` | 0.821 | good | 10.0 |
 | `netsolp` | 0.569 | medium | 8.0 |
 
 Categories: binding 10.000, developability 8.000, novelty 10.000

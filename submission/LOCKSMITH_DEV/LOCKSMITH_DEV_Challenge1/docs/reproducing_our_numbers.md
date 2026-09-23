@@ -24,7 +24,7 @@ different input could silently be scored under a different correspondence:
 ```
 $ DockQ structures/design_1_complex.pdb 5ggs_ABZ.pdb \
       --allowed_mismatches 40 --mapping ABC:ABC
-Total DockQ over 3 native interfaces: 0.816 with ABC:ABC model:native mapping
+Total DockQ over 3 native interfaces: 0.800 with ABC:ABC model:native mapping
   A,B  DockQ 0.931      (heavy-light framework -- near-perfect by construction)
   A,C  DockQ 0.723      <-- the interface the design actually creates
   B,C  DockQ 0.794
