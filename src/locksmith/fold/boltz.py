@@ -61,9 +61,57 @@ def _stage(msa: Path) -> Path:
     return staged
 
 
+def _msa_query_length(msa: Path) -> int | None:
+    """Length of the cached alignment's query row (its first sequence), gaps removed."""
+    import csv
+
+    try:
+        rows = list(csv.reader(msa.read_text().splitlines()))
+    except Exception:                                        # noqa: BLE001
+        return None
+    if len(rows) < 2:
+        return None
+    header = [c.strip().lower() for c in rows[0]]
+    if "sequence" not in header:
+        return None
+    return len(rows[1][header.index("sequence")].replace("-", ""))
+
+
 def write_input(path: Path, heavy: str, light: str, antigen: str,
-                *, antigen_msa: Path | None = PD1_MSA) -> Path:
-    """Boltz FASTA: >CHAIN|entity|msa. The literal `empty` means no alignment."""
+                *, antigen_msa: Path | None = PD1_MSA,
+                allow_msa_mismatch: bool = False) -> Path:
+    """Boltz FASTA: >CHAIN|entity|msa. The literal `empty` means no alignment.
+
+    REFUSES a cached alignment whose query length differs from the antigen, because Boltz
+    SILENTLY DISCARDS such an alignment. `featurizerv2.py` compares
+    `len(residues) == len(first_residues)` and, on mismatch, prints
+    `Warning: MSA does not match input sequence, creating dummy.` to stdout and replaces
+    the MSA with a dummy. No exception, no non-zero exit, no marker in any output file.
+
+    The check is on LENGTH ALONE -- a query that is an exact substring of the input at
+    offset 5 is treated exactly like an unrelated sequence.
+
+    Measured 2026-09-23: the shipped Challenge 2 structure was folded this way. The cached
+    PD-1 alignment has a 113-residue query; the fold passed it alongside the handbook's
+    123-residue antigen, and `runs/sequon_fix.log` carries that warning twice. The antigen
+    was folded in single-sequence mode and nothing in the pipeline said so. Worse, the
+    processed `msa/*.npz` still records 1024 sequences at width 113, so inspecting the
+    artefact SUGGESTS THE ALIGNMENT WAS USED.
+
+    `allow_msa_mismatch=True` is for deliberately reproducing that pairing -- see
+    `scripts/94_msa_register.py`, which measures what the discard cost.
+    """
+    if antigen_msa is not None and not allow_msa_mismatch:
+        qlen = _msa_query_length(Path(antigen_msa))
+        if qlen is not None and qlen != len(antigen):
+            raise FoldFailed(
+                f"cached MSA {Path(antigen_msa).name} has a {qlen}-residue query but the "
+                f"antigen is {len(antigen)} residues. Boltz would DISCARD this alignment "
+                f"silently and fold the antigen single-sequence "
+                f"(featurizerv2.py compares lengths only, then calls dummy_msa). "
+                f"Pass an alignment built for this exact sequence, use "
+                f"antigen_msa=None to query the server, or set allow_msa_mismatch=True "
+                f"if you are deliberately reproducing the mismatch.")
     msa_field = str(_stage(antigen_msa)) if antigen_msa else ""
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
@@ -78,7 +126,7 @@ def fold(label: str, heavy: str, light: str, antigen: str, *,
          out_root: Path, construct: str = "fv", seed: int = 1,
          antigen_msa: Path | None = PD1_MSA,
          diffusion_samples: int = 1, recycling_steps: int = 3,
-         timeout: int = 3600) -> FoldResult:
+         timeout: int = 3600, allow_msa_mismatch: bool = False) -> FoldResult:
     # ipsae.py finds the pLDDT array by doing pae_path.replace("pae", "plddt").
     # A label containing "pae" corrupts that substitution and ipsae then writes an
     # empty table and exits 0. Cheap assertion against an expensive silent failure.
@@ -90,7 +138,8 @@ def fold(label: str, heavy: str, light: str, antigen: str, *,
 
     out_dir = Path(out_root) / label
     fasta = write_input(out_dir / f"{label}.fasta", heavy, light, antigen,
-                        antigen_msa=antigen_msa)
+                        antigen_msa=antigen_msa,
+                        allow_msa_mismatch=allow_msa_mismatch)
 
     cmd = [BOLTZ, "predict", str(fasta),
            "--out_dir", str(out_dir),

@@ -93,8 +93,12 @@ def main() -> int:
         print(f"{label:<14} {what} ...", end=" ", flush=True)
         t0 = time.time()
         try:
+            # `as_shipped` deliberately reproduces the pairing that Boltz discards, which
+            # write_input now refuses by default. That refusal is the point of the guard;
+            # this arm is the one place that must bypass it.
             fold(label, heavy, light, antigen, out_root=OUT, antigen_msa=msa, seed=1,
-                 diffusion_samples=SAMPLES, recycling_steps=RECYCLING, timeout=5400)
+                 diffusion_samples=SAMPLES, recycling_steps=RECYCLING, timeout=5400,
+                 allow_msa_mismatch=(label == "as_shipped"))
             log[label] = {"ok": True, "seconds": round(time.time() - t0, 1), "what": what}
             print(f"ok in {(time.time()-t0)/60:.1f} min", flush=True)
         except Exception as e:                               # noqa: BLE001

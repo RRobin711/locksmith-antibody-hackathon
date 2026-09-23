@@ -561,3 +561,50 @@ def test_pick_contacting_chain_rejects_the_wrong_copy():
 
     # nothing touching => refuse, rather than returning a chain that is not a partner
     assert pick_contacting_chain({"D": list(far)}, ab) == (None, 0)
+
+
+def test_write_input_refuses_an_msa_that_boltz_would_discard(tmp_path):
+    """A cached alignment whose query length differs from the antigen must RAISE.
+
+    The bug this pins, measured 2026-09-23 on the shipped Challenge 2 structure: Boltz's
+    featurizer compares `len(residues) == len(first_residues)` and, on mismatch, prints
+    `Warning: MSA does not match input sequence, creating dummy.` to stdout and replaces
+    the alignment with a dummy. No exception, no non-zero exit, nothing in any output file.
+
+    The check is on LENGTH ALONE, so a query that is an exact substring of the input at
+    offset 5 -- which is precisely our case, a 113-residue cached query against the
+    123-residue handbook antigen -- is treated like an unrelated sequence. The antigen was
+    folded single-sequence and nothing said so.
+
+    Worse for detection: the processed `msa/*.npz` still records the full alignment,
+    because the discard happens at featurisation AFTER that file is written. Inspecting
+    the artefact suggests the alignment was used.
+    """
+    from locksmith.fold import FoldFailed
+    from locksmith.fold.boltz import write_input
+
+    msa = tmp_path / "cached.csv"
+    query = "PWNPPTFSPALL"                      # 12 residues
+    msa.write_text("key,sequence\n-1," + query + "\n-1,PWSPLTFSPAQL\n")
+
+    # exact match: accepted
+    out = write_input(tmp_path / "ok.fasta", "QVQ", "DIQ", query, antigen_msa=msa)
+    assert out.exists() and query in out.read_text()
+
+    # the real shape of the bug: query is a SUBSTRING of a longer antigen
+    longer = "DSPDR" + query
+    with pytest.raises(FoldFailed, match="would DISCARD|DISCARD this alignment"):
+        write_input(tmp_path / "bad.fasta", "QVQ", "DIQ", longer, antigen_msa=msa)
+
+    # a shorter antigen is equally wrong
+    with pytest.raises(FoldFailed):
+        write_input(tmp_path / "bad2.fasta", "QVQ", "DIQ", query[:-3], antigen_msa=msa)
+
+    # the deliberate-reproduction escape hatch still works
+    out = write_input(tmp_path / "forced.fasta", "QVQ", "DIQ", longer,
+                      antigen_msa=msa, allow_msa_mismatch=True)
+    assert longer in out.read_text()
+
+    # no cached MSA at all => nothing to check, server query is fine
+    out = write_input(tmp_path / "server.fasta", "QVQ", "DIQ", longer, antigen_msa=None)
+    assert "|protein|\n" in out.read_text()
