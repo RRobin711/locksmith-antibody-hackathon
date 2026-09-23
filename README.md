@@ -27,6 +27,24 @@ PDF.
 | `designs/` | Candidate designs — structures, PAE files, sequences. Empty. |
 | `scripts/` | Local re-implementation of the scoring pipeline. Empty. |
 
+## Status — 2026-09-22 (final)
+
+> **Both challenges packaged, validated, and §9.2-clean.**
+> Challenge 1 `mpnn_T0.5_s104_036` **N55Q** — 96.0, envelope 94.0–96.0.
+> Challenge 2 `bb_2_0_dldesign_1` **S→A** — 91.2, envelope 91.2–96.0.
+> Both viable across all five diffusion samples; `VALIDATION PASSED` from the packaged
+> files alone. 29 tests. Deck is 6 slides, generated from the packaging run.
+>
+> **We submit a lower-scoring Challenge 2 on purpose**: 4.8 points to remove two
+> glycosylation sequons from a paratope. §9.2 asks for it, §5.2 does not pay for it.
+>
+> **Refuted this session:** "redesign the light-chain CDRs" — see
+> [[results/ch1_ng_and_light_chain_2026-09-22|the measurement]]. It cannot move the band
+> (VH 0.699 caps `min()` by 0.001) and ProteinMPNN gets 18% of the way regardless.
+>
+> **Outstanding, and it is the only one:** the team name is still the placeholder
+> `LOCKSMITH_DEV`.
+
 ## Status — 2026-09-22
 
 > ### The 2026-09-21 audit findings are closed — see [[results/audit_response_2026-09-22|the full response]]

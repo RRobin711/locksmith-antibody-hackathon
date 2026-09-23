@@ -28,7 +28,22 @@ this machine during this session unless it says otherwise.
 ## 1. What was done tonight, in order
 
 | # | Task | Status |
-|---|---|---|
+|
+## 1b. Later the same day — liability fixes and a refuted recommendation
+
+| item | outcome |
+|---|---|
+| Challenge 1 `NG` deamidation motif (§9.2) | ✅ **fixed free** — `N55Q`, composite stays 96.0, envelope 0.044 vs baseline 0.039 |
+| Challenge 2 glycosylation sequons (§9.2) | ✅ fixed earlier — `S→A`, 4.8 points paid deliberately |
+| "redesign the light chain" | ❌ **REFUTED** — ceiling is VH by 0.001; 24 designs reach +0.023 of a required +0.131; 24/24 add liabilities |
+| PDB chain termination | ✅ 3 `TER` records per structure |
+| Challenge 2 reproduction doc | ✅ shipped, closing the asymmetry with Challenge 1 |
+
+**The contact-count rule is now confirmed in both directions** — Ch2's `N→Q` on acceptors
+carrying 10 and 19 contacts was fatal; Ch1's `N55Q` on one carrying 3 was free. Prescribed
+developability fixes are not interchangeable, and the structure decides which in a minute.
+
+---|---|---|
 | 1 | Finish the sha256 pass on the retrieved pod artefacts | ✅ **DONE** — 258/258 verified, 0 mismatches |
 | 2 | Challenge 2 end to end | ✅ **DONE** — 30/30 folded at recycling 10, **1/30 clears** |
 | 3 | Select and package Challenge 2 | ✅ **RUN** — packaged and validated; the rule was inapplicable (one candidate) |
