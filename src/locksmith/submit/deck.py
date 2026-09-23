@@ -30,9 +30,14 @@ def _rgb(t):
     return RGBColor(*t)
 
 
-def build(path: Path, *, c1: dict, c2: dict) -> Path:
+def build(path: Path, *, c1: dict, c2: dict, calib: dict | None = None) -> Path:
     """`c1`/`c2` are the scored metric dicts for each challenge, from the same run that
-    packages them. Nothing on a slide is hardcoded if it appears in the package."""
+    packages them. Nothing on a slide is hardcoded if it appears in the package.
+
+    `calib` is `runs/calibration/scores.json` -- the calibration panel and negative
+    control. When present it adds two slides; when absent the deck builds without them
+    rather than printing placeholders, because a slide that says "pending" in a shipped
+    package is exactly the failure mode this module exists to prevent."""
     from pptx import Presentation
     from pptx.chart.data import CategoryChartData
     from pptx.enum.chart import XL_CHART_TYPE, XL_LEGEND_POSITION
@@ -88,6 +93,106 @@ def build(path: Path, *, c1: dict, c2: dict) -> Path:
          f"Challenge 2 {c2['final']:.1f}/100.", 0, False, MUTED),
         ("That is the least interesting thing in this deck.", 1, True, MUTED),
     ])
+
+    # ---------------------------------------------------------------- 1b
+    if calib and calib.get("negctrl"):
+        rows = list(calib["negctrl"].values())
+        neg = [r for r in rows if r["expected"] == "negative"]
+        pos = [r for r in rows if r["expected"] == "positive"]
+        swept = [r for r in neg if r.get("ipsae_m0") is not None
+                 and r["ipsae_m0"] >= 0.60]
+        if neg:
+            hero = max(neg, key=lambda r: r.get("ipsae_m0") or 0)
+            s = slide("We docked an anti-lysozyme antibody onto PD-1. "
+                      "The rubric certified it.",
+                      "The control that could have sunk this project. It costs eight "
+                      "folds. Nobody ran it for a week.")
+            items = [
+                (f"{hero['name']} is a real antibody raised against hen egg lysozyme. "
+                 f"It cannot bind PD-1.", 0, True, INK),
+                (f"Folded against our exact PD-1 construct, our exact cached alignment, "
+                 f"our exact flags — only the antibody changed:", 1, False, MUTED),
+                ("", 0, False, INK),
+                (f"ipSAE {hero.get('ipsae_m0', 0):.3f}  ·  ΔG {hero.get('dg_m0', 0):.1f}  ·  "
+                 f"{hero.get('contacts_m0', 0):.0f} contacts  ·  "
+                 f"interface pLDDT {hero.get('iface_plddt_m0', 0):.1f}  ·  "
+                 f"CDR SASA {hero.get('cdr_sasa_m0', 0):.0f} Å²", 0, True, WARN),
+                ("Every one of the five §7.2 hard cutoffs. A clean sweep, by a molecule "
+                 "that cannot possibly bind.", 0, True, WARN),
+                ("", 0, False, INK),
+                ("Because that is `model_0` — and Boltz ranks its diffusion outputs by its "
+                 "own confidence, so the default `diffusion_samples=1` returns an ARGMAX, "
+                 "not a draw.", 0, True, INK),
+                (f"Across five samples its median is ipSAE {hero.get('ipsae', 0):.3f}. It "
+                 f"fails comfortably the moment you actually sample.", 1, False, MUTED),
+                ("", 0, False, INK),
+            ]
+            inert = [n for n in ("ΔG", "contacts", "interface pLDDT", "CDR SASA")]
+            items.append(
+                ("Four of the five gates are cleared by EVERY antibody in the negative "
+                 "arm. The §7.2 viability decision rests on ipSAE alone; the other four "
+                 "supply the appearance of a check.", 0, True, INK))
+            if pos:
+                items.append(
+                    (f"The panel works: both licensed anti-PD-1 antibodies "
+                     f"({', '.join(r['name'] for r in pos)}) pass. A negative arm without "
+                     f"a working positive proves nothing, and we have published that "
+                     f"mistake before.", 0, False, MUTED))
+            items.append(("A gate has to be calibrated against something that should fail "
+                          "it. Until this experiment, nothing in this project ever was.",
+                          0, True, ACCENT))
+            bullets(s, items, size=15)
+
+    # ---------------------------------------------------------------- 1c
+    if calib and calib.get("panel"):
+        panel = list(calib["panel"].values())
+        post = [r for r in panel if r["arm"] == "post" and r.get("ipsae") is not None]
+        pre = [r for r in panel if r["arm"] == "pre" and r.get("ipsae") is not None]
+        tests = [r for r in calib.get("negctrl", {}).values()
+                 if r["expected"] == "test"]
+        if len(post) >= 5 and len(pre) >= 5:
+            import statistics as _st
+            s = slide("Our numbers, placed in the only distribution that matters",
+                      f"{len(pre)+len(post)} real crystallised antibody–antigen complexes "
+                      f"folded through the identical pipeline")
+            def _pct(v, pool):
+                return 100.0 * sum(1 for x in pool if x < v) / len(pool)
+            ip_post = [r["ipsae"] for r in post]
+            ip_pre = [r["ipsae"] for r in pre]
+            items = [
+                ("\u201cipSAE 0.864\u201d is not a result. Nobody knows whether real "
+                 "complexes cluster at 0.5 or 0.95, or where the handbook's 0.80 edge "
+                 "actually sits. So we measured it.", 0, True, INK),
+                ("", 0, False, INK),
+                (f"Pre-cutoff, released before 2023-06-01 — Boltz has seen these "
+                 f"(n={len(pre)}): median ipSAE {_st.median(ip_pre):.3f}", 0, True, INK),
+                ("The ceiling. What the metric looks like when prediction is closer to "
+                 "recall.", 1, False, MUTED),
+                (f"Post-cutoff, genuinely novel (n={len(post)}): median ipSAE "
+                 f"{_st.median(ip_post):.3f}", 0, True, INK),
+                ("The honest bar for a de novo design. Both arms drawn by one query "
+                 "either side of one date, so era and resolution are matched and the "
+                 "cutoff is the only systematic difference.", 1, False, MUTED),
+                ("", 0, False, INK),
+            ]
+            for t in tests:
+                if t.get("ipsae") is None:
+                    continue
+                items.append(
+                    (f"{t['name']}: ipSAE {t['ipsae']:.3f} — "
+                     f"{_pct(t['ipsae'], ip_post):.0f}th percentile of novel real "
+                     f"complexes", 0, True, ACCENT))
+            items += [
+                ("", 0, False, INK),
+                ("A high percentile is NOT evidence our design binds. It says the "
+                 "predictor is as confident about our molecule as about real complexes "
+                 "it has never seen — a statement about the predictor, not the molecule.",
+                 0, True, INK),
+                ("The one metric here that reads coordinates against external truth is "
+                 "DockQ, and for a de novo design there is no crystal to read against. "
+                 "It is absent exactly where it would matter most.", 0, False, MUTED),
+            ]
+            bullets(s, items, size=15)
 
     # ---------------------------------------------------------------- 2
     s = slide("The rubric's own metrics, measured against controls that could fail",

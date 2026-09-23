@@ -66,7 +66,12 @@ def build_deck(path: Path, final: float, raw: dict) -> Path:
             "no viable Challenge 2 design found; the deck would have to state what "
             "Challenge 2 contains and cannot guess. Run scripts/80 first, or edit "
             "submit/deck.py deliberately.")
-    return deck.build(path, c1=c1, c2=c2)
+    # The calibration panel and negative control, when they exist. Passed as data rather
+    # than transcribed into the slides, for the same reason as c1/c2: the deck went stale
+    # once already because a number lived in two places.
+    calib_path = Path("runs/calibration/scores.json")
+    calib = json.loads(calib_path.read_text()) if calib_path.exists() else None
+    return deck.build(path, c1=c1, c2=c2, calib=calib)
 
 
 def main() -> int:

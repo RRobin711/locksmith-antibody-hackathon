@@ -464,3 +464,55 @@ def test_resume_keys_on_the_artefact_not_on_the_row_existing():
         assert 'get("ok")' in src or '"ipsae" in' in src, (
             f"{script}: resume does not key on an artefact field")
         assert "design_id" in src
+
+
+def test_fold_is_complete_distinguishes_absent_from_broken(tmp_path):
+    """A resume predicate must not report 'not done' when the CHECK is broken.
+
+    The bug this pins, measured 2026-09-22: four driver scripts called
+    `assert_artefacts(dir, label)`, which is not its signature. The `TypeError` was caught
+    by a bare `except Exception` and read as "not folded yet", so a finished 40-complex
+    panel would have been silently refolded from scratch on any restart. Re-doing finished
+    work looks exactly like doing work, so nothing would have reported it.
+
+    Note the asymmetry: had the swallowed exception meant "done" instead, the same bug
+    would have SKIPPED every fold and produced an empty panel that looked complete. So the
+    predicate must be false only because the ARTEFACTS say so.
+    """
+    import numpy as np
+    from locksmith.fold import fold_is_complete
+
+    d = tmp_path / "predictions" / "x"
+    d.mkdir(parents=True)
+    assert fold_is_complete(tmp_path / "nope", "x", n_models=1) is False
+
+    def write(i, *, atoms=True, square=True):
+        tag = f"x_model_{i}"
+        (d / f"{tag}.pdb").write_text(
+            "ATOM      1  N   ALA A   1      0.000   0.000   0.000  1.00 50.00\n"
+            if atoms else "REMARK nothing\n")
+        arr = np.zeros((4, 4)) if square else np.zeros((4, 5))
+        np.savez(d / f"pae_{tag}.npz", pae=arr)
+        np.savez(d / f"plddt_{tag}.npz", plddt=np.zeros(4))
+
+    write(0)
+    assert fold_is_complete(d, "x", n_models=1) is True
+    # asking for more models than were produced must be False, not a crash
+    assert fold_is_complete(d, "x", n_models=5) is False
+    for i in range(1, 5):
+        write(i)
+    assert fold_is_complete(d, "x", n_models=5) is True
+
+    # a broken artefact is False...
+    (d / "x_model_3.pdb").write_text("")
+    assert fold_is_complete(d, "x", n_models=5) is False
+
+    # ...but a broken CHECK must propagate, never read as "not done"
+    import locksmith.fold as F
+    real = F.assert_artefacts
+    F.assert_artefacts = lambda *a, **k: (_ for _ in ()).throw(TypeError("wrong args"))
+    try:
+        with pytest.raises(TypeError):
+            fold_is_complete(d, "x", n_models=1)
+    finally:
+        F.assert_artefacts = real

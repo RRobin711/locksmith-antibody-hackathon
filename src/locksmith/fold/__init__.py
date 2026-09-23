@@ -83,3 +83,37 @@ def assert_artefacts(pdb: Path, pae: Path, plddt: Path | None, *,
             raise FoldFailed(f"{label}: PAE .npz will not load: {e}") from e
         if arr.ndim != 2 or arr.shape[0] != arr.shape[1]:
             raise FoldFailed(f"{label}: PAE is not a square matrix, got {arr.shape}")
+
+
+def fold_is_complete(pred_dir: Path, label: str, *, n_models: int = 1) -> bool:
+    """Has this fold already produced `n_models` scorable models? Resume keys on THIS.
+
+    WHY THIS EXISTS AS A FUNCTION. Four driver scripts each grew their own resume check,
+    and every one of them called `assert_artefacts(dir, label)` -- which is not its
+    signature. The call raised `TypeError`, each script caught it with a bare
+    `except Exception`, and the error was silently read as "not folded yet". A completed
+    40-complex panel would have been refolded from scratch on any restart, and nothing
+    would have said so. The bug survived because the failure mode of a resume check is
+    invisible in the direction it failed: re-doing finished work looks exactly like
+    doing work.
+
+    Note the asymmetry that makes this dangerous. Had the boolean been inverted -- had the
+    swallowed exception meant "done" -- the same bug would have SKIPPED every fold and
+    produced an empty panel that looked complete. A resume predicate must therefore
+    distinguish "the artefacts say no" from "the check itself is broken", which is why
+    only `FoldFailed` is caught here and every other exception propagates.
+
+    Pinned by `tests/test_invariants.py::test_fold_is_complete_distinguishes_absent_from_broken`.
+    """
+    if not pred_dir.is_dir():
+        return False
+    for i in range(n_models):
+        tag = f"{label}_model_{i}"
+        try:
+            assert_artefacts(pred_dir / f"{tag}.pdb",
+                             pred_dir / f"pae_{tag}.npz",
+                             pred_dir / f"plddt_{tag}.npz",
+                             label=tag)
+        except FoldFailed:
+            return False
+    return True

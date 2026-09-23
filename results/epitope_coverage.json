@@ -1,0 +1,99 @@
+{
+ "pembrolizumab": {
+  "pdb": "5GGS",
+  "pd1_chain": "Y",
+  "n_epitope": 24,
+  "epitope": [
+   "SER62",
+   "PHE63",
+   "VAL64",
+   "ASN66",
+   "TYR68",
+   "THR76",
+   "ASP77",
+   "LYS78",
+   "ALA81",
+   "PHE82",
+   "PRO83",
+   "GLU84",
+   "ASP85",
+   "ARG86",
+   "SER87",
+   "GLN88",
+   "PRO89",
+   "GLY90",
+   "ILE126",
+   "LEU128",
+   "ALA129",
+   "LYS131",
+   "ALA132",
+   "ILE134"
+  ],
+  "folded_113": {
+   "covered": 24,
+   "missing": 0,
+   "missing_residues": [],
+   "pct": 100.0
+  },
+  "followup_119": {
+   "covered": 24,
+   "missing": 0,
+   "missing_residues": [],
+   "pct": 100.0
+  },
+  "submitted": {
+   "covered": 24,
+   "missing": 0,
+   "missing_residues": [],
+   "pct": 100.0
+  }
+ },
+ "nivolumab": {
+  "pdb": "5WT9",
+  "pd1_chain": "G",
+  "n_epitope": 14,
+  "epitope": [
+   "LEU25",
+   "ASP26",
+   "SER27",
+   "PRO28",
+   "ASP29",
+   "ARG30",
+   "PRO31",
+   "THR59",
+   "SER60",
+   "LEU128",
+   "ALA129",
+   "PRO130",
+   "LYS131",
+   "ALA132"
+  ],
+  "folded_113": {
+   "covered": 8,
+   "missing": 6,
+   "missing_residues": [
+    "LEU25",
+    "ASP26",
+    "SER27",
+    "PRO28",
+    "ASP29",
+    "ARG30"
+   ],
+   "pct": 57.1
+  },
+  "followup_119": {
+   "covered": 14,
+   "missing": 0,
+   "missing_residues": [],
+   "pct": 100.0
+  },
+  "submitted": {
+   "covered": 13,
+   "missing": 1,
+   "missing_residues": [
+    "LEU25"
+   ],
+   "pct": 92.9
+  }
+ }
+}
