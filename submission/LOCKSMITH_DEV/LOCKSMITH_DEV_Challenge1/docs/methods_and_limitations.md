@@ -95,6 +95,25 @@ filtered designs make ~1.8 **fewer** heavy-atom contacts, which is what one shou
 from selecting against large aromatic side chains. We have withdrawn that filter as a
 design rule.
 
+## Developability liabilities in this design, found by our own scan
+
+Handbook §9.2 asks for no NG/DG deamidation motifs in CDRs. **This design carries `NG` at
+heavy chain position 55, inside CDR-H2.**
+
+It is pembrolizumab's own motif, not one we introduced — but both positions sat inside the
+29 IMGT positions we made designable, so removing it was free and we did not take it. Our
+redesign changed CDR-H2 at exactly one position (S54L) and left `N55-G56` intact.
+
+Also present and worth stating: `M29` in CDR-H1, introduced by our redesign alongside the
+inherited `M34` (§9.2: no exposed methionines in CDRs) — though measured CDR-H1 hydrophobic
+exposure is low at 79 Å², so this is a soft flag. The unpaired cysteine the scan reports is
+an artefact of the handbook's own §4.2.2 construct (truncated hinge), not of our design.
+
+Found by `src/locksmith/metrics/liabilities.py`, which was specified in our build plan,
+never written, and only built on 2026-09-22 after an independent reviewer found two
+glycosylation sequons in our Challenge 2 design. The scan is now part of the repository and
+regression-tested.
+
 ## Method
 
 Fixed-backbone ProteinMPNN redesign of the 29 IMGT heavy-chain CDR positions of

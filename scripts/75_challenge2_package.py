@@ -247,10 +247,18 @@ a glycan at either would sit in the middle of the paratope. §9 gives the fix (N
 S→A); we have not applied it, because changing the sequence after scoring it is precisely
 what the rest of this document argues against.
 
-**Why we did not catch this ourselves:** our own build plan specifies a
-`liabilities.py` scanner for N-X-S/T, NG/DG motifs, exposed Met, pI and net charge. It was
-never written. A planned check that does not exist is indistinguishable from a check that
-passed, which is the failure mode this project spent a week cataloguing and then repeated.
+**Why we did not catch this ourselves, and what we did about it.** Our own build plan
+(`BUILD.md:62`) specifies a `liabilities.py` scanner for exactly this — N-X-S/T, NG/DG
+motifs, exposed Met, pI, net charge. It was never written. A planned check that does not
+exist is indistinguishable from a check that passed, which is the failure mode this
+project spent a week cataloguing and then committed.
+
+**It exists now** (`src/locksmith/metrics/liabilities.py`), it reproduces both sequons at
+the exact positions above, and it is pinned by regression tests against this specific
+defect — including that `N-P-S/T` is *not* a sequon, the commonest way such a scan cries
+wolf. Running it also found a liability in our **Challenge 1** design that no reviewer had
+flagged as a §9.2 failure (an `NG` deamidation motif in CDR-H2), which is the argument for
+mechanisms over prose in one line.
 
 Also present, lower severity: CDR-H3 `SRSFAGSHLL` is short (8 residues by Kabat) and its
 exposed surface is ~88% hydrophobic, a recognised aggregation and polyreactivity risk.

@@ -43,53 +43,30 @@ NATIVE = Structure(pdb=Path("data/refs/prepared/5ggs_ABZ.pdb"),
 
 
 def build_deck(path: Path, final: float, raw: dict) -> Path:
-    from pptx import Presentation
-    from pptx.util import Inches, Pt
-    prs = Presentation(); prs.slide_width = Inches(13.333); prs.slide_height = Inches(7.5)
-    def slide(title, bullets):
-        s = prs.slides.add_slide(prs.slide_layouts[5])
-        s.shapes.title.text = title
-        tb = s.shapes.add_textbox(Inches(0.7), Inches(1.6), Inches(11.9), Inches(5.2))
-        tf = tb.text_frame; tf.word_wrap = True
-        for i, b in enumerate(bullets):
-            p = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
-            p.text = b; p.font.size = Pt(18)
-        return s
-    slide("We built the judge before the contestant — then showed the judge cannot see",
-          ["Challenge 1: ProteinMPNN redesign of pembrolizumab's heavy CDRs on 5GGS, folded with Boltz-2.",
-           f"Named design scores {final:.1f}/100 and clears all eight hard cutoffs.",
-           "That number is the least interesting thing in this deck."])
-    slide("The rubric's own metrics, measured against controls",
-          ["Epitope knockout (delete PD-1's binding face, matched off-interface control):",
-           "   ipSAE and interface pLDDT respond — 17x and 64x their own seed noise.",
-           "   PRODIGY dG and contact count do not. dG carries the largest share of our ranking.",
-           "Contacts ICC = 0.003 and CDR SASA ICC = 0.000 — pure sampler noise.",
-           "Five of the eight rubric metrics are constants across our pool; the harness ranks on three."])
-    slide("Against experiment: 45 mutants with measured ddG (SKEMPI, 3HFM)",
-          ["No metric tracks measured binding affinity (bound: no effect stronger than rho ~ 0.41).",
-           "Mutations that abolish binding score like the wild type:",
-           "   NL31A, ddG +21.8 kcal/mol -> ipSAE 0.917 vs wild type 0.903.",
-           "The metrics move a lot across mutants (ipSAE 19.5x its seed sd) — just not with affinity.",
-           "Conclusion: this stack separates a destroyed interface from an intact one.",
-           "It cannot rank two intact ones by affinity."])
-    slide("What our design is, honestly",
-          [f"ipSAE {raw['ipsae']:.3f} | DockQ {raw['dockq']:.3f} | dG {raw['dg']:+.1f} | "
-           f"NetSolP {raw['netsolp']:.3f} | CDR-H3 identity {raw['cdrh3_identity']:.1f}%",
-           "Specificity: predicted cross-reactivity with TIM-3, a same-fold checkpoint receptor.",
-           "   0.513 vs pembrolizumab 0.331 vs a real TIM-3 binder 0.682 (p = 0.038, n = 8).",
-           "Ranking within the viable pool is NOT supported by the metrics — and we can now price that:",
-           "   correcting a band-convention bug in our own selection surrogate renames the winner, but by 0.19 points against a 0.23 seed sd.",
-           "Developability is capped by the light chain, which we never redesigned."])
-    slide("What we would do next",
-          ["Redesign the light-chain CDRs — the NetSolP deficit sits there. VL is pembrolizumab's 0.569 in all 239 designs and `min()` pins the score to it.",
-           "   (This design's VH is 0.699, just under the 0.70 Good edge — 168/239 of the pool clear it; this one does not.)",
-           "Validate any ranking claim against measured affinity before making it.",
-           "Challenge 2 (de novo): RFantibody + ProteinMPNN, 30 designs, folded with Boltz-2. ONE clears all seven gates — 96.0/100, ipSAE 0.864.",
-           "   Targeting is evidenced: 17/18 backbones beat a contiguous same-size patch null (0.712 vs 0.154). Binding is NOT evidenced by anything here.",
-           "   The other 29 fail ipSAE alone, all at <=0.331. At recycling 3 we measured 0/30 — an under-sampling artefact we caught and withdrew."])
-    path.parent.mkdir(parents=True, exist_ok=True)
-    prs.save(str(path))
-    return path
+    """Delegates to `submit/deck.py`, and feeds it CHALLENGE 2's live scores too.
+
+    The deck went stale once (it claimed no Challenge 2 design was submitted while one
+    was in the package) because it was generated from Challenge 1's run only. It now
+    reads Challenge 2's scores from that challenge's own scoring artefact, so a deck
+    built here cannot contradict a package built by `scripts/75`.
+    """
+    import json
+    from locksmith.submit import deck
+
+    c1 = dict(raw); c1["final"] = final
+    c2_path = Path("runs/challenge2_fold_r10/scores.jsonl")
+    c2 = {}
+    if c2_path.exists():
+        viable = [json.loads(l) for l in c2_path.read_text().splitlines()
+                  if l.strip() and json.loads(l).get("viable") is True]
+        if viable:
+            c2 = viable[0]
+    if not c2:
+        raise RuntimeError(
+            "no viable Challenge 2 design found; the deck would have to state what "
+            "Challenge 2 contains and cannot guess. Run scripts/80 first, or edit "
+            "submit/deck.py deliberately.")
+    return deck.build(path, c1=c1, c2=c2)
 
 
 def main() -> int:
@@ -251,6 +228,25 @@ the structure predictor rather than of the interface**. Contact count runs the o
 filtered designs make ~1.8 **fewer** heavy-atom contacts, which is what one should expect
 from selecting against large aromatic side chains. We have withdrawn that filter as a
 design rule.
+
+## Developability liabilities in this design, found by our own scan
+
+Handbook §9.2 asks for no NG/DG deamidation motifs in CDRs. **This design carries `NG` at
+heavy chain position 55, inside CDR-H2.**
+
+It is pembrolizumab's own motif, not one we introduced — but both positions sat inside the
+29 IMGT positions we made designable, so removing it was free and we did not take it. Our
+redesign changed CDR-H2 at exactly one position (S54L) and left `N55-G56` intact.
+
+Also present and worth stating: `M29` in CDR-H1, introduced by our redesign alongside the
+inherited `M34` (§9.2: no exposed methionines in CDRs) — though measured CDR-H1 hydrophobic
+exposure is low at 79 Å², so this is a soft flag. The unpaired cysteine the scan reports is
+an artefact of the handbook's own §4.2.2 construct (truncated hinge), not of our design.
+
+Found by `src/locksmith/metrics/liabilities.py`, which was specified in our build plan,
+never written, and only built on 2026-09-22 after an independent reviewer found two
+glycosylation sequons in our Challenge 2 design. The scan is now part of the repository and
+regression-tested.
 
 ## Method
 

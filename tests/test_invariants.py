@@ -326,3 +326,67 @@ def test_an_unmeasurable_metric_leaves_viability_UNKNOWN_not_true():
     assert sc.viable is None, "a missing metric must not yield viable=True"
     assert sc.final is None, "and must not yield a final score"
     assert "ipsae" in sc.unknown
+
+
+# --------------------------------------------------------------------------------
+# 9. The liability scan BUILD.md promised and nobody wrote.
+# --------------------------------------------------------------------------------
+# `BUILD.md:62` specified `liabilities.py — N-X-S/T, NG/DG motifs, exposed Met, pI, net
+# charge`. It was never written, and two N-glycosylation sequons went out in the
+# Challenge 2 submission on antigen-contacting CDR residues, against a handbook §9.2
+# checklist item. These tests pin the scanner against the exact defect it failed to
+# catch, so "the module exists" can never again be confused with "the check runs".
+
+from locksmith.metrics import liabilities as liab
+
+CH2_HEAVY = ("EVQLVESGGGLVQPGGSLRLSCAASGFNLKDHYIHWVRQAPGKGLEWVARINVSTGATRYADSVKGRFTI"
+             "SADTSKNTAYLQMNSLRAEDTAVYYCSRSFAGSHLLWGQGTLVTVSS")
+CH2_LIGHT = ("DIQMTQSPSSLSASVGDRVTITCKSSRVVDVVSWYQQKPGKAPKLLIYNASTRPAGVPSRFSGSRSGTDF"
+             "TLTISSLQPEDFATYYCQGYDYETDTLVFGQGTKVEIK")
+
+
+def test_scanner_finds_the_two_sequons_that_actually_shipped():
+    """The regression test for the defect. Exact motifs, exact positions."""
+    rep = liab.compute(CH2_HEAVY, CH2_LIGHT)
+    glyc = {(l.chain, l.position, l.motif) for l in rep.liabilities
+            if l.kind == "glycosylation"}
+    assert ("heavy", 52, "NVS") in glyc, "CDR-H2 sequon missed"
+    assert ("light", 49, "NAS") in glyc, "CDR-L2 sequon missed"
+    assert all(l.severity == "high" for l in rep.liabilities
+               if l.kind == "glycosylation"), "a CDR sequon is not 'high'"
+    ok, fails = rep.handbook_9_2_pass()
+    assert ok is False and len(fails) == 2
+
+
+def test_proline_blocks_the_sequon():
+    """N-P-S/T is NOT a sequon — proline blocks the transferase. The commonest
+    false positive in a naive regex, and the one that would make the scan cry wolf."""
+    assert liab.SEQUON.findall("AAANPSAAA") == []
+    assert liab.SEQUON.findall("AAANPTAAA") == []
+    assert liab.SEQUON.findall("AAANASAAA") == ["NAS"]
+
+
+def test_cdr_context_raises_severity_over_framework():
+    """A framework NG is tolerated in marketed antibodies; a paratope NG is not.
+    The scan must distinguish them or it is just a grep."""
+    rep = liab.compute(CH2_HEAVY, CH2_LIGHT)
+    assert rep.cdr_hits, "no CDR-located liabilities found at all — region mapping broken"
+    assert all(l.region.startswith("CDR-") for l in rep.cdr_hits)
+    assert any(l.region == "framework" for l in rep.liabilities), \
+        "everything landed in a CDR — region mapping is not discriminating"
+
+
+def test_charge_and_pi_are_self_consistent():
+    """Net charge must be zero at the pI, by construction."""
+    for seq in (CH2_HEAVY, CH2_LIGHT):
+        pi = liab.isoelectric_point(seq)
+        assert abs(liab.net_charge(seq, pi)) < 1e-3
+        assert liab.net_charge(seq, pi - 2) > 0 and liab.net_charge(seq, pi + 2) < 0
+
+
+def test_build_md_promise_is_now_kept():
+    """`BUILD.md:62` names five scans. All five must be reachable."""
+    src = Path(liab.__file__).read_text()
+    for token in ("glycosylation", "deamidation", "isomerisation", "oxidation",
+                  "free_cysteine", "net_charge", "isoelectric_point"):
+        assert token in src, f"BUILD.md promises {token} and it is absent"
