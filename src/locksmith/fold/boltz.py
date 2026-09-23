@@ -161,6 +161,35 @@ def fold(label: str, heavy: str, light: str, antigen: str, *,
     pae = pred / f"pae_{label}_model_0.npz"
     plddt = pred / f"plddt_{label}_model_0.npz"
 
+    # BOLTZ ANNOUNCES SOME FATAL-TO-MEANING PROBLEMS ONLY ON STDOUT, AND THIS FUNCTION
+    # CAPTURES STDOUT. `subprocess.run(capture_output=True)` sends it to a pipe that is
+    # surfaced only when `assert_artefacts` raises -- i.e. only on failure. A fold that
+    # succeeds throws its warnings away.
+    #
+    # Measured 2026-09-23: every Challenge 2 fold this project ever ran printed
+    #   "Warning: MSA does not match input sequence, creating dummy."
+    # because a 113-residue cached alignment was passed with the 123-residue antigen, and
+    # Boltz silently replaced the alignment with a dummy. `runs/challenge2_refold_r10.log`
+    # is 34 lines containing ZERO boltz output, so nobody could have read it. With the
+    # alignment actually used, the same design scores ipSAE 0.012 instead of 0.773.
+    #
+    # Three layers hid it: the warning went to a captured pipe; the processed msa/*.npz
+    # still records the full alignment because the discard happens later, at
+    # featurisation; and the run "succeeded". So the check is on the captured text, and it
+    # is a hard failure rather than a log line -- a warning nobody reads is not a warning.
+    _tail = proc.stdout + proc.stderr
+    for _needle, _why in (
+        ("MSA does not match input sequence",
+         "Boltz DISCARDED the alignment and folded that chain single-sequence"),
+        ("Number of failed examples",
+         "Boltz reported failed examples while still exiting successfully"),
+    ):
+        if _needle in _tail:
+            raise FoldFailed(
+                f"{label}: boltz printed {_needle!r} -- {_why}. This is fatal to the "
+                f"meaning of the result, not cosmetic, and boltz reports it only on "
+                f"stdout while exiting 0.\n--- tail of tool output ---\n{_tail[-1500:]}")
+
     # Exit code is deliberately not consulted -- see fold/__init__.py.
     assert_artefacts(pdb, pae, plddt, label=label,
                      stdout=proc.stdout + proc.stderr)

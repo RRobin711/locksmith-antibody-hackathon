@@ -608,3 +608,45 @@ def test_write_input_refuses_an_msa_that_boltz_would_discard(tmp_path):
     # no cached MSA at all => nothing to check, server query is fine
     out = write_input(tmp_path / "server.fasta", "QVQ", "DIQ", longer, antigen_msa=None)
     assert "|protein|\n" in out.read_text()
+
+
+def test_fold_raises_on_a_boltz_warning_that_only_reaches_stdout(monkeypatch, tmp_path):
+    """Boltz reports some meaning-fatal problems only on stdout, while exiting 0.
+
+    Measured 2026-09-23: every Challenge 2 fold this project ran printed
+    `Warning: MSA does not match input sequence, creating dummy.` -- a 113-residue cached
+    alignment passed with a 123-residue antigen -- and Boltz silently substituted a dummy.
+    With the alignment actually used the same design scores ipSAE 0.012 rather than 0.773.
+
+    Three layers hid it: `fold()` captures stdout and surfaces it only when
+    `assert_artefacts` raises, so a SUCCESSFUL fold discards its own warnings
+    (`runs/challenge2_refold_r10.log` is 34 lines with zero boltz output); the processed
+    `msa/*.npz` still records the full alignment because the discard happens later at
+    featurisation; and the run exits 0. A warning nobody reads is not a warning, so this
+    is a hard failure.
+    """
+    import subprocess
+    from locksmith.fold import FoldFailed
+    from locksmith.fold import boltz as B
+
+    class FakeProc:
+        returncode = 0
+        stdout = ("Predicting DataLoader 0: 100%\n"
+                  "Warning: MSA does not match input sequence, creating dummy. 2 [..]\n")
+        stderr = ""
+
+    monkeypatch.setattr(subprocess, "run", lambda *a, **k: FakeProc())
+    monkeypatch.setattr(B, "_stage", lambda p: p)
+
+    with pytest.raises(FoldFailed, match="MSA does not match input sequence"):
+        B.fold("t", "QVQ", "DIQ", "PWNPP", out_root=tmp_path, antigen_msa=None,
+               diffusion_samples=1, recycling_steps=1)
+
+    # and the other exit-0 failure this project has hit
+    class FailedExamples(FakeProc):
+        stdout = "Predicting: 100%\nNumber of failed examples: 1\n"
+
+    monkeypatch.setattr(subprocess, "run", lambda *a, **k: FailedExamples())
+    with pytest.raises(FoldFailed, match="Number of failed examples"):
+        B.fold("t2", "QVQ", "DIQ", "PWNPP", out_root=tmp_path, antigen_msa=None,
+               diffusion_samples=1, recycling_steps=1)

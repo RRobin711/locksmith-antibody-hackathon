@@ -1,105 +1,119 @@
-# The shipped Challenge 2 structure was folded with no antigen alignment
+# Every Challenge 2 number came from a fold with no antigen alignment
 
-**2026-09-23.** Found while chasing an unrelated inconsistency in the deck. This is the
-most serious defect found in the submission, and it is a *silent* one: nothing failed,
-nothing scored zero, and every artefact looks normal.
+**2026-09-23.** This supersedes the earlier version of this file, which reported the
+discard as a defect in the *shipped* fold only. Measurement shows it affected **every
+Challenge 2 fold this project ever ran**, and that the design's viability is an artefact
+of it.
 
-## The finding
+## The result
 
-`data/msa_cache/pd1_5ggs.csv` is a multiple sequence alignment whose query is the
-**113-residue** PD-1 construct beginning `PWNPP`. The fold that produced the shipped
-Challenge 2 structure (`scripts/82_sequon_fix.py`, the S→A sequon fix) passed that cache
-alongside the handbook's **123-residue** antigen beginning `DSPDRP`.
+Four folds, one script, identical driver / seed / sampling depth / flags. Only the design
+and the presence of an antigen alignment vary. Median of five diffusion samples:
 
-Boltz did not error. It **discarded the alignment and replaced it with a dummy**, so the
-antigen was effectively folded in single-sequence mode.
+| | antigen MSA **used** | antigen MSA **absent** |
+|---|---|---|
+| **baseline** (pre-sequon-fix) | **0.012** | **0.773** (0.736–0.864) |
+| **S→A** (the shipped design) | **0.012** | **0.686** (0.619–0.781) |
 
-## The mechanism, read from the source rather than inferred
+Supporting metrics move together: with the alignment absent, ~97 heavy-atom contacts,
+ΔG ≈ −11 to −12, interface pLDDT ≈ 84. With it present, ~70 contacts, ΔG ≈ −10,
+interface pLDDT ≈ 73.
 
-`boltz/data/feature/featurizerv2.py`, the block that attaches an MSA to a chain:
+**The mutation is irrelevant to the effect.** Both designs read 0.012 with an alignment
+and both read high without one. The earlier reading — that S→A specifically required the
+MSA's absence — is wrong and is withdrawn. What suppresses the interface is giving the
+antigen evolutionary information at all.
 
-```python
-warning = "Warning: MSA does not match input sequence, creating dummy."
-if len(residues) == len(first_residues):
-    ...                      # lengths agree: use the MSA (MET/UNK mismatches tolerated)
-else:
-    print(warning, "2", ...)
-    msa[chain_id] = dummy_msa(residues)      # lengths differ: THROW THE MSA AWAY
+**The no-MSA cells reproduce the project's historical numbers exactly.** `base_nomsa`
+returns 0.736–0.864, which is the envelope recorded for this design in the r10 screening
+and the diffusion-samples run. So these are not new folds disagreeing with old ones; they
+are the same condition, reproduced.
+
+## Every Challenge 2 fold was in the no-MSA condition
+
+The FASTAs are unambiguous. `runs/challenge2_fold_r10/*/**.fasta` — the screening that
+produced "1 of 30 designs clears" — carry:
+
+```
+>C|protein|/home/rrobin711/.cache/locksmith/msa/pd1_5ggs.csv
+DSPDRPWNPPTFSPALLVVTEGDNATFT…          (123 residues)
 ```
 
-The check is on **length alone**. There is no re-alignment and no attempt to locate the
-query inside the input; a query that is a perfect substring of the input at offset 5 is
-treated exactly like an unrelated sequence. The failure is announced on stdout and
-nowhere else — no exception, no non-zero exit, no marker in any output file.
+and `pd1_5ggs.csv` has a **113**-residue query. Boltz's featurizer compares
+`len(residues) == len(first_residues)`, and on mismatch prints
+`Warning: MSA does not match input sequence, creating dummy.` and calls `dummy_msa`. The
+check is on **length alone**; the cached query is an exact substring of the antigen at
+offset 5 and is treated exactly like an unrelated sequence.
 
-## The evidence
+Warning counts: `runs/sequon_fix.log` **2** (both arms), `runs/diffusion_samples.log`
+**1** (the Challenge 2 arm; the Challenge 1 arm used a server MSA and is unaffected).
 
-| observation | value |
-|---|---|
-| cached MSA query length | **113** residues (`PWNPPTFSPALL…`) |
-| antigen folded in `sq_sa` | **123** residues (`DSPDRPWNPPTFSPALL…`) |
-| query located inside the antigen | offset **5**, exact substring |
-| processed alignment width written | **113** columns for a 123-residue chain |
-| `"MSA does not match input sequence"` in `runs/sequon_fix.log` | **2** (one per arm), branch **`2`** = the length-mismatch path |
-| same warning in any 113-mer fold log | **0** |
+## Why nobody saw it — three independent layers
 
-The processed `msa/sq_sa_0.npz` still records 1024 sequences at width 113 — the discard
-happens at *featurisation*, in memory, after that file is written. **Reading the processed
-MSA would have suggested the alignment was used.** Only the stdout warning and the source
-tell the truth.
+1. **The warning went into a captured pipe.** `fold()` runs boltz with
+   `subprocess.run(capture_output=True)` and surfaces stdout only when `assert_artefacts`
+   raises. A fold that *succeeds* discards its own warnings.
+   `runs/challenge2_refold_r10.log` is **34 lines containing zero boltz output**.
+2. **The artefact suggests the opposite.** The processed `msa/*.npz` still records 1024
+   sequences at width 113, because the discard happens later, at featurisation. Inspecting
+   the file implies the alignment was used.
+3. **Nothing failed.** Exit 0, every expected file present, every metric computable, the
+   composite in the Good band.
 
-## What it invalidates, and what it does not
+## What this invalidates
 
-**Invalidated: the claim that the S→A sequon fix costs 4.8 composite points.**
-That number compares:
+- **"1 of 30 designs clears the gates"** — measured entirely in the no-MSA condition.
+  With an alignment, the design that cleared scores **0.012**.
+- **The shipped Challenge 2 design is not viable under a correct fold.** ipSAE 0.012
+  against a 0.60 cutoff.
+- **"S→A costs 4.8 composite points."** Withdrawn twice over: the arms differed in
+  construct and alignment as well as sequence, and the 2×2 now shows the mutation
+  contributes almost nothing in either column.
 
-- the **baseline** at 96.0 — folded in `runs/diffusion_samples/ds_ch2` on the **113-mer**
-  with the cached MSA **in use**, and
-- the **S→A variant** at 91.2 — folded in `runs/sequon_fix` on the **123-mer** with the
-  MSA **silently discarded**.
+## What survives
 
-Three things change between those arms at once: the two serine mutations, the antigen
-construct (113 → 123), and the presence of the antigen alignment. The 4.8-point cost is
-attributed entirely to the mutations and **cannot be**, on this evidence. The session doc
-that recorded the cost as "unexplained" was closer to right than the confident version.
+- **`N→Q` kills the interface where `S→A` does not**, *within the no-MSA condition* where
+  both were measured (0.014 vs 0.619–0.781). The contact-count rule that predicted it is
+  untouched. Whether it holds with an alignment present is **not known** — both cells of
+  that comparison would now read ≈0.012, so the experiment cannot be re-run meaningfully
+  on this design.
+- **Challenge 1 is unaffected.** Its folds used a server-derived MSA matched to its own
+  antigen; `runs/diffusion_samples.log` shows the warning once, for the Challenge 2 arm
+  only.
+- **Every calibration-panel and negative-control fold in this session is unaffected** —
+  the panel queries the server per antigen, and the negative control's 113-mer matches its
+  cached query exactly (0 warnings in either log).
 
-**Not invalidated: `N→Q` kills the interface while `S→A` does not.** Both arms ran in the
-same script, same construct, same discarded MSA, so the comparison between them is
-internally valid. ipSAE 0.864 → 0.014 for `N→Q` against 0.619–0.781 for `S→A` stands, and
-so does the contact-count rule that predicted it.
+## What it does *not* establish
 
-**Not yet known: whether the shipped structure is materially worse for it.** An antibody
-chain carries `empty` by design in this pipeline — an antibody and its antigen have not
-co-evolved — so the question is only what the *antigen's* alignment was worth.
-`scripts/94_msa_register.py` measures it directly, three folds, all else identical:
+That the design cannot bind. ipSAE 0.012 means **Boltz will not place this antibody on
+PD-1 when it has evolutionary information about the antigen** — a statement about the
+predictor's confidence, not an experiment. But it removes the only evidence the project
+had in the other direction, and it removes it for every Challenge 2 number simultaneously.
 
-| arm | antigen | alignment | isolates |
-|---|---|---|---|
-| `as_shipped` | 123-mer | cached (discarded → none) | reproduces the shipped fold |
-| `matched_113` | 113-mer | cached (used) | the alignment, at the screening construct |
-| `matched_123` | 123-mer | fresh query for that sequence | the alignment, at the shipped construct |
+The honest summary is that **Challenge 2 has no surviving computational evidence of
+binding**, and the epitope-targeting evidence (17/18 backbones beating a contiguous-patch
+null) is unaffected because it is geometric and does not depend on a fold.
 
-`as_shipped` vs `matched_123` isolates the alignment at constant construct, which is the
-quantity that matters. Decision rule fixed before running: `~=` means inside this design's
-measured diffusion envelope (composite 91.2 on all five samples, ipSAE 0.619–0.781).
+## The guards
 
-## How it was found, and why that matters
+Two, because the first only covers the pairing we now know about:
 
-Not by looking for it. The chain was: a deck slide contradicted itself on Challenge 2's
-score (96.0 on slide 1, 91.2 on slide 8) → tracing that showed the deck read a *run
-directory* rather than the *package* → sweeping for the same number elsewhere found an
-overstated envelope inside the shipped docs → checking which construct produced the
-shipped structure showed it was the 123-mer, not the 113-mer I had claimed → which made
-the cached 113-column MSA an obvious mismatch → which the source and the log confirmed.
+- `write_input` **raises** when a cached alignment's query length differs from the antigen
+  (`allow_msa_mismatch=True` for `scripts/94`/`95`, which reproduce it deliberately).
+  Pinned by `test_write_input_refuses_an_msa_that_boltz_would_discard`.
+- `fold()` **scans captured stdout** and raises on `MSA does not match input sequence` or
+  `Number of failed examples`, because a warning nobody reads is not a warning. Pinned by
+  `test_fold_raises_on_a_boltz_warning_that_only_reaches_stdout`.
 
-**Five inconsistencies deep, starting from a cosmetic one.** The transferable point is that
-the cheap contradiction was worth chasing: a number that disagrees with itself is the only
-free evidence you get that something upstream is wrong.
+## The transferable principle
 
-## The guard
+**A tool that degrades instead of failing will produce your best-looking numbers.** Boltz
+had three reasonable options on a mismatched alignment — error, re-align, or drop it — and
+chose the one that keeps running. Every layer downstream then made the choice invisible:
+captured stdout, an artefact written before the decision, and a successful exit.
 
-A length mismatch between a cached alignment and the sequence it is handed to is now an
-error rather than a warning on someone else's stdout:
-`locksmith.fold.boltz.write_input` refuses to write a FASTA whose antigen length differs
-from its cached MSA's query length. Pinned by
-`tests/test_invariants.py::test_write_input_refuses_an_msa_that_boltz_would_discard`.
+Check, for anything expensive you depend on, **what it does when its input is wrong**, and
+verify from the output that it did what you asked rather than something adjacent. Here the
+question "was the MSA actually used?" was never asked in six days, and the answer was one
+`grep` away in a log that was never written.
