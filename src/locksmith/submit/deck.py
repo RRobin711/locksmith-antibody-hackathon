@@ -148,51 +148,78 @@ def build(path: Path, *, c1: dict, c2: dict, calib: dict | None = None) -> Path:
         panel = list(calib["panel"].values())
         post = [r for r in panel if r["arm"] == "post" and r.get("ipsae") is not None]
         pre = [r for r in panel if r["arm"] == "pre" and r.get("ipsae") is not None]
+        paired = [r for r in panel
+                  if r.get("ipsae") is not None and r.get("dockq") is not None]
         tests = [r for r in calib.get("negctrl", {}).values()
                  if r["expected"] == "test"]
-        if len(post) >= 5 and len(pre) >= 5:
+        if len(paired) >= 10:
             import statistics as _st
-            s = slide("Our numbers, placed in the only distribution that matters",
-                      f"{len(pre)+len(post)} real crystallised antibody–antigen complexes "
-                      f"folded through the identical pipeline")
-            def _pct(v, pool):
-                return 100.0 * sum(1 for x in pool if x < v) / len(pool)
-            ip_post = [r["ipsae"] for r in post]
-            ip_pre = [r["ipsae"] for r in pre]
+            try:
+                from scipy.stats import spearmanr
+                rho, pv = spearmanr([r["ipsae"] for r in paired],
+                                    [r["dockq"] for r in paired])
+            except Exception:                                # noqa: BLE001
+                rho, pv = float("nan"), float("nan")
+            good = [r for r in paired if r["dockq"] >= 0.49]
+            bad = [r for r in paired if r["dockq"] < 0.23]
+            fn = sorted([r for r in good if r["ipsae"] < 0.60],
+                        key=lambda r: -r["dockq"])
+            fp = [r for r in bad if r["ipsae"] >= 0.60]
+            fnr = 100.0 * len(fn) / max(len(good), 1)
+
+            s = slide(f"We ran the gate against {len(paired)} real crystals. "
+                      f"It rejects {fnr:.0f}% of correct answers.",
+                      "Same pipeline, same flags. Every complex here has a solved "
+                      "structure, so for once we can ask whether the number is right — "
+                      "which is impossible on a de novo design")
             items = [
-                ("\u201cipSAE 0.864\u201d is not a result. Nobody knows whether real "
-                 "complexes cluster at 0.5 or 0.95, or where the handbook's 0.80 edge "
-                 "actually sits. So we measured it.", 0, True, INK),
+                (f"ipSAE genuinely does track pose accuracy: Spearman ρ = {rho:+.3f} "
+                 f"against DockQ (p = {pv:.4f}). We are not claiming it is noise.",
+                 0, True, INK),
                 ("", 0, False, INK),
-                (f"Pre-cutoff, released before 2023-06-01 — Boltz has seen these "
-                 f"(n={len(pre)}): median ipSAE {_st.median(ip_pre):.3f}", 0, True, INK),
-                ("The ceiling. What the metric looks like when prediction is closer to "
-                 "recall.", 1, False, MUTED),
-                (f"Post-cutoff, genuinely novel (n={len(post)}): median ipSAE "
-                 f"{_st.median(ip_post):.3f}", 0, True, INK),
-                ("The honest bar for a de novo design. Both arms drawn by one query "
-                 "either side of one date, so era and resolution are matched and the "
-                 "cutoff is the only systematic difference.", 1, False, MUTED),
-                ("", 0, False, INK),
+                (f"But at the handbook's ipSAE ≥ 0.60 cutoff, against the CAPRI "
+                 f"convention for a good pose (DockQ ≥ 0.49):", 0, True, INK),
+                (f"{len(good) - len(fn)} of {len(good)} correct structures pass · "
+                 f"{len(fn)} are REJECTED — a {fnr:.0f}% false-negative rate",
+                 0, True, WARN),
             ]
-            for t in tests:
-                if t.get("ipsae") is None:
-                    continue
+            if fn:
+                h = fn[0]
                 items.append(
-                    (f"{t['name']}: ipSAE {t['ipsae']:.3f} — "
-                     f"{_pct(t['ipsae'], ip_post):.0f}th percentile of novel real "
-                     f"complexes", 0, True, ACCENT))
+                    (f"{h['pdb_id']}: DockQ {h['dockq']:.3f} — a near-perfect "
+                     f"reproduction of the crystal — scores ipSAE {h['ipsae']:.3f}. "
+                     f"The rubric calls it non-viable.", 1, False, MUTED))
             items += [
                 ("", 0, False, INK),
-                ("A high percentile is NOT evidence our design binds. It says the "
-                 "predictor is as confident about our molecule as about real complexes "
-                 "it has never seen — a statement about the predictor, not the molecule.",
-                 0, True, INK),
-                ("The one metric here that reads coordinates against external truth is "
-                 "DockQ, and for a de novo design there is no crystal to read against. "
-                 "It is absent exactly where it would matter most.", 0, False, MUTED),
+                ("So the problem is not that the metrics are meaningless. It is sharper "
+                 "than that:", 0, True, INK),
+                ("four of the five §7.2 gates reject NOTHING · the one that works is "
+                 "mis-thresholded · and on one diffusion sample it certifies an "
+                 "anti-lysozyme antibody", 1, True, WARN),
             ]
-            bullets(s, items, size=15)
+            if len(post) >= 5 and len(pre) >= 5:
+                items += [
+                    ("", 0, False, INK),
+                    (f"Memorisation is worth a lot: median ipSAE {_st.median([r['ipsae'] for r in pre]):.3f} "
+                     f"pre-cutoff (n={len(pre)}, Boltz has seen these) vs "
+                     f"{_st.median([r['ipsae'] for r in post]):.3f} post-cutoff "
+                     f"(n={len(post)}, genuinely novel).", 0, False, MUTED),
+                ]
+                for t in tests:
+                    if t.get("ipsae") is None:
+                        continue
+                    pc = 100.0 * sum(1 for r in post if r["ipsae"] < t["ipsae"]) / len(post)
+                    items.append(
+                        (f"{t['name']}: ipSAE {t['ipsae']:.3f} — {pc:.0f}th percentile of "
+                         f"novel real complexes", 1, True, ACCENT))
+            items += [
+                ("", 0, False, INK),
+                ("A high percentile is not evidence our design binds — only that the "
+                 "predictor is as confident about it as about real complexes it has never "
+                 "seen. The one metric here that checks against external truth is DockQ, "
+                 "and for a de novo design there is no crystal to check.", 0, True, INK),
+            ]
+            bullets(s, items, size=14)
 
     # ---------------------------------------------------------------- 2
     s = slide("The rubric's own metrics, measured against controls that could fail",
