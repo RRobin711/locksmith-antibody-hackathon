@@ -120,4 +120,71 @@ same shape as the `recycling_steps=3` episode in
 
 ---
 
+## C2 — The contact-count rule is refuted, and three of its four instances are void
+
+**Raised 2026-09-23. Status: refuted as a predictor; the replacement explanation is unresolved.**
+
+### What the course says
+
+[[00-orientation#4.4 Scientific findings|Chapter 00 §4.4]] calls this "the best result in the
+project", and [[01-the-biological-problem#6.3 N→Q versus S→A: the contact-count result|chapter 01 §6.3]]
+develops it at length: handbook §9 lists `N→Q` and `S→A` as interchangeable fixes for a
+glycosylation sequon; the asparagine acceptors carried **10 and 19** antigen contacts and
+the serines **zero**; `N→Q` collapsed ipSAE **0.864 → 0.014** while `S→A` stayed viable 5 of
+5. The claimed generalisation was that **the contact count on the mutated residue predicts
+which prescribed fix is safe**, for free, before any folding.
+
+### Why it does not hold
+
+**A residue with zero contacts is not safe.** A third fix arm, `N91Q`, mutates a residue
+with **no antigen contacts in any of five diffusion samples** and still collapses the
+interface:
+
+| arm | mutation | antigen contacts | ipSAE median | viable |
+|---|---|---|---|---|
+| unfixed | — | — | **0.637** | 3/5 |
+| `fix91` | `N91Q` | **0** | 0.128 | 0/5 |
+| `fix31` | `G32A` | 4 | 0.140 | 0/5 |
+| `fix_both` | both | — | 0.034 | 0/5 |
+
+NetSolP holds at **0.617** across every arm, so the collapse is entirely interface-side and
+not a solubility artefact.
+
+**And three of the rule's four instances are void.** Both original measurements — `N→Q`
+fatal at 10 and 19 contacts, `S→A` free at 0 — came from `runs/sequon_fix`, which folded
+with the antigen alignment silently discarded (see [[CORRECTIONS#C1 — Challenge 2's computational evidence is withdrawn|C1]]).
+Under a correct alignment that design scores **0.012 regardless of its sequence**. They are
+therefore two readings of a *condition*, not of a substitution.
+
+What survives is Challenge 1's `N55Q`, **free at 3 contacts**, and this design's `N91Q`,
+**fatal at 0 contacts**. Under correct alignments the rule fails *even in direction*.
+
+### The competing explanation, and why it is not settled
+
+The parsimonious reading is that **a design sitting 0.037 above the cutoff cannot absorb any
+single-residue change at all.** Two observations support it: all three arms land in
+approximately the same place rather than the double mutant being twice as damaged, which is
+not what independent per-residue damage looks like; and Challenge 1's free `N55Q` sat at
+ipSAE **0.821**, comfortably clear of its edge.
+
+The two explanations are **not distinguished by the data in hand**, and no design in this
+pool has comfortable margin under a correct alignment, so the pool cannot settle it. Recorded
+as unresolved rather than replaced.
+
+### What still stands
+
+The weaker and older claim is untouched and is the one to keep: **a prescribed developability
+fix is a design change and must be measured, not assumed.** Handbook §9 presenting `N→Q` and
+`S→A` on the same line as equivalents is still wrong; three of three fix arms here collapsed
+a viable design. What is gone is the cheap structural *predictor* of which fix to choose.
+
+### The meta-lesson, which is the durable part
+
+A finding built on four instances lost three of them to a single upstream defect discovered a
+day later. **Count how many of a finding's instances share one apparatus. If they all do, the
+finding is one bug away from empty** — and its apparent replication across instances is not
+independent evidence at all.
+
+---
+
 *No further corrections at this time.*
