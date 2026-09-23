@@ -22,6 +22,8 @@ The point estimate is the **median over the five diffusion samples**, fixed in a
 |---|---|---|---|---|---|---|---|---|
 | pembrolizumab | PD-1 | positive | 0.876 | -12.6 | 106 | 94.8 | 1507 | **5/5** ✅ ALL |
 | nivolumab | PD-1 | positive | 0.263 | -11.8 | 78 | 82.3 | 1317 | **4/5** (fails ipsae) |
+| Challenge 1 design | PD-1 (ours) | **test** | 0.881 | -12.4 | 99 | 92.0 | 1608 | **5/5** ✅ ALL |
+| Challenge 2 design | PD-1 (ours) | **test** | 0.074 | -13.0 | 82 | 77.7 | 1279 | **4/5** (fails ipsae) |
 | HyHEL-10 | hen egg lysozyme | negative | 0.609 | -12.4 | 77 | 85.0 | 1084 | **5/5** ✅ ALL |
 | cetuximab | EGFR domain III | negative | 0.594 | -10.0 | 54 | 84.0 | 1470 | **4/5** (fails ipsae) |
 | CR9114 | influenza haemagglutinin | negative | 0.567 | -8.4 | 56 | 75.6 | 1707 | **4/5** (fails ipsae) |
@@ -37,6 +39,8 @@ The same folds, collapsed to the **median over the five diffusion samples** — 
 |---|---|---|---|---|---|---|---|
 | pembrolizumab | PD-1 | positive | **0.874** | 0.895 | -12.3 | 103 | **5/5** ✅ ALL |
 | nivolumab | PD-1 | positive | **0.017** | 0.263 | -12.3 | 78 | **4/5** (fails ipsae) |
+| Challenge 1 design | PD-1 (ours) | **test** | **0.863** | 0.881 | -12.4 | 97 | **5/5** ✅ ALL |
+| Challenge 2 design | PD-1 (ours) | **test** | **0.012** | 0.074 | -9.9 | 68 | **4/5** (fails ipsae) |
 | cetuximab | EGFR domain III | negative | **0.594** | 0.676 | -10.0 | 51 | **4/5** (fails ipsae) |
 | BO2C11 | coagulation factor VIII C2 | negative | **0.343** | 0.392 | -11.5 | 113 | **4/5** (fails ipsae) |
 | CR9114 | influenza haemagglutinin | negative | **0.307** | 0.567 | -10.6 | 73 | **4/5** (fails ipsae) |
@@ -99,6 +103,25 @@ So the defect is not that the submission was measured on a short antigen. It is 
 **And there is a worse consequence, under investigation rather than concluded.** `data/msa_cache/pd1_5ggs.csv` is aligned to the **113-residue** query. The shipped Challenge 2 fold passed that cache alongside the **123-residue** antigen, and Boltz did not complain: the processed alignment in `runs/sequon_fix/sq_sa/.../processed/msa/sq_sa_0.npz` is **113 columns wide for a 123-residue chain**, with the cached query sitting at offset 5 within the folded sequence. Whether Boltz re-aligns by sequence or maps positionally — in which case the antigen alignment is out of register by five residues for the whole chain — is not something to settle by reading the number. It is being settled by re-folding the shipped design with a matched alignment and comparing; the result is reported wherever it lands.
 
 **The transferable point.** A positive control can fail for a reason that has nothing to do with the thing being controlled for. "The positive failed, so the panel is broken" and "the positive failed, so ignore it" are equally unjustified until you ask *why*, from data. Here the answer took no GPU time and turned a failed control into the most useful finding in the experiment.
+
+## Follow-up: the same experiment on a construct containing both epitopes
+
+**This is a follow-up, not the pre-registered experiment.** Rule 3 fired above and is not retracted. The construct here is the 113-mer extended N-terminally by `LDSPDR` to 119 residues (PD-1 25–143), the minimal change that restores nivolumab's epitope while leaving every previously-used residue in place. The cached alignment cannot be reused against a longer query, so all rows take a fresh MMseqs2 query; because the antigen is byte-identical across rows, the alignment depth of each row is recorded and compared rather than assumed.
+
+| antibody | arm | median ipSAE | best of 5 | §7.2 cutoffs cleared | was (113-mer) |
+|---|---|---|---|---|---|
+| pembrolizumab | positive | **0.843** | 0.889 | **5/5** ✅ ALL | 0.874 |
+| nivolumab | positive | **0.691** | 0.840 | **5/5** ✅ ALL | 0.017 |
+| Challenge 1 design | **test** | **0.841** | 0.862 | **5/5** ✅ ALL | 0.863 |
+| Challenge 2 design | **test** | **0.013** | 0.194 | **4/5** (fails ipsae) | 0.012 |
+| BO2C11 | negative | **0.507** | 0.769 | **4/5** (fails ipsae) | 0.343 |
+| trastuzumab | negative | **0.371** | 0.622 | **4/5** (fails ipsae) | 0.000 |
+| bevacizumab | negative | **0.308** | 0.555 | **4/5** (fails ipsae) | 0.153 |
+| HyHEL-10 | negative | **0.228** | 0.409 | **4/5** (fails ipsae) | 0.219 |
+| CR9114 | negative | **0.217** | 0.584 | **4/5** (fails ipsae) | 0.307 |
+| cetuximab | negative | **0.052** | 0.399 | **4/5** (fails ipsae) | 0.594 |
+
+**On the repaired construct the control resolves.** All 2 positives clear the gate and all 6 irrelevant antibodies fail it, separated by **0.184 ipSAE**. The diagnosis is therefore confirmed by the intervention it predicted: restoring the six missing residues is sufficient to recover the positive control.
 
 ## What this does not establish
 

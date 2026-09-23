@@ -28,6 +28,7 @@ Two reasons, one scientific and one about disclosure:
 """
 from __future__ import annotations
 
+import re
 import shutil
 import subprocess
 import time
@@ -178,17 +179,22 @@ def fold(label: str, heavy: str, light: str, antigen: str, *,
     # featurisation; and the run "succeeded". So the check is on the captured text, and it
     # is a hard failure rather than a log line -- a warning nobody reads is not a warning.
     _tail = proc.stdout + proc.stderr
-    for _needle, _why in (
-        ("MSA does not match input sequence",
-         "Boltz DISCARDED the alignment and folded that chain single-sequence"),
-        ("Number of failed examples",
-         "Boltz reported failed examples while still exiting successfully"),
-    ):
-        if _needle in _tail:
-            raise FoldFailed(
-                f"{label}: boltz printed {_needle!r} -- {_why}. This is fatal to the "
-                f"meaning of the result, not cosmetic, and boltz reports it only on "
-                f"stdout while exiting 0.\n--- tail of tool output ---\n{_tail[-1500:]}")
+    _problems = []
+    if "MSA does not match input sequence" in _tail:
+        _problems.append("boltz DISCARDED an alignment and folded that chain "
+                         "single-sequence")
+    # `writer.py` prints "Number of failed examples: {n}" UNCONDITIONALLY, including
+    # ": 0" on every successful run, so the count is the signal and the prefix is not.
+    # Matching the prefix alone made this guard fire on every fold -- caught immediately
+    # because it failed loudly, which is the right direction for a guard to be wrong in.
+    _m = re.search(r"Number of failed examples:\s*(\d+)", _tail)
+    if _m and int(_m.group(1)) > 0:
+        _problems.append(f"boltz reported {_m.group(1)} failed example(s) while exiting 0")
+    if _problems:
+        raise FoldFailed(
+            f"{label}: " + "; ".join(_problems) + ". This is fatal to the meaning of the "
+            f"result, not cosmetic, and boltz reports it only on stdout while exiting 0."
+            f"\n--- tail of tool output ---\n{_tail[-1500:]}")
 
     # Exit code is deliberately not consulted -- see fold/__init__.py.
     assert_artefacts(pdb, pae, plddt, label=label,

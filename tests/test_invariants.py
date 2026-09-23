@@ -647,6 +647,18 @@ def test_fold_raises_on_a_boltz_warning_that_only_reaches_stdout(monkeypatch, tm
         stdout = "Predicting: 100%\nNumber of failed examples: 1\n"
 
     monkeypatch.setattr(subprocess, "run", lambda *a, **k: FailedExamples())
-    with pytest.raises(FoldFailed, match="Number of failed examples"):
+    with pytest.raises(FoldFailed, match="failed example"):
         B.fold("t2", "QVQ", "DIQ", "PWNPP", out_root=tmp_path, antigen_msa=None,
+               diffusion_samples=1, recycling_steps=1)
+
+    # `writer.py` prints that line UNCONDITIONALLY, including ": 0" on success, so the
+    # COUNT is the signal and the prefix is not. Keying on the prefix made this guard fire
+    # on every fold; it reached a real run before the mistake was caught.
+    class Healthy(FakeProc):
+        stdout = "Predicting: 100%\nNumber of failed examples: 0\n"
+
+    monkeypatch.setattr(subprocess, "run", lambda *a, **k: Healthy())
+    with pytest.raises(FoldFailed, match="fold produced no"):
+        # reaches assert_artefacts (no files on disk) rather than the stdout guard
+        B.fold("t3", "QVQ", "DIQ", "PWNPP", out_root=tmp_path, antigen_msa=None,
                diffusion_samples=1, recycling_steps=1)
