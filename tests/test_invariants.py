@@ -516,3 +516,48 @@ def test_fold_is_complete_distinguishes_absent_from_broken(tmp_path):
             fold_is_complete(d, "x", n_models=1)
     finally:
         F.assert_artefacts = real
+
+
+def test_pick_contacting_chain_rejects_the_wrong_copy():
+    """Two copies of an antigen; only one touches the antibody. Pick that one.
+
+    The bug this pins, measured 2026-09-22: `classify()` took the first heavy chain, the
+    first light chain and the first non-antibody chain in the file, with nothing requiring
+    them to belong to the same copy of the complex. On a 40-entry calibration panel
+    **8 of 40 (20%)** paired an Fv with the antigen of a *different* copy, producing a
+    DockQ native whose only interface was the heavy-light framework.
+
+    Every chain is present and every sequence is correct in that file -- it is simply not
+    a complex. Nothing raises. The number that comes out is about the wrong pair.
+    """
+    import gemmi
+    from locksmith.io.pdb import contacting_residues, pick_contacting_chain
+
+    def chain(name, positions):
+        ch = gemmi.Chain(name)
+        for i, (x, y, z) in enumerate(positions, start=1):
+            r = gemmi.Residue()
+            r.name, r.seqid = "ALA", gemmi.SeqId(i, " ")
+            a = gemmi.Atom()
+            a.name, a.element, a.pos = "CA", gemmi.Element("C"), gemmi.Position(x, y, z)
+            r.add_atom(a)
+            ch.add_residue(r)
+        return ch
+
+    antibody = chain("A", [(0, 0, 0), (0, 0, 3), (0, 0, 6)])
+    near = chain("C", [(3, 0, 0), (3, 0, 3), (3, 0, 6)])     # 3 Å away: touching
+    far = chain("D", [(60, 0, 0), (60, 0, 3), (60, 0, 6)])   # another copy, 60 Å away
+
+    ab = list(antibody)
+    assert contacting_residues(list(near), ab) == 3
+    assert contacting_residues(list(far), ab) == 0
+
+    name, n = pick_contacting_chain({"C": list(near), "D": list(far)}, ab)
+    assert name == "C" and n == 3
+
+    # order must not decide it -- the bug was "first one wins"
+    name, n = pick_contacting_chain({"D": list(far), "C": list(near)}, ab)
+    assert name == "C" and n == 3
+
+    # nothing touching => refuse, rather than returning a chain that is not a partner
+    assert pick_contacting_chain({"D": list(far)}, ab) == (None, 0)

@@ -82,8 +82,9 @@ Both positives are licensed anti-PD-1 antibodies, so "the pipeline is broken" an
 
 | antibody | epitope size | covered by our folded 113-mer | missing |
 |---|---|---|---|
-| pembrolizumab (5GGS) | 24 residues | **24/24 (100.0%)** | — |
+| pembrolizumab (5GGS) | 26 residues | **26/26 (100.0%)** | — |
 | nivolumab (5WT9) | 14 residues | **8/14 (57.1%)** | LEU25 ASP26 SER27 PRO28 ASP29 ARG30 |
+| PD-L1 (therapeutic target face) (5IUS) | 23 residues | **23/23 (100.0%)** | — |
 
 **The construct is missing 6 of nivolumab's 14 contact residues** — the `LDSPDR` N-terminal segment, PD-1 residues 25–30. Nivolumab did not fail because the pipeline is broken. It failed because **the molecule it was docked against does not contain the surface it binds.**
 

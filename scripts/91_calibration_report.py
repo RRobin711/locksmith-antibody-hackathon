@@ -436,6 +436,32 @@ def calibration(d: dict, cfg) -> str:
       "and target fashion are matched and the cutoff is close to the only systematic "
       "difference between them.")
     w("")
+    w("## Coverage — how many complexes each metric actually produced")
+    w("")
+    w("Stated before any distribution, because a metric that silently drops rows reports "
+      "a distribution of the rows where it happened to work. DockQ is the one at risk "
+      "here: it needs a native, and it refuses rather than guessing when chains cannot be "
+      "mapped.")
+    w("")
+    w("| metric | pre-cutoff | post-cutoff |")
+    w("|---|---|---|")
+    for m in METRICS:
+        a = sum(1 for r in pre if r.get(m) is not None)
+        b = sum(1 for r in post if r.get(m) is not None)
+        flag = "" if (a == len(pre) and b == len(post)) else "  ⚠️"
+        w(f"| {LABEL[m]} | {a}/{len(pre)} | {b}/{len(post)}{flag} |")
+    w("")
+    w("`dockq.compute` returns **None with a reason**, never 0, when it cannot score an "
+      "interface. That distinction is load-bearing: 8 of these 40 natives initially "
+      "paired an Fv with the antigen of a *different copy* in the asymmetric unit, and a "
+      "fabricated 0 would have entered the distribution as eight genuine docking "
+      "failures instead of being caught. (See "
+      "[[2026-09-22-calibrating-the-rubric-against-things-that-should-fail|the session "
+      "doc]] §5b.) Model antigens carry SEQRES-filled internal gaps that the crystal does "
+      "not, up to **38 residues** on 8EQ6 — against `dockq_allowed_mismatches: 40`, a "
+      "margin of 2. Any row exceeding it appears as a gap in this table, not as a zero.")
+    w("")
+
     w("## The distributions")
     w("")
     w("| metric | pre-cutoff median (IQR) | post-cutoff median (IQR) | Mann–Whitney p | "
@@ -486,6 +512,63 @@ def calibration(d: dict, cfg) -> str:
                 w(f"| {LABEL[m]} | **{v:.3f}** | {rank} of {len(pool)} | "
                   f"{pc:.0f}th | {stats.median(pool):.3f} |")
             w("")
+    # ---- is ipSAE continuous, or a per-sample coin flip? ----
+    allrows = [r for r in panel if r.get("rows")]
+    if len(allrows) >= 8:
+        FLOOR = 0.05
+        buckets = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
+        n_samples = n_floor = 0
+        for r in allrows:
+            vals = [x["ipsae"] for x in r["rows"] if x.get("ipsae") is not None]
+            if len(vals) != 5:
+                continue
+            k = sum(1 for v in vals if v < FLOOR)
+            buckets[k] = buckets.get(k, 0) + 1
+            n_samples += len(vals)
+            n_floor += k
+        total = sum(buckets.values())
+        if total >= 8:
+            w("## Is ipSAE a confidence, or a coin flip?")
+            w("")
+            w(f"Each complex was folded five times from one trunk pass, so the five "
+              f"values differ *only* in the diffusion draw. Across the panel the "
+              f"within-complex spread is not small: it reaches "
+              f"{max(r.get('ipsae_spread', 0) for r in allrows):.3f} ipSAE on a single "
+              f"complex — wider than the entire Medium band.")
+            w("")
+            w(f"Counting how many of each complex's five samples sit on the ipSAE floor "
+              f"(< {FLOOR}):")
+            w("")
+            w("| samples at floor | complexes | |")
+            w("|---|---|---|")
+            for k in range(6):
+                bar = "█" * buckets.get(k, 0)
+                w(f"| {k} of 5 | {buckets.get(k, 0)} | {bar} |")
+            w("")
+            ends = buckets.get(0, 0) + buckets.get(5, 0)
+            w(f"**{ends} of {total} complexes are all-or-nothing** (either no sample on "
+              f"the floor, or every sample on it); {total - ends} are mixed. Overall "
+              f"{n_floor}/{n_samples} samples "
+              f"({100.0*n_floor/max(n_samples,1):.0f}%) are at the floor.")
+            w("")
+            if total - ends >= total * 0.25:
+                w("**A substantial fraction of complexes are mixed, and that is the "
+                  "finding.** For those, whether the complex 'passes' is decided by which "
+                  "diffusion samples happen to be drawn — the quantity being thresholded "
+                  "is not a stable property of the complex. ipSAE's hard PAE < 10 Å cutoff "
+                  "means a pose either has inter-chain pairs inside the window or it does "
+                  "not, so the score collapses toward a two-state indicator rather than "
+                  "degrading smoothly. **Reading a gate off one sample, on a mixed "
+                  "complex, is a coin flip with the model's confidence ranking as the "
+                  "thumb on the scale.**")
+            else:
+                w("**Most complexes are all-or-nothing**, so ipSAE behaves here as a "
+                  "two-state liveness indicator — docked or not — rather than as a graded "
+                  "confidence. That is consistent with this project's earlier finding that "
+                  "it separates dead interfaces from live ones while barely ranking the "
+                  "live ones.")
+            w("")
+
     w("## Reading this honestly")
     w("")
     w("A high percentile here is **not** evidence the design binds. It says the predictor "

@@ -1,14 +1,20 @@
 {
  "pembrolizumab": {
   "pdb": "5GGS",
-  "pd1_chain": "Y",
-  "n_epitope": 24,
+  "pd1_chain": "Z",
+  "partners": [
+   "A",
+   "B"
+  ],
+  "n_epitope": 26,
   "epitope": [
+   "SER60",
    "SER62",
    "PHE63",
    "VAL64",
    "ASN66",
    "TYR68",
+   "GLN75",
    "THR76",
    "ASP77",
    "LYS78",
@@ -29,20 +35,24 @@
    "ALA132",
    "ILE134"
   ],
+  "all_copies": {
+   "Z": 26,
+   "Y": 24
+  },
   "folded_113": {
-   "covered": 24,
+   "covered": 26,
    "missing": 0,
    "missing_residues": [],
    "pct": 100.0
   },
   "followup_119": {
-   "covered": 24,
+   "covered": 26,
    "missing": 0,
    "missing_residues": [],
    "pct": 100.0
   },
   "submitted": {
-   "covered": 24,
+   "covered": 26,
    "missing": 0,
    "missing_residues": [],
    "pct": 100.0
@@ -51,6 +61,10 @@
  "nivolumab": {
   "pdb": "5WT9",
   "pd1_chain": "G",
+  "partners": [
+   "H",
+   "L"
+  ],
   "n_epitope": 14,
   "epitope": [
    "LEU25",
@@ -68,6 +82,9 @@
    "LYS131",
    "ALA132"
   ],
+  "all_copies": {
+   "G": 14
+  },
   "folded_113": {
    "covered": 8,
    "missing": 6,
@@ -94,6 +111,61 @@
     "LEU25"
    ],
    "pct": 92.9
+  }
+ },
+ "PD-L1 (therapeutic target face)": {
+  "pdb": "5IUS",
+  "pd1_chain": "A",
+  "partners": [
+   "C"
+  ],
+  "n_epitope": 23,
+  "epitope": [
+   "HIS64",
+   "VAL66",
+   "HIS68",
+   "GLU70",
+   "SER73",
+   "GLY74",
+   "THR76",
+   "THR78",
+   "LEU79",
+   "ALA80",
+   "ALA81",
+   "ASP85",
+   "PRO89",
+   "GLY90",
+   "GLN91",
+   "GLY124",
+   "ILE126",
+   "LEU128",
+   "ILE132",
+   "ILE134",
+   "LYS135",
+   "GLU136",
+   "ARG139"
+  ],
+  "all_copies": {
+   "A": 23,
+   "B": 20
+  },
+  "folded_113": {
+   "covered": 23,
+   "missing": 0,
+   "missing_residues": [],
+   "pct": 100.0
+  },
+  "followup_119": {
+   "covered": 23,
+   "missing": 0,
+   "missing_residues": [],
+   "pct": 100.0
+  },
+  "submitted": {
+   "covered": 23,
+   "missing": 0,
+   "missing_residues": [],
+   "pct": 100.0
   }
  }
 }

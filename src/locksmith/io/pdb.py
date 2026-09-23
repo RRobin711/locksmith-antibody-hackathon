@@ -145,3 +145,60 @@ def extract_complex(
     Path(dest).parent.mkdir(parents=True, exist_ok=True)
     out.write_pdb(str(dest))
     return want
+
+
+def contacting_residues(a_res, b_res, cutoff: float = 4.5) -> int:
+    """How many residues of `a_res` have a heavy atom within `cutoff` Å of `b_res`.
+
+    Hydrogens are excluded because crystal structures mostly do not resolve them, so
+    including them would make the count depend on whether a given entry was refined with
+    riding hydrogens rather than on the geometry.
+    """
+    n = 0
+    for r in a_res:
+        touched = False
+        for r2 in b_res:
+            for x in r:
+                if x.element.name == "H":
+                    continue
+                for y in r2:
+                    if y.element.name != "H" and x.pos.dist(y.pos) <= cutoff:
+                        touched = True
+                        break
+                if touched:
+                    break
+            if touched:
+                break
+        n += int(touched)
+    return n
+
+
+def pick_contacting_chain(candidates: dict, target_res, *, min_contacts: int = 1):
+    """Of `candidates` (name -> residues), the one actually touching `target_res`.
+
+    WHY THIS EXISTS. Selecting "the first heavy chain, the first light chain and the first
+    non-antibody chain" in a PDB entry is the obvious thing to do and is wrong whenever the
+    asymmetric unit holds more than one copy of the complex: nothing in that rule requires
+    the three chains to belong to the SAME copy. The result is a complex whose chains never
+    touch, which is not a complex.
+
+    Measured 2026-09-22 on a 40-entry panel: **8 of 40 (20%)** paired an antibody Fv with
+    the antigen of a different copy. The resulting DockQ "native" contained only the
+    heavy-light framework interface, so DockQ scored `Total DockQ over 1 native interfaces`
+    and the antibody-antigen number -- the entire point of the measurement -- was absent.
+
+    The failure is silent in the worst way: every chain is present, every sequence is
+    correct, the file parses, and the number that comes out is merely about the wrong pair
+    of molecules. It was caught only by a contradiction -- ipSAE 0.819 (chains demonstrably
+    in contact) alongside a missing DockQ (no interface found) cannot both be true.
+
+    Returns (name, n_contacts), or (None, 0) if nothing clears `min_contacts`.
+
+    Pinned by `tests/test_invariants.py::test_pick_contacting_chain_rejects_the_wrong_copy`.
+    """
+    best, best_n = None, 0
+    for name, res in candidates.items():
+        n = contacting_residues(res, target_res)
+        if n > best_n:
+            best, best_n = name, n
+    return (best, best_n) if best_n >= min_contacts else (None, 0)

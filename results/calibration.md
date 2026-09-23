@@ -6,13 +6,13 @@
 
 "ipSAE 0.864" tells a reader nothing. They cannot know whether the metric saturates at 0.9 or runs to 1.0, whether real complexes cluster at 0.5 or at 0.95, or how far 0.864 sits from the noise. The handbook's band edge at 0.80 is **asserted**, not located in any distribution. This panel locates it.
 
-3 real, crystallised antibody–antigen complexes were folded through the identical pipeline — same driver, same flags, same Fv+Fv+antigen construct, `recycling_steps=10`, `diffusion_samples=5` — and scored on the same six metrics. Each complex's value is the **median over its five diffusion samples**.
+8 real, crystallised antibody–antigen complexes were folded through the identical pipeline — same driver, same flags, same Fv+Fv+antigen construct, `recycling_steps=10`, `diffusion_samples=5` — and scored on the same six metrics. Each complex's value is the **median over its five diffusion samples**.
 
 ## The split, and why it is the whole point
 
 Boltz-2's training cutoff is **2023-06-01 on PDB *release* date**. A panel mixing memorised and novel complexes would produce a distribution that means nothing, because they are different tasks:
 
-- **pre-cutoff (n=2)** — Boltz has seen these. This is the **ceiling**: what the metrics look like when prediction is closer to recall.
+- **pre-cutoff (n=7)** — Boltz has seen these. This is the **ceiling**: what the metrics look like when prediction is closer to recall.
 - **post-cutoff (n=1)** — genuinely novel. This is the **honest bar** for a de novo design.
 
 Both arms were drawn by one RCSB query sorted by release date, taking the entries **nearest the cutoff on each side**, so resolution practice, refinement convention and target fashion are matched and the cutoff is close to the only systematic difference between them.

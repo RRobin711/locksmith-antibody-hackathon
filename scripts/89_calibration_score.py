@@ -37,6 +37,7 @@ import gemmi
 
 from locksmith.config import load
 from locksmith.metrics import dockq, ipsae, plddt, prodigy, sasa
+from locksmith.io.pdb import contacting_residues, pick_contacting_chain
 from locksmith.numbering import number
 from locksmith.types import Provenance, Structure
 
@@ -53,15 +54,27 @@ def build_native(entry: dict) -> Path | None:
     """Write an Fv+Fv+antigen native as chains A/B/C, matching the folded construct.
 
     DockQ compares a model to a native by sequence-aligned chain correspondence. Handing
-    it a full Fab native against an Fv model means ~110 unmatched residues per antibody
-    chain, which is exactly the situation where DockQ prints
-    `no identical corresponding chain was found` and exits 1 with no output. Trimming the
-    native to the same variable domains removes the problem at its source rather than by
-    raising `--allowed_mismatches` until something comes out.
+    it a full Fab native against an Fv model leaves ~110 unmatched residues per antibody
+    chain, which is exactly when DockQ prints `no identical corresponding chain was found`
+    and exits 1. Trimming the native to the same variable domains removes that at source
+    rather than by raising `--allowed_mismatches` until something comes out. The Fv span
+    comes from ANARCII's `query_start`/`query_end`, indices into the sequence handed to it.
 
-    The Fv span comes from ANARCII's `query_start`/`query_end`, which are indices into the
-    sequence handed to it -- here the coordinate-derived sequence of CA-bearing residues,
-    so they index that same residue list.
+    THE ANTIGEN COPY MUST BE THE ONE THIS Fv ACTUALLY BINDS. `classify()` takes the first
+    heavy, first light and first non-antibody chain it meets, with nothing requiring them
+    to belong to the same copy. In a crystal with two complexes in the asymmetric unit
+    that silently pairs an Fv from one copy with the antigen of the other, and the
+    resulting "native" has no antibody-antigen interface at all.
+
+    Measured on 7ST5: DockQ reported `Total DockQ over 1 native interfaces` -- only the
+    heavy-light framework -- and `compute()` correctly returned None rather than 0. The
+    tell was ipSAE **0.819** alongside a missing DockQ: a high confidence score means the
+    chains ARE in contact, so a missing interface had to be the native's fault, not the
+    prediction's. A silent zero here would have been far worse than a missing value,
+    because it would have entered the distribution as a genuine docking failure.
+
+    So the antigen chain is re-chosen here as the copy with the most contacts to the
+    selected Fv, and a native with no antibody-antigen interface is refused outright.
     """
     NATIVES.mkdir(parents=True, exist_ok=True)
     out = NATIVES / f"{entry['pdb_id'].lower()}_ABC.pdb"
@@ -73,20 +86,43 @@ def build_native(entry: dict) -> Path | None:
     st = gemmi.read_structure(str(src))
     st.setup_entities()
     st.remove_ligands_and_waters()
-    want = {entry["chains"]["H"]: "A", entry["chains"]["L"]: "B",
-            entry["chains"]["A"]: "C"}
+    chains = {c.name: [r for r in c if r.find_atom("CA", "*")] for c in st[0]}
+
+    hname, lname = entry["chains"]["H"], entry["chains"]["L"]
+    if hname not in chains or lname not in chains:
+        return None
+
+    def fv(name):
+        res = chains[name]
+        n = number(gemmi.one_letter_code([r.name for r in res]).upper())
+        return None if n is None else res[n.query_start:n.query_end + 1]
+
+    hres, lres = fv(hname), fv(lname)
+    if not hres or not lres:
+        return None
+
+    # pick the antigen COPY this Fv actually binds, not the first one in the file
+    ag_seq = entry["antigen"]
+    cands = {}
+    for name, res in chains.items():
+        if name in (hname, lname) or not (0.5 * len(ag_seq) <= len(res) <= 2 * len(ag_seq)):
+            continue
+        sq = gemmi.one_letter_code([r.name for r in res]).upper()
+        if number(sq) is not None:
+            continue                       # an antibody chain, not the antigen
+        cands[name] = res
+    best, best_n = pick_contacting_chain(cands, hres + lres)
+    if best is None:
+        print(f"    {entry['pdb_id']}: no antigen chain contacts the selected Fv; "
+              f"refusing to build a native with no interface", file=sys.stderr)
+        return None
+    if best != entry["chains"]["A"]:
+        print(f"    {entry['pdb_id']}: antigen copy {entry['chains']['A']} -> {best} "
+              f"({best_n} contacting residues)", file=sys.stderr)
+
     new = gemmi.Structure()
     new.add_model(gemmi.Model("1"))
-    for orig, dest in want.items():
-        ch = next((c for c in st[0] if c.name == orig), None)
-        if ch is None:
-            return None
-        res = [r for r in ch if r.find_atom("CA", "*")]
-        if dest in ("A", "B"):
-            n = number(gemmi.one_letter_code([r.name for r in res]).upper())
-            if n is None:
-                return None
-            res = res[n.query_start:n.query_end + 1]
+    for dest, res in (("A", hres), ("B", lres), ("C", chains[best])):
         nc = gemmi.Chain(dest)
         for r in res:
             nc.add_residue(r)

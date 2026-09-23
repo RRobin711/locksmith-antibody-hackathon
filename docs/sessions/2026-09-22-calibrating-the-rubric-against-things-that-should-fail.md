@@ -139,7 +139,7 @@ each antibody's own crystal, list the PD-1 residues it contacts, and ask how man
 in the construct we fold.
 
 ```
-pembrolizumab (5GGS)  epitope 24 residues   folded 113-mer covers 24/24 (100%)
+pembrolizumab (5GGS)  epitope 26 residues   folded 113-mer covers 26/26 (100%)
 nivolumab     (5WT9)  epitope 14 residues   folded 113-mer covers  8/14 (57.1%)
                                             MISSING: L25 D26 S27 P28 D29 R30
 ```
@@ -147,6 +147,13 @@ nivolumab     (5WT9)  epitope 14 residues   folded 113-mer covers  8/14 (57.1%)
 **43% of nivolumab's binding site is not in the molecule we docked it against.** Its
 epitope is dominated by PD-1's N-terminal `LDSPDR` loop; our construct begins at `PWNPP`
 (residue P31).
+
+5GGS holds **two independent copies** in the asymmetric unit and their epitopes differ —
+chain Z (with Fab A/B) contacts 26 residues, chain Y (with Fab C/D) contacts 24. Both are
+real; the difference is which side chains each copy resolved. The larger is used, because
+for a question of the form *"how much of the epitope is missing from our construct?"* the
+bigger epitope is the conservative choice. Reporting "the first chain that matched" would
+have made the number depend on chain iteration order, which is not a measurement.
 
 **Why this was invisible for the whole project.** The 113-mer was inherited from the 5GGS
 (pembrolizumab) construct and never re-examined. Pembrolizumab's epitope is 100% inside
@@ -161,7 +168,31 @@ did not.
 113-mer (57.1%). Every number in the submission was measured on a molecule six residues
 shorter than the one shipped beside it, and nothing in the pipeline ever compared them.
 
+### How far does the damage reach? Bounded, and in our favour
+
+The same calculation run against the **PD-1/PD-L1 complex (5IUS)** — the face a checkpoint
+inhibitor must occlude, and the face our Challenge 2 design was conditioned on — gives a
+23-residue footprint of which the folded 113-mer contains **23/23 (100%)**. So the
+truncation damages nivolumab, which binds the N-terminal loop, and touches neither
+pembrolizumab's epitope nor the therapeutic target face. **Our own numbers are not
+affected by it.** That is worth computing rather than assuming: the alternative — that we
+had been folding against a construct missing part of our own target epitope — would have
+invalidated the whole project, and it takes one script to rule out.
+
 ### Method note: match by sequence, never by residue number
+
+Two traps were hit building this and both produce a plausible wrong number silently.
+
+**(1) Every chain over 80 residues is not "the antibody."** In a crystal with two copies in
+the asymmetric unit that sweeps in the second Fab *and the second PD-1 copy*, so
+lattice-packing contacts get counted as epitope. Partners are instead required to make ≥5
+contacting residues with *this* PD-1 copy, which a genuine binding partner clears easily
+and a lattice neighbour does not.
+
+**(2) A long sequence probe fails on any crystal with a disordered loop inside it.** A
+single 30-residue probe silently returned "no PD-1 chain here" for 5IUS — whose PD-1 has
+an unresolved gap in that window — and the entry was skipped without comment. Replaced by
+six 12-mers spread along the sequence, requiring any two to match.
 
 Epitope coverage is computed by locating the construct **inside each crystal's PD-1 chain
 by exact substring match**. PD-1 is numbered differently between entries, and matching on
@@ -221,6 +252,48 @@ only `FoldFailed`, and pinned by
 `tests/test_invariants.py::test_fold_is_complete_distinguishes_absent_from_broken` —
 including a case asserting a monkeypatched `TypeError` **propagates** rather than
 returning False. Suite: 29 → **30 tests**.
+
+---
+
+## 5b. The second bug: 20% of DockQ natives paired the wrong copy
+
+`classify()` picks the first heavy chain, the first light chain and the first
+non-antibody chain it meets. **Nothing required them to be the same copy.** In a crystal
+with two complexes in the asymmetric unit that silently pairs an Fv from copy 1 with the
+antigen of copy 2, and the resulting "native" contains no antibody–antigen interface at
+all.
+
+**Measured: 8 of 40 natives (20%) had the wrong antigen copy.**
+
+```
+7ST5 F->A (24 contacts)   8ATH A->B (15)   7Z2M G->K (25)   8EB2 A->D (17)
+8DFG B->A (17)            8G4T A->F (13)   8W83 C->D (17)   8W84 C->D (18)
+```
+
+**How it was caught, and why it nearly wasn't.** 7ST5 reported no DockQ value while
+scoring **ipSAE 0.819**. That combination is contradictory: a high confidence score means
+the chains *are* in contact, so a missing interface had to be the native's fault rather
+than the prediction's. Running DockQ by hand printed the giveaway —
+`Total DockQ over 1 native interfaces`, the heavy–light framework only.
+
+**The thing that saved this was `dockq.compute` returning `None` with a reason instead of
+`0`.** A zero would have been indistinguishable from a genuine docking failure and would
+have injected eight fabricated catastrophes into the panel distribution. After the fix
+7ST5 scores **DockQ 0.857** — not a failure at all, but one of the best predictions in
+the panel. Dropping it had been biasing the distribution *downward*.
+
+**Scope, established rather than assumed.** This affects only the DockQ native, **not the
+folds**: copies of a molecule have identical sequences, so what was folded is the right
+complex either way. The same contact test doubles as a validity check on the panel itself
+— a row whose folded "antigen" does not touch its Fv in the crystal would mean we had
+folded a pair that is not a complex. **0 of 40 were refused**, so every row is genuine.
+
+**The general principle.** *A metric that returns "I could not measure this" is worth far
+more than one that returns a plausible number.* Three silent-failure classes turned up in
+one session — a resume check reading a `TypeError` as "not done", a sequence probe reading
+a disordered loop as "chain not found", and a chain selector pairing molecules that never
+touch. **Every one produced a well-formed, plausible, wrong answer**, and each was caught
+only by an inconsistency between two numbers that should have agreed.
 
 ---
 
@@ -322,6 +395,21 @@ never seen — a statement about the predictor. The one metric reading external 
 DockQ, and for a de novo design there is no crystal, so it is **absent exactly where it
 would matter most.**
 
+**A packaging gap found and deliberately NOT fixed mid-run.** Three modules this code
+imports are absent from `[project.dependencies]`: **`gemmi`** (used pervasively),
+**`python-pptx`** (the deck builder — a scored deliverable whose builder therefore cannot
+run from a clean checkout), and **`scipy`** (present only in the `analysis` extra while
+the report path imports it directly). `gemmi` and `scipy` arrive transitively today, which
+is why nothing has failed; a transitive dependency is not a declared one and can vanish on
+any upstream release.
+
+It was left unfixed *during* the run on purpose. The fold chain invokes `uv run` at each
+stage transition, and editing `pyproject.toml` makes the next such call re-sync the
+virtualenv underneath a job that is mid-flight. That is the same hazard as editing a script
+a running job shells out to — this project has already corrupted a dataset that way,
+recording idle GPU traces still labelled `ml_training`. **The environment is part of the
+running job.** Fixed after the chain completed.
+
 **Stubbed / crude, stated plainly.**
 - Follow-up rows take a **fresh MSA** rather than a cached one. Mitigated by identical
   antigens and a recorded depth check, not eliminated.
@@ -356,5 +444,11 @@ would matter most.**
    bug silently produces empty results that look complete.
 7. **When comparing across a boundary, match everything except the boundary.** Sampling
    both arms either side of one date is what makes the pre/post comparison mean anything.
-8. **Verify what you fold is what you ship.** Nothing here compared the folding construct
+8. **Prefer a metric that can say "I could not measure this."** `None` with a reason
+   caught a 20% native-pairing error; a plausible `0` would have buried it as eight
+   genuine docking failures.
+9. **Cross-check two numbers that must agree.** Every silent failure this session was
+   found by a contradiction — high ipSAE with no DockQ, a "done" fold reported as not
+   done — never by reading the failing component directly.
+10. **Verify what you fold is what you ship.** Nothing here compared the folding construct
    to the submitted one, for the entire project.
