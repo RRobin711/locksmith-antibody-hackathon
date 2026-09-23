@@ -632,13 +632,24 @@ def calibration(d: dict, cfg) -> str:
                 bar = "█" * buckets.get(k, 0)
                 w(f"| {k} of 5 | {buckets.get(k, 0)} | {bar} |")
             w("")
-            ends = buckets.get(0, 0) + buckets.get(5, 0)
-            w(f"**{ends} of {total} complexes are all-or-nothing** (either no sample on "
-              f"the floor, or every sample on it); {total - ends} are mixed. Overall "
-              f"{n_floor}/{n_samples} samples "
-              f"({100.0*n_floor/max(n_samples,1):.0f}%) are at the floor.")
+            never, always = buckets.get(0, 0), buckets.get(5, 0)
+            mixed = total - never - always
+            w(f"**{never} of {total} complexes never touch the floor, {always} are "
+              f"always on it, and {mixed} are mixed.** Overall {n_floor}/{n_samples} "
+              f"samples ({100.0*n_floor/max(n_samples,1):.0f}%) sit at the floor.")
             w("")
-            if total - ends >= total * 0.25:
+            if always == 0 and mixed:
+                w(f"**Note the asymmetry, which is sharper than the bimodality itself: "
+                  f"not one complex has all five samples on the floor.** Every floor "
+                  f"value in this panel belongs to a complex that also produced at least "
+                  f"one non-floor sample. A floor reading is therefore never a property "
+                  f"of the complex here — it is always a property of the draw. A single "
+                  f"sample landing at 0.000 says the diffusion head missed on that "
+                  f"attempt, not that the pair cannot be placed, and this project spent a "
+                  f"week reading exactly that signal as the latter (`0/30 viable`, "
+                  f"15 designs at exactly 0.000).")
+                w("")
+            if mixed >= total * 0.25:
                 w("**A substantial fraction of complexes are mixed, and that is the "
                   "finding.** For those, whether the complex 'passes' is decided by which "
                   "diffusion samples happen to be drawn — the quantity being thresholded "
