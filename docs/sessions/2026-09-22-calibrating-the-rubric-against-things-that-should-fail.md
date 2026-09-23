@@ -340,6 +340,77 @@ only by an inconsistency between two numbers that should have agreed.
 
 ---
 
+## 5c. Two infrastructure failures overnight, and one of them refutes a rule we wrote
+
+### `nohup setsid` does not survive systemd-oomd
+
+The fold chain was launched with this project's documented overnight pattern:
+
+```
+nohup setsid systemd-inhibit --what=sleep:idle:handle-lid-switch --why="…" cmd > log 2>&1 &
+```
+
+At **01:06:59** it died at 31 of 40 folds. `journalctl` gives the cause exactly:
+
+```
+vte-spawn-0213d043-….scope: systemd-oomd killed 27 process(es) in this unit.
+vte-spawn-0213d043-….scope: Failed with result 'oom-kill'.
+    Current Memory Usage: 8.2G     Pressure: Avg10: 54.76
+```
+
+**`setsid` detaches a process from its controlling TERMINAL. It does not move it out of
+the terminal's CGROUP.** systemd-oomd selects and kills by cgroup, so every `setsid`'d
+child of a terminal dies with that terminal's scope. The `systemd-inhibit` in the same
+pattern is orthogonal — it blocks *suspend*, not an OOM kill — so the documented pattern
+protects against exactly the two failure modes that did not happen.
+
+Machine: 15 GiB RAM, and the terminal's cgroup held Boltz plus a 6-thread scorer plus the
+agent session.
+
+**The fix is a different cgroup, not a bigger machine:**
+
+```
+systemd-run --user --unit=locksmith-folds  ./scripts/run_remaining.sh
+```
+
+A transient unit lands in `/user.slice/user-1000.slice/user@1000.service/app.slice/…`,
+independent of any terminal. Sleep inhibition becomes a second unit whose lifetime is tied
+to the first, rather than a wrapper inside the doomed scope.
+
+**What made this cheap:** every stage keys resume on artefacts, so restarting cost only
+the unfinished 8 folds. And note which source was right — **the log said fold 32 never
+finished** (its `ok in` line was never flushed), while **the artefacts said it did**, with
+all five models present and scorable. A log-keyed resume would have refolded a complete
+fold; `fold_is_complete` did not. That is the §5 rule paying for itself within hours.
+
+### `pgrep -f` self-matched for the seventh time — in my own health check
+
+Checking whether the chain had survived, I ran `pgrep -f "boltz predict"` inside a shell
+command *whose own command line contained the string `boltz predict`*. It reported the job
+**ALIVE** on a machine where `ps` showed no boltz process and `nvidia-smi
+--query-compute-apps` showed nothing on the GPU.
+
+This project has a hook and six recorded instances for exactly this, and the pattern still
+caught me, because a health check feels too small to need discipline. The replacement
+watchdog reads the **systemd unit state**:
+
+```
+systemctl --user is-active --quiet locksmith-folds.service
+```
+
+which is authoritative, cannot match itself, and distinguishes *stopped* from *between
+folds* without any string matching at all. **When a supervisor exists, ask the supervisor.**
+
+### And the watchdog that would have caught it had died with the session
+
+The stall watchdog armed earlier — 20 minutes without a completed fold — was a
+Claude-managed background shell, so it was killed by the same OOM event as the job it
+was watching. **A watchdog inside the thing it watches is not a watchdog.** The current
+one is armed the same way, which is honest about its limits: it catches a hung job, not a
+dead machine. Surviving the supervisor is what the systemd unit is for.
+
+---
+
 ## 6. Calibration panel: design
 
 40 real crystallised complexes, folded through the identical pipeline and scored on the
@@ -493,5 +564,11 @@ running job.** Fixed after the chain completed.
 9. **Cross-check two numbers that must agree.** Every silent failure this session was
    found by a contradiction — high ipSAE with no DockQ, a "done" fold reported as not
    done — never by reading the failing component directly.
-10. **Verify what you fold is what you ship.** Nothing here compared the folding construct
+10. **`setsid` detaches from the terminal, not the cgroup.** On a systemd-oomd system a
+    background job launched from a terminal dies when that terminal's scope is killed.
+    Use `systemd-run --user` for anything that must outlive the session.
+11. **When a supervisor exists, ask the supervisor.** `systemctl is-active` cannot
+    self-match the way `pgrep -f` can, and distinguishes stopped from idle.
+12. **Verify what you fold is what you ship** — and check that the alignment you cached
+    is the one the tool actually used. Nothing here compared the folding construct
    to the submitted one, for the entire project.
