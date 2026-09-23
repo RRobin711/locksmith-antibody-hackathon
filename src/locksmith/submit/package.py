@@ -52,6 +52,15 @@ class Design:
     confidence_json: Path | None = None
 
 
+def _ter_after(atom_line: str) -> str:
+    """A TER record inheriting the serial/resName/chain/resSeq of the atom before it."""
+    try:
+        serial = int(atom_line[6:11]) + 1
+    except ValueError:
+        serial = 0
+    return f"TER   {serial:5d}      {atom_line[17:20]} {atom_line[21]}{atom_line[22:27]}"
+
+
 def _chains(pdb: Path) -> dict[str, list[str]]:
     st = gemmi.read_structure(str(pdb))
     st.remove_hydrogens()
@@ -91,6 +100,22 @@ def write_structure(design: Design, path: Path) -> Path:
     """Copy the predicted complex and assert chain identity against the FASTA."""
     path.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(design.pdb, path)
+
+    # PDB HYGIENE. Boltz writes TER after the first two chains and then goes straight
+    # from the last chain-C atom to END, leaving the final polymer unterminated, plus a
+    # trailing whitespace line. Nothing in our stack minds -- DockQ, PRODIGY, ipsae.py,
+    # freesasa and gemmi all parse it -- but a stricter parser is entitled to merge
+    # chains B and C, which would silently score the wrong interface. Cheap to be correct.
+    lines = [ln.rstrip() for ln in path.read_text().splitlines()]
+    out, prev = [], None
+    for ln in lines:
+        if ln.startswith("END") and prev is not None and prev.startswith("ATOM"):
+            out.append(_ter_after(prev))
+        if ln:
+            out.append(ln)
+        prev = ln
+    path.write_text("\n".join(out) + "\n")
+
     have = _chains(path)
     want = {"A": design.heavy, "B": design.light, "C": design.antigen}
     if set(have) != set(want):
