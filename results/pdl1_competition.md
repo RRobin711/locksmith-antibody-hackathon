@@ -6,11 +6,11 @@ Method: superpose each design's PD-1 onto PDB **5IUS** (PD-1/PD-L1), carry the F
 
 | challenge | superposed on | CA RMSD | Fv↔PD-L1 clashes (<3 Å) | PD-L1 footprint occluded | PD-1 epitope shared with PD-L1 |
 |---|---|---|---|---|---|
-| **Challenge 1** | 106 PD-1 residues | 1.80 Å | **2007** | **16/18 (89%)** | 1 residues |
-| **Challenge 2** | 106 PD-1 residues | 1.79 Å | **4522** | **17/18 (94%)** | 1 residues |
+| **Challenge 1** | 106 PD-1 residues | 1.80 Å | **2007** | **16/18 (89%)** | 7 residues |
+| **Challenge 2** | 106 PD-1 residues | 1.79 Å | **4522** | **17/18 (94%)** | 9 residues |
 
-- **Challenge 1: **blocks PD-L1**.** 2007 atomic clashes with PD-L1 and 16 of 18 PD-L1 interface residues occluded (88.9%). Its own PD-1 epitope is 23 residues, 1 of them shared with PD-L1's.
-- **Challenge 2: **blocks PD-L1**.** 4522 atomic clashes with PD-L1 and 17 of 18 PD-L1 interface residues occluded (94.4%). Its own PD-1 epitope is 25 residues, 1 of them shared with PD-L1's.
+- **Challenge 1: **blocks PD-L1**.** 2007 atomic clashes with PD-L1 and 16 of 18 PD-L1 interface residues occluded (88.9%). Its own PD-1 epitope is 23 residues, 7 of them shared with PD-L1's.
+- **Challenge 2: **blocks PD-L1**.** 4522 atomic clashes with PD-L1 and 17 of 18 PD-L1 interface residues occluded (94.4%). Its own PD-1 epitope is 25 residues, 9 of them shared with PD-L1's.
 
 ## What this does and does not establish
 

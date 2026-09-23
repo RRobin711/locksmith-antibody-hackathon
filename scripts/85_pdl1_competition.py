@@ -78,7 +78,7 @@ def superpose_on_pd1(design_pdb: Path, ref_st):
     aligner = Align.PairwiseAligner(mode="global", match_score=1, mismatch_score=-1,
                                     open_gap_score=-5, extend_gap_score=-0.5)
     aln = aligner.align(ds, rs)[0]
-    dpos, rpos, n = [], [], 0
+    dpos, rpos, n, numap = [], [], 0, {}
     for (d0, d1), (r0, r1) in zip(aln.aligned[0], aln.aligned[1]):
         for t in range(d1 - d0):
             di, ri = d0 + t, r0 + t
@@ -88,13 +88,14 @@ def superpose_on_pd1(design_pdb: Path, ref_st):
             b = rc["A"][ri].find_atom("CA", "*")
             if a and b:
                 dpos.append(a.pos); rpos.append(b.pos); n += 1
+                numap[dc['C'][di].seqid.num] = rc['A'][ri].seqid.num
     if n < 40:
         raise RuntimeError(f"{design_pdb.name}: only {n} PD-1 residues align to 5IUS; "
                            f"refusing to superpose on that")
 
     sup = gemmi.superpose_positions(rpos, dpos)      # moves design -> reference frame
     st[0].transform_pos_and_adp(sup.transform)
-    return st, n, sup.rmsd
+    return st, n, sup.rmsd, numap
 
 
 def main() -> int:
@@ -143,7 +144,7 @@ def main() -> int:
         if not p.exists():
             print(f"challenge {ch}: {p} missing", file=sys.stderr)
             continue
-        st, nmatch, rmsd = superpose_on_pd1(p, ref)
+        st, nmatch, rmsd, numap = superpose_on_pd1(p, ref)
         dc = chains_of(st)
         fv = [(r, a) for cn in ("A", "B") for r in dc[cn] for a in r
               if a.element.name != "H"]
@@ -168,8 +169,11 @@ def main() -> int:
                     if a.pos.dist(b.pos) <= CONTACT:
                         ab_epitope.add(r.seqid.num)
                         break
-        # PD-1 numbering differs between constructs; compare by count and by fraction
-        shared = len(ab_epitope & pd1_iface)
+        # PD-1 NUMBERING DIFFERS BETWEEN THE TWO CONSTRUCTS, so intersecting residue
+        # numbers directly is meaningless -- it is the same error as matching RFdiffusion
+        # hotspots on residue number, which this project has a standing rule about. Map
+        # our numbering into 5IUS's through the alignment before comparing.
+        shared = len({numap[r] for r in ab_epitope if r in numap} & pd1_iface)
 
         pct = 100.0 * len(occluded) / max(len(pdl1_iface), 1)
         w(f"| **Challenge {ch}** | {nmatch} PD-1 residues | {rmsd:.2f} Å | "

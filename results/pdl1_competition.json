@@ -7,7 +7,7 @@
   "rmsd": 1.8,
   "matched": 106,
   "ab_epitope": 23,
-  "shared_with_pdl1": 1
+  "shared_with_pdl1": 7
  },
  "2": {
   "clashes": 4522,
@@ -17,6 +17,6 @@
   "rmsd": 1.79,
   "matched": 106,
   "ab_epitope": 25,
-  "shared_with_pdl1": 1
+  "shared_with_pdl1": 9
  }
 }
