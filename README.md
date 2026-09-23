@@ -31,7 +31,7 @@ PDF.
 
 > **Both challenges packaged, validated, and §9.2-clean.**
 > Challenge 1 `mpnn_T0.5_s104_036` **N55Q** — 96.0, envelope 94.0–96.0.
-> Challenge 2 `bb_2_0_dldesign_1` **S→A** — 91.2, envelope 91.2–96.0.
+> Challenge 2 `bb_2_0_dldesign_1` **S→A** — 91.2 on all five diffusion samples (ipSAE envelope 0.619–0.781, entirely within one band). The 91.2–96.0 envelope belongs to the unfixed design this replaced.
 > Both viable across all five diffusion samples; `VALIDATION PASSED` from the packaged
 > files alone. 29 tests. Deck is 6 slides, generated from the packaging run.
 >

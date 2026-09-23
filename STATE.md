@@ -10,7 +10,7 @@ this machine during this session unless it says otherwise.
 > | | design | score | viable |
 > |---|---|---|---|
 > | **Challenge 1** | `mpnn_T0.5_s104_036` | **96.0** | ✅ |
-> | **Challenge 2** | `bb_2_0_dldesign_1` | **96.0** | ✅ |
+> | **Challenge 2** | `bb_2_0_dldesign_1` (S→A sequon-fixed) | **91.2** | ✅ |
 >
 > `submission/LOCKSMITH_DEV.zip` (0.9 MB) contains both. `VALIDATION PASSED` from the
 > packaged files alone, re-deriving every metric with no run directory and no cached score.
