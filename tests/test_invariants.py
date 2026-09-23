@@ -390,3 +390,77 @@ def test_build_md_promise_is_now_kept():
     for token in ("glycosylation", "deamidation", "isomerisation", "oxidation",
                   "free_cysteine", "net_charge", "isoelectric_point"):
         assert token in src, f"BUILD.md promises {token} and it is absent"
+
+
+# --------------------------------------------------------------------------------
+# 10. A program that runs without error is not evidence it did what you intended.
+# --------------------------------------------------------------------------------
+# `boltz predict` EXITS 0 after fatal errors -- seen four times: a missing
+# `cuequivariance_torch` import, a host-RAM kill, a CUDA OOM printing "Number of failed
+# examples: 1" under a 100% progress bar, and an MSA path truncated at a space which
+# printed a traceback, then initialised the GPU and carried on. A batch keyed on exit
+# status marks all of them complete and skips them for ever. `assert_artefacts` is the
+# rule as code; these are the cases it has to catch.
+
+def test_assert_artefacts_rejects_every_way_a_fold_lies(tmp_path):
+    import numpy as np
+    from locksmith.fold import FoldFailed, assert_artefacts
+
+    def good_pdb(p):
+        p.write_text("ATOM      1  CA  ALA A   1       0.000   0.000   0.000"
+                     "  1.00  0.00           C\nEND\n")
+        return p
+
+    def good_npz(p):
+        np.savez(p, pae=np.zeros((4, 4)))
+        return p
+
+    pdb, pae = good_pdb(tmp_path / "m.pdb"), good_npz(tmp_path / "pae.npz")
+    assert_artefacts(pdb, pae, None, label="ok")          # the happy path must pass
+
+    # 1. the artefact is simply absent -- the commonest silent exit-0 failure
+    with pytest.raises(FoldFailed, match="produced no"):
+        assert_artefacts(tmp_path / "nope.pdb", pae, None, label="missing")
+
+    # 2. present but EMPTY. `.exists()` is satisfied; nothing was written.
+    empty = tmp_path / "empty.pdb"
+    empty.write_text("")
+    with pytest.raises(FoldFailed, match="empty"):
+        assert_artefacts(empty, pae, None, label="empty")
+
+    # 3. present, non-empty, and contains no coordinates at all
+    noatoms = tmp_path / "noatoms.pdb"
+    noatoms.write_text("REMARK boltz wrote a header and then died\nEND\n")
+    with pytest.raises(FoldFailed, match="no ATOM"):
+        assert_artefacts(noatoms, pae, None, label="noatoms")
+
+    # 4. truncated .npz -- exists, right name, unreadable. The failure mode that
+    #    survives every existence check anyone writes.
+    trunc = tmp_path / "trunc.npz"
+    trunc.write_bytes(good_npz(tmp_path / "src.npz").read_bytes()[:40])
+    with pytest.raises(FoldFailed, match="will not load"):
+        assert_artefacts(pdb, trunc, None, label="trunc")
+
+    # 5. a PAE that loads but is not a square matrix
+    notsquare = tmp_path / "ns.npz"
+    np.savez(notsquare, pae=np.zeros((4, 7)))
+    with pytest.raises(FoldFailed, match="not a square matrix"):
+        assert_artefacts(pdb, notsquare, None, label="notsquare")
+
+    # 6. the plddt sibling missing -- ipsae.py locates it by string-substituting the
+    #    PAE path, and without it writes an EMPTY table and exits 0.
+    with pytest.raises(FoldFailed, match="produced no"):
+        assert_artefacts(pdb, pae, tmp_path / "absent_plddt.npz", label="noplddt")
+
+
+def test_resume_keys_on_the_artefact_not_on_the_row_existing():
+    """A scorer that skipped any design with A ROW in its output treated 239 error
+    rows as completed work, so the obvious re-run would have skipped all 239 for ever
+    and left a file that looks finished. Every resume in this repo must test for the
+    VALUE, not for the row."""
+    for script in ("scripts/72_challenge2_fold.py", "scripts/73_challenge2_score.py",
+                   "scripts/80_challenge2_score_r10.py"):
+        src = Path(script).read_text()
+        assert 'get("ok")' in src or '"ipsae" in' in src, (
+            f"{script}: resume does not key on an artefact field")
+        assert "design_id" in src
