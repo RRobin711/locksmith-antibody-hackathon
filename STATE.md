@@ -5,23 +5,54 @@ It records what is **verified**, what is **taken on trust**, what is **blocked**
 shortest path to a complete submission. Every number below was recomputed from files on
 this machine during this session unless it says otherwise.
 
-> ## ✅ HEADLINE: **Both challenges are packaged, viable and validated.**
+> ## ⚠️ HEADLINE, REWRITTEN 2026-09-23: **Challenge 2 has no surviving computational
+> evidence of binding. Challenge 1 is unaffected.**
 >
-> | | design | score | viable |
+> | | design | score | status |
 > |---|---|---|---|
-> | **Challenge 1** | `mpnn_T0.5_s104_036` | **96.0** | ✅ |
-> | **Challenge 2** | `bb_2_0_dldesign_1` (S→A sequon-fixed) | **91.2** | ✅ |
+> | **Challenge 1** | `mpnn_T0.5_s104_036` **N55Q** | **96.0** | ✅ viable, unaffected |
+> | **Challenge 2** | `bb_2_0_dldesign_1` (S→A) | 91.2 *as packaged* | ❌ **withdrawn as evidence** |
 >
-> `submission/LOCKSMITH_DEV.zip` (0.9 MB) contains both. `VALIDATION PASSED` from the
-> packaged files alone, re-deriving every metric with no run directory and no cached score.
+> **Why.** Every Challenge 2 fold this project ever ran paired the 123-residue antigen with
+> a cached alignment whose query is 113 residues. Boltz compares lengths, **discards the
+> alignment**, and folds the antigen single-sequence — announcing it only on a stdout
+> stream this code captured and threw away. Measured 2×2 in
+> `results/msa_silently_discarded.md`:
 >
-> **Challenge 2 is 1 of 30**, and the earlier `0/30` from the same night is **withdrawn**:
-> it was an artefact of folding at `recycling_steps=3`. Re-folded at recycling 10, the
-> winner scores ipSAE **0.864** — higher than the positive control's 0.842 on a real
-> crystallised pair — while all 29 others sit at **≤0.331**. Nothing in between.
+> | | antigen MSA used | antigen MSA absent |
+> |---|---|---|
+> | baseline (pre-fix) | **0.012** | 0.773 |
+> | S→A (packaged) | **0.012** | 0.686 |
 >
-> **Neither 96.0 is evidence of binding.** Both are self-consistency scores. This project's
-> own SKEMPI work shows the stack does not track measured affinity in either direction.
+> The mutation is irrelevant; the alignment is the whole effect. The no-MSA cells reproduce
+> the project's historical envelopes exactly, so **"1 of 30 designs clears" was measured
+> entirely in the flattering condition.**
+>
+> **Re-screen in progress** with a correct alignment (`data/msa_cache/pd1_123_handbook.csv`,
+> 3407 sequences, query matching the antigen exactly). First 5 designs: **0/5 clear**, and
+> the ranking is scrambled — the packaged design falls 0.864 → **0.013** while the worst of
+> the five rises from 0.116 to **0.440**. The old ranking carries no information about the
+> correct one.
+>
+> **Challenge 1 is not affected**: its folds used a server MSA matched to its own antigen
+> (`runs/diffusion_samples.log` shows the discard warning once, for the Challenge 2 arm
+> only).
+>
+> **`submission/LOCKSMITH_DEV.zip` is stale** and must not be sent as-is.
+
+---
+
+## 0. What changed on 2026-09-23 (calibration session)
+
+| finding | where |
+|---|---|
+| Challenge 2 folds had no antigen alignment; 2×2 isolates it | `results/msa_silently_discarded.md` |
+| Calibration panel, 40 real complexes either side of the training cutoff | `results/calibration.md` |
+| Gate vs crystal: ρ=+0.702, **0% false positives, 25% false negatives** | `results/calibration.md` |
+| Negative control: HyHEL-10 clears all 5 §7.2 gates on `model_0` | `results/negative_control.md` |
+| 4 of 5 §7.2 gates reject 0/6 wrong antibodies | `results/negative_control.md` |
+| Positive control failed → diagnosed → repaired (nivolumab 0.017 → 0.691) | `results/negative_control.md` |
+| Guards added: MSA length, boltz stdout, chain-copy pairing, resume predicate | `tests/test_invariants.py` (33) |
 
 ---
 
