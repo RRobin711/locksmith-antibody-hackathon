@@ -26,18 +26,26 @@ CPU and costs ~8 s per 8 draws per backbone — **~10 minutes total for all 576*
 Folding is the cost. To read a *curve* rather than a single point, sequences are folded in
 **depth strata**, all 18 backbones at each stratum before moving to the next:
 
-| stratum | sequences/backbone | new folds | cumulative | cumulative wall-clock |
-|---|---|---|---|---|
-| already done | 1 | 18 | 18 | — |
-| A | +3 (→4) | 54 | 72 | ~2.6 h |
-| B | +4 (→8) | 72 | 144 | ~5.1 h |
-| C | +8 (→16) | 144 | 288 | ~12.0 h |
-| D | +16 (→32) | 288 | 576 | ~24.0 h |
+| stratum | sequences/backbone | new folds | this stratum | cumulative new folds | cumulative |
+|---|---|---|---|---|---|
+| already done | 1 | 18 | — | — | — |
+| A | +3 (→4) | 54 | 2.6 h | 54 | **2.6 h** |
+| B | +4 (→8) | 72 | 3.5 h | 126 | **6.1 h** |
+| C | +8 (→16) | 144 | 7.0 h | 270 | **13.1 h** |
+| D | +16 (→32) | 288 | 13.9 h | 558 | **27.0 h** |
 
-At the measured **2.9 min/fold** on the local 5070 Ti. **Strata A+B alone are ~4.5 hours
-and give three points on the curve (1, 4, 8);** C and D are overnight commitments and are
-**not** authorised by this pre-registration — they are run only if A+B show yield still
-climbing.
+At the measured **2.9 min/fold** on the local 5070 Ti.
+
+*(Corrected 2026-09-23: an earlier version of this table gave cumulative 5.1 / 12.0 / 24.0
+hours and described A+B as "~4.5 hours". Those were arithmetic errors — the cumulative
+column had been written without multiplying through. A+B is **6.1 hours**, not 4.5, and
+the full sweep is **27 hours**, not 24. Caught while costing the rented-GPU alternative.
+This project has a standing rule about unmeasured projections justifying schedules; this
+was worse, being a measured rate multiplied wrongly.)*
+
+**Strata A+B are ~6.1 hours and give three points on the curve (1, 4, 8);** C and D are
+overnight commitments and are **not** authorised by this pre-registration — they are run
+only if A+B show yield still climbing.
 
 **Order is interruption-survivable by construction:** completing any stratum yields a
 usable curve point across all 18 backbones. An interruption mid-stratum loses at most the
