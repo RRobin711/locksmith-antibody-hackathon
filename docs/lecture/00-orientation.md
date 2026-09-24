@@ -179,18 +179,18 @@ instances of a bug that had already been written down.
 
 ### 3.1 Tools
 
-| role | tool | note |
-|---|---|---|
-| sequence design | ProteinMPNN (`8907e66`) | cannot vary loop length — a hard constraint on the design space |
-| backbone generation | RFdiffusion / RFantibody | hotspot conditioning; would not run on the local GPU |
-| structure prediction | Boltz-2 **2.2.1** | the workhorse; every headline number comes from it |
-| structure prediction | ColabFold / AlphaFold2 1.6.3 | qualified and dropped — cannot fold designs without an MSA |
-| filter | RF2 | sits 24.9 Å from the designed pose |
-| pose quality | DockQ 2.1.3 | needs non-default flags or it refuses to run |
-| binding energy | PRODIGY 2.4.0 | later shown blind to the epitope |
-| interface confidence | ipSAE (`6174cf9`) | the only gate that actually rejects anything |
-| solubility | NetSolP (ESM1b ensemble) | variant chosen by positive control, not by default |
-| numbering | ANARCII 2.0.8 | numbers PD-1 *as an antibody* — shared IgV fold |
+| role                 | tool                         | note                                                            |
+| -------------------- | ---------------------------- | --------------------------------------------------------------- |
+| sequence design      | ProteinMPNN (`8907e66`)      | cannot vary loop length — a hard constraint on the design space |
+| backbone generation  | RFdiffusion / RFantibody     | hotspot conditioning; would not run on the local GPU            |
+| structure prediction | Boltz-2 **2.2.1**            | the workhorse; every headline number comes from it              |
+| structure prediction | ColabFold / AlphaFold2 1.6.3 | qualified and dropped — cannot fold designs without an MSA      |
+| filter               | RF2                          | sits 24.9 Å from the designed pose                              |
+| pose quality         | DockQ 2.1.3                  | needs non-default flags or it refuses to run                    |
+| binding energy       | PRODIGY 2.4.0                | later shown blind to the epitope                                |
+| interface confidence | ipSAE (`6174cf9`)            | the only gate that actually rejects anything                    |
+| solubility           | NetSolP (ESM1b ensemble)     | variant chosen by positive control, not by default              |
+| numbering            | ANARCII 2.0.8                | numbers PD-1 *as an antibody* — shared IgV fold                 |
 
 Hardware: a laptop RTX 5070 Ti (Blackwell, `sm_120`) for everything Boltz, plus
 one rented RTX 3090 at **$2.82 for 5.5 hours** for the backbone generation the
@@ -205,7 +205,7 @@ off-interface control and a dose–response. Ablation. Post-training-cutoff
 generalisation testing. Adversarial multi-judge audits. Mutation testing of the
 test suite itself. Re-derivation of every published number from raw data.
 
-### 3.3 Mathematics
+### 3.3 Mathematics``
 
 The intellectual core. Reliability as a variance ratio and the intraclass
 correlation; Spearman–Brown for the [[04-measurement-theory#1.3 Reliability|reliability]] of a k-replicate mean;
