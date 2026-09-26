@@ -15,24 +15,30 @@ $ echo $?
 ```
 
 Exit status **1**, no score printed. **`--allowed_mismatches` is mandatory and the
-minimum value that works is 15** — exactly the number of substitutions in this
-design, so the flag is not arbitrary. We pass 40 for headroom. `--mapping ABC:ABC`
-is *not* strictly required (DockQ resolves the same mapping on its own and returns
-the identical 0.816), but we pass it because leaving the search free means a
-different input could silently be scored under a different correspondence:
+smallest value that works is 16** — measured by bisection, not inferred: 15 still
+exits 1, 16 scores. We pass 40 for headroom. `--mapping ABC:ABC` is *not* strictly
+required (DockQ resolves the same correspondence on its own and returns the
+identical 0.800), but we pass it because leaving the search free means a different
+input could silently be scored under a different mapping:
 
 ```
 $ DockQ structures/design_1_complex.pdb 5ggs_ABZ.pdb \
       --allowed_mismatches 40 --mapping ABC:ABC
 Total DockQ over 3 native interfaces: 0.800 with ABC:ABC model:native mapping
-  A,B  DockQ 0.931      (heavy-light framework -- near-perfect by construction)
-  A,C  DockQ 0.723      <-- the interface the design actually creates
-  B,C  DockQ 0.794
+  A,B  DockQ 0.8716     (heavy-light framework -- near-perfect by construction)
+  A,C  DockQ 0.7308     <-- the interface the design actually creates
+  B,C  DockQ 0.7963
 ```
+
+Those three are read from `--json`, not from the printed summary, which rounds to 3 dp.
+An earlier draft of this document reported 0.931 / 0.723 / 0.794 here. Those numbers are
+real, but they belong to a **different structure** — model 0 of the five-diffusion-sample
+sweep below, which was run on the pre-`N55Q` design. The submitted design carries the
+deamidation fix, and it is the one scored here.
 
 - `--allowed_mismatches` defaults to **0**. A redesigned CDR is not identical to the
   native by definition, so the default refuses *every* mutated design instead of scoring
-  it badly. 40 is comfortably above our 15 substitutions.
+  it badly. 40 is comfortably above the measured minimum of 16.
 - `--mapping ABC:ABC` pins the correspondence §4.2.2 already fixes (A=heavy, B=light,
   C=antigen). Left free, DockQ searches, and a wrong mapping scores a good design badly.
 
@@ -40,9 +46,9 @@ Total DockQ over 3 native interfaces: 0.800 with ABC:ABC model:native mapping
 Total over the three interfaces, because that is what an organiser reads off the tool's
 summary line. The handbook says only that DockQ "returns a docking quality score between
 0 and 1" and does not say how to combine three interfaces. Worth knowing when comparing:
-the Total averages in the **heavy-light framework interface (0.931)**, which no design
+the Total averages in the **heavy-light framework interface (0.8716)**, which no design
 touches and which is near-perfect by construction. The interface our design is actually
-responsible for is **A-C = 0.723**.
+responsible for is **A-C = 0.7308**.
 
 ## The native reference, and a trap in it
 

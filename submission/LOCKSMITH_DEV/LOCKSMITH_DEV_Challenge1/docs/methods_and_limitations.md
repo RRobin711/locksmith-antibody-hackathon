@@ -2,7 +2,7 @@
 
 ## Read this first
 
-This submission's design clears all eight hard cutoffs and scores 96.0/100. **We do
+This submission's design clears all eight hard cutoffs and scores 94.0/100. **We do
 not think that number means the design is good, and the evidence for that is ours.**
 
 Three controls we ran on our own pipeline:
@@ -124,11 +124,17 @@ Boltz's `--diffusion_samples` defaults to 1, so every pose-derived metric here c
 single diffusion draw. Five samples from one run (MSA shared, so this is pure diffusion
 variability):
 
-| diffusion sample | 0 (submitted) | 1 | 2 | 3 | 4 | spread |
+| diffusion sample | 0 | 1 | 2 | 3 | 4 | spread |
 |---|---|---|---|---|---|---|
 | ipSAE | 0.822 | 0.841 | 0.827 | 0.840 | 0.861 | 0.039 |
 | **DockQ** | **0.816** | 0.798 | 0.801 | 0.820 | **0.711** | **0.109** |
 | composite | **96.0** | 94.0 | 96.0 | 96.0 | 94.0 | **94.0–96.0** |
+
+**This sweep was run on the pre-`N55Q` design, not on the submitted one** — the two differ
+at exactly one position (heavy 55, N→Q) and we did not re-run the sweep after the fix. So
+read it as a measurement of *diffusion variability on this complex*, which is what it is
+for, and not as the submitted design's own envelope. The submitted structure scores DockQ
+**0.7996**, just below the 0.80 band edge; sample 0 above scores 0.8160, just above it.
 
 **ipSAE is stable and DockQ is not.** We expected the opposite — this complex is nearly
 invariant to Boltz recycling depth (ipSAE range 0.036 over depths 3→20), and we predicted

@@ -12,12 +12,12 @@ prediction to anything external.** Every number below is computed from the two f
 
 | metric | source | our value |
 |---|---|---|
-| `ipsae` | `vendor/ipsae/ipsae.py` on the PAE JSON + PDB, cutoffs 10/15 | 0.781 |
-| `dg`, `contacts` | PRODIGY, chain selection `A,B` vs `C` | -11.0, 97 |
-| `iface_plddt` | mean B-factor over interface residues, 5.0 Å heavy-atom | 85.17 |
-| `cdr_sasa` | freesasa over the six CDRs, `bound` state | 1066.5 |
-| `netsolp` | NetSolP **ESM1b** (the tool's own default), Fv, `min` over chains | 0.570 |
-| `cdrh3_identity` | **human germline**, not Keytruda — see below | 30.0% |
+| `ipsae` | `vendor/ipsae/ipsae.py` on the PAE JSON + PDB, cutoffs 10/15 | 0.904 |
+| `dg`, `contacts` | PRODIGY, chain selection `A,B` vs `C` | -10.9, 99 |
+| `iface_plddt` | mean B-factor over interface residues, 5.0 Å heavy-atom | 88.62 |
+| `cdr_sasa` | freesasa over the six CDRs, `bound` state | 1110.5 |
+| `netsolp` | NetSolP **ESM1b** (the tool's own default), Fv, `min` over chains | 0.555 |
+| `cdrh3_identity` | **human germline**, not Keytruda — see below | 18.2% |
 
 ## The one that needs explaining: novelty against germline
 
@@ -32,8 +32,9 @@ Ours (`src/locksmith/metrics/germline.py`): best **exact V prefix** + best **D s
 `covered / len(query)`. V is a prefix and J a suffix because exonuclease trimming removes
 segment *ends*; D is a substring because it is trimmed at both ends and read in any frame.
 
-**An independent reviewer computing this as a global-alignment identity against all 6,864
-IGHV×IGHD×IGHJ recombinations gets 40.0% where we report 30.0%.**
+**The convention moves the number.** Scoring the same CDR-H3 as best global-alignment
+identity against any single germline segment (`best_segment`) gives **27.3%**, where
+the V(D)J-coverage reading we report as `cdrh3_identity` gives **18.2%**.
 Both readings are defensible against §6.3.1's wording and **both are far inside the Good
 band (<70%) and the <95% cutoff**, so nothing about the score turns on it. We record the
 disagreement rather than hide it.

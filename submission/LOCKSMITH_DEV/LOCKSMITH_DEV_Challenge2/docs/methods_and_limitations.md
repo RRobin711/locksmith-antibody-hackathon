@@ -94,8 +94,12 @@ SKEMPI work found no metric in the stack tracks measured ΔΔG.
 
 **Can: that the confidence is calibrated.** Against 40 real crystallised complexes folded
 through this identical pipeline, ipSAE tracks pose accuracy at Spearman **ρ = +0.702** with
-a **0% false-positive rate** — it never accepted an incorrect pose in 40 tries — against a
-25% false-negative rate. The post-cutoff (novel-antigen) median in that panel is 0.165.
+error rates that **must be quoted at one threshold**. Against DockQ ≥ 0.49 (Medium+) the
+ipSAE ≥ 0.60 gate gives **12.5% false-positive / 25.0% false-negative**; against DockQ ≥ 0.23
+(Acceptable+) it gives **0% false-positive / 58.3% false-negative**, and that 0% rests on
+only 4 negatives — a Clopper–Pearson 95% upper bound of **0.602**, i.e. uninformative. An
+earlier version of this document paired the 0% with the 25%, which is the favourable half of
+each threshold and is reachable at neither. The post-cutoff (novel-antigen) median is 0.165.
 
 **Can: that the targeting is evidenced.** Backbones were conditioned on the PD-L1
 competitive footprint; against 2000 random contiguous surface patches of the same size on
