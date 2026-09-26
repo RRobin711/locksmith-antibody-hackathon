@@ -80,8 +80,12 @@ the condition every prior fold was run in.
 ### What it does NOT invalidate
 
 - **Challenge 1.** Its folds used a server MSA matched to its own antigen; the discard
-  warning appears once in `runs/diffusion_samples.log`, for the Challenge 2 arm only. Every
-  Challenge 1 number in this course stands.
+  warning appears once in `runs/diffusion_samples.log`, for the Challenge 2 arm only.
+  **Narrowed 2026-09-26:** this bullet originally ended "Every Challenge 1 number in this
+  course stands", which is true of *this defect* and false as a blanket assurance —
+  Challenge 1's composite changed 96.0 → 94.0 on 2026-09-24 for an unrelated reason. See
+  [[CORRECTIONS#C3 — Challenge 1's composite is 94.0, not 96.0|C3]]. *A correction scoped
+  to one defect should not be worded as a general clearance.*
 - **Everything in [[04-measurement-theory|measurement theory]],
   [[05-experiment-design|experiment design]] and
   [[06-allocation-and-selection|allocation and selection]]** that is derived from the
@@ -208,6 +212,76 @@ A finding built on four instances lost three of them to a single upstream defect
 day later. **Count how many of a finding's instances share one apparatus. If they all do, the
 finding is one bug away from empty** — and its apparent replication across instances is not
 independent evidence at all.
+
+---
+
+---
+
+## C3 — Challenge 1's composite is 94.0, not 96.0
+
+**Raised 2026-09-24. Status: settled, mechanism in place. Unrelated to C1.**
+
+### What happened
+
+`dockq.compute` parsed DockQ's **printed** summary line, which the tool formats to 3
+decimal places, and then rounded that again itself. The true value is
+
+```
+GlobalDockQ = 0.7995794972281312
+```
+
+which is **0.00042 below** the §5.2 Good edge at 0.80 and therefore bands **medium**, worth
+8 sub-score points rather than 10. The printed `0.800` banded **good**. Challenge 1's
+composite is **94.0**, not 96.0, and the design is unchanged — this is a measurement
+correction, not a regression.
+
+Any true value in the half-open interval **[0.7995, 0.800)** was misbanded the same way, so
+the defect is a property of the parser, not of this structure.
+
+### Why it is worth a numbered correction
+
+Because it is the project's own thesis turned on itself. This course argues throughout that
+the rubric is gameable by whoever controls the structure; two of its points came from a
+`printf`. A project making that argument cannot keep them.
+
+It is also **not covered by C1**, which is scoped to the Challenge 2 MSA defect and
+explicitly exonerates Challenge 1. That exoneration is correct *for that defect* and was
+being read as general.
+
+### What it invalidates
+
+Every occurrence of Challenge 1 at `final 96.0`, and the convention triple
+`84.0 / 90.0 / 96.0`, which is now **81.0 / 87.5 / 94.0** across the three readings §5.2
+permits. Known live in this course:
+
+| file | line |
+|---|---|
+| `01-the-biological-problem.md` | 701 |
+| `02-the-engineering-problem.md` | 234, 730 |
+| `07-the-campaign.md` | 466 |
+
+`02-the-engineering-problem.md:730` additionally quotes Challenge 2 at `final 91.2`, which
+C1 supersedes; the current figure is `bb_8_0` at **93.6**.
+
+Chapters are not rewritten, per this file's standing policy — the correction lives here and
+the chapters are indexed above.
+
+### The mechanism
+
+Two, because surfacing and preventing are different jobs:
+
+1. `dockq.compute` now passes `--json` and reads `GlobalDockQ` unrounded. The returned value
+   is **not** rounded at all, because banding must see the true number.
+2. `score.evaluate` declares each metric's display precision and appends to
+   `Scored.rounding_risk` when a value lands within ±0.5 ulp of any band edge. Packaged
+   tables then print that metric at 6 dp instead of 3 — which is why the shipped
+   `scores.md` reads `dockq 0.799579 | medium` rather than the self-contradictory-looking
+   `0.800 | medium`.
+
+**Transferable form:** *any parse of a **rendered** number inherits that renderer's
+precision, and a threshold comparison is exactly where the lost digits matter. Parse the
+machine-readable output when one exists — and when a value sits within its display
+precision of a decision boundary, print more digits rather than fewer.*
 
 ---
 

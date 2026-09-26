@@ -37,7 +37,7 @@ PDF.
 > `bb_2_0_dldesign_1` (S→A, 91.2) after the silently-discarded-MSA finding invalidated every
 > number the earlier design had.
 > Both viable across all five diffusion samples; `VALIDATION PASSED` from the packaged
-> files alone. 29 tests. Deck is 6 slides, generated from the packaging run.
+> files alone. 34 tests. Deck is 6 slides, generated from the packaging run.
 >
 > **We submit a lower-scoring Challenge 2 on purpose**: 4.8 points to remove two
 > glycosylation sequons from a paratope. §9.2 asks for it, §5.2 does not pay for it.

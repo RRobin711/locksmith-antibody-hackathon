@@ -18,7 +18,8 @@ had been carried as a *pointer* in three consecutive session docs without anyone
 enumerating them. A retraction that is only gestured at cannot be checked off, and
 `STATE.md` could not be cleaned while the list did not exist.
 
-**Scope.** The whole project. [[../docs/lecture/CORRECTIONS|the course's own corrections file]] is narrower — it covers what a reader of the lecture course must not trust — and its
+**Scope.** The whole project.
+[[../docs/lecture/CORRECTIONS|The course's own corrections file]] is narrower — it covers what a reader of the lecture course must not trust — and its
 C1/C2 remain the fuller treatment of those two items. Where both cover a claim, this file
 is the index and that file is the detail.
 
@@ -49,7 +50,20 @@ populates `Scored.rounding_risk` for any value within ±0.5 ulp of a band edge.
 Evidence: `submission/LOCKSMITH_DEV/LOCKSMITH_DEV_Challenge1/metrics/scores.md`, which now
 prints `dockq 0.799579`.
 
-**Live text:** none known.
+**Live text — this entry originally read "none known", which was wrong.** A newline-tolerant
+sweep on 2026-09-26 (§C1's lesson, applied) found the stale `final 96.0` and the superseded
+convention triple `84.0 / 90.0 / 96.0` in **four places in the lecture course**
+(`01-the-biological-problem.md:701`, `02-the-engineering-problem.md:234` and `:730`,
+`07-the-campaign.md:466`) and in `results/pitch_outline.md`. The chapters are indexed rather
+than rewritten, per policy, under the new
+[[../docs/lecture/CORRECTIONS|C3 of the course corrections file]]; `pitch_outline.md` is
+marked superseded at its head. `PLAN.md:862` and `BUILD.md:204` already carried the
+correction inline.
+
+**And the course's C1 had to be narrowed**, because it ended "Every Challenge 1 number in
+this course stands" — true of the MSA defect it was scoped to, and read as a general
+clearance. *A correction scoped to one defect must not be worded as a blanket exoneration;
+the next defect will be unrelated.*
 
 ### A2 — every Challenge 2 number before 2026-09-23 · **WITHDRAWN**
 

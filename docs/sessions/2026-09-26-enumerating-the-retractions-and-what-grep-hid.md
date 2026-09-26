@@ -1,8 +1,10 @@
 ---
-date: 2026-09-26
-tags: [project, locksmith, learning, problem]
-status: living
+tags:
+  - session
+  - locksmith-antibody-hackathon
 ---
+
+Tags: [[../../results/retractions|the register this session produced]], [[README|the session index]]
 
 # Session 2026-09-26 — Enumerating the retractions, and what a line-oriented grep hid
 
@@ -22,6 +24,7 @@ What changed:
 | 3 | `docs/lecture/CORRECTIONS.md` | **fixed** — it contradicted itself and had gone stale |
 | 4 | `STATE.md` | **rewritten** — §8/§9 described the pre-MSA-discovery world |
 | 5 | A live retracted claim in `results/constrained_paired.md` | **corrected, twice** |
+| 6 | Stale Challenge 1 `96.0` in four lecture chapters + the pitch outline | **indexed as course correction C3** |
 
 The one genuinely new piece of knowledge is in §5, and it is about `grep`, not about
 antibodies.
@@ -339,7 +342,78 @@ resolved unreliably.
 
 ---
 
-## 6. Verification — how we know it worked
+### 5.4 A correction scoped to one defect, worded as a general clearance
+
+Found during the end-of-session sweep, which is the second time today the sweep found what
+the work itself missed.
+
+`docs/lecture/CORRECTIONS.md` C1 — the Challenge 2 MSA defect — ended its *"what it does
+NOT invalidate"* section with:
+
+> **Challenge 1.** Its folds used a server MSA matched to its own antigen [...] **Every
+> Challenge 1 number in this course stands.**
+
+Each clause is true of *that defect*. The final sentence is not true in general, and it
+became false three weeks later for a completely unrelated reason: Challenge 1's composite
+moved **96.0 → 94.0** on the DockQ display-rounding fix. The course consequently carried
+the stale `final 96.0` in **four places** (`01:701`, `02:234`, `02:730`, `07:466`) with no
+correction covering them, *and* a sentence telling the reader those numbers were fine.
+
+**Why it was dangerous.** A stale number is an ordinary defect a reader may catch. A stale
+number plus an explicit assurance that the number is current is worse than either: it
+spends the reader's scepticism budget in the wrong direction. The assurance was also the
+load-bearing reason nobody re-checked Challenge 1 when the rounding fix landed.
+
+**How it was caught.** Only by sweeping for `final 96.0` across the whole vault rather than
+trusting the corrections file's own account of its coverage. Notably the sweep was run
+because of §5.1, not because anyone suspected C1.
+
+**The general lesson.** *A correction is scoped to the defect that prompted it, and its
+wording must say so. "X is unaffected by this" is a claim about one causal pathway; "every
+X in this document stands" is a claim about all future pathways, which no author is in a
+position to make.* C1 is now narrowed to the first form, and the rounding correction has
+its own entry (C3) naming the four affected lines.
+
+This also exposes a structural gap the register does not close: **the course's corrections
+file had no entry for the project's single largest score change**, because that change was
+made in the repo and propagated to the package without anyone asking what else quoted the
+number.
+
+---
+
+## 6. Degenerate and failure cases for the register itself
+
+A register is a data structure with invariants, and it is worth stating what breaks them.
+
+- **An entry with no settling file** is a rumour. Every entry names the file that settles
+  it; one that cannot is not ready to be an entry.
+- **An entry with no live-text note has not been checked for propagation.** This is the
+  invariant §5.1 violated, and the whole register currently sits in a weakened form of it:
+  nineteen of twenty live-text notes rest on line-oriented greps. The register is *correct*
+  about what was retracted and *unreliable* about where stale copies remain.
+- **A claim retracted twice** — an entry superseded, then its replacement superseded again.
+  §A2 is the live instance: Challenge 2's numbers were withdrawn, replaced by
+  `bb_1_0_dldesign_0` (0.637), and replaced *again* by `bb_8_0` (0.904). Recording only the
+  latest state loses the fact that the ranking inverted, which is the teachable part. The
+  register therefore records the chain, not the endpoint.
+- **A correction that is itself wrong.** Happened twice here — §C7 (a reliability figure
+  corrected 0.28 → 0.296, where 0.28 was the `midpoint` value quoted in a `top` context, the
+  same convention-mixing error the document was reporting) and §D1 (the course's corrections
+  file going stale and self-contradictory). There is no structural defence; the only
+  mitigation is that corrections are audited like any other claim.
+- **A pre-registration containing a retracted claim.** Cannot be fixed without destroying
+  the document's function (§2.3). Handled by policy — the correction lives only in the
+  register — and it means the repo will always contain at least one uncorrected copy of
+  some retracted claims. That is intended, and stating it here is the alternative to
+  someone "fixing" it later.
+- **The register growing without bound.** Not yet a problem at 25 entries. The natural exit
+  is the same as `LEARNINGS.md`'s: an entry whose recurrence is prevented by a mechanism can
+  be compressed to a pointer at that mechanism. Four already qualify — §A1, §C1, §C2, §C3
+  are covered by `--json`/`rounding_risk` and `check_docs_against_scores`.
+
+---
+
+## 7. Verification — how we know it worked
 
 | check | result |
 |---|---|
@@ -347,6 +421,7 @@ resolved unreliably.
 | `scripts/58_validate_submission.py submission/LOCKSMITH_DEV` | re-derives all metrics from the package alone |
 | Split wikilinks across the 4 touched files | **0**, `[[`/`]]` counts balanced |
 | Newline-tolerant sweep for the §C1 claim | 3 found, 2 corrected, 1 prereg left by policy |
+| Vault-wide sweep, 5 corrected facts | 6 stale sites found (4 lecture chapters + pitch outline; `PLAN.md`/`BUILD.md` already correct) |
 | Frontmatter conforms to the vault rule | date / two-axis tags / `status: living` |
 | Working tree | clean before this session's doc commit |
 
@@ -357,7 +432,7 @@ is a rumour; an entry with no live-text note has not been checked for propagatio
 
 ---
 
-## 7. Honest assessment
+## 8. Honest assessment
 
 **Solid.** The enumeration exists and is checkable. The two stale places in the course's
 corrections file were found by reading it rather than by being told, and one of them was a
@@ -382,7 +457,7 @@ caveat — it is the same defect, known and not yet acted on across the register
 
 ---
 
-## 8. Next steps
+## 9. Next steps
 
 1. **Re-sweep every register entry with a newline-tolerant matcher.** The live-text column
    is currently built on the search method §5.1 shows to under-report. Cheap, scriptable,
@@ -397,7 +472,7 @@ caveat — it is the same defect, known and not yet acted on across the register
 
 ---
 
-## 9. Glossary
+## 10. Glossary
 
 - **Clopper–Pearson interval** — an exact confidence interval for a binomial proportion,
   valid at small *n* and at 0 or 100%, where the normal approximation is not. It is what
