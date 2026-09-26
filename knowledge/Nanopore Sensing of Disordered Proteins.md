@@ -9,7 +9,7 @@ Tags: [[Nanopore|nanopore sensing]] · [[IDP|intrinsically disordered proteins]]
 # Nanopore Sensing of Disordered Proteins
 
 The second half of the reading Ajitesh sent. Where
-[[Intrinsically Disordered Proteins|the IDP notes]] establish *why* ensemble-averaged
+[the IDP notes](Intrinsically%20Disordered%20Proteins.md) establish *why* ensemble-averaged
 measurements fail for disordered proteins, these two papers are the *measurement answer*:
 instruments that read one molecule at a time and therefore return a distribution.
 
@@ -132,6 +132,6 @@ folded one. A pitch that notices this — that positions the antibody work as a 
 design capability the company's own roadmap explicitly asks for — lands differently from one that
 just reports metrics.
 
-See [[Locksmith Bio — Company Context|the company-context note]] for how far that inference can
-honestly be pushed, [[De Novo Design and the Two Challenges|the design-problem note]] for what
-de novo design means in our case, and [[../PROJECT-STORY|the project story]] for the arc.
+See [the company-context note](Locksmith%20Bio%20%E2%80%94%20Company%20Context.md) for how far that inference can
+honestly be pushed, [the design-problem note](De%20Novo%20Design%20and%20the%20Two%20Challenges.md) for what
+de novo design means in our case, and [the project story](../PROJECT-STORY.md) for the arc.

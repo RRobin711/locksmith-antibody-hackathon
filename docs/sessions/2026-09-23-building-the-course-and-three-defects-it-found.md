@@ -2,7 +2,7 @@
 
 **2026-09-23.** No GPU time, no new science. This session read the entire
 project record back and turned it into a teaching course at
-[[../lecture/README|docs/lecture/]]. The interesting part is not the course; it
+[docs/lecture/](../lecture/README.md). The interesting part is not the course; it
 is that *reading nine days of work as a single document* surfaced three defects
 that nine days of working inside it did not.
 
@@ -212,7 +212,7 @@ fix it in prose, because prose has no compiler.
 The remedy is the one the project reached on its last day and did not have time
 to build: **one machine-readable results store, with the prose reading from it
 rather than duplicating it.** Combined with the four-field stamp proposed in
-[[../lecture/09-critique|the critique]] — every number carries its `n`, its
+[the critique](../lecture/09-critique.md) — every number carries its `n`, its
 estimand, its detectable effect, and its provenance — it closes most of the
 class.
 
@@ -221,7 +221,7 @@ class.
 ## 5. What was deliberately not done
 
 - **Nothing in the project record was corrected.** The three defects are
-  documented in [[../lecture/09-critique|chapter 09]] and here; `STATE.md`,
+  documented in [chapter 09](../lecture/09-critique.md) and here; `STATE.md`,
   `config/metrics.yaml`, `PROJECT-STORY.md` and `LEARNINGS.md` are untouched.
   Correcting them is a separate, deliberate pass.
 - **No science was re-run.** Every number in the course is quoted from the

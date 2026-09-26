@@ -26,9 +26,9 @@ wrong claims — two of them *inside the shipped package* — and finally swappe
 lower-scoring design that removes a developability liability the rubric does not measure.
 
 **Prerequisites:** the rubric and its metrics —
-[[2026-09-14-antibody-hackathon-spec-and-scoring|the spec extraction]]. The overnight run
+[the spec extraction](2026-09-14-antibody-hackathon-spec-and-scoring.md). The overnight run
 that preceded this —
-[[2026-09-22-the-first-test-file-and-the-winner-that-changed|the first test file]].
+[the first test file](2026-09-22-the-first-test-file-and-the-winner-that-changed.md).
 
 ---
 

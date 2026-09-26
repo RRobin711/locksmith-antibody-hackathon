@@ -12,7 +12,7 @@ Tags: [[Antibody|antibodies]] · [[Protein Design|protein design]] · [[Structur
 project — what we mutate, what gets scored, what "novel" means, even how much GPU memory a
 job needs — follows from the shape of this molecule.
 
-Read [[PD-1 and Checkpoint Blockade|the target note]] first if you haven't.
+Read [the target note](PD-1%20and%20Checkpoint%20Blockade.md) first if you haven't.
 
 ---
 
@@ -53,7 +53,7 @@ size. Fv is much cheaper. But the constant domains physically clamp the angle be
 VL — the "elbow" — so a bare Fv has an under-constrained wobble the Fab does not.
 
 That trade-off is a whole decision on its own: see
-[[Screening on Fv Confirming on Fab|the Fv-screen/Fab-confirm protocol]]. We measured the
+[the Fv-screen/Fab-confirm protocol](Screening%20on%20Fv%20Confirming%20on%20Fab.md). We measured the
 consequence directly — in our first prediction, the VH/VL interface was the *worst*-scoring
 part of the model, exactly as the theory predicts.
 
@@ -144,7 +144,7 @@ of 1/13 ≈ 7.7%:
 
 **Four substitutions in a 13-residue loop earns full novelty marks.** That is very reachable,
 which is a useful thing to know before you start: novelty is among the cheapest points
-available. See [[The Eight Metrics|the metrics note]] for how the scoring bands work.
+available. See [the metrics note](The%20Eight%20Metrics.md) for how the scoring bands work.
 
 ## 7. One thing that surprised us
 
@@ -157,8 +157,8 @@ evolutionary ancestry. A tool trained to recognise V domains recognises it becau
 it *is* one.
 
 Real antibody domains scored ~31 on the tool's confidence measure; PD-1 scored ~16. Clean
-separation — but only if you look for it. Full story in [[Eight Silent Failures|the traps note]].
+separation — but only if you look for it. Full story in [the traps note](Eight%20Silent%20Failures.md).
 
 ---
 
-**Next:** [[De Novo Design and the Two Challenges|what we're actually being asked to design]].
+**Next:** [what we're actually being asked to design](De%20Novo%20Design%20and%20the%20Two%20Challenges.md).

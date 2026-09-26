@@ -1,6 +1,6 @@
 # The post-training-cutoff test — result
 
-Analysis exactly as fixed in [[prereg_post_cutoff_test|the pre-registration]], which was written before target selection and before any fold. Targets and the novelty screen are in [[postcutoff_targets|the target record]]. Five antibody–antigen complexes released 2024-09 to 2026-07, all ≥7 months clear of Boltz-2's **2023-06-01** release-date cutoff, each with a closest pre-cutoff CDR-H3 relative ≤44.4% identical.
+Analysis exactly as fixed in [the pre-registration](prereg_post_cutoff_test.md), which was written before target selection and before any fold. Targets and the novelty screen are in [the target record](postcutoff_targets.md). Five antibody–antigen complexes released 2024-09 to 2026-07, all ≥7 months clear of Boltz-2's **2023-06-01** release-date cutoff, each with a closest pre-cutoff CDR-H3 relative ≤44.4% identical.
 
 **DockQ here is genuine prediction accuracy** — each target scored against its own released crystal, same molecule, known answer the model has not seen. That differs from the variant panel, where mutants were scored against the 5GGS crystal and DockQ measured retention of the native binding mode.
 

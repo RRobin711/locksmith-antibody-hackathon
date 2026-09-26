@@ -11,13 +11,13 @@ Tags: [[Protein Design|protein design]] · [[Structure Prediction|structure pred
 **Session:** 2026-09-17, third. **Outcome:** the coordinate-sequence defect was confined to the
 post-cutoff prep and is already fixed; **5GGS is clean and nothing needs re-running**. A guard
 now makes the failure mechanical. Ends with a scoping recommendation.
-**Prerequisite:** [[2026-09-17-validating-the-inputs-and-withdrawing-a-result|the validation doc]], which found the defect.
+**Prerequisite:** [the validation doc](2026-09-17-validating-the-inputs-and-withdrawing-a-result.md), which found the defect.
 
 ---
 
 ## 1. The sweep
 
-Full table in [[../../results/coordinate_sequence_sweep|the sweep results]]. The headline is
+Full table in [the sweep results](../../results/coordinate_sequence_sweep.md). The headline is
 that **5GGS has zero internal deletions** in either crystal copy — every coordinate/SEQRES
 difference is terminal truncation, and the coordinate sequence is a contiguous substring of
 SEQRES for all six chains.

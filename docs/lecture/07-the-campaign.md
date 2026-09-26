@@ -6,7 +6,7 @@ status: review
 
 # 07 — The Campaign: nine days, 1,266 folds, in order
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [[CORRECTIONS|corrections C1 and C2, and what they do and do not invalidate]] — C2 also refutes the contact-count rule this course calls its best finding. Challenge 1 is unaffected.
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1 and C2, and what they do and do not invalidate](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding. Challenge 1 is unaffected.
 
 ## What this chapter teaches
 
@@ -25,7 +25,7 @@ inherited for bad reasons*.
 
 ## The ledger, before the narrative
 
-**Folds per day**, from the modification times of the `pae_*.npz` files [[03-the-toolchain#3.1 Boltz-2 — the primary predictor|Boltz-2]] writes for
+**Folds per day**, from the modification times of the `pae_*.npz` files [Boltz-2](03-the-toolchain.md#31-boltz-2-the-primary-predictor) writes for
 every completed prediction. One fold = one prediction that produced a parseable Predicted
 Aligned Error (PAE) matrix.
 
@@ -63,9 +63,9 @@ Final Score (0–100) = [ 0.60 × Binding_struct + 0.20 × Developability
 ```
 
 Each category term is 0–10. `Binding_struct` is the **mean** of six sub-scores for Challenge 1
-([[03-the-toolchain#4.3 ipSAE — interface confidence from the PAE|ipSAE]], [[03-the-toolchain#4.1 DockQ 2.1.3 — two flags that both default wrong|DockQ]], ΔG, interface contacts, interface pLDDT, CDR SASA) and of five for Challenge 2,
+([ipSAE](03-the-toolchain.md#43-ipsae-interface-confidence-from-the-pae), [DockQ](03-the-toolchain.md#41-dockq-213-two-flags-that-both-default-wrong), ΔG, interface contacts, interface pLDDT, CDR SASA) and of five for Challenge 2,
 which has no DockQ because a de novo design has no reference structure. `Developability` is
-one metric ([[03-the-toolchain#4.4 NetSolP-1.0 — sequence-only solubility, and a positive control that chose the model|NetSolP]] solubility); `Novelty` is one (CDR-H3 identity). Each of the eight metrics
+one metric ([NetSolP](03-the-toolchain.md#44-netsolp-10-sequence-only-solubility-and-a-positive-control-that-chose-the-model) solubility); `Novelty` is one (CDR-H3 identity). Each of the eight metrics
 maps a raw value onto 0–10 through three bands and carries a hard cutoff below which the
 design is not penalised but **non-viable**. Challenge 1 redesigns pembrolizumab's heavy-chain
 CDRs on PDB entry **5GGS**; Challenge 2 designs a VH/VL de novo. 100 + 100 + 50 presentation =
@@ -74,8 +74,8 @@ CDRs on PDB entry **5GGS**; Challenge 2 designs a VH/VL de novo. 100 + 100 + 50 
 Three pieces of arithmetic, done with no compute, shaped everything after. **One design per
 challenge** — the checklist permits one folder each, no "submit ten, keep the best" — converts
 the task from *generate-and-rank* into *generate, rank internally, bet on one*, which is why so
-much of the project is about the [[04-measurement-theory#1.3 Reliability|reliability]] of a ranking; see
-[[06-allocation-and-selection|how a fixed fold budget splits between candidates and seeds]].
+much of the project is about the [reliability](04-measurement-theory.md#13-reliability) of a ranking; see
+[how a fixed fold budget splits between candidates and seeds](06-allocation-and-selection.md).
 **Optimise the minimum of the binding sub-scores, not the mean**: binding is a mean over six, so
 lifting the weakest sub-score from 5 to 9 is worth `0.60 × (4/6) × 10 = 4.0` points and lifting an
 already-good one is worth nothing — the same insight (*under an aggregator, find the argmin
@@ -88,11 +88,11 @@ could later separate "we chose a convention" from "the handbook said so". CDR SA
 specified bound or unbound, and the two readings *conflict in sign* with the contacts metric
 (better burial ⇒ more contacts but **less** bound CDR SASA). The example FASTA is Fab-length with
 a His-tag while NetSolP is documented on Fv. Band-edge ties are undefined. And contacts and ΔG
-both come from [[03-the-toolchain#4.2 PRODIGY 2.4.0 — ΔG and contacts|PRODIGY]] on the same interface yet occupy two of six binding slots — prophetic,
+both come from [PRODIGY](03-the-toolchain.md#42-prodigy-240-δg-and-contacts) on the same interface yet occupy two of six binding slots — prophetic,
 since on day 7 PRODIGY's ΔG proves blind to the interface.
 
 **Inherited by day 2:** a rubric expressed as data, and the commitment in `PLAN.md` §3 —
-*[[02-the-engineering-problem#6. Build the judge before the contestant|build the judge before the contestant]]*, gated behind G0: *"Harness reproduces ground truth;
+*[build the judge before the contestant](02-the-engineering-problem.md#6-build-the-judge-before-the-contestant)*, gated behind G0: *"Harness reproduces ground truth;
 pembrolizumab passes every binding gate and fails novelty; decoy rejected."* The best decision
 in the project.
 
@@ -103,7 +103,7 @@ in the project.
 `knowledge/The Environment Saga.md` opens honestly: **roughly half the day went into getting
 software to run at all.**
 
-**The [[03-the-toolchain#5. The numpy 2.0 fault line, and isolation as architecture|numpy 2.0]] fault line.** `prodigy-prot` 2.4.0 requires `numpy>=2` (2.4.6); DockQ 2.1.3 and
+**The [numpy 2.0](03-the-toolchain.md#5-the-numpy-20-fault-line-and-isolation-as-architecture) fault line.** `prodigy-prot` 2.4.0 requires `numpy>=2` (2.4.6); DockQ 2.1.3 and
 Boltz-2 2.2.1 require `numpy<2` (1.26.4); the main environment wants `numpy>=2` (2.5.3). Genuine
 incompatibilities — **the tools physically cannot share an environment**. Resolution:
 `uv tool install` per conflicting tool, each with its own environment and a CLI shim, invoked as
@@ -127,8 +127,8 @@ into RAM one at a time; 3.2 GB took minutes and looked like a hang. Additive bea
 **Two traps that would have produced confident wrong numbers**, caught only because the harness
 was run on molecules whose answers were known.
 
-*[[03-the-toolchain#4.5 ANARCII 2.0.8 — IMGT numbering, and the antigen it numbered as an antibody|ANARCII]] numbers PD-1 as an antibody.* PD-1 is an immunoglobulin-superfamily member with an
-**[[01-the-biological-problem#2.5 The IgV fold, and the trap it set|IgV fold]]** — by fold it *is* a V domain — so ANARCII assigns it `CDR3=GAISLAPKA`. Correct
+*[ANARCII](03-the-toolchain.md#45-anarcii-208-imgt-numbering-and-the-antigen-it-numbered-as-an-antibody) numbers PD-1 as an antibody.* PD-1 is an immunoglobulin-superfamily member with an
+**[IgV fold](01-the-biological-problem.md#25-the-igv-fold-and-the-trap-it-set)** — by fold it *is* a V domain — so ANARCII assigns it `CDR3=GAISLAPKA`. Correct
 behaviour on out-of-distribution input, not a bug. The separation is in the score: true V
 domains **30.7–30.9**, PD-1 **15.8–16.2**. Mitigation: `MIN_V_DOMAIN_SCORE = 25.0` plus explicit
 chain assignment, never auto-detection. Without it, every CDR metric can be computed on the
@@ -209,7 +209,7 @@ problem rather than a configuration one. The spread across variants is **0.35, w
 0.20 cutoff-to-Good span**. ESM1b became a *declared convention* in `config/metrics.yaml` with
 evidence attached. Cost ~11 s/sequence against ~2 s for ESM12, paid on CPU while the GPU folds.
 
-[[03-the-toolchain#3.2 ColabFold / AlphaFold2-multimer|ColabFold]]/AF2 was installed and JAX verified on Blackwell by matmul. The first cross-predictor
+[ColabFold](03-the-toolchain.md#32-colabfold-alphafold2-multimer)/AF2 was installed and JAX verified on Blackwell by matmul. The first cross-predictor
 number looked like a scale offset — Boltz ipSAE **0.841** versus AF2's **0.654** on the same
 complex — until DockQ showed AF2's pose was genuinely worse (0.690 vs 0.820), so part of the gap
 was *deserved*. **When comparing two estimators' confidence, first compare their accuracy.**
@@ -239,7 +239,7 @@ at which point R² collapsed to **0.263** and the slope flattened threefold. Acr
 series DockQ fell 0.820 → 0.601 while ipSAE wandered within ±0.04 of 0.82, and the *highest*
 ipSAE in the panel (0.867) belonged to a variant at DockQ 0.742 against the wild type's 0.820.
 Rule: **report it, gate at 0.60, never rank on it**; see
-[[04-measurement-theory|why an outlier-anchored R² is not a ranking claim]].
+[why an outlier-anchored R² is not a ranking claim](04-measurement-theory.md).
 
 **The memorisation test, pre-registered at 10:45.** Boltz-2's training cutoff was read from the
 paper's own PDF — **2023-06-01 on PDB *release* date**, not deposition. Five complexes released
@@ -294,7 +294,7 @@ viable**. Ranking on DockQ would promote near-copies and then fail them on novel
 `selection_key: final`.
 
 **The baseline, and the most load-bearing negative result in Challenge 1.** Twenty plain
-[[03-the-toolchain#2.1 ProteinMPNN|ProteinMPNN]] designs at defaults, no filtering: **20 of 20 clear all eight gates.** The gates do
+[ProteinMPNN](03-the-toolchain.md#21-proteinmpnn) designs at defaults, no filtering: **20 of 20 clear all eight gates.** The gates do
 not bite on fixed-backbone redesign, because the binding geometry is guaranteed by the native
 backbone you did not change. Without this, "our funnel produced 20 viable designs" would later
 have read as a result. In the same pass **pembrolizumab itself scores 76.0 and is non-viable**,
@@ -319,7 +319,7 @@ n=8**. Hold that number.
 tightness earned a selection axis: 40 designs × 3 seeds, no gating before the correlation,
 deliberately, because shortlisting first restricts the range of the variable under test. Primary:
 spread→DockQ **−0.387 (p=0.014)**. But **CDR-H3 aromatic fraction**, computable from sequence at
-zero fold cost, predicted spread at **+0.621** *and* DockQ at **−0.536**. The [[05-experiment-design#3. Partial correlation, and a result that half-reversed|partial correlation]]
+zero fold cost, predicted spread at **+0.621** *and* DockQ at **−0.536**. The [partial correlation](05-experiment-design.md#3-partial-correlation-and-a-result-that-half-reversed)
 settled it: ensemble→DockQ controlling aromatics collapsed to **−0.081 (p=0.62)** while
 aromatics→DockQ controlling ensemble survived at **−0.410 (p=0.009)**. The **ensemble axis was
 dropped from selection**; aromatic fraction became a candidate pre-fold filter. Hold this too.
@@ -377,7 +377,7 @@ The rest of the day built what the next three sessions reason about. The continu
 **surrogate** was written — the banded composite with the step replaced by interpolation,
 reliability **0.689** against `final`'s 0.602 — and here `select/surrogate.py:46` hardcoded the
 band anchors `2.5, 7.0, 9.5`, which on day 9 turns out to have changed the winner. The G3
-aromatic filter **PASSED** its [[05-experiment-design#6. Equal-budget resampling, and varying the outcome|equal-budget]] null at **+0.0241, p<0.0001**. The winner was named
+aromatic filter **PASSED** its [equal-budget](05-experiment-design.md#6-equal-budget-resampling-and-varying-the-outcome) null at **+0.0241, p<0.0001**. The winner was named
 `mpnn_T0.5_s104_036`, with a **winner's-curse discount**: raw 7-seed mean 95.117, shortlist mean
 94.703, reliability 0.629 ⇒ predicted **94.963**; a fresh uncontaminated seed measured
 **94.962**. Batching was measured at **1.16×** (84 s → 72 s) against a projected 1.8×. And
@@ -436,12 +436,12 @@ aromatic count and charge constant by construction — found designs beat their 
 (p=2.4e−06), but **15 of 30 scrambles land inside the pool's DockQ range and 0 of 30 above its
 median**, so only the upper half of the pool is design-dependent.
 
-**And the metric ICCs, at zero fold cost.** `contacts` [[04-measurement-theory#2. The intraclass correlation, and metrics that turn out to be constants|ICC]] **0.003**; `cdr_sasa` ICC **0.000** —
+**And the metric ICCs, at zero fold cost.** `contacts` [ICC](04-measurement-theory.md#2-the-intraclass-correlation-and-metrics-that-turn-out-to-be-constants) **0.003**; `cdr_sasa` ICC **0.000** —
 pure seed noise. **Five of eight rubric metrics are constants across the pool**; the harness ranks
 on three (`dg`, `ipsae`, `dockq`), one of which is the blind one. This is arithmetic over folds
 already on disk; run after the day-5 baseline it would have redesigned the campaign.
 
-**The other pre-registered experiments.** *Specificity*: the named design is **[[01-the-biological-problem#6.4 TIM-3 cross-reactivity — a specificity failure|TIM-3]]-reactive** —
+**The other pre-registered experiments.** *Specificity*: the named design is **[TIM-3](01-the-biological-problem.md#64-tim-3-cross-reactivity-a-specificity-failure)-reactive** —
 ipSAE **0.568** against pembrolizumab's 0.323 and a real TIM-3 binder's 0.682 on the same antigen
 — tripping its **own pre-declared per-seed failure condition** on 2 of 3 seeds. The arm *mean*
 would have passed; the rule was written per-seed before the data existed and was applied as
@@ -467,13 +467,13 @@ undefined and worth 12 points** — the same design scores **84.0 / 90.0 / 96.0*
 midpoint / top of band. `top` was chosen because §7.3 states the range as 0–100 and only `top`
 attains it; the YAML records against its own interest that this is the most flattering reading.
 
-**Blackwell, and a feasibility gate done right.** Challenge 2 needs RFantibody ([[03-the-toolchain#2.2 RFdiffusion via RFantibody|RFdiffusion]] +
+**Blackwell, and a feasibility gate done right.** Challenge 2 needs RFantibody ([RFdiffusion](03-the-toolchain.md#22-rfdiffusion-via-rfantibody) +
 ProteinMPNN + RoseTTAFold2), which pins `torch==2.3.*` built against CUDA 11.8; the local GPU is
 an RTX 5070 Ti Laptop at compute capability **`sm_120`**, needing CUDA ≥ 12.8. The probe ran
 *before* the ~10 GB install and tested with arithmetic: a 512² fp32 matmul against numpy (cuBLAS)
 and a plain elementwise **ReLU** (PyTorch's own kernels). Both failed with `CUDA error: no kernel
 image is available for execution on the device` while `torch.cuda.is_available()` returned
-**True**, and `get_arch_list()` printed **`PTX entries: NONE`** — a CUDA binary carries [[03-the-toolchain#6.2 SASS versus PTX — the mechanism you need|SASS]]
+**True**, and `get_arch_list()` printed **`PTX entries: NONE`** — a CUDA binary carries [SASS](03-the-toolchain.md#62-sass-versus-ptx-the-mechanism-you-need)
 (machine code for one architecture) and/or PTX (a virtual ISA the driver can JIT to a newer chip),
 and with no PTX there is no forward-compatibility fallback. DGL's wheels stop at cu124 (cu126 and
 cu128 both HTTP 403), and `dgl-2.4.0+cu124` **pins `torch==2.4.0` exactly**, silently replacing
@@ -517,7 +517,7 @@ pinned for.* The decision rule should have fired at the Gate 0 failure, not afte
 
 **What the pilot found.** Hotspot conditioning appeared to work — `frac_iface_on_epitope`
 **0.712** conditioned against **0.501** unconditioned, d = 1.47, p = 0.0016 — but this was
-**[[05-experiment-design#7. Optional stopping|optional stopping]]**: an interim look at n = 10 v 5 (d = 0.96, ambiguous) extended to n = 18 v
+**[optional stopping](05-experiment-design.md#7-optional-stopping)**: an interim look at n = 10 v 5 (d = 0.96, ambiguous) extended to n = 18 v
 18 and tested at nominal α with no pre-registered rule, so the p is not the true type-I rate and
 d is upward-biased, CI **[0.733, 2.216]**. And the null arm is the wrong one: the decoy-patch
 control, hotspots on the opposite face of PD-1, **was never run and is still open**.
@@ -595,7 +595,7 @@ crystallised complex moves **0.050** and the Challenge 1 design **0.036**, while
 design swings **0.601**. *That variance is the real finding, and it is larger than the score.*
 
 **The argmax discovery.** `diffusion_samples` defaults to **1**, and Boltz **orders its output
-models by its own confidence** — so `model_0` at one sample is an **[[06-allocation-and-selection#5. Order statistics: when your prediction is silently a maximum|argmax by construction]]**.
+models by its own confidence** — so `model_0` at one sample is an **[argmax by construction](06-allocation-and-selection.md#5-order-statistics-when-your-prediction-is-silently-a-maximum)**.
 Every pose-derived number reported for a week (ipSAE, DockQ, ΔG, contacts, interface pLDDT, CDR
 SASA) was the top of a distribution never sampled. At five samples the Challenge 1 design moves
 ipSAE 0.039 but **DockQ 0.109**, turning 96.0 into a **94.0–96.0** envelope; the de novo design
@@ -623,8 +623,8 @@ PD-L1 footprint, the face the designs target, is **23/23** inside the folded con
 
 **The developability work, and the best science in the project.** `metrics/liabilities.py` —
 promised at `BUILD.md:62`, never written — was finally written and immediately reproduced the two
-N-[[01-the-biological-problem#6.1 Two N-glycosylation sequons in the Challenge 2 paratope|glycosylation sequons]] a reviewer had found in the Challenge 2 paratope (`N-V-S` at heavy 52,
-`N-A-S` at light 49, both introduced by ProteinMPNN) **and** caught an `NG` [[01-the-biological-problem#6.2 The NG deamidation motif in Challenge 1's CDR-H2|deamidation]] motif in
+N-[glycosylation sequons](01-the-biological-problem.md#61-two-n-glycosylation-sequons-in-the-challenge-2-paratope) a reviewer had found in the Challenge 2 paratope (`N-V-S` at heavy 52,
+`N-A-S` at light 49, both introduced by ProteinMPNN) **and** caught an `NG` [deamidation](01-the-biological-problem.md#62-the-ng-deamidation-motif-in-challenge-1s-cdr-h2) motif in
 Challenge 1 nobody had flagged. *A planned check that does not exist is indistinguishable from a
 check that passed.*
 
@@ -690,7 +690,7 @@ Six of the eight are one abstract error: **a value chosen once, for one purpose,
 that travelled into a context where it was wrong — and nothing could notice, because the value
 lived in prose, in a signature default, or in a tool's defaults rather than in an assertion.**
 Every one was free to check; none was, until something downstream broke. The full taxonomy is
-[[08-what-broke|the failure catalogue and its frequency analysis]].
+[the failure catalogue and its frequency analysis](08-what-broke.md).
 
 ---
 
@@ -719,5 +719,5 @@ that is recoverable from code. The failure mode is not writing too much — it i
 **storage medium** for facts that belong in a checked, single-source store, which is what day 9's
 test file started to fix, eight days late.
 
-Continue with [[08-what-broke|the failure catalogue, organised by generating mechanism]], then
-[[09-critique|the adversarial reading of what the nine days established]].
+Continue with [the failure catalogue, organised by generating mechanism](08-what-broke.md), then
+[the adversarial reading of what the nine days established](09-critique.md).

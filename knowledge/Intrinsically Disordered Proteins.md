@@ -8,7 +8,7 @@ Tags: [[IDP|intrinsically disordered proteins]] · [[Structural Biology|structur
 
 # Intrinsically Disordered Proteins
 
-Background reading Ajitesh sent ahead of the [[../PLAN|Locksmith Bio antibody hackathon]].
+Background reading Ajitesh sent ahead of the [Locksmith Bio antibody hackathon](../PLAN.md).
 Not the hackathon task — antibodies are well-folded — but this is the science the company
 is built on, and §4 below argues the connection is much tighter than it first looks.
 
@@ -30,7 +30,7 @@ instructions must live in the sequence itself.
 
 Uversky's opening sentence names the mental image this produces: the **"lock-and-key" model** —
 a rigid, precisely shaped protein meeting a precisely shaped partner. Hold onto that phrase; it
-comes back in [[Locksmith Bio — Company Context|why the company is called what it is]].
+comes back in [why the company is called what it is](Locksmith%20Bio%20%E2%80%94%20Company%20Context.md).
 
 **Intrinsically disordered proteins (IDPs)** break it. They are functional proteins that never
 adopt a unique structure. **Intrinsically disordered protein regions (IDPRs)** are the same thing
@@ -98,7 +98,7 @@ Their prescription is methods that report **distributions rather than averages**
 
 - **Single-molecule methods** — smFRET (they cite Holmstrom et al. on hepatitis C virus core
   protein), and increasingly in living cells. Also the natural home of
-  [[Nanopore Sensing of Disordered Proteins|nanopore sensing, which reads one molecule at a time]].
+  [nanopore sensing, which reads one molecule at a time](Nanopore%20Sensing%20of%20Disordered%20Proteins.md).
 - **Scattering** — SAXS/SANS, which constrain the maximum dimensions of the conformer population
   and can be used to *restrain* computed ensembles rather than fit a single structure.
 - **Computation** — molecular dynamics with improved force fields and enhanced sampling. They are
@@ -148,16 +148,16 @@ without its error distribution, or a latency p50 without the tail. The IDP field
 twenty-year worked example of what it costs to notice this late.
 
 **And it applies directly to the hackathon** — see
-[[Antibody Architecture|why CDR-H3 is the most variable part of the molecule]] and
-[[../PROJECT-STORY|the project story]] for the wider arc. The evaluation rubric asks for one `complex.pdb` —
+[why CDR-H3 is the most variable part of the molecule](Antibody%20Architecture.md) and
+[the project story](../PROJECT-STORY.md) for the wider arc. The evaluation rubric asks for one `complex.pdb` —
 a single set of coordinates — plus a PAE matrix, and scores the interface confidence. But
 **CDR-H3, the loop that determines antibody specificity, is the most conformationally variable
 element in the entire antibody repertoire.** Representing it as one static structure with a scalar
 confidence is exactly the modelling failure described in §4.
 
 That is the argument for the ensemble workstream — see
-[[Confidence Is Not Truth|the note on why confidence scores are not evidence]] and
-[[../PLAN|§10.1 of the delivery plan]]: sample CDR-H3 across seeds and predictors, report the
+[the note on why confidence scores are not evidence](Confidence%20Is%20Not%20Truth.md) and
+[§10.1 of the delivery plan](../PLAN.md): sample CDR-H3 across seeds and predictors, report the
 conformational spread, and show whether the designed interface is supported by a converged loop
 or by one lucky sample. It is a stronger claim than ipSAE can make, and it is stated in the
 vocabulary of the people reading the pitch.

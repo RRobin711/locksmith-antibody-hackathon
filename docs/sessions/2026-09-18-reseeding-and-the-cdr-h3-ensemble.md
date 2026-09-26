@@ -8,7 +8,7 @@ Tags: [[Protein Design|protein design]] · [[Structure Prediction|structure pred
 
 # Re-seeding, and the CDR-H3 ensemble
 
-> ⚠️ **One claim below was narrowed at n=40 — see [[2026-09-18-the-ensemble-axis-loses-to-a-free-sequence-feature|the validation doc]].**
+> ⚠️ **One claim below was narrowed at n=40 — see [the validation doc](2026-09-18-the-ensemble-axis-loses-to-a-free-sequence-feature.md).**
 > "Invisible to pLDDT" was measured on *mean loop* pLDDT (rho −0.168, n=8) and is too broad.
 > At n=40, **`iface_plddt` does partly see the heterogeneity (rho −0.496, p=0.001)**. The loop's
 > own mean is blind; the interface value is not. Separately, the ensemble axis was **dropped from
@@ -19,7 +19,7 @@ Tags: [[Protein Design|protein design]] · [[Structure Prediction|structure pred
 **Found:** the single-seed ranking is substantially noise (reliability 0.727, as predicted),
 the winner's curse is −0.0079 DockQ, and CDR-H3 ensemble spread varies **4.4×** across designs
 the rubric calls identical — invisible to pLDDT.
-**Prerequisite:** [[2026-09-18-m2-the-design-path-and-a-baseline-that-passes-everything|the M2 doc]] for the baseline this re-seeds.
+**Prerequisite:** [the M2 doc](2026-09-18-m2-the-design-path-and-a-baseline-that-passes-everything.md) for the baseline this re-seeds.
 
 ---
 

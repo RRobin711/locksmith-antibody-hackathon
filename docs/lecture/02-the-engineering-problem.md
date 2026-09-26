@@ -6,7 +6,7 @@ status: review
 
 # 02 — The Engineering Problem
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [[CORRECTIONS|corrections C1 and C2, and what they do and do not invalidate]] — C2 also refutes the contact-count rule this course calls its best finding. Challenge 1 is unaffected.
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1 and C2, and what they do and do not invalidate](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding. Challenge 1 is unaffected.
 
 **What this chapter teaches.** How to build a system that turns a prose rubric into a number you can
 defend. We work through the five-stage pipeline and the contract each stage signs; then we spend the
@@ -19,8 +19,8 @@ which reordered the project's own winner in a way that looks impossible until yo
 We close on reproducibility engineering, and on the ratio that characterises the whole codebase:
 roughly 53% of the code exists to check the other half.
 
-The biology this system is scoring is in [[01-the-biological-problem|the biology chapter]]; the
-individual tools and their gotchas are in [[03-the-toolchain|the toolchain chapter]]. No prior
+The biology this system is scoring is in [the biology chapter](01-the-biological-problem.md); the
+individual tools and their gotchas are in [the toolchain chapter](03-the-toolchain.md). No prior
 exposure to either is needed here.
 
 **Scale, for orientation.** 18,020 lines of Python across `src/`, `scripts/` and `tests/`; 3,407 of
@@ -50,7 +50,7 @@ Two consequences follow, opposite in sign.
 
 **The structure predictor is not infrastructure; it is a scored component** (`PLAN.md:28-31`).
 Choosing it and configuring it is a first-class design decision, on the same footing as choosing the
-sequence. If [[03-the-toolchain#3.1 Boltz-2 — the primary predictor|Boltz-2]] produces an optimistic pose, that optimism is *in the submitted file* and is
+sequence. If [Boltz-2](03-the-toolchain.md#31-boltz-2-the-primary-predictor) produces an optimistic pose, that optimism is *in the submitted file* and is
 what gets graded.
 
 **The evaluation is deterministic given our files.** Nothing the organisers do introduces variance.
@@ -66,7 +66,7 @@ A third fact shapes selection: **eight hard cutoffs, all must pass, one submissi
 > error.
 
 That is a constrained optimisation over a discontinuous objective, which is why
-[[06-allocation-and-selection|the selection chapter]] spends so long on it.
+[the selection chapter](06-allocation-and-selection.md) spends so long on it.
 
 ---
 
@@ -157,7 +157,7 @@ Final Score (0–100) = [ 0.60 × Binding_struct + 0.20 × Developability + 0.20
 ```
 
 Each category is the **unweighted mean of its members' 0–10 sub-scores**. Challenge 1's binding mean
-is over **six** metrics; Challenge 2's over **five**, because [[03-the-toolchain#4.1 DockQ 2.1.3 — two flags that both default wrong|DockQ]] is excluded. Implemented at
+is over **six** metrics; Challenge 2's over **five**, because [DockQ](03-the-toolchain.md#41-dockq-213-two-flags-that-both-default-wrong) is excluded. Implemented at
 `src/locksmith/score.py:76-84`:
 
 ```python
@@ -179,7 +179,7 @@ is wasted past the point where it stops being the argmin.
 
 ### 3.3 Worked arithmetic: how a design reaches 96.0
 
-Challenge 1, design `mpnn_T0.5_s104_036` with the `N55Q` [[01-the-biological-problem#6.2 The NG deamidation motif in Challenge 1's CDR-H2|deamidation]] fix, folded on the handbook
+Challenge 1, design `mpnn_T0.5_s104_036` with the `N55Q` [deamidation](01-the-biological-problem.md#62-the-ng-deamidation-motif-in-challenge-1s-cdr-h2) fix, folded on the handbook
 §4.2.2 constructs under conventions `band_value=top`, `dockq_interface_agg=global`,
 `netsolp_construct=fv`, `netsolp_chain_agg=min` (`submission/.../Challenge1/metrics/scores.md`):
 
@@ -294,7 +294,7 @@ attached**. The full list of seventeen keys, with the interesting ones annotated
   more contacts but *less* bound CDR SASA.
 - `submission_form: fab` — UNRESOLVED; the handbook's example FASTA is Fab-length.
 - `ipsae_pae_cutoff: 10`, `ipsae_dist_cutoff: 15`, `ipsae_row_type: max`.
-- `numbering_scheme: imgt` — see [[01-the-biological-problem|why the scheme is part of the metric]].
+- `numbering_scheme: imgt` — see [why the scheme is part of the metric](01-the-biological-problem.md).
 - `interface_dist_cutoff: 5.0` Å heavy-atom.
 - `dockq_allowed_mismatches: 40`, `dockq_chain_mapping: ABC:ABC`, `dockq_interface_agg: global`
   (default **changed 2026-09-20** from `min`; the aggregation choice is worth a full band and
@@ -353,13 +353,13 @@ the *expectation*: pembrolizumab must fail novelty, because it is the molecule y
 to copy. The rewritten assertion — passes all binding gates **and** fails novelty — is strictly
 stronger than the one it replaced.
 
-*Three-valued viability.* With [[03-the-toolchain#4.3 ipSAE — interface confidence from the PAE|ipSAE]], interface pLDDT and [[03-the-toolchain#4.4 NetSolP-1.0 — sequence-only solubility, and a positive control that chose the model|NetSolP]] unmeasurable at that point, the
+*Three-valued viability.* With [ipSAE](03-the-toolchain.md#43-ipsae-interface-confidence-from-the-pae), interface pLDDT and [NetSolP](03-the-toolchain.md#44-netsolp-10-sequence-only-solubility-and-a-positive-control-that-chose-the-model) unmeasurable at that point, the
 harness reported viability **UNKNOWN**, not `True`. Returning "viable because nothing measured
 failed" is the bug. `score.py:71-74` makes this structural: a missing metric yields `viable=None`,
 never `True`, and `final` is withheld unless every category is present. `select.rank` then partitions
 UNKNOWN out with the non-viable rather than optimistically including it.
 
-*The gates do not bite on fixed-backbone redesign.* The 20-design baseline arm — plain [[03-the-toolchain#2.1 ProteinMPNN|ProteinMPNN]]
+*The gates do not bite on fixed-backbone redesign.* The 20-design baseline arm — plain [ProteinMPNN](03-the-toolchain.md#21-proteinmpnn)
 at T=0.1, no filtering, no reranking, no cherry-picking — had **20/20 clear all eight gates**. That
 is a real, slightly deflating piece of information: for Challenge 1 the hard cutoffs are not the
 binding constraint, so any claim that a clever filter "produced viable designs" has to beat 100%
@@ -369,14 +369,14 @@ baseline viability, not 0%.
 5GGS C/D/Y must agree with it; 5WT9 nivolumab must look like a genuine binder; and a **deliberate
 decoy** — pembrolizumab paired with the PD-1 copy it does *not* touch — **must be rejected**.
 *"Showing your measurement gives good scores to good things is only half a validation."* Three of
-the project's eight catalogued [[08-what-broke#Class 1 — Silent failures|silent failures]] were caught *only* because the harness was running on
+the project's eight catalogued [silent failures](08-what-broke.md#class-1-silent-failures) were caught *only* because the harness was running on
 structures whose answers were known.
 
 What Gate 0 did **not** buy is equally important and the project says so: the real negative control
 — a real antibody against an unrelated target, docked onto PD-1 — "costs eight folds and nobody ran
 it for a week". When finally run, HyHEL-10 (anti-lysozyme) cleared all five hard cutoffs on
-`model_0`. That story is in [[01-the-biological-problem|the biology chapter's closing section]] and
-[[09-critique|the critique]].
+`model_0`. That story is in [the biology chapter's closing section](01-the-biological-problem.md) and
+[the critique](09-critique.md).
 
 ---
 
@@ -394,7 +394,7 @@ tabulates all 16 band edges plus 8 minimums and reports **24/24 MATCH** at the e
 **The margin rule, and why its original justification was wrong.** The original rule (`PLAN.md:650-676`)
 was: "≥2σ margin on every gate because our estimates will not agree with the organisers' run." That
 reasoning is simply false — *the organisers do not re-fold.* Given the same PDB and PAE, ipSAE,
-DockQ, [[03-the-toolchain#4.2 PRODIGY 2.4.0 — ΔG and contacts|PRODIGY]] and SASA are deterministic. What actually varies between our run and theirs is
+DockQ, [PRODIGY](03-the-toolchain.md#42-prodigy-240-δg-and-contacts) and SASA are deterministic. What actually varies between our run and theirs is
 **implementation**: tool version, numbering scheme, SASA probe radius, bound versus unbound, chain
 pairing. That is reducible by *pinning*, not by margin.
 
@@ -443,7 +443,7 @@ the challenge explicitly forbids. So `selection_key: final`, with DockQ as tiebr
 had never been measured while the project reasoned for four sessions from DockQ's 0.727. Measured,
 `final` is **0.602 single-seed, 0.780 at 3 seeds**, with **22 of 40 designs changing their score
 across Boltz seeds** via `ipsae` (16 designs) and `dg` (17) crossing band edges as full 2.5-point
-steps. And [[06-allocation-and-selection#4. Banding: what a step function costs, and what changes when you relabel it|banding]] destroys resolution: 40 designs collapsed onto **three distinct values of
+steps. And [banding](06-allocation-and-selection.md#4-banding-what-a-step-function-costs-and-what-changes-when-you-relabel-it) destroys resolution: 40 designs collapsed onto **three distinct values of
 `final`**, {82.5, 85.0, 87.5}. A wider pool then adds candidates without adding any ordering.
 
 Two properties of a step function are at work and both are worth internalising. A step function does
@@ -558,7 +558,7 @@ catch, one level up."
 because the heredoc that created the script was still the command line of a live parent shell, so the
 bracketed literal matched from another process's cmdline. An earlier instance idled the GPU **2 h
 39 m**. Rule: **gate long jobs on artefacts, never on process tables.** Full tally in
-[[03-the-toolchain|the workflow section of the toolchain chapter]] — six occurrences, about 4 h 22 m
+[the workflow section of the toolchain chapter](03-the-toolchain.md) — six occurrences, about 4 h 22 m
 of measured idle GPU.
 
 **9.10 The adjacent class: a program that runs correctly on the wrong input.** `io/pdb.py`'s
@@ -679,7 +679,7 @@ free parameter that the original specification never constrained.
 The design was **not** swapped. The reasoning (`audit_response` §B0, `README.md:60-66`): the 1st–4th
 gap is **0.191** surrogate points against a pooled within-design seed sd of **0.226** and a 7-seed
 standard error of **0.086**. The whole top six spans **0.205** — less than one seed. Single-seed
-[[04-measurement-theory#1.3 Reliability|reliability]] on this shortlist is **0.296**. *"Swapping now would mean acting on a ranking this
+[reliability](04-measurement-theory.md#13-reliability) on this shortlist is **0.296**. *"Swapping now would mean acting on a ranking this
 project has already measured as unable to rank."*
 
 And then the line that makes the whole episode worth teaching: **"the winner changing is itself
@@ -690,7 +690,7 @@ One residual is flagged rather than fixed: the reliability figure **0.629** quot
 shortlist "does not reproduce from the recorded inputs under any standard estimator we tried" — the
 plug-in variance ratio gives **0.276** under `midpoint` and **0.296** under `top`. Flagged, because
 "the original script would settle it and guessing would add a fifth number."
-[[04-measurement-theory|The measurement chapter]] works through what those numbers mean.
+[The measurement chapter](04-measurement-theory.md) works through what those numbers mean.
 
 ---
 
@@ -776,7 +776,7 @@ artefact rather than the process table"); after a pod restart the Jupyter token 
 **query parameter** (`?token=<t>` returns 200, the `Authorization: token <t>` header form returns
 **403** with the same valid token, and a 403 reads as "credential expired"); and prefer one HTTP
 transfer over paste or keystroke simulation above about 1 KB — see
-[[03-the-toolchain|the 11,092-of-11,096-character transfer]].
+[the 11,092-of-11,096-character transfer](03-the-toolchain.md).
 
 Scope discipline, stated explicitly: the pass says the bytes are *unaltered in transit*. It says
 nothing about whether the data is *correct*.
@@ -883,7 +883,7 @@ applied; **exit 0** = built.
 8. **A green suite is a claim about the code; a suite shown to go red on reintroduced defects is
    evidence about the suite.**
 
-Next: [[03-the-toolchain|every tool, how it was invoked, and what it silently gets wrong]]. For the
+Next: [every tool, how it was invoked, and what it silently gets wrong](03-the-toolchain.md). For the
 statistics underneath the reliability numbers used here, see
-[[04-measurement-theory|the measurement-theory chapter]]; for how the shortlist and seed budget were
-sized, [[06-allocation-and-selection|allocation and selection]].
+[the measurement-theory chapter](04-measurement-theory.md); for how the shortlist and seed budget were
+sized, [allocation and selection](06-allocation-and-selection.md).

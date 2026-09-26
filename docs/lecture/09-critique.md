@@ -6,7 +6,7 @@ status: review
 
 # Chapter 09 — Critique: a rigorous project, badly ordered
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [[CORRECTIONS|corrections C1 and C2, and what they do and do not invalidate]] — C2 also refutes the contact-count rule this course calls its best finding. Challenge 1 is unaffected.
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1 and C2, and what they do and do not invalidate](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding. Challenge 1 is unaffected.
 
 ## What this chapter teaches
 
@@ -43,7 +43,7 @@ and fails novelty; the decoy is rejected.* This ordering bought two results that
 would have been invisible otherwise. Pembrolizumab itself scores **76.0 and is
 non-viable**, failing the novelty gate at 100% CDR-H3 identity — a harness that
 scored the parent as viable would have been silently wrong about the one molecule
-whose answer is known in advance. And **20 of 20** baseline [[03-the-toolchain#2.1 ProteinMPNN|ProteinMPNN]] designs at
+whose answer is known in advance. And **20 of 20** baseline [ProteinMPNN](03-the-toolchain.md#21-proteinmpnn) designs at
 defaults clear all eight gates, which establishes that the gates do not bite on
 fixed-backbone redesign. Without that baseline, *"our funnel produced twenty
 viable designs"* would have read as an achievement rather than as a measurement
@@ -51,7 +51,7 @@ of the gates' inertness.
 
 **Pre-registration that cost something.** Eleven pre-registration documents exist
 and at least three fired against the author's interest. `results/specificity.md`
-records the pre-declared failure condition triggering on [[01-the-biological-problem#6.4 TIM-3 cross-reactivity — a specificity failure|TIM-3]] in 2 of 3 seeds,
+records the pre-declared failure condition triggering on [TIM-3](01-the-biological-problem.md#64-tim-3-cross-reactivity-a-specificity-failure) in 2 of 3 seeds,
 and notes explicitly that *the arm mean would have passed* — the rule was written
 per-seed before the data existed and was applied as written. The design ships
 carrying a cross-reactivity caveat that a post-hoc analysis choice would have
@@ -65,9 +65,9 @@ document the contamination of their own pre-registration.
 **Nulls with matched geometry.** The epitope knockout in `results/validity.md` §1
 carries a matched off-interface alanine control, a fresh MSA for every mutant so
 the alignment cannot leak native residues back, and a dose–response across 0, 349
-and 527 deleted antigen contacts. It yields a falsifiable partition: [[03-the-toolchain#4.3 ipSAE — interface confidence from the PAE|ipSAE]] moves
+and 527 deleted antigen contacts. It yields a falsifiable partition: [ipSAE](03-the-toolchain.md#43-ipsae-interface-confidence-from-the-pae) moves
 **17.1×** its own seed standard deviation, interface pLDDT **64.0×**, while
-[[03-the-toolchain#4.2 PRODIGY 2.4.0 — ΔG and contacts|PRODIGY]] ΔG moves **0.9×** and contacts **1.2×** — the last two are blind. The
+[PRODIGY](03-the-toolchain.md#42-prodigy-240-δg-and-contacts) ΔG moves **0.9×** and contacts **1.2×** — the last two are blind. The
 composition-matched CDR-H3 scramble holds length, composition, aromatic count and
 charge constant, so every cheap sequence feature the project used as a predictor
 is controlled by construction.
@@ -88,7 +88,7 @@ and 17/18 residues), and the write-up correctly labels the result conditional.
 ### 2.1 Precision before validity
 
 The project spent five sessions building increasingly sophisticated theory about
-**how precisely it was measuring**: [[04-measurement-theory#3. Spearman–Brown: what averaging buys|Spearman–Brown]], disattenuation, range
+**how precisely it was measuring**: [Spearman–Brown](04-measurement-theory.md#3-spearmanbrown-what-averaging-buys), disattenuation, range
 restriction, optimal allocation, winner's-curse shrinkage. Every one of those is
 an answer to *"how noisy is my ruler?"* None of them touches *"is my ruler
 measuring the thing I care about?"*
@@ -97,7 +97,7 @@ When validity was finally measured, on day 7, the answer was severe.
 `results/metric_validity.md` — whose own opening line notes it was written *after
 an independent audit pointed out that six days had been spent on ranking
 precision and none on whether the ranked quantities carry design information* —
-found `contacts` at **[[04-measurement-theory#2. The intraclass correlation, and metrics that turn out to be constants|ICC]] 0.003** and `cdr_sasa` at **ICC 0.000**: pure sampler
+found `contacts` at **[ICC](04-measurement-theory.md#2-the-intraclass-correlation-and-metrics-that-turn-out-to-be-constants) 0.003** and `cdr_sasa` at **ICC 0.000**: pure sampler
 noise. **Five of the eight rubric metrics are constants across the pool.** The
 eight-metric harness ranks on three. And of those three, `results/validity.md`
 shows that PRODIGY ΔG is **blind to the epitope** — 0.9× its own seed standard
@@ -215,7 +215,7 @@ project is"* and presents a headline table giving Challenge 2 a score of
 `submission/LOCKSMITH_DEV/LOCKSMITH_DEV_Challenge2/metrics/scores.md:18` both
 record **91.2**, because the design that actually shipped is the S→A
 sequon-fixed variant — 4.8 composite points paid deliberately to remove two
-[[01-the-biological-problem#6.1 Two N-glycosylation sequons in the Challenge 2 paratope|glycosylation sequons]] from the paratope. The substitutions are physically present
+[glycosylation sequons](01-the-biological-problem.md#61-two-n-glycosylation-sequons-in-the-challenge-2-paratope) from the paratope. The substitutions are physically present
 in the packaged FASTA.
 
 A stale headline is minor. A stale headline in the designated source of truth,
@@ -224,7 +224,7 @@ danger, is not.
 
 ### 3.3 The `0.629` reliability puzzle resolves, and then does not
 
-`STATE.md` §8 lists as unresolved: the [[04-measurement-theory#1.3 Reliability|reliability]] figure 0.629 *"does not
+`STATE.md` §8 lists as unresolved: the [reliability](04-measurement-theory.md#13-reliability) figure 0.629 *"does not
 reproduce (plug-in gives 0.276 midpoint / 0.296 top)"*, flagged but not
 corrected.
 
@@ -287,7 +287,7 @@ actually stops it.
 **Optimising a component that could not move the result.** *"Redesign the
 light-chain CDRs"* appeared in three documents and was echoed by two independent
 reviewers over two days. The refutation is two lines of arithmetic that were
-available the whole time: [[03-the-toolchain#4.4 NetSolP-1.0 — sequence-only solubility, and a positive control that chose the model|NetSolP]] aggregates as `min(VH, VL)`; the shipped
+available the whole time: [NetSolP](03-the-toolchain.md#44-netsolp-10-sequence-only-solubility-and-a-positive-control-that-chose-the-model) aggregates as `min(VH, VL)`; the shipped
 design's VH is **0.699** against a Good edge of **0.70**; therefore the maximum
 over all possible light chains of `min(0.699, VL)` is 0.699, and the band cannot
 move — **by 0.001**. The empirical half was free too, NetSolP being
@@ -310,7 +310,7 @@ lines against 18,020 lines of Python — a ratio of **1.04 : 1** — of which on
 I do not think the charge holds, and the evidence is specific. Essentially every
 correction in this project was found by *re-reading its own written record
 against fresh data*, not by a tool. The −0.081 → −0.289 reversal was findable
-because `results/ensemble_power.md` had recorded the exact [[05-experiment-design#3. Partial correlation, and a result that half-reversed|partial correlation]]
+because `results/ensemble_power.md` had recorded the exact [partial correlation](05-experiment-design.md#3-partial-correlation-and-a-result-that-half-reversed)
 and its n. The allocation claim was refuted because **the refuting row was
 printed directly above it in the same file**. The 0.849-versus-0.856 withdrawal
 happened because `results/m3_winner.md` recorded that 0.856 was an eight-seed
@@ -356,7 +356,7 @@ measurement stack, and these are the actual deliverable:
    anti-lysozyme antibody — sweeps the entire gate set** as a PD-1 binder.
 3. Five of eight rubric metrics are constants; the harness ranks on three; one of
    the three is blind to the epitope.
-4. The predictor's median [[03-the-toolchain#4.1 DockQ 2.1.3 — two flags that both default wrong|DockQ]] on genuinely novel antibody–antigen pairs is
+4. The predictor's median [DockQ](03-the-toolchain.md#41-dockq-213-two-flags-that-both-default-wrong) on genuinely novel antibody–antigen pairs is
    **0.291**.
 5. A mutation that abolishes binding scores above the wild type on the primary
    gate.
@@ -527,8 +527,8 @@ weakness is that it asked in the reverse of cost order. That ordering, not any
 individual defect, is the thing worth teaching — and it is the reason this
 chapter exists rather than a list of bugs.
 
-See [[08-what-broke|the full failure catalogue]] for the incident-level record,
-[[04-measurement-theory|the measurement theory]] for the reliability machinery
-discussed in §3.3, [[06-allocation-and-selection|allocation and selection]] for
-the [[06-allocation-and-selection#4. Banding: what a step function costs, and what changes when you relabel it|banding]] mathematics of §3.1, and [[11-study-plan|the study plan]] for how to
+See [the full failure catalogue](08-what-broke.md) for the incident-level record,
+[the measurement theory](04-measurement-theory.md) for the reliability machinery
+discussed in §3.3, [allocation and selection](06-allocation-and-selection.md) for
+the [banding](06-allocation-and-selection.md#4-banding-what-a-step-function-costs-and-what-changes-when-you-relabel-it) mathematics of §3.1, and [the study plan](11-study-plan.md) for how to
 practise avoiding all of it.

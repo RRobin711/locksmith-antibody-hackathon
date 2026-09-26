@@ -359,6 +359,29 @@ SEQRES, including the His-tag on the heavy chain. Our earlier folds used 5GGS's
 *coordinate* sequences, 10 residues shorter at the antigen's termini; re-folding on the
 handbook constructs moved DockQ by −0.034 and changed no band.
 
+## The two challenges ship different constructs, deliberately
+
+A reviewer diffing our two FASTAs will find Challenge 1 at **232 / 218** residues and
+Challenge 2 at **118 / 106**. That is not an inconsistency, and it is worth stating rather
+than leaving to be discovered.
+
+**Challenge 1 ships Fab-length chains** (VH+CH1, VL+CL) because the handbook's own worked
+example is a Fab -- its heavy chain runs past the variable domain into CH1 and ends in a
+His-tag -- and this challenge is a redesign of a real molecule whose constant domains
+exist and are unchanged. Matching their example is the safer precedent where the spec is
+ambiguous.
+
+**Challenge 2 ships Fv only** (VH, VL) because a de novo design *has* no constant domains.
+Nothing was designed, folded or scored beyond the variable domains, so shipping a grafted
+constant region would mean shipping residues we never modelled.
+
+**This does not affect any score**, because `netsolp_construct=fv` extracts the Fv from
+whatever is submitted -- the handbook specifies NetSolP on the Fv (S6.2.1) twice -- and
+every other metric is computed from the folded coordinates, which are Fv-only in both
+cases. We record it because a silent asymmetry between two sibling deliverables reads as
+carelessness, and because the Fab-or-Fv question is one the handbook leaves genuinely
+open.
+
 ## Known ambiguities in the rubric, and what we chose
 
 | ambiguity | handbook | our choice | cost if wrong |

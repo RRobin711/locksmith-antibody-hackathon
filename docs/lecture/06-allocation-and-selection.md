@@ -6,7 +6,7 @@ status: review
 
 # 06 — Allocation and Selection
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [[CORRECTIONS|corrections C1 and C2, and what they do and do not invalidate]] — C2 also refutes the contact-count rule this course calls its best finding. Challenge 1 is unaffected.
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1 and C2, and what they do and do not invalidate](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding. Challenge 1 is unaffected.
 
 **What this chapter teaches.** You have a noisy instrument, a pool of candidates, and a budget. Where
 does the next measurement go — a new candidate, or another replicate of an old one? The answer is not
@@ -19,12 +19,12 @@ you paid for and reorders under a change of convention), and **order statistics 
 generator** (your "prediction" is silently a maximum).
 
 This is the chapter where the measurement theory of
-[[04-measurement-theory|the reliability chapter]] turns into decisions, and where several of the
+[the reliability chapter](04-measurement-theory.md) turns into decisions, and where several of the
 campaign's own decisions turn out to have been wrong. The banding section contains the course's
 sharpest single result: a claim written in a config file, repeated in an audit, and **false as a
 theorem** — with an exhaustively verified counterexample.
 
-Formulas are derived; arithmetic is shown. [[10-glossary|The glossary]] carries the terms.
+Formulas are derived; arithmetic is shown. [The glossary](10-glossary.md) carries the terms.
 
 ---
 
@@ -115,11 +115,11 @@ from 0.0907 Å² to **0.0145 Å²**, and with it:
 
 (Those 0.591/0.813 figures are the ones that disagree with the table above at the third significant
 figure; the reconstruction of why is in
-[[04-measurement-theory|the measurement-theory chapter's section on figures that disagree]].)
+[the measurement-theory chapter's section on figures that disagree](04-measurement-theory.md).)
 
 A leverage check like this costs one line of code and it is the difference between "the ensemble axis
 carries signal" and "one design does". The question was then settled properly on the full 239-design
-pool: between-design variance **0.13720 Å²**, k = 2 [[04-measurement-theory#1.3 Reliability|reliability]] **0.686**; dropping the top three
+pool: between-design variance **0.13720 Å²**, k = 2 [reliability](04-measurement-theory.md#13-reliability) **0.686**; dropping the top three
 spreads (2.58, 2.24, 2.09 Å) moves it to 0.10264 Å² and **0.620**. *"The variation survives, so it is
 a distribution, not an artefact of a few designs."*
 
@@ -128,7 +128,7 @@ a distribution, not an artefact of a few designs."*
 Now spend the budget. Going from 2 to 5 seeds per design costs **4×** the folds and recovers, at best,
 `0.967/0.769 = 1.26×` of the attenuated effect. The *same* folds spent on new designs take n from 60
 to 239 and shrink the Fisher-z standard error (see
-[[05-experiment-design|the power machinery]]) by `√(236/57) = 2.0×`. The allocation table makes it
+[the power machinery](05-experiment-design.md)) by `√(236/57) = 2.0×`. The allocation table makes it
 concrete: at a 120-fold budget the detectable `ρ_true` at 80% power is **0.327** for k = 2 / n = 120
 against **0.591** for k = 7 / n = 20.
 
@@ -231,7 +231,7 @@ One genuinely good habit from the same work: **the i.i.d. assumption was tested,
 7-seed within-design sd was predicted at 0.529 from the 3-seed estimate and **measured at 0.467**
 (0.88×) — close enough that no systematic component appeared, so averaging kept paying up to k = 7.
 (Compare the mild evidence *against* i.i.d. seeds in
-[[04-measurement-theory|the Spearman–Brown section]]; these two checks disagree slightly and neither
+[the Spearman–Brown section](04-measurement-theory.md); these two checks disagree slightly and neither
 is decisive.)
 
 ---
@@ -282,7 +282,7 @@ Apply (6.3):
 Predicted 94.963; measured 94.962. One thousandth of a point apart.
 
 An earlier, cleaner instance is worth copying as a technique: on re-seeding, the seed-1 top design
-regressed **−0.0123** [[03-the-toolchain#4.1 DockQ 2.1.3 — two flags that both default wrong|DockQ]] while the average of all 8 re-seeded designs regressed **−0.0045**, so the
+regressed **−0.0123** [DockQ](03-the-toolchain.md#41-dockq-213-two-flags-that-both-default-wrong) while the average of all 8 re-seeded designs regressed **−0.0045**, so the
 **selection excess is −0.0079 DockQ**. Subtracting the shared drift from the winner's drift isolates
 the selection bias from whatever the re-run did to everything — that decomposition is the right way to
 measure a winner's curse empirically.
@@ -342,11 +342,11 @@ a threshold it is Good, in between Medium. Each band then contributes a fixed su
 A design far from an edge is perfectly reproducible. A design sitting on an edge flips on arbitrarily
 small noise, and the flip is worth a full 2.5 points of the composite under the midpoint convention.
 This is exactly the item-dependent, non-i.i.d. error component that made measured three-seed
-reliabilities fall below their [[04-measurement-theory#3. Spearman–Brown: what averaging buys|Spearman–Brown]] predictions in
-[[04-measurement-theory|the measurement-theory chapter]].
+reliabilities fall below their [Spearman–Brown](04-measurement-theory.md#3-spearmanbrown-what-averaging-buys) predictions in
+[the measurement-theory chapter](04-measurement-theory.md).
 
 Measured (`results/m3_plan_review.md` §3.2): **22 of 40 designs (55%)** change their single-seed
-composite across 3 seeds; the flipping sub-scores are **[[03-the-toolchain#4.3 ipSAE — interface confidence from the PAE|ipSAE]] (16 designs)** and **ΔG (17 designs)**;
+composite across 3 seeds; the flipping sub-scores are **[ipSAE](03-the-toolchain.md#43-ipsae-interface-confidence-from-the-pae) (16 designs)** and **ΔG (17 designs)**;
 single-seed reliability **0.602**; and — the cost that no amount of extra compute repairs — the
 **40 designs collapse onto three distinct values, {82.5, 85.0, 87.5}**. *"Scaling generation to 200
 does not add resolution, because banding is what removed it."*
@@ -559,7 +559,7 @@ reruns. About 50% more wall clock, available for the life of the project, and th
 found on day 9 of 9.
 
 **The independent confirmation is devastating**, and it links straight back to
-[[05-experiment-design|the negative-control panel]]: HyHEL-10, an anti-lysozyme antibody, cleared all
+[the negative-control panel](05-experiment-design.md): HyHEL-10, an anti-lysozyme antibody, cleared all
 five hard viability cutoffs on `model_0` — while its **median over five samples is ipSAE 0.219**.
 *"The maximum of five draws from a broad low distribution routinely lands above a threshold the
 distribution's centre is nowhere near. The gate is not broken. Reading the gate off a single diffusion
@@ -661,7 +661,7 @@ within the hour."*
    0.432 between depths, identical 15/30 zero count, the clearing design ranked 2nd at the shallow
    depth. Vary sampling depth before believing a unanimous null.
 
-This closes the mathematical core. [[07-the-campaign|The campaign chapter]] walks the nine days in
+This closes the mathematical core. [The campaign chapter](07-the-campaign.md) walks the nine days in
 order and shows where each of these ideas arrived — usually later than it should have.
-[[08-what-broke|The failure catalogue]] and [[09-critique|the critique]] take up what that lateness
+[The failure catalogue](08-what-broke.md) and [the critique](09-critique.md) take up what that lateness
 cost.

@@ -6,7 +6,7 @@ status: review
 
 # Chapter 10 — Glossary
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [[CORRECTIONS|corrections C1 and C2, and what they do and do not invalidate]] — C2 also refutes the contact-count rule this course calls its best finding. Challenge 1 is unaffected.
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1 and C2, and what they do and do not invalidate](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding. Challenge 1 is unaffected.
 
 ## What this chapter teaches
 
@@ -69,7 +69,7 @@ useless novelty screen: every antibody sits at **86–94%** identity to somethin
 
 **Fv** — "fragment, variable": just the two variable domains, VH and VL. The
 minimal binding unit. Cheaper to fold, but which of Fv and Fab you use changes
-answers — see `netsolp_construct` in [[02-the-engineering-problem|Chapter 02]].
+answers — see `netsolp_construct` in [Chapter 02](02-the-engineering-problem.md).
 
 **Glycosylation sequon** — the sequence motif **N-X-S/T** (asparagine, any residue
 except proline, then serine or threonine), which is a substrate for enzymatic
@@ -79,11 +79,11 @@ project's Challenge 2 sequons were in the paratope.
 **Heavy chain / light chain** — the two chain types in an antibody. The heavy
 chain contributes CDR-H3 and usually dominates binding.
 
-**[[01-the-biological-problem#2.5 The IgV fold, and the trap it set|IgV fold]]** — the immunoglobulin variable domain fold. PD-1 has one, which is
-why the antibody-numbering tool [[03-the-toolchain#4.5 ANARCII 2.0.8 — IMGT numbering, and the antigen it numbered as an antibody|ANARCII]] cheerfully numbers PD-1 *as an antibody*.
+**[IgV fold](01-the-biological-problem.md#25-the-igv-fold-and-the-trap-it-set)** — the immunoglobulin variable domain fold. PD-1 has one, which is
+why the antibody-numbering tool [ANARCII](03-the-toolchain.md#45-anarcii-208-imgt-numbering-and-the-antigen-it-numbered-as-an-antibody) cheerfully numbers PD-1 *as an antibody*.
 
 **IMGT** — a standardised antibody residue-numbering scheme. Numbering schemes
-matter more than they look: IMGT and [[01-the-biological-problem#2.4 Numbering schemes, and why the novelty gate depends on one|Kabat]] disagree on CDR-H3 boundaries, which
+matter more than they look: IMGT and [Kabat](01-the-biological-problem.md#24-numbering-schemes-and-why-the-novelty-gate-depends-on-one) disagree on CDR-H3 boundaries, which
 changes the identity **denominator from 11 to 13**, which changes a novelty gate's
 value.
 
@@ -105,14 +105,14 @@ off. A therapeutic antibody works by occluding the PD-L1 footprint.
 High positive charge in CDR-H3 is a leading predictor; the winning design carries
 net charge **+2** where pembrolizumab carries **0**.
 
-**Sequon** — see *[[01-the-biological-problem#6.1 Two N-glycosylation sequons in the Challenge 2 paratope|glycosylation sequon]]*.
+**Sequon** — see *[glycosylation sequon](01-the-biological-problem.md#61-two-n-glycosylation-sequons-in-the-challenge-2-paratope)*.
 
 **SKEMPI** — a database of experimentally measured binding-affinity changes on
 mutation (ΔΔG). The only external ground truth this project touched, and the
 source of its most damaging result.
 
 **Specificity** — binding the intended target and not others. The named Challenge
-1 design failed its own pre-declared specificity condition against **[[01-the-biological-problem#6.4 TIM-3 cross-reactivity — a specificity failure|TIM-3]]**.
+1 design failed its own pre-declared specificity condition against **[TIM-3](01-the-biological-problem.md#64-tim-3-cross-reactivity-a-specificity-failure)**.
 
 **TIM-3** — another immune checkpoint receptor, used here as a decoy antigen.
 
@@ -120,21 +120,21 @@ source of its most damaging result.
 
 ## 2. Structure prediction
 
-**AlphaFold2 / [[03-the-toolchain#3.2 ColabFold / AlphaFold2-multimer|ColabFold]]** — the original high-accuracy folding model and a
+**AlphaFold2 / [ColabFold](03-the-toolchain.md#32-colabfold-alphafold2-multimer)** — the original high-accuracy folding model and a
 convenient wrapper. Qualified and dropped here: it **cannot fold designed
 antibodies without an MSA**, giving pLDDT 37 and interpenetrating chains.
 
-**[[03-the-toolchain#4.7 gemmi, freesasa, and the interface definition|B-factor]] column** — a PDB field that holds crystallographic disorder in an
+**[B-factor](03-the-toolchain.md#47-gemmi-freesasa-and-the-interface-definition) column** — a PDB field that holds crystallographic disorder in an
 experimental structure and **per-residue confidence in a predicted one**. Same
-column, two incompatible meanings. A classic [[08-what-broke#Class 1 — Silent failures|silent failure]].
+column, two incompatible meanings. A classic [silent failure](08-what-broke.md#class-1-silent-failures).
 
-**[[03-the-toolchain#3.1 Boltz-2 — the primary predictor|Boltz-2]]** — the folding model used for essentially everything here, version
+**[Boltz-2](03-the-toolchain.md#31-boltz-2-the-primary-predictor)** — the folding model used for essentially everything here, version
 2.2.1. Training cutoff **2023-06-01 on PDB release date** — release, not
 deposition.
 
 **Diffusion samples** — how many candidate structures the diffusion head
 generates. Boltz's default is **1**, and outputs are returned ranked, so
-`model_0` at the default is an **[[06-allocation-and-selection#5. Order statistics: when your prediction is silently a maximum|argmax by construction]]**, not a sample. Five
+`model_0` at the default is an **[argmax by construction](06-allocation-and-selection.md#5-order-statistics-when-your-prediction-is-silently-a-maximum)**, not a sample. Five
 samples cost 2m54s against ~2m for one.
 
 **Folding / structure prediction** — predicting a protein's three-dimensional
@@ -147,13 +147,13 @@ alignment is misleading.
 
 **PAE (predicted aligned error)** — a matrix estimating, for each residue pair,
 how wrong their relative position is likely to be, in ångströms. The only source
-of inter-chain positional confidence, and the input to [[03-the-toolchain#4.3 ipSAE — interface confidence from the PAE|ipSAE]].
+of inter-chain positional confidence, and the input to [ipSAE](03-the-toolchain.md#43-ipsae-interface-confidence-from-the-pae).
 
 **pLDDT** — predicted local distance difference test: per-residue confidence,
 0–100. A statement about the model's certainty, not about correctness. One design
 here carried pLDDT **90.5** on a loop moving **4.31 Å** between seeds.
 
-**PTX vs [[03-the-toolchain#6.2 SASS versus PTX — the mechanism you need|SASS]]** — SASS is machine code compiled for one specific GPU
+**PTX vs [SASS](03-the-toolchain.md#62-sass-versus-ptx-the-mechanism-you-need)** — SASS is machine code compiled for one specific GPU
 architecture; PTX is an intermediate representation the driver can just-in-time
 compile for a *newer* one. A wheel shipping SASS but no PTX cannot run on a newer
 chip at all. `get_arch_list()` showing `PTX entries: NONE` is why the Blackwell
@@ -164,10 +164,10 @@ input to refine it. Inherited here as **3** from another task and never
 re-examined until it had produced a published, wrong, unanimous result. At
 recycling 10 one design moved ipSAE **0.263 → 0.864**.
 
-**[[03-the-toolchain#2.2 RFdiffusion via RFantibody|RFdiffusion]] / RFantibody** — generative models that produce protein backbones,
+**[RFdiffusion](03-the-toolchain.md#22-rfdiffusion-via-rfantibody) / RFantibody** — generative models that produce protein backbones,
 optionally conditioned on target hotspots.
 
-**[[03-the-toolchain#2.1 ProteinMPNN|ProteinMPNN]]** — designs a sequence given a fixed backbone. Critically, it
+**[ProteinMPNN](03-the-toolchain.md#21-proteinmpnn)** — designs a sequence given a fixed backbone. Critically, it
 optimises **sequence recovery given a backbone** — solubility and developability
 are not in its loss. It also **cannot vary loop length**.
 
@@ -185,12 +185,12 @@ changed a verdict here from FAIL to MARGINAL.
 given the chance.
 
 **Contacts** — count of heavy-atom pairs across the interface within a distance
-cutoff. Measured [[04-measurement-theory#2. The intraclass correlation, and metrics that turn out to be constants|ICC]] here: **0.003**. Pure sampler noise.
+cutoff. Measured [ICC](04-measurement-theory.md#2-the-intraclass-correlation-and-metrics-that-turn-out-to-be-constants) here: **0.003**. Pure sampler noise.
 
 **CDR SASA** — solvent-accessible surface area of the CDR loops, in Å². Measured
 ICC: **0.000**.
 
-**[[03-the-toolchain#4.1 DockQ 2.1.3 — two flags that both default wrong|DockQ]]** — a 0–1 measure of how close a predicted complex is to a reference
+**[DockQ](03-the-toolchain.md#41-dockq-213-two-flags-that-both-default-wrong)** — a 0–1 measure of how close a predicted complex is to a reference
 structure, with CAPRI quality bands. Version 2.1.3. **At its defaults it refuses
 to score a redesigned antibody**, exiting 1 with no output; it needs
 `--allowed_mismatches` and a pinned chain mapping. Note also that DockQ requires
@@ -205,11 +205,11 @@ write an empty table and exit 0.
 shown to respond to the epitope (64.0× its seed standard deviation under
 knockout).
 
-**[[03-the-toolchain#4.4 NetSolP-1.0 — sequence-only solubility, and a positive control that chose the model|NetSolP]]** — a sequence-only solubility predictor. Ships **three** model
+**[NetSolP](03-the-toolchain.md#44-netsolp-10-sequence-only-solubility-and-a-positive-control-that-chose-the-model)** — a sequence-only solubility predictor. Ships **three** model
 variants scoring a licensed antibody at 0.379 / 0.463 / 0.733 against a 0.50
 cutoff. Aggregated here as `min(VH, VL)`.
 
-**[[03-the-toolchain#4.2 PRODIGY 2.4.0 — ΔG and contacts|PRODIGY]]** — predicts binding free energy ΔG in kcal/mol from a structure. It is
+**[PRODIGY](03-the-toolchain.md#42-prodigy-240-δg-and-contacts)** — predicts binding free energy ΔG in kcal/mol from a structure. It is
 a **contact-count regression over an unminimised predicted pose**, with no
 solvation term. Shown here to be **blind to the epitope** (0.9× its own seed sd
 against a 527-contact deletion) while carrying the largest share of the ranking
@@ -219,7 +219,7 @@ variance.
 designed pose.
 
 **uv** — the Python package manager used throughout. `uv tool install` gives each
-tool its own environment plus a CLI shim, which is how the [[03-the-toolchain#5. The numpy 2.0 fault line, and isolation as architecture|numpy 2.0]] conflict was
+tool its own environment plus a CLI shim, which is how the [numpy 2.0](03-the-toolchain.md#5-the-numpy-20-fault-line-and-isolation-as-architecture) conflict was
 resolved.
 
 ---
@@ -234,7 +234,7 @@ contacts, because the predictor simply re-docked and rebuilt an interface.
 ranked output and you take the first, you have an order statistic, not a sample.
 
 **Attenuation** — the shrinking of an observed correlation by measurement noise:
-`ρ_obs ≈ ρ_true · √(r₁r₂)`. With [[04-measurement-theory#1.3 Reliability|reliability]] 0.75 on each side, a true 0.80
+`ρ_obs ≈ ρ_true · √(r₁r₂)`. With [reliability](04-measurement-theory.md#13-reliability) 0.75 on each side, a true 0.80
 presents as 0.60. Never report a corrected value as observed.
 
 **Detectable effect** — the smallest effect an experiment could have found at its
@@ -286,7 +286,7 @@ selection stage.
 signal. Distinct from **validity**, which asks whether the signal is the thing you
 care about. The central confusion this project ran on for six days.
 
-**[[04-measurement-theory#3. Spearman–Brown: what averaging buys|Spearman–Brown]]** — how reliability improves with k replicates:
+**[Spearman–Brown](04-measurement-theory.md#3-spearmanbrown-what-averaging-buys)** — how reliability improves with k replicates:
 `r_k = k·r₁ / (1 + (k−1)·r₁)`.
 
 **Validity** — whether a metric measures what it claims to. A metric can be
@@ -303,9 +303,9 @@ fresh measurement can never validate the correction however closely it lands.
 ## Cross-references
 
 Definitions here are expanded where they are used:
-[[01-the-biological-problem|biology]],
-[[02-the-engineering-problem|the rubric and the pipeline]],
-[[03-the-toolchain|tool versions and gotchas]],
-[[04-measurement-theory|reliability]],
-[[05-experiment-design|nulls and controls]],
-[[06-allocation-and-selection|allocation, banding and the winner's curse]].
+[biology](01-the-biological-problem.md),
+[the rubric and the pipeline](02-the-engineering-problem.md),
+[tool versions and gotchas](03-the-toolchain.md),
+[reliability](04-measurement-theory.md),
+[nulls and controls](05-experiment-design.md),
+[allocation, banding and the winner's curse](06-allocation-and-selection.md).

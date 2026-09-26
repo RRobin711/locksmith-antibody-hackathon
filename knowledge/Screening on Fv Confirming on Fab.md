@@ -11,7 +11,7 @@ Tags: [[Protein Design|protein design]] · [[Structure Prediction|structure pred
 **Why this note exists:** a small protocol decision with a hidden assumption that could have
 invalidated an entire screening campaign without ever announcing itself.
 
-Background: [[Antibody Architecture|Fv versus Fab]].
+Background: [Fv versus Fab](Antibody%20Architecture.md).
 
 ---
 
@@ -86,5 +86,5 @@ around is real and measurable on our own data.
 
 ---
 
-**Related:** [[How Structure Prediction Works|what folding costs]] ·
-[[The Eight Metrics|what DockQ and iRMSD mean]]
+**Related:** [what folding costs](How%20Structure%20Prediction%20Works.md) ·
+[what DockQ and iRMSD mean](The%20Eight%20Metrics.md)

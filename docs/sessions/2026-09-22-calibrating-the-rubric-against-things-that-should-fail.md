@@ -82,7 +82,7 @@ becomes a finding by accident.
 Boltz emits diffusion samples **ranked by its own confidence**. Therefore `model_0` under
 the default `diffusion_samples=1` is **the maximum of a distribution that was never
 drawn** — an order statistic, not a sample. (Established previously; see
-[[diffusion_samples_2026-09-22|the diffusion-sampling experiment]].)
+[the diffusion-sampling experiment](../../results/diffusion_samples_2026-09-22.md).)
 
 **HyHEL-10, an antibody raised against hen egg lysozyme, docked onto PD-1, `model_0`:**
 

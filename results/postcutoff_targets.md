@@ -1,7 +1,7 @@
 # Post-cutoff test — target selection (LOCKED 2026-09-17, before any fold)
 
 Boltz-2 training cutoff **2023-06-01 on PDB release date**, verified in the paper
-(see [[prereg_post_cutoff_test|the pre-registration]]). Margin adopted: release ≥ 2024-01-01.
+(see [the pre-registration](prereg_post_cutoff_test.md)). Margin adopted: release ≥ 2024-01-01.
 
 ## How the pool was built
 

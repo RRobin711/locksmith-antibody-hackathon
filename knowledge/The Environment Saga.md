@@ -113,7 +113,7 @@ actual wall was the graphics card. Swap cannot help with VRAM at all.
 
 **Fix — and this is the satisfying part:** the memory went into the sequence alignments, and
 Boltz was building deep ones for all three chains. But
-[[How Structure Prediction Works|antibody chains should not have alignments at all]]. Removing
+[antibody chains should not have alignments at all](How%20Structure%20Prediction%20Works.md). Removing
 them was **both the scientifically correct protocol and a two-thirds cut in the memory that was
 blowing up** — right thing and cheap thing coinciding.
 
@@ -125,7 +125,7 @@ blowing up** — right thing and cheap thing coinciding.
 
 Not a fold failure, but part of the same evening: the ipSAE tool located its confidence data by
 string-substituting the filename, and our copy-and-rename broke it. Covered as trap #7 in
-[[Eight Silent Failures|the traps note]].
+[the traps note](Eight%20Silent%20Failures.md).
 
 **What the four attempts generalise to:** "out of memory" is at least two different problems on
 a GPU machine, and they have different fixes. And **three of the four failures reported success
@@ -186,7 +186,7 @@ robust version excludes `$$` and `$PPID` explicitly and keeps the literal string
 **Assuming instead of measuring.** The three concurrent archive scans in §3 were not a tooling
 failure; they were me being careless about resource contention while a fragile job was starting.
 
-Both are in here because [[Eight Silent Failures|the traps note]] would be dishonest if it only
+Both are in here because [the traps note](Eight%20Silent%20Failures.md) would be dishonest if it only
 catalogued other people's software behaving badly.
 
 ---
@@ -207,5 +207,5 @@ getting the environment working and measuring, rather than estimating.
 
 ---
 
-**Related:** [[Eight Silent Failures|the scientific traps]] ·
-[[How Structure Prediction Works|what the folding model does with all that memory]]
+**Related:** [the scientific traps](Eight%20Silent%20Failures.md) ·
+[what the folding model does with all that memory](How%20Structure%20Prediction%20Works.md)

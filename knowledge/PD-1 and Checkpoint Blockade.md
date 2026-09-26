@@ -65,7 +65,7 @@ when it works.
 
 ## 5. Pembrolizumab (Keytruda) — the molecule we are benchmarking against
 
-**Pembrolizumab**, sold as **Keytruda**, is an [[Antibody Architecture|antibody]] that does
+**Pembrolizumab**, sold as **Keytruda**, is an [antibody](Antibody%20Architecture.md) that does
 exactly this. It binds human PD-1 and blocks PD-L1.
 
 Two numbers worth knowing:
@@ -103,7 +103,7 @@ patients?" has a concrete target: **~58%**.
 
 That is a validation criterion grounded in clinical reality rather than in the competition's
 scoring rules — which, notably, never ask whether the molecule blocks anything at all. See
-[[Confidence Is Not Truth|why we care about checks the rubric doesn't make]].
+[why we care about checks the rubric doesn't make](Confidence%20Is%20Not%20Truth.md).
 
 ## 7. Structures we work from
 
@@ -120,8 +120,8 @@ structures. Each entry has a four-character code.
 One caution we hit in practice: **5IUS and 5GGS do not contain the identical PD-1 sequence**
 (90.1% identical). Residue numbering therefore cannot be assumed transferable between them —
 we had to align the sequences explicitly to map one structure's numbering onto the other's.
-See [[Eight Silent Failures|the traps note]] for why assuming would have been dangerous.
+See [the traps note](Eight%20Silent%20Failures.md) for why assuming would have been dangerous.
 
 ---
 
-**Next:** [[Antibody Architecture|what an antibody actually is, and which bit does the binding]].
+**Next:** [what an antibody actually is, and which bit does the binding](Antibody%20Architecture.md).

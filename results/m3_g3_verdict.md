@@ -4,8 +4,8 @@
 > Re-running this document's own equal-budget test with each scored metric as the outcome
 > shows the filter beats its null on **2 of 6** — `dockq` and `iface_plddt` — and **both
 > are properties of the predictor, not the interface**. `contacts` runs the wrong way
-> (−1.80, p=0.988 for 'more contacts'). See [[g3_outcome_variable|the outcome-variable
-> test]]. Read what follows as a record of the method, not as a validated filter.
+> (−1.80, p=0.988 for 'more contacts'). See [the outcome-variable
+> test](g3_outcome_variable.md). Read what follows as a record of the method, not as a validated filter.
 
 # G3 — verdict
 

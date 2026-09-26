@@ -1,6 +1,6 @@
 # What does the rubric's novelty metric actually measure?
 
-`scripts/43_novelty_probe_generate.py` → `44_novelty_probe_fold.py` → this. Pre-registered in [[prereg_2026-09-20_novelty_probe|the novelty-probe pre-registration]] before any fold ran.
+`scripts/43_novelty_probe_generate.py` → `44_novelty_probe_fold.py` → this. Pre-registered in [the novelty-probe pre-registration](prereg_2026-09-20_novelty_probe.md) before any fold ran.
 
 Only the listed CDR-H3 positions are redesigned; H1, H2, the light chain and the antigen are native, so the **paratope is the only thing that varies between arms**. The native residue is forbidden at each designed position, so identity is exact.
 

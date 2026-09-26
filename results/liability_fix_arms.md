@@ -48,7 +48,7 @@ a prescribed fix. Contact count alone therefore cannot license a fix here. Wheth
 **2. Three of the four supporting instances were measured without an antigen alignment.**
 The Ch2 previous-design measurements — the 60× collapse and the "S→A free 5/5" that
 licensed the shipped fix — both come from `runs/sequon_fix`, which
-[[msa_silently_discarded|folded with the alignment silently discarded]]. Under a correct
+[folded with the alignment silently discarded](msa_silently_discarded.md). Under a correct
 alignment that same design scores **0.012** whatever its sequence. So those two instances
 cannot support any rule about mutations; they are two readings of a condition, not two
 readings of a substitution.

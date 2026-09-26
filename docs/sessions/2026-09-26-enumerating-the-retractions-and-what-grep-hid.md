@@ -4,7 +4,7 @@ tags:
   - locksmith-antibody-hackathon
 ---
 
-Tags: [[../../results/retractions|the register this session produced]], [[README|the session index]]
+Tags: [the register this session produced](../../results/retractions.md), [the session index](README.md)
 
 # Session 2026-09-26 — Enumerating the retractions, and what a line-oriented grep hid
 
@@ -328,10 +328,22 @@ asserted.
 
 The first draft of `results/retractions.md` contained a wikilink broken across a newline:
 
-```
+```text
 [[../docs/lecture/CORRECTIONS|The course's own corrections
 file]]
 ```
+
+> **Restored 2026-09-26, after a second tool broke it.** When the repository's 558
+> wikilinks were converted to standard markdown links for GitHub, the converter rewrote
+> *this* block too — turning the illustration of a broken wikilink into a working
+> markdown link, and deleting the only evidence the section is about. The regex matched
+> across the newline exactly as Obsidian's parser does not.
+>
+> **A source-rewriting tool must skip fenced blocks**, because a documentation repo's code
+> fences hold deliberately-wrong examples, and "fixing" them destroys the record. The
+> fence is now tagged `text` and the check for this is: after any bulk rewrite, grep
+> inside fences for the pattern you just introduced. That check found exactly one hit —
+> this one.
 
 This is precisely what `.claude/hooks/wikilink-guard.sh` exists to catch, written into a
 file whose subject is corrections failing to propagate. Caught by a scripted check

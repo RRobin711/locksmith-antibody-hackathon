@@ -31,9 +31,9 @@ submission says.
    reasons, and finding that out cost zero GPU folds.
 
 **Prerequisites:** the liability scanner and the first sequon fix —
-[[2026-09-22-published-withdrawn-and-the-fix-that-killed-the-antibody|the previous
-session]]. The rubric and its bands —
-[[2026-09-14-antibody-hackathon-spec-and-scoring|the spec extraction]].
+[the previous
+session](2026-09-22-published-withdrawn-and-the-fix-that-killed-the-antibody.md). The rubric and its bands —
+[the spec extraction](2026-09-14-antibody-hackathon-spec-and-scoring.md).
 
 ---
 
@@ -126,7 +126,7 @@ position (S54L) and left `N55-G56` intact.
 
 Both arms folded at Challenge 1's exact submitted settings — Fab construct, `recycling_steps=3`,
 seed 71, `--use_msa_server` — with `diffusion_samples=5`, so arms are compared on envelopes
-rather than on a single argmax (see [[2026-09-22-published-withdrawn-and-the-fix-that-killed-the-antibody|last session §1.3]] for why `model_0` is an order statistic).
+rather than on a single argmax (see [last session §1.3](2026-09-22-published-withdrawn-and-the-fix-that-killed-the-antibody.md) for why `model_0` is an order statistic).
 
 ### 2.2 The light-chain redesign — `scripts/84_light_chain_redesign.py`
 

@@ -4,7 +4,7 @@
 **Goal:** get a verified GPU environment, the scoring tools installed, reference structures
 on disk, and the antibody-numbering layer working — the foundation everything else sits on.
 
-**Prerequisite reading:** [[2026-09-14-antibody-hackathon-spec-and-scoring|the specification and scoring rules]] for what the metrics are; [[../../BUILD|the build skeleton]] for why the code is
+**Prerequisite reading:** [the specification and scoring rules](2026-09-14-antibody-hackathon-spec-and-scoring.md) for what the metrics are; [the build skeleton](../../BUILD.md) for why the code is
 laid out as it is. This doc is self-contained on the concepts it introduces.
 
 ---
@@ -260,7 +260,7 @@ number. A crystal B-factor of 30 Å² is not a pLDDT of 30.
 [ ok ] two ASU copies agree on dG (spread 0.40 kcal/mol)      -14.3 vs -13.9
 ```
 
-The full calibration table is in [[../../results/calibration|results/calibration.md]].
+The full calibration table is in [results/calibration.md](../../results/calibration.md).
 
 **One assertion in the gate was wrong and had to be corrected — the harness was right.** The
 first run reported "native pembrolizumab passes every computable gate: FAIL — failing

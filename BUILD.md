@@ -1,6 +1,6 @@
 # Build skeleton
 
-Concrete structure for the code. Companion to [[PLAN|the delivery plan]]; read §14 of that
+Concrete structure for the code. Companion to [the delivery plan](PLAN.md); read §14 of that
 first — several decisions here exist to fix problems found in review.
 
 **Status:** M0 complete — `io/`, `numbering.py`, `metrics/`, `score.py`, `config/` and

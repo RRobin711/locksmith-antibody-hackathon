@@ -10,7 +10,7 @@ Tags: [[Protein Design|protein design]] · [[Structure Prediction|structure pred
 
 **Session:** 2026-09-16 afternoon. **Closed:** the NetSolP half of G1e. **Advanced but
 did not close:** G1d. **Retired:** the JAX-on-Blackwell risk.
-**Prerequisite:** [[2026-09-16-first-prediction-and-the-four-attempt-fold|the first-prediction doc]]
+**Prerequisite:** [the first-prediction doc](2026-09-16-first-prediction-and-the-four-attempt-fold.md)
 for the Boltz-2 baseline numbers this session compares against. Everything needed
 is restated below.
 

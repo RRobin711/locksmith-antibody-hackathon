@@ -1,6 +1,6 @@
 # Coordinate-derived sequence sweep — 2026-09-17
 
-Following the input-validation failure in [[postcutoff_result|the post-cutoff result]], where
+Following the input-validation failure in [the post-cutoff result](postcutoff_result.md), where
 four of five targets were folded from sequences with unresolved loops spliced out. That fix
 was applied to the post-cutoff targets only. This is the sweep of everywhere else.
 

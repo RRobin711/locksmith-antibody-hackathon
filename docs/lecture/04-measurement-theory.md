@@ -6,7 +6,7 @@ status: review
 
 # 04 — Measurement Theory
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [[CORRECTIONS|corrections C1 and C2, and what they do and do not invalidate]] — C2 also refutes the contact-count rule this course calls its best finding. Challenge 1 is unaffected.
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1 and C2, and what they do and do not invalidate](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding. Challenge 1 is unaffected.
 
 **What this chapter teaches.** How good is my measurement? Not "is it accurate" — that question
 needs a truth to compare against, and this project never had one — but the prior question: *does
@@ -19,16 +19,16 @@ correlations by measurement error, and the collapse of reliability under range r
 derived, then worked against numbers this campaign actually measured.
 
 The chapter is the load-bearing one for the two that follow, because
-[[05-experiment-design|the chapter on designing an experiment that could fail]] and
-[[06-allocation-and-selection|the chapter on where to spend the next measurement]] both consume
+[the chapter on designing an experiment that could fail](05-experiment-design.md) and
+[the chapter on where to spend the next measurement](06-allocation-and-selection.md) both consume
 reliability as an input. It is also the chapter where the campaign's single most expensive
 conceptual error lives: **reliability is a property of a measurement *and a population*, and
 selecting a shortlist destroys it on purpose.**
 
 No statistics beyond an introductory course is assumed. No biology is assumed at all — every
 quantity below is just "a number a program printed for a design", and if you want to know what
-`ipSAE` or `DockQ` mean physically, see [[03-the-toolchain|the chapter on what each tool computes]].
-Terms are collected in [[10-glossary|the glossary]].
+`ipSAE` or `DockQ` mean physically, see [the chapter on what each tool computes](03-the-toolchain.md).
+Terms are collected in [the glossary](10-glossary.md).
 
 ---
 
@@ -51,13 +51,13 @@ Three assumptions are packed in there and all three are testable, so name them:
 2. **Zero mean.** `E[ε] = 0`, so the measurement is *unbiased for the item*. Note this is much
    weaker than "the metric measures what you want" — a metric can be perfectly unbiased for a
    quantity nobody cares about. That distinction is validity, not reliability, and it is
-   [[05-experiment-design|the subject of the next chapter's control section]].
+   [the subject of the next chapter's control section](05-experiment-design.md).
 3. **Homoscedastic independence.** The same `σ²_noise` for every item, and independent across
    replicates. This is the one that fails quietly. Section 4 shows the campaign's own evidence that
    it fails here.
 
 Units: `x`, `τ` and `ε` all carry the metric's units — surrogate points on a 0–100 scale, ångströms
-of RMSD, kcal/mol of predicted free energy, or dimensionless in the case of [[03-the-toolchain#4.3 ipSAE — interface confidence from the PAE|ipSAE]] and [[03-the-toolchain#4.1 DockQ 2.1.3 — two flags that both default wrong|DockQ]].
+of RMSD, kcal/mol of predicted free energy, or dimensionless in the case of [ipSAE](03-the-toolchain.md#43-ipsae-interface-confidence-from-the-pae) and [DockQ](03-the-toolchain.md#41-dockq-213-two-flags-that-both-default-wrong).
 `σ²_noise` carries the square of those units.
 
 ### 1.2 The variance identity
@@ -195,7 +195,7 @@ Medium).
 
 **Five of the eight rubric metrics are constants across this pool. The eight-metric harness ranks on
 three: `dg`, `ipsae`, `dockq`.** Two of those three are among the least reliable of the usable set,
-and one of them — `dg` — is [[05-experiment-design|blind to the epitope under the knockout control]].
+and one of them — `dg` — is [blind to the epitope under the knockout control](05-experiment-design.md).
 
 > **Transferable principle.** *ICC and dynamic range are different objections and they are not
 > interchangeable. A metric can be perfectly reproducible and useless (pinned in one band), or wildly
@@ -320,11 +320,11 @@ assumes independence.
 The mechanism is identifiable here: `final` is **banded**, so a design sitting near a band edge flips
 band on arbitrarily small noise, and a design far from an edge cannot flip at all. That is a
 structured, item-dependent error component, not an i.i.d. one, and it violates assumption 3 of §1.1
-directly. We take [[06-allocation-and-selection#4. Banding: what a step function costs, and what changes when you relabel it|banding]] apart properly in
-[[06-allocation-and-selection|the chapter on allocation and selection]].
+directly. We take [banding](06-allocation-and-selection.md#4-banding-what-a-step-function-costs-and-what-changes-when-you-relabel-it) apart properly in
+[the chapter on allocation and selection](06-allocation-and-selection.md).
 
 **The project never comments on this gap.** It matters because the allocation simulations of
-[[06-allocation-and-selection|that same chapter]] assume i.i.d. seed noise throughout, and here is
+[that same chapter](06-allocation-and-selection.md) assume i.i.d. seed noise throughout, and here is
 its own data mildly contradicting the assumption. The correct disposition is not alarm — the
 discrepancy is small — but it belongs in the record, and its absence is a real omission.
 
@@ -485,7 +485,7 @@ r        =  0.053124 / 0.08410  =  0.6317        (reported 0.629)
 
 Now read the two lines that matter. **The noise behaved exactly as forecast** — 0.467 measured
 against 0.529 predicted, a ratio of 0.88, well within estimation error of an sd from seven draws
-(see [[06-allocation-and-selection|the spread-estimation law]], which gives that sd a 29% relative
+(see [the spread-estimation law](06-allocation-and-selection.md), which gives that sd a 29% relative
 error at k = 7). Nothing went wrong with the instrument. **The reliability fell from 0.849 to 0.629
 because the signal was destroyed by the act of selecting.** The 239-pool's true between-design sd is
 0.562; the top-20's is 0.290, roughly half. Halve the signal sd at constant noise and you quarter
@@ -512,7 +512,7 @@ standard estimator we tried (the plug-in variance ratio on these data gives **0.
 **The resolution, first half: they are estimating different things.** 0.629 is the reliability of a
 **7-seed mean**, and §5.4 reproduces it exactly: `1 − 0.176²/0.290² = 0.6317`. That is the correct
 quantity for the purpose it was used for, which was shrinking a 7-seed mean
-([[06-allocation-and-selection|the winner's-curse estimator]] takes it as input). The audit's
+([the winner's-curse estimator](06-allocation-and-selection.md) takes it as input). The audit's
 0.276/0.296 are **single-seed** reliabilities on the same shortlist. Two different estimands. So
 "does not reproduce" is itself an instance of a rule the project catalogues elsewhere: *never diff a
 single observation against an aggregate without first checking what each number is.*
@@ -584,7 +584,7 @@ downstream, **0.591 / 0.813 / 0.938 at k = 2/3/5**, is a *mixture* of the two es
 two from `B = 0.0907`, the third from `B = 0.09372`. No decision turns on it (the attenuation
 ceilings are `√0.591 = 0.769` and `√0.599 = 0.774`, indistinguishable in practice), but it is exactly
 the convention drift the project's own rule about divergent constants exists to prevent, and it is
-catalogued in [[08-what-broke|the failure catalogue]] alongside the other bookkeeping defects.
+catalogued in [the failure catalogue](08-what-broke.md) alongside the other bookkeeping defects.
 
 One further trap in that table, which the project does name: **the k = 7 row reads 1.000, and it is a
 tautology.** Truth was *defined* as the 7-seed spread, so a 7-seed estimate has zero error against it
@@ -621,6 +621,6 @@ believe something no data can support."*
    inconsistent under Spearman–Brown (r₁ = 0.296 ⇒ r₇ = 0.746; r₇ = 0.629 ⇒ r₁ = 0.195). Finding the
    first error is not permission to stop looking for the second.
 
-Next: [[05-experiment-design|what would have to be true for me to be wrong]], which takes the
+Next: [what would have to be true for me to be wrong](05-experiment-design.md), which takes the
 reliability numbers established here and asks what experiment could actually overturn a claim —
 including the four nulls this campaign published and then reversed.

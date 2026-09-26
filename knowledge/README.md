@@ -8,44 +8,44 @@ Tags: [[index|indexes and MOCs]] · [[Locksmith Bio|Locksmith Bio]] · [[Resourc
 
 # Knowledge notes
 
-Teaching notes for the [[../PROJECT-STORY|Locksmith antibody design project]]. Written for a
+Teaching notes for the [Locksmith antibody design project](../PROJECT-STORY.md). Written for a
 reader with no background in structural biology — every term is defined on first use, and every
 note leads with *why it matters* before *how it works*.
 
-Start with [[../PROJECT-STORY|the project story]] for the narrative arc.
+Start with [the project story](../PROJECT-STORY.md) for the narrative arc.
 
 ## The science — read in this order if you're new
 
 | Note | Covers |
 |---|---|
-| [[PD-1 and Checkpoint Blockade\|PD-1 and Checkpoint Blockade]] | T cells, the off-switch tumours exploit, what Keytruda does, and the 58% coverage figure that gives us a real target |
-| [[Antibody Architecture\|Antibody Architecture]] | Heavy and light chains, Fv vs Fab, the six CDR loops, why CDR-H3 dominates, and what "novelty" means |
-| [[De Novo Design and the Two Challenges\|De Novo Design and the Two Challenges]] | Fixed-backbone redesign vs designing from scratch, and why Challenge 2 may not work |
-| [[How Structure Prediction Works\|How Structure Prediction Works]] | Folding models, MSAs and co-evolution, pLDDT and PAE, and why antibody chains want no alignment |
-| [[The Eight Metrics\|The Eight Metrics]] | Plain-language definition of each measurement, what "good" looks like, and what they collectively miss |
+| [PD-1 and Checkpoint Blockade](PD-1%20and%20Checkpoint%20Blockade.md) | T cells, the off-switch tumours exploit, what Keytruda does, and the 58% coverage figure that gives us a real target |
+| [Antibody Architecture](Antibody%20Architecture.md) | Heavy and light chains, Fv vs Fab, the six CDR loops, why CDR-H3 dominates, and what "novelty" means |
+| [De Novo Design and the Two Challenges](De%20Novo%20Design%20and%20the%20Two%20Challenges.md) | Fixed-backbone redesign vs designing from scratch, and why Challenge 2 may not work |
+| [How Structure Prediction Works](How%20Structure%20Prediction%20Works.md) | Folding models, MSAs and co-evolution, pLDDT and PAE, and why antibody chains want no alignment |
+| [The Eight Metrics](The%20Eight%20Metrics.md) | Plain-language definition of each measurement, what "good" looks like, and what they collectively miss |
 
 ## Method — why we built it this way
 
 | Note | Covers |
 |---|---|
-| [[Build the Judge Before the Contestant\|Build the Judge Before the Contestant]] | Validating the scoring against known answers first, and the failed test that was right |
-| [[Confidence Is Not Truth\|Confidence Is Not Truth]] | Goodhart's law, the winner's curse, and the four kinds of evidence a confidence score can't produce |
-| [[Screening on Fv Confirming on Fab\|Screening on Fv, Confirming on Fab]] | The cheap-screen protocol and the hidden assumption that would fail invisibly |
+| [Build the Judge Before the Contestant](Build%20the%20Judge%20Before%20the%20Contestant.md) | Validating the scoring against known answers first, and the failed test that was right |
+| [Confidence Is Not Truth](Confidence%20Is%20Not%20Truth.md) | Goodhart's law, the winner's curse, and the four kinds of evidence a confidence score can't produce |
+| [Screening on Fv, Confirming on Fab](Screening%20on%20Fv%20Confirming%20on%20Fab.md) | The cheap-screen protocol and the hidden assumption that would fail invisibly |
 
 ## Lessons — what went wrong
 
 | Note | Covers |
 |---|---|
-| [[Eight Silent Failures\|Eight Silent Failures]] | Eight traps that each produced a confident wrong answer without raising an exception |
-| [[The Environment Saga\|The Environment Saga]] | The dependency fault line, the four-attempt fold, the swap detour, and two mistakes of my own |
+| [Eight Silent Failures](Eight%20Silent%20Failures.md) | Eight traps that each produced a confident wrong answer without raising an exception |
+| [The Environment Saga](The%20Environment%20Saga.md) | The dependency fault line, the four-attempt fold, the swap detour, and two mistakes of my own |
 
 ## Context — Locksmith's own science
 
 | Note | Covers |
 |---|---|
-| [[Intrinsically Disordered Proteins\|Intrinsically Disordered Proteins]] | Anfinsen's dogma and its limit; why ensemble-averaging is a category error |
-| [[Nanopore Sensing of Disordered Proteins\|Nanopore Sensing of Disordered Proteins]] | Single-molecule measurement, and a de novo protein design paper pointed at sensors |
-| [[Locksmith Bio — Company Context\|Locksmith Bio — Company Context]] | What the company works on, where the name comes from, and how to pitch to them |
+| [Intrinsically Disordered Proteins](Intrinsically%20Disordered%20Proteins.md) | Anfinsen's dogma and its limit; why ensemble-averaging is a category error |
+| [Nanopore Sensing of Disordered Proteins](Nanopore%20Sensing%20of%20Disordered%20Proteins.md) | Single-molecule measurement, and a de novo protein design paper pointed at sensors |
+| [Locksmith Bio — Company Context](Locksmith%20Bio%20%E2%80%94%20Company%20Context.md) | What the company works on, where the name comes from, and how to pitch to them |
 
 ## Still to write
 

@@ -6,7 +6,7 @@ status: living
 
 # Designing a cancer drug on a laptop — a complete course
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [[CORRECTIONS|corrections C1 and C2, and what they do and do not invalidate]] — C2 also refutes the contact-count rule this course calls its best finding. Challenge 1 is unaffected.
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1 and C2, and what they do and do not invalidate](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding. Challenge 1 is unaffected.
 
 A twelve-chapter lecture course built from the nine-day Locksmith Bio antibody
 design campaign (2026-09-14 → 2026-09-22). It teaches the whole thing from first
@@ -31,34 +31,34 @@ main result, and it is why the course is worth reading.
 
 | # | Chapter | What it covers |
 |---|---|---|
-| 00 | [[00-orientation\|Orientation]] | The four questions answered directly: what we had to do, what we needed to know, what we used, what we made |
-| 01 | [[01-the-biological-problem\|The biological problem]] | T cells, PD-1, checkpoint blockade, antibody architecture, epitopes, developability chemistry, and what the scores do not say |
-| 02 | [[02-the-engineering-problem\|The engineering problem]] | The pipeline, the rubric as data, build-the-judge-first, and programs that exit 0 having done the wrong thing |
-| 03 | [[03-the-toolchain\|The toolchain]] | Every tool with versions and gotchas, the dependency fault line, the Blackwell GPU saga, and what it all cost |
-| 04 | [[04-measurement-theory\|Measurement theory]] | Reliability, ICC, Spearman–Brown, attenuation, range restriction — how good is my measurement? |
-| 05 | [[05-experiment-design\|Experiment design]] | Power, nulls, null geometry, controls, pre-registration — what would have to be true for me to be wrong? |
-| 06 | [[06-allocation-and-selection\|Allocation and selection]] | Depth versus breadth, the winner's curse, banding, order statistics — where should the next measurement go? |
-| 07 | [[07-the-campaign\|The campaign]] | The nine days as narrative, with the fold ledger and the parameters inherited unexamined |
-| 08 | [[08-what-broke\|What broke]] | The full failure catalogue: silent failures, withdrawn claims, blind controls, wasted hours |
-| 09 | [[09-critique\|The critique]] | The adversarial re-evaluation — what was excellent, what was mis-sequenced, and three findings that contradict the project's own record |
-| 10 | [[10-glossary\|Glossary]] | Every term, acronym and metric defined |
-| 11 | [[11-study-plan\|Study plan]] | Reading orders, prerequisite curriculum, self-tests, exercises, and a checklist |
+| 00 | [Orientation](00-orientation.md) | The four questions answered directly: what we had to do, what we needed to know, what we used, what we made |
+| 01 | [The biological problem](01-the-biological-problem.md) | T cells, PD-1, checkpoint blockade, antibody architecture, epitopes, developability chemistry, and what the scores do not say |
+| 02 | [The engineering problem](02-the-engineering-problem.md) | The pipeline, the rubric as data, build-the-judge-first, and programs that exit 0 having done the wrong thing |
+| 03 | [The toolchain](03-the-toolchain.md) | Every tool with versions and gotchas, the dependency fault line, the Blackwell GPU saga, and what it all cost |
+| 04 | [Measurement theory](04-measurement-theory.md) | Reliability, ICC, Spearman–Brown, attenuation, range restriction — how good is my measurement? |
+| 05 | [Experiment design](05-experiment-design.md) | Power, nulls, null geometry, controls, pre-registration — what would have to be true for me to be wrong? |
+| 06 | [Allocation and selection](06-allocation-and-selection.md) | Depth versus breadth, the winner's curse, banding, order statistics — where should the next measurement go? |
+| 07 | [The campaign](07-the-campaign.md) | The nine days as narrative, with the fold ledger and the parameters inherited unexamined |
+| 08 | [What broke](08-what-broke.md) | The full failure catalogue: silent failures, withdrawn claims, blind controls, wasted hours |
+| 09 | [The critique](09-critique.md) | The adversarial re-evaluation — what was excellent, what was mis-sequenced, and three findings that contradict the project's own record |
+| 10 | [Glossary](10-glossary.md) | Every term, acronym and metric defined |
+| 11 | [Study plan](11-study-plan.md) | Reading orders, prerequisite curriculum, self-tests, exercises, and a checklist |
 
 ---
 
 ## Where to start
 
-- **Just want the answers?** [[00-orientation|Chapter 00]] alone, about twenty minutes.
-- **Want the story?** [[07-the-campaign|Chapter 07]], then follow its links.
-- **Don't care about antibodies?** Chapters [[04-measurement-theory|04]],
-  [[05-experiment-design|05]] and [[06-allocation-and-selection|06]] are
+- **Just want the answers?** [Chapter 00](00-orientation.md) alone, about twenty minutes.
+- **Want the story?** [Chapter 07](07-the-campaign.md), then follow its links.
+- **Don't care about antibodies?** Chapters [04](04-measurement-theory.md),
+  [05](05-experiment-design.md) and [06](06-allocation-and-selection.md) are
   field-independent and are where the compounding knowledge lives. This is the
   recommendation for most readers.
-- **Going to build something like this?** [[02-the-engineering-problem|Chapter 02]]
+- **Going to build something like this?** [Chapter 02](02-the-engineering-problem.md)
   with `config/metrics.yaml` open beside it, then
-  [[08-what-broke|Chapter 08]], then the Track C exercises in
-  [[11-study-plan|Chapter 11]].
-- **Want to know what went wrong?** [[09-critique|Chapter 09]].
+  [Chapter 08](08-what-broke.md), then the Track C exercises in
+  [Chapter 11](11-study-plan.md).
+- **Want to know what went wrong?** [Chapter 09](09-critique.md).
 
 ---
 
@@ -97,8 +97,8 @@ And five results that matter more than either score:
 1. Four of five hard cutoffs reject **0 of 6** known-wrong antibodies.
 2. **HyHEL-10, an anti-lysozyme antibody, cleared all five cutoffs as a PD-1 binder.**
 3. Five of eight metrics are constants; the harness ranks on three; one of those is blind to the epitope.
-4. Median [[03-the-toolchain#4.1 DockQ 2.1.3 — two flags that both default wrong|DockQ]] on genuinely novel antibody–antigen pairs: **0.291**, against **0.818** on the memorised reference.
-5. A mutation that abolishes binding experimentally (ΔΔG **+21.8 kcal/mol**) scores [[03-the-toolchain#4.3 ipSAE — interface confidence from the PAE|ipSAE]] **0.917** against the wild type's **0.903**.
+4. Median [DockQ](03-the-toolchain.md#41-dockq-213-two-flags-that-both-default-wrong) on genuinely novel antibody–antigen pairs: **0.291**, against **0.818** on the memorised reference.
+5. A mutation that abolishes binding experimentally (ΔΔG **+21.8 kcal/mol**) scores [ipSAE](03-the-toolchain.md#43-ipsae-interface-confidence-from-the-pae) **0.917** against the wild type's **0.903**.
 
 ---
 
@@ -108,7 +108,7 @@ This course was assembled on 2026-09-23 from the project's own record: 62 result
 files, 23 session documents, 14 knowledge notes, `config/metrics.yaml`, `PLAN.md`,
 `STATE.md`, and the source. Every figure is cited to a file so you can check it.
 
-Three findings in [[09-critique|the critique]] contradict statements in the
+Three findings in [the critique](09-critique.md) contradict statements in the
 project's own files and were produced while writing this course:
 
 - `config/metrics.yaml`'s claim that the band→score choice *"moves the headline
@@ -118,11 +118,11 @@ project's own files and were produced while writing this course:
 - `STATE.md`, which declares itself the single source of truth, is **stale on a
   headline number** — it reports Challenge 2 at 96.0 where the shipped design
   scores 91.2.
-- The open `0.629` [[04-measurement-theory#1.3 Reliability|reliability]] question resolves as an estimand mismatch, but a
-  **real [[04-measurement-theory#3. Spearman–Brown: what averaging buys|Spearman–Brown]] inconsistency survives underneath it**.
+- The open `0.629` [reliability](04-measurement-theory.md#13-reliability) question resolves as an estimand mismatch, but a
+  **real [Spearman–Brown](04-measurement-theory.md#3-spearmanbrown-what-averaging-buys) inconsistency survives underneath it**.
 
 Other live defects inherited from the record and flagged in
-[[08-what-broke|Chapter 08]]: `PROJECT-STORY.md` — the designated entry point —
+[Chapter 08](08-what-broke.md): `PROJECT-STORY.md` — the designated entry point —
 still carries three refuted or superseded claims; `results/calibration.md` ships
 an empty results table beside power language it has three observations for.
 
@@ -133,6 +133,6 @@ the shipped submission package and says so.
 
 ## Related reading in this project
 
-[[../../PROJECT-STORY|The project story]] (stale in places — see above) ·
-[[../../STATE|Current state]] · [[../../knowledge/README|The knowledge notes]] ·
-[[../sessions/README|Session logs]] · [[../../PLAN|The delivery plan]]
+[The project story](../../PROJECT-STORY.md) (stale in places — see above) ·
+[Current state](../../STATE.md) · [The knowledge notes](../../knowledge/README.md) ·
+[Session logs](../sessions/README.md) · [The delivery plan](../../PLAN.md)

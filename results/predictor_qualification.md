@@ -79,6 +79,6 @@ roughly **4,700 folds**, against a planned estimate of 1,400–1,800.
 > panel folds, a `boltz predict` call costs **92 s (Fv) / 126 s (Fab)** — a fixed ~60 s of
 > checkpoint load and MSA parsing dominates. Real budget: **~1,290 Fab folds**, not 4,700.
 > Batching several targets into one invocation would recover ~1.8× and is not yet done.
-> See [[../docs/sessions/2026-09-17-the-fv-screen-fails-and-ipsae-is-a-liveness-test|the 2026-09-17 session doc]] §4.1. The funnel in
+> See [the 2026-09-17 session doc](../docs/sessions/2026-09-17-the-fv-screen-fails-and-ipsae-is-a-liveness-test.md) §4.1. The funnel in
 PLAN §5.2 can be several times wider than budgeted, and chasing `boltz[cuda]`
 kernels on Blackwell is not currently worth the compatibility risk.

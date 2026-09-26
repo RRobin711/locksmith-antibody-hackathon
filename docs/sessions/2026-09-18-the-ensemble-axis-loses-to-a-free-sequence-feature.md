@@ -14,7 +14,7 @@
 >
 > Also: "mean loop pLDDT is uncorrelated with spread" was n=8 (ρ −0.168, p=0.69, CI ≈ ±0.7);
 > at n=239 it is **−0.432**, and it *beats* interface pLDDT (−0.344). See
-> [[2026-09-20-auditing-the-judge-reliability-is-not-validity|the audit]].
+> [the audit](2026-09-20-auditing-the-judge-reliability-is-not-validity.md).
 
 date: 2026-09-18
 tags: [project, protein-design, structure-prediction, learning]
@@ -29,7 +29,7 @@ Tags: [[Protein Design|protein design]] · [[Structure Prediction|structure pred
 **Result:** ensemble tightness **does not earn** a place in selection — its correlation with
 design quality is fully explained by CDR-H3 **aromatic fraction**, which predicts quality better
 and costs **zero folds**.
-**Prerequisite:** [[2026-09-18-reseeding-and-the-cdr-h3-ensemble|the re-seed doc]], which found the 4.4× ensemble spread this tests.
+**Prerequisite:** [the re-seed doc](2026-09-18-reseeding-and-the-cdr-h3-ensemble.md), which found the 4.4× ensemble spread this tests.
 
 ---
 
@@ -44,7 +44,7 @@ But **dynamic range is not meaning.** So this session tested whether the axis pr
 before building selection around it.
 
 Three choices shaped the design, all fixed in
-[[../../results/prereg_ensemble_validation|a pre-registration]] written before the designs existed:
+[a pre-registration](../../results/prereg_ensemble_validation.md) written before the designs existed:
 
 **No gating or shortlisting before the correlation.** Selecting the top by DockQ and then
 correlating ensemble spread *against* DockQ restricts the range of the variable under test —

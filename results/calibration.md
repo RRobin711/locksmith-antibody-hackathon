@@ -1,6 +1,6 @@
 # Calibration — where do our numbers actually sit?
 
-**2026-09-22.** Pre-registered in [[prereg_2026-09-22_calibration_and_negative_control|the pre-registration]].
+**2026-09-22.** Pre-registered in [the pre-registration](prereg_2026-09-22_calibration_and_negative_control.md).
 
 ## Why a bare metric value is not a result
 
@@ -30,7 +30,7 @@ Stated before any distribution, because a metric that silently drops rows report
 | interface pLDDT | 20/20 | 20/20 |
 | CDR SASA (Å²) | 20/20 | 20/20 |
 
-`dockq.compute` returns **None with a reason**, never 0, when it cannot score an interface. That distinction is load-bearing: 8 of these 40 natives initially paired an Fv with the antigen of a *different copy* in the asymmetric unit, and a fabricated 0 would have entered the distribution as eight genuine docking failures instead of being caught. (See [[2026-09-22-calibrating-the-rubric-against-things-that-should-fail|the session doc]] §5b.) Model antigens carry SEQRES-filled internal gaps that the crystal does not, up to **38 residues** on 8EQ6 — against `dockq_allowed_mismatches: 40`, a margin of 2. Any row exceeding it appears as a gap in this table, not as a zero.
+`dockq.compute` returns **None with a reason**, never 0, when it cannot score an interface. That distinction is load-bearing: 8 of these 40 natives initially paired an Fv with the antigen of a *different copy* in the asymmetric unit, and a fabricated 0 would have entered the distribution as eight genuine docking failures instead of being caught. (See [the session doc](../docs/sessions/2026-09-22-calibrating-the-rubric-against-things-that-should-fail.md) §5b.) Model antigens carry SEQRES-filled internal gaps that the crystal does not, up to **38 residues** on 8EQ6 — against `dockq_allowed_mismatches: 40`, a margin of 2. Any row exceeding it appears as a gap in this table, not as a zero.
 
 ## The distributions
 

@@ -6,11 +6,11 @@ status: review
 
 # 08 — What Broke: a failure catalogue organised by generating mechanism
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [[CORRECTIONS|corrections C1 and C2, and what they do and do not invalidate]] — C2 also refutes the contact-count rule this course calls its best finding. Challenge 1 is unaffected.
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1 and C2, and what they do and do not invalidate](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding. Challenge 1 is unaffected.
 
 ## What this chapter teaches
 
-[[07-the-campaign|The campaign chapter]] told you what happened in order. This one takes the
+[The campaign chapter](07-the-campaign.md) told you what happened in order. This one takes the
 same nine days apart along a different axis: **how things failed**, and — the part that
 generalises — **what generated each kind of failure**.
 
@@ -111,7 +111,7 @@ unclassified. That is the audit's own gap and is left visible rather than smooth
 **Fifteen of twenty-six would have handed over a number in the right range, with the right
 units, computed on the wrong thing.** Three of the original eight were caught *only* because
 the harness was being run on structures whose answers were already known — the
-"[[02-the-engineering-problem#6. Build the judge before the contestant|build the judge before the contestant]]" discipline. **On a novel design there would have been
+"[build the judge before the contestant](02-the-engineering-problem.md#6-build-the-judge-before-the-contestant)" discipline. **On a novel design there would have been
 nothing to notice.**
 
 ### The mechanisms, taught one at a time
@@ -122,7 +122,7 @@ in the protein but disordered in the lattice are simply absent from the file. If
 sequence by walking the residues in the coordinate block, the flanking residues on either side
 of a disordered loop concatenate, and you produce a sequence describing **a protein with a loop
 excised and its ends fused** — a chimera. Nothing errors. The fold completes, the structure is
-confident, [[03-the-toolchain#4.1 DockQ 2.1.3 — two flags that both default wrong|DockQ]] returns a plausible number. Measured: 9W43's antigen was folded as **83 aa
+confident, [DockQ](03-the-toolchain.md#41-dockq-213-two-flags-that-both-default-wrong) returns a plausible number. Measured: 9W43's antigen was folded as **83 aa
 against a true 115**, losing 32 residues *across the epitope face*; 9BQW's lost 19 across its
 epitope. Re-folding 9BQW from SEQRES moved DockQ **0.064 → 0.370** and flipped a milestone
 verdict. The fix distinguishes two cases that look alike and are not: `seq_for_folding()`
@@ -132,8 +132,8 @@ Both are detectable from author numbering alone, without fetching SEQRES. The tr
 form: **a large interface at near-zero DockQ is as easily your input preparation as the model's
 error — check the question you asked before you doubt the answer.**
 
-**A tool's default encodes its author's use case, not yours (S5, S6, S24, and [[03-the-toolchain#4.4 NetSolP-1.0 — sequence-only solubility, and a positive control that chose the model|NetSolP]]'s model
-variant).** [[03-the-toolchain#4.2 PRODIGY 2.4.0 — ΔG and contacts|PRODIGY]] run on a three-chain file without `--selection` does not fail; it *chooses*,
+**A tool's default encodes its author's use case, not yours (S5, S6, S24, and [NetSolP](03-the-toolchain.md#44-netsolp-10-sequence-only-solubility-and-a-positive-control-that-chose-the-model)'s model
+variant).** [PRODIGY](03-the-toolchain.md#42-prodigy-240-δg-and-contacts) run on a three-chain file without `--selection` does not fail; it *chooses*,
 and on 5GGS it chose the heavy–light interface inside the antibody and returned **−16.3
 kcal/mol**, a value entirely plausible for an antibody–antigen interface and therefore
 undetectable by inspection. DockQ's `--allowed_mismatches` defaults to **0** because DockQ's
@@ -197,7 +197,7 @@ host-RAM kill in its own four-item list. **The host-RAM kill did not exit 0.** T
 session doc records attempt 1 as *killed* — the kernel's OOM killer sends `SIGKILL`, which is
 emphatically a non-zero status and is the one failure in that evening that announced itself
 honestly. The session index for 2026-09-16 states the membership correctly: *"Four fold
-failures — host RAM, missing CUDA kernel, GPU VRAM, and [[03-the-toolchain#4.3 ipSAE — interface confidence from the PAE|ipSAE]]'s filename coupling — three of
+failures — host RAM, missing CUDA kernel, GPU VRAM, and [ipSAE](03-the-toolchain.md#43-ipsae-interface-confidence-from-the-pae)'s filename coupling — three of
 which exited 0."* Subtract the one that was killed and the three genuine exit-0 cases are the
 missing `cuequivariance_torch` import, the CUDA VRAM OOM, and **ipSAE's empty-table failure**
 (S11) — which is the member the docstring drops.
@@ -251,7 +251,7 @@ where *x* is the effect detectable at the *n* you actually have. **State the det
 beside every null, or do not report the null.** Note also the W4 → W4b → W4c chain: three
 successive statements of one finding, each wrong, each overcorrecting the last. The discipline
 that stops this is not more scepticism; it is computing the interval first. See
-[[04-measurement-theory|attenuation, reliability, and why an n=8 interval spans ±0.7]].
+[attenuation, reliability, and why an n=8 interval spans ±0.7](04-measurement-theory.md).
 
 ### Generator (ii) — a single observation compared against an aggregate
 
@@ -343,7 +343,7 @@ correctly eliminated the confound it was built for — and was then read as gene
 
 **C1 is the centrepiece.** Read the shape of it carefully, because it is exactly the shape of a
 control you will build. A plausible confound was identified (the Fv construct, on the strength
-of a real earlier finding that Fv ipSAE [[04-measurement-theory#1.3 Reliability|reliability]] is 0.607 against Fab's 0.965). A control was
+of a real earlier finding that Fv ipSAE [reliability](04-measurement-theory.md#13-reliability) is 0.607 against Fab's 0.965). A control was
 designed that could genuinely have caught it. It ran, it passed, the confound was correctly
 eliminated — and because a control passing *feels* like reassurance, it was allowed to license a
 much broader verdict about the pool. That verdict was wrong within the hour, and had already
@@ -521,7 +521,7 @@ is what locates the weakness.
 ### What this says
 
 **The weakness was not the statistics and not the engineering craft.** The statistical work is
-unusually careful — [[04-measurement-theory#4. Attenuation: why correlations between noisy things look weak|attenuation]] corrections, pre-registration, [[05-experiment-design#6. Equal-budget resampling, and varying the outcome|equal-budget]] resampling nulls,
+unusually careful — [attenuation](04-measurement-theory.md#4-attenuation-why-correlations-between-noisy-things-look-weak) corrections, pre-registration, [equal-budget](05-experiment-design.md#6-equal-budget-resampling-and-varying-the-outcome) resampling nulls,
 mutation-tested tests — and when a result was attacked with the right instrument it usually
 survived. The aromatic→DockQ correlation replicated to **0.002** on 239 independent designs; the
 conditioning result survived the replacement of its own test by a stricter one.
@@ -615,5 +615,5 @@ Pose retention against a parent crystal is not binding. A predictor's own confid
 accuracy. A metric that passes an epitope knockout can still rank binding-abolishing mutants
 above the wild type. Ask what the outcome variable *is* before you optimise against it.
 
-Continue with [[09-critique|the adversarial reading of what the nine days established]], or go
-back to [[05-experiment-design|how to design a control that could actually fail]].
+Continue with [the adversarial reading of what the nine days established](09-critique.md), or go
+back to [how to design a control that could actually fail](05-experiment-design.md).

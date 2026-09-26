@@ -6,7 +6,7 @@ fixed: same sequences, same antigen, `recycling_steps=10`, `diffusion_samples=5`
 seed, same driver. Point estimate is the **median of five**, fixed in advance.
 
 This is the first Challenge 2 screen ever run under a condition where the antigen
-alignment was used. See [[msa_silently_discarded|why every previous one was not]].
+alignment was used. See [why every previous one was not](msa_silently_discarded.md).
 
 ## Result
 

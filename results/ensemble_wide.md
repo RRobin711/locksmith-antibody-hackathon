@@ -1,6 +1,6 @@
 # The CDR-H3 ensemble, widened from 40 designs to the pool
 
-`scripts/39_ensemble_wide_fold.py` + `42_analyse_tonight.py`. Pre-registered in [[prereg_2026-09-20_ensemble_wide|the ensemble pre-registration]]; sizing argued in [[ensemble_power|the seeds-versus-designs power analysis]], which is why this is a wide shallow design rather than the deep narrow one originally proposed.
+`scripts/39_ensemble_wide_fold.py` + `42_analyse_tonight.py`. Pre-registered in [the ensemble pre-registration](prereg_2026-09-20_ensemble_wide.md); sizing argued in [the seeds-versus-designs power analysis](ensemble_power.md), which is why this is a wide shallow design rather than the deep narrow one originally proposed.
 
 **n = 239 designs**, 155 at k=2 and 84 at k≥3, spanning 4 temperature arms ({0.1: 60, 0.2: 59, 0.3: 60, 0.5: 60}).
 

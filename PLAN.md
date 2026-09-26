@@ -823,7 +823,7 @@ This makes the multi-seed ensemble treatment natural rather than bolted on.
 
 ### M0 — Scoring harness ✅ COMPLETE
 Gate 0 green. Five of eight metrics validated against ground truth; see
-[[results/calibration|the calibration table]]. ipSAE, interface pLDDT and NetSolP untested.
+[the calibration table](results/calibration.md). ipSAE, interface pLDDT and NetSolP untested.
 
 ### M1 — Predictor qualification ← *everything waits on this*
 
@@ -861,7 +861,7 @@ defensible claim; the other is not.
 > **Deliverable: `mpnn_T0.5_s104_036`** — CDR-H3 `ALRPRDVDRGFYK`, 38.5% identity to
 > pembrolizumab, arm T=0.5. Discounted surrogate **94.963**, rubric `final` **87.5**, viable, *(the 87.5 is convention-dependent and superseded: under the handbook-conformant `band_value: top` + `dockq_interface_agg: global` it is **94.0**; the same design scores **81.0 / 87.5 / 94.0** across the three readings the handbook permits — see `results/handbook_conformance.md`)* *(corrected 2026-09-25: this line previously read 96.0 and 84.0/90.0/96.0, computed when `dockq.compute` parsed DockQ's printed 3-dp summary. True `GlobalDockQ = 0.79958` bands `medium`, not `good`; the printed `0.800` banded `good`. Recomputed above from the unrounded value.)*
 > fresh-seed DockQ **0.749**, CDR-H3 ensemble RMSD 0.52 Å over 7 seeds.
-> See [[results/m3_winner|the winner report]].
+> See [the winner report](results/m3_winner.md).
 >
 > **As run:** 239 designs over T = 0.1/0.2/0.3/0.5 (CDR-H3 length fixed at 13) → **all 239
 > folded unfiltered** at 1 seed, 6.0 h, zero failures → scored → shortlist 20 → **7 seeds
@@ -878,7 +878,7 @@ defensible claim; the other is not.
 >    ⚠ **The stronger claim "3 seeds is the worst allocation at every budget tested" is FALSE**
 >    and was corrected on 2026-09-20: at a 40-fold budget 20×3 (+1.4024) beats 4×10 (+1.3847)
 >    and 2×15 (+1.2992). The refuted wording survived here until 2026-09-21.
->    See [[results/m3_shortlist_depth|the sizing]].
+>    See [the sizing](results/m3_shortlist_depth.md).
 > 3. **Ranked on a continuous surrogate, reported `final`.** `final` takes 3 distinct values
 >    over 40 designs and flips band on seed noise; `src/locksmith/select/surrogate.py` keeps the
 >    rubric's pricing and anchors but interpolates between them (single-seed reliability
@@ -911,7 +911,7 @@ defensible claim; the other is not.
 > 3-seed mean DockQ at rho −0.387, but **aromatic fraction fully explains it** — the partial
 > correlation controlling for aromatics is −0.081 (p=0.62), while aromatics survive controlling
 > for ensemble (−0.410, p=0.009). Aromatic fraction predicts DockQ **better** (−0.536) at **zero
-> folds** versus three. See [[results/ensemble_validation\|the validation]].
+> folds** versus three. See [the validation](results/ensemble_validation.md).
 >
 > This gives the funnel its first genuinely cheap stage: over-generate with MPNN, prune on
 > aromatic fraction before any GPU time, then fold the survivors. Multi-seeding of the shortlist
@@ -968,7 +968,7 @@ Fresh-seed re-score on whichever we name best.
 > 36 backbones, 30 sequences and 30 RF2 structures (443 MB) sit on a stopped RunPod volume.
 > **None of the seven Challenge 2 metrics has a value**; there is no PDB, no PAE, no FASTA.
 > Retrieval is a ~20 min file copy requiring a paid pod restart. See
-> [[results/challenge2_remaining_work|the gap analysis]] — ~7 h of work remains, all local
+> [the gap analysis](results/challenge2_remaining_work.md) — ~7 h of work remains, all local
 > except that retrieval.
 
 <details><summary>Previous status (2026-09-20) — blocked on hardware</summary>
@@ -985,8 +985,8 @@ Fresh-seed re-score on whichever we name best.
 > has no GPU runtime anyway.
 >
 > **The route is off-machine**, not abandoned: RFantibody's stack runs untouched on any
-> T4/L4/A10. See [[results/rfantibody_risk_scope|the risk scope]] (9 risks, kill criteria,
-> staged gates) and [[results/challenge2_colab_plan|the plan]] (RunPod/Kaggle over free Colab;
+> T4/L4/A10. See [the risk scope](results/rfantibody_risk_scope.md) (9 risks, kill criteria,
+> staged gates) and [the plan](results/challenge2_colab_plan.md) (RunPod/Kaggle over free Colab;
 > hotspots = the 26-residue PD-L1 footprint already mapped to 5GGS; framework = RFantibody's own
 > `hu-4D5-8_Fv.pdb`; RF2 as filter, Boltz-2 as the scoring fold so both challenges share one
 > predictor).
@@ -1087,12 +1087,12 @@ prediction that reproduces copy 1's specific conformation can legitimately score
 | **G0** ✅ | Harness reproduces ground truth; pembrolizumab passes every binding gate and fails novelty; decoy rejected | — |
 | **G1a** | Predicted 5GGS (**templated**) scores viable on all 8 metrics | Everything — proves the harness works on a prediction |
 | **G1b** | Predicted 5GGS (**untemplated**) DockQ ≥ 0.49 vs crystal | **Hard go/no-go for Challenge 2 only.** Ch1 is template-protected and unaffected |
-| **G1c** ❌ | **FAILED 2026-09-17.** Restricted-range ρ = 0.469, 95% CI [−0.14, +0.82], n=12. Separately and more decisively: Fv ipSAE reliability 0.61 vs Fab 0.96 (under-constrained elbow), so matching Fab precision needs ≥4 Fv seeds = 2.9× the Fab's cost. **Fab-only adopted.** See [[results/panel_g1c_g1d\|the panel results]] | Resolved — funnel screens on Fab |
+| **G1c** ❌ | **FAILED 2026-09-17.** Restricted-range ρ = 0.469, 95% CI [−0.14, +0.82], n=12. Separately and more decisively: Fv ipSAE reliability 0.61 vs Fab 0.96 (under-constrained elbow), so matching Fab precision needs ≥4 Fv seeds = 2.9× the Fab's cost. **Fab-only adopted.** See [the panel results](results/panel_g1c_g1d.md) | Resolved — funnel screens on Fab |
 | **G1d** ◐ | **PARTIAL 2026-09-17.** Against a 14-point Boltz ipSAE↔DockQ curve, the AF2 point sits 3.1 residual sd low → **scale offset ≈ 0.13** (raw gap 0.187; the rest is deserved). n=1 for AF2. **Blocked for designs:** AF2 cannot fold without MSAs (single-sequence gives pLDDT 37, interpenetrating chains) and designs must not reach the public MMseqs2 server. Needs a local DB, or drop AF2 for Chai-1 | Treat Boltz ipSAE as ~0.13 optimistic |
 | **G1e** ½ | DockQ ✅ tolerates ≥8 substitutions and indels once `--allowed_mismatches 40` + `--mapping ABC:ABC` are passed (defaults refuse **every** mutated design). NetSolP ⬜ downloaded, not installed | `viable` can return `True` |
-| **G1f** ◐ | **POST-CUTOFF TEST — MARGINAL (revised 2026-09-17 after input validation).** 5 complexes released clear of Boltz-2's verified 2023-06-01 cutoff, CDR-H3 novelty 21–44%: **median Fab DockQ 0.291** vs 5GGS's 0.818; 1/5 clears 0.49; 2/5 fail completely and stably. ipSAE rank correlation on novel complexes is **intact** (Spearman +0.900) but sits ~0.19–0.28 BELOW the panel curve, i.e. conservative. **An earlier FAIL verdict (median 0.157, inverted confidence) was withdrawn** — 4/5 targets had been folded from coordinate-derived sequences with internal loops spliced out. See [[results/postcutoff_result\|the result and its validation]] | Challenge 2 high-risk, not excluded |
-| **G2** ✅ | **CLOSED 2026-09-18.** Baseline 1 (plain ProteinMPNN, 20 designs, defaults) run end to end: design → validate → fold → score → gate → rank, 20/20 folds, `designs.parquet` written. **20/20 clear all eight gates**; pembrolizumab itself scores 76.0 and is NON-VIABLE (novelty gate). See [[results/baseline_mpnn\|the baseline report]] | The control exists — but shows the gates do not discriminate on fixed-backbone redesign |
-| **G3** ❌ **REFUTED AS A DESIGN RULE 2026-09-22** (test: [[results/g3_outcome_variable\|g3_outcome_variable]]) — re-ran G3's own equal-budget random-subset test with EACH scored metric as the outcome, n=239, 10,000 resamples. The filter beats its null on **2 of 6**: `dockq` (+0.0237, p=0.0001) and `iface_plddt` (+1.12, p=0.0001). **Both are properties of the PREDICTOR, not the interface** — DockQ here is pose retention against the parent crystal, and interface pLDDT is Boltz's own confidence. Every quantity about the interface itself is null or against it: `dg` p=0.064, `cdr_sasa` p=0.547, and **`contacts` runs the WRONG WAY** (filtered designs make 1.80 FEWER contacts; one-sided p for 'more contacts' = 0.988). That is what the chemistry predicts, since Tyr/Trp are large and contact-rich. So the filter selects for designs Boltz finds easy to place confidently, which is a metric gaming its own scorer, and neither surviving quantity even EXISTS for a de novo target. Original PASS statistics were sound; the outcome variable did not support the conclusion. Superseded status below. |
+| **G1f** ◐ | **POST-CUTOFF TEST — MARGINAL (revised 2026-09-17 after input validation).** 5 complexes released clear of Boltz-2's verified 2023-06-01 cutoff, CDR-H3 novelty 21–44%: **median Fab DockQ 0.291** vs 5GGS's 0.818; 1/5 clears 0.49; 2/5 fail completely and stably. ipSAE rank correlation on novel complexes is **intact** (Spearman +0.900) but sits ~0.19–0.28 BELOW the panel curve, i.e. conservative. **An earlier FAIL verdict (median 0.157, inverted confidence) was withdrawn** — 4/5 targets had been folded from coordinate-derived sequences with internal loops spliced out. See [the result and its validation](results/postcutoff_result.md) | Challenge 2 high-risk, not excluded |
+| **G2** ✅ | **CLOSED 2026-09-18.** Baseline 1 (plain ProteinMPNN, 20 designs, defaults) run end to end: design → validate → fold → score → gate → rank, 20/20 folds, `designs.parquet` written. **20/20 clear all eight gates**; pembrolizumab itself scores 76.0 and is NON-VIABLE (novelty gate). See [the baseline report](results/baseline_mpnn.md) | The control exists — but shows the gates do not discriminate on fixed-backbone redesign |
+| **G3** ❌ **REFUTED AS A DESIGN RULE 2026-09-22** (test: [g3_outcome_variable](results/g3_outcome_variable.md)) — re-ran G3's own equal-budget random-subset test with EACH scored metric as the outcome, n=239, 10,000 resamples. The filter beats its null on **2 of 6**: `dockq` (+0.0237, p=0.0001) and `iface_plddt` (+1.12, p=0.0001). **Both are properties of the PREDICTOR, not the interface** — DockQ here is pose retention against the parent crystal, and interface pLDDT is Boltz's own confidence. Every quantity about the interface itself is null or against it: `dg` p=0.064, `cdr_sasa` p=0.547, and **`contacts` runs the WRONG WAY** (filtered designs make 1.80 FEWER contacts; one-sided p for 'more contacts' = 0.988). That is what the chemistry predicts, since Tyr/Trp are large and contact-rich. So the filter selects for designs Boltz finds easy to place confidently, which is a metric gaming its own scorer, and neither surviving quantity even EXISTS for a de novo target. Original PASS statistics were sound; the outcome variable did not support the conclusion. Superseded status below. |
 | **G4** | Ch2: ≥1 gate-clearing design **or** a characterised failure with evidence | Dossier |
 | **G5** | Dossier complete on 2 designs per challenge (best + contrast) | Writeup |
 | **G6** | Synthesis written | — |

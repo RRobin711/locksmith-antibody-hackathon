@@ -1,7 +1,7 @@
 # The diffusion draw moves BOTH challenges, and we have been reporting the argmax
 
 **2026-09-22.** Run against the rule pre-registered in
-[[prereg_2026-09-22_diffusion_samples|the pre-registration]], written before the folds.
+[the pre-registration](prereg_2026-09-22_diffusion_samples.md), written before the folds.
 
 ## Result
 

@@ -1,7 +1,7 @@
 # What a pre-fold filter has to beat
 
 **Session:** 2026-09-18 (fourth of the day) · **Kind:** design review, no new folds ·
-**Artefacts:** `scripts/27_review_m3_assumptions.py`, [[m3_plan_review|results/m3_plan_review.md]]
+**Artefacts:** `scripts/27_review_m3_assumptions.py`, [results/m3_plan_review.md](../../results/m3_plan_review.md)
 
 The M3 campaign plan arrived fully specified: generate wide, prune on CDR-H3 aromatic
 fraction before spending GPU time, fold the survivors, rank on the three-seed mean rubric
@@ -12,8 +12,8 @@ assumptions against folds already on disk, before committing an overnight run to
 four of the assumptions did not survive.
 
 Nothing here was folded. Every number comes from re-interrogating the 40-design × 3-seed
-pool built for [[2026-09-18-the-ensemble-axis-loses-to-a-free-sequence-feature|the ensemble
-validation]].
+pool built for [the ensemble
+validation](2026-09-18-the-ensemble-axis-loses-to-a-free-sequence-feature.md).
 
 ---
 
@@ -434,7 +434,7 @@ is exactly right and is the most valuable part of it.
 ## 9. State
 
 **Ran.** No folds. `scripts/27_review_m3_assumptions.py`,
-[[m3_plan_review|results/m3_plan_review.md]].
+[results/m3_plan_review.md](../../results/m3_plan_review.md).
 
 **Launched 2026-09-19 01:04.** M3's primary arm is running unattended:
 `scripts/28_generate_temp_arm.py` (done — 239 unique designs over T = 0.1/0.2/0.3/0.5),

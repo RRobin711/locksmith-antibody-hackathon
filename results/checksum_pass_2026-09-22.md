@@ -1,6 +1,6 @@
 # The sha256 pass, completed
 
-**2026-09-22.** The amber row in [[audit_response_2026-09-22|the audit response]] is now
+**2026-09-22.** The amber row in [the audit response](audit_response_2026-09-22.md) is now
 green. This is the independent hash, not a substitute for it.
 
 ## Result

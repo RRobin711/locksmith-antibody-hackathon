@@ -29,17 +29,17 @@ Pick the one that matches why you are here.
 
 Read in this order, roughly one hour each:
 
-1. [[00-orientation|Orientation]] — the four questions
-2. [[07-the-campaign|The campaign]] — the nine days as narrative
-3. [[01-the-biological-problem|The biological problem]]
-4. [[02-the-engineering-problem|The engineering problem]]
-5. [[04-measurement-theory|Measurement theory]]
-6. [[05-experiment-design|Experiment design]]
-7. [[06-allocation-and-selection|Allocation and selection]]
-8. [[08-what-broke|What broke]]
-9. [[09-critique|The critique]]
+1. [Orientation](00-orientation.md) — the four questions
+2. [The campaign](07-the-campaign.md) — the nine days as narrative
+3. [The biological problem](01-the-biological-problem.md)
+4. [The engineering problem](02-the-engineering-problem.md)
+5. [Measurement theory](04-measurement-theory.md)
+6. [Experiment design](05-experiment-design.md)
+7. [Allocation and selection](06-allocation-and-selection.md)
+8. [What broke](08-what-broke.md)
+9. [The critique](09-critique.md)
 
-Skip [[03-the-toolchain|the toolchain]] on a first pass and return when you need
+Skip [the toolchain](03-the-toolchain.md) on a first pass and return when you need
 to actually install something.
 
 ### 1.2 The transferable pass — "I do not care about antibodies"
@@ -48,19 +48,19 @@ This is the honest recommendation for most readers. The measurement theory here
 is field-independent: it applies to A/B testing, model evaluation, benchmark
 design, hiring, or any setting where you rank noisy candidates and pick the best.
 
-1. [[00-orientation|Orientation]] §1.3 and §2 only
-2. [[04-measurement-theory|Measurement theory]] — all of it
-3. [[05-experiment-design|Experiment design]] — all of it
-4. [[06-allocation-and-selection|Allocation and selection]] — all of it
-5. [[09-critique|The critique]] §2 and §6
+1. [Orientation](00-orientation.md) §1.3 and §2 only
+2. [Measurement theory](04-measurement-theory.md) — all of it
+3. [Experiment design](05-experiment-design.md) — all of it
+4. [Allocation and selection](06-allocation-and-selection.md) — all of it
+5. [The critique](09-critique.md) §2 and §6
 
 That is four to five hours and it is where the compounding knowledge lives.
 
 ### 1.3 The practitioner pass — "I am going to build something like this"
 
-Add [[03-the-toolchain|the toolchain]] and [[08-what-broke|what broke]] to the
+Add [the toolchain](03-the-toolchain.md) and [what broke](08-what-broke.md) to the
 transferable pass, then work the Track B exercises in §4. Read
-[[02-the-engineering-problem|the engineering problem]] with `config/metrics.yaml`
+[the engineering problem](02-the-engineering-problem.md) with `config/metrics.yaml`
 open beside it.
 
 ---
@@ -73,9 +73,9 @@ is what most people are missing and what pays back fastest.
 
 **Tier 1 — Measurement theory (highest leverage; start here).** Classical test
 theory: `observed = true + error`. Reliability as a variance ratio. The
-[[04-measurement-theory#2. The intraclass correlation, and metrics that turn out to be constants|intraclass correlation]]. [[04-measurement-theory#3. Spearman–Brown: what averaging buys|Spearman–Brown]]. Attenuation. Range restriction. If you
+[intraclass correlation](04-measurement-theory.md#2-the-intraclass-correlation-and-metrics-that-turn-out-to-be-constants). [Spearman–Brown](04-measurement-theory.md#3-spearmanbrown-what-averaging-buys). Attenuation. Range restriction. If you
 learn only one tier, learn this one; it is what
-[[04-measurement-theory|Chapter 04]] teaches and it is what the project spent
+[Chapter 04](04-measurement-theory.md) teaches and it is what the project spent
 five sessions discovering the hard way.
 
 **Tier 2 — Inference and power.** Confidence intervals, the Fisher-z
@@ -97,14 +97,14 @@ CDRs, framework regions, V(D)J recombination and why CDR-H3 is special, IMGT
 numbering.
 
 **Tier 6 — Structure prediction.** What a folding model does. MSAs and
-co-evolution. pLDDT, PAE, ipTM, [[03-the-toolchain#4.3 ipSAE — interface confidence from the PAE|ipSAE]] and what each is a statement *about*.
+co-evolution. pLDDT, PAE, ipTM, [ipSAE](03-the-toolchain.md#43-ipsae-interface-confidence-from-the-pae) and what each is a statement *about*.
 Recycling and diffusion sampling. Training cutoffs and memorisation.
 
-**Tier 7 — Design tools.** [[03-the-toolchain#2.1 ProteinMPNN|ProteinMPNN]], [[03-the-toolchain#2.2 RFdiffusion via RFantibody|RFdiffusion]], and their limits — notably
+**Tier 7 — Design tools.** [ProteinMPNN](03-the-toolchain.md#21-proteinmpnn), [RFdiffusion](03-the-toolchain.md#22-rfdiffusion-via-rfantibody), and their limits — notably
 that ProteinMPNN optimises sequence recovery given a backbone, which is not the
 same objective as anything you care about.
 
-**Tier 8 — Developability.** Glycosylation sequons, [[01-the-biological-problem#6.2 The NG deamidation motif in Challenge 1's CDR-H2|deamidation]] motifs,
+**Tier 8 — Developability.** Glycosylation sequons, [deamidation](01-the-biological-problem.md#62-the-ng-deamidation-motif-in-challenge-1s-cdr-h2) motifs,
 isoelectric point, aggregation propensity, immunogenicity. Deferrable until you
 have a design worth criticising.
 
@@ -115,12 +115,12 @@ have a design worth criticising.
 Answer these from memory before checking. If you cannot, reread the named
 chapter. Answers are all recoverable from the repository.
 
-**On measurement** ([[04-measurement-theory|Ch 04]])
+**On measurement** ([Ch 04](04-measurement-theory.md))
 
 1. A metric has an intraclass correlation of 0.003 across random seeds. What does
    that tell you about using it to rank designs, and what does it tell you about
    the *designs*?
-2. Two noisy measurements each with [[04-measurement-theory#1.3 Reliability|reliability]] 0.75 have a true correlation of
+2. Two noisy measurements each with [reliability](04-measurement-theory.md#13-reliability) 0.75 have a true correlation of
    0.80. What correlation will you observe? Why must you never report the
    corrected value as if it were observed?
 3. You measure reliability 0.965 on a panel spanning a wide quality range, then
@@ -129,7 +129,7 @@ chapter. Answers are all recoverable from the repository.
 4. Why is "shortlisting destroys reliability" a statement about the *selection
    step* rather than about the measurement?
 
-**On inference** ([[05-experiment-design|Ch 05]])
+**On inference** ([Ch 05](05-experiment-design.md))
 
 5. You measure a correlation of −0.168 with p = 0.69 at n = 8 and conclude the
    effect is absent. State precisely what is wrong with that conclusion, and what
@@ -137,13 +137,13 @@ chapter. Answers are all recoverable from the repository.
 6. A filter improves a pool's mean quality with p < 0.0001 but does not move the
    maximum, and the p-value for the maximum *rises monotonically* with retention
    fraction. What is that pattern the signature of?
-7. Your filter beats an [[05-experiment-design#6. Equal-budget resampling, and varying the outcome|equal-budget]] random null on the outcome you chose. What
+7. Your filter beats an [equal-budget](05-experiment-design.md#6-equal-budget-resampling-and-varying-the-outcome) random null on the outcome you chose. What
    should you do before believing it, and what did doing so reveal here?
 8. Why is a null built from uniformly-drawn residues a strawman when testing
    whether a designed interface lands on a target epitope? What is the right null
    and what is still wrong with it?
 
-**On allocation** ([[06-allocation-and-selection|Ch 06]])
+**On allocation** ([Ch 06](06-allocation-and-selection.md))
 
 9. The error of a mean falls as `1/√k`. What law governs the error of a *spread*,
    and why does that invert the depth-versus-breadth answer?
@@ -154,7 +154,7 @@ chapter. Answers are all recoverable from the repository.
 12. A monotone relabelling of a banded sub-score cannot change which of two
     designs scores higher — true or false? Justify carefully.
 
-**On engineering** ([[02-the-engineering-problem|Ch 02]], [[08-what-broke|Ch 08]])
+**On engineering** ([Ch 02](02-the-engineering-problem.md), [Ch 08](08-what-broke.md))
 
 13. Name four distinct ways a structure-prediction run can exit with status 0
     having produced nothing usable.
@@ -166,7 +166,7 @@ chapter. Answers are all recoverable from the repository.
     the declared source of truth. What actually happened here, and what did it
     cost?
 
-**On the science** ([[01-the-biological-problem|Ch 01]])
+**On the science** ([Ch 01](01-the-biological-problem.md))
 
 17. A handbook lists `N→Q` and `S→A` as interchangeable fixes for a glycosylation
     sequon. What single free calculation tells you which one is safe, and what was
@@ -236,7 +236,7 @@ anyway." A few GPU-hours and a few dollars.
 
 ### Track C — rebuild it
 
-Work through [[02-the-engineering-problem|Chapter 02]] and implement the pipeline
+Work through [Chapter 02](02-the-engineering-problem.md) and implement the pipeline
 yourself, in this order — which is deliberately *not* the order the project used:
 
 1. Encode the rubric as data, with every unspecified convention as an explicit switch.
@@ -298,8 +298,8 @@ practise:
 
 Almost everything this campaign took nine days to learn was learnable in two. The
 negative control cost eight folds. The metric reliability table cost nothing at
-all. The chapter that explains why they came last is [[09-critique|the critique]];
+all. The chapter that explains why they came last is [the critique](09-critique.md);
 the chapters that explain why they matter are
-[[04-measurement-theory|measurement theory]],
-[[05-experiment-design|experiment design]] and
-[[06-allocation-and-selection|allocation and selection]].
+[measurement theory](04-measurement-theory.md),
+[experiment design](05-experiment-design.md) and
+[allocation and selection](06-allocation-and-selection.md).

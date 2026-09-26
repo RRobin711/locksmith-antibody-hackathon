@@ -1,7 +1,7 @@
 # Positive control: the Challenge 2 fold configuration is sound
 
 **2026-09-22.** Run against the decision rule pre-registered in
-[[prereg_2026-09-22_positive_control|the pre-registration]], written before the folds.
+[the pre-registration](prereg_2026-09-22_positive_control.md), written before the folds.
 
 ## Result
 

@@ -4,11 +4,11 @@
 **verified**, what is **taken on trust**, what is **blocked**, and what is left. Every
 number here was read from a file on this machine while writing it. Where a number has a
 history, the history is in
-[[results/retractions|the retraction register]] rather than inlined, because this file
+[the retraction register](results/retractions.md) rather than inlined, because this file
 kept accreting corrections until it contradicted itself in three places.
 
 There is **no deadline and this is not being submitted** to the live event — see
-[[PLAN|§15 of the plan]]. What the project is now is a worked example of measuring a design
+[§15 of the plan](PLAN.md). What the project is now is a worked example of measuring a design
 pipeline honestly, and the deliverable is the whole record, not the score.
 
 ---
@@ -64,7 +64,7 @@ Challenge 2 arm only.
 
 **Known limit.** The top two designs in the shortlist were separated by **0.1 standard
 errors**, so this is *a* best design, not *the* best. The winner-change analysis is in
-[[results/audit_response_2026-09-22|§B0 of the audit response]]; swapping for
+[§B0 of the audit response](results/audit_response_2026-09-22.md); swapping for
 `mpnn_T0.2_s102_032` was left as the user's call and has not been made.
 
 ---
@@ -91,7 +91,7 @@ MSA's query length against the input chain and, on mismatch, **discards the alig
 folds single-sequence**, announcing it only on stdout — which the harness captured and
 threw away. Every fold paired a 123-residue antigen with a 113-residue cached alignment.
 The 2×2 that isolates it is in
-[[results/msa_silently_discarded|the alignment-discard measurement]]: with a correct
+[the alignment-discard measurement](results/msa_silently_discarded.md): with a correct
 alignment **0.012** both pre- and post-fix, without it **0.773 / 0.686**.
 
 The consequence was not noise but **near-inversion of the ranking** — re-screening all 30
@@ -106,13 +106,13 @@ eight times the sequences produced **nothing better than the first pass found** 
 0.859 at depth 1, 0.854 at depth 8. So more backbones and more sequences are the same
 experiment at different prices, and **renting a GPU is not justified**. Reaching past ~0.86
 needs a different generator, not more samples from this one. See
-[[results/depth_sweep|the depth sweep]].
+[the depth sweep](results/depth_sweep.md).
 
 **What the 0.904 does and does not mean.** It is Boltz's confidence, not an affinity
 measurement. What the 40-crystal calibration panel buys is that this confidence tracks pose
 accuracy at **ρ = +0.702**. Its error rates must be quoted at a stated DockQ threshold —
 0% FP / 58.3% FN at Acceptable+, 12.5% FP / 25.0% FN at Medium+ — and never as the
-flattering half of each; see [[results/retractions|§C1 of the register]].
+flattering half of each; see [§C1 of the register](results/retractions.md).
 
 ---
 
@@ -123,7 +123,7 @@ flattering half of each; see [[results/retractions|§C1 of the register]].
 - The package re-derives its own scores from its own files (`scripts/58`, exits non-zero on
   any structural problem or failed cutoff).
 - 258/258 retrieved pod artefacts sha256-match the server —
-  [[results/checksum_pass_2026-09-22|the checksum pass]].
+  [the checksum pass](results/checksum_pass_2026-09-22.md).
 - 34 invariant tests, several mutation-verified.
 - The harness scores pembrolizumab itself correctly (the standing canary).
 
@@ -136,7 +136,7 @@ flattering half of each; see [[results/retractions|§C1 of the register]].
 - **The negative-control result cuts against the rubric, not for us.** HyHEL-10, raised
   against hen egg lysozyme, clears **all five** §7.2 hard cutoffs on `model_0`; four of the
   five gates reject **0 of 6** wrong antibodies. §7.2 rests on ipSAE alone. See
-  [[results/negative_control|the negative control]].
+  [the negative control](results/negative_control.md).
 - **Nothing here is wet-lab evidence.** No claim in the package says otherwise.
 
 ---
@@ -187,7 +187,7 @@ In order of what unblocks what.
 **Done 2026-09-26 and no longer on this list:** per-interface DockQ verification in the
 documentation guard (`check_docs_against_scores` now compares element-wise; mutation-tested
 by restoring `A,B DockQ 0.931`), the `ProcessPoolExecutor` spawn fix and its test, and
-[[results/retractions|the retraction register]], which is what had been blocking a clean
+[the retraction register](results/retractions.md), which is what had been blocking a clean
 version of this file.
 
 ---
@@ -195,14 +195,14 @@ version of this file.
 ## 8. Reading order for a cold reader
 
 1. This file.
-2. [[results/retractions|The retraction register]] — everything the project withdrew, and
+2. [The retraction register](results/retractions.md) — everything the project withdrew, and
    the four figures flagged as not reproducing. Read before trusting a number found
    anywhere else in the repo.
-3. [[docs/sessions/README|The session index]] — one line per working session; the teaching
+3. [The session index](docs/sessions/README.md) — one line per working session; the teaching
    lives in the per-session docs.
-4. [[docs/lecture/README|The lecture course]], with
-   [[docs/lecture/CORRECTIONS|its own corrections file]] read first.
-5. [[README|The repo README]] for the organising idea, and [[PLAN|PLAN §15]] for how the
+4. [The lecture course](docs/lecture/README.md), with
+   [its own corrections file](docs/lecture/CORRECTIONS.md) read first.
+5. [The repo README](README.md) for the organising idea, and [PLAN §15](PLAN.md) for how the
    milestones were re-scoped.
 
 **One warning about this repo's prose.** Its errors cluster in sentences, not in code — the

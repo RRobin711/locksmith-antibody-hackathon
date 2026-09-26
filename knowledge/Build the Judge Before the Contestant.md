@@ -16,7 +16,7 @@ single molecule, we rebuilt the scoring system and tested it on answers we alrea
 ## 1. The reasoning
 
 We are going to generate thousands of candidate antibodies and pick the best one. That means
-[[The Eight Metrics|the scoring function]] decides everything — which designs survive, which
+[the scoring function](The%20Eight%20Metrics.md) decides everything — which designs survive, which
 get discarded, what we eventually claim.
 
 So: **what happens if the scoring is subtly wrong?**
@@ -72,7 +72,7 @@ The first run reported:
 My instinct was to go looking for a bug.
 
 There wasn't one. Pembrolizumab's CDR-H3 is 100% identical to pembrolizumab's CDR-H3, because
-it *is* pembrolizumab. The [[The Eight Metrics|novelty gate]] exists specifically to reject
+it *is* pembrolizumab. The [novelty gate](The%20Eight%20Metrics.md) exists specifically to reject
 trivial clones. **The reference molecule must fail it.** The harness was right; my expectation
 was wrong.
 
@@ -117,5 +117,5 @@ decision was made on a broken number.
 
 ---
 
-**Related:** [[Confidence Is Not Truth|why passing the metrics still isn't proof]] ·
-[[Eight Silent Failures|the traps this discipline caught]]
+**Related:** [why passing the metrics still isn't proof](Confidence%20Is%20Not%20Truth.md) ·
+[the traps this discipline caught](Eight%20Silent%20Failures.md)

@@ -11,7 +11,7 @@ Tags: [[Protein Design|protein design]] · [[Structure Prediction|structure pred
 **Session:** 2026-09-17, later. **Outcome:** the post-cutoff result was **partly invalid**.
 Its headline verdict moves **FAIL → MARGINAL**, and two of its three conclusions are
 **withdrawn**. The cause was ours, not the model's.
-**Prerequisite:** [[2026-09-17-the-memorisation-test-and-what-it-cost-challenge-2|the post-cutoff session doc]], which this corrects.
+**Prerequisite:** [the post-cutoff session doc](2026-09-17-the-memorisation-test-and-what-it-cost-challenge-2.md), which this corrects.
 
 ---
 

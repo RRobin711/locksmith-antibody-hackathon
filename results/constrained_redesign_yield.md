@@ -26,7 +26,7 @@ surrounding residues under the constraint rather than having one residue swapped
 a finished sequence.
 
 That distinction is the whole finding. The fix arms
-([[liability_fix_arms|all three collapsed]], including one at zero contacts) tested
+([all three collapsed](liability_fix_arms.md), including one at zero contacts) tested
 **post-hoc point mutation breaking a joint optimisation**. This tests whether a clean
 sequence *exists* on the backbone. It does, essentially always, and usually on the first try.
 

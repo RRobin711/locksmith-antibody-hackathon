@@ -12,7 +12,7 @@ Tags: [[Protein Design|protein design]] · [[Structure Prediction|structure pred
 the variant generator, and the scoring/analysis pipeline. **Gates:** G1c **fails** (recorded, with
 a cost decision); G1d **cannot be discharged on designs** under the disclosure constraint, but the
 part that can be answered now has a much better answer.
-**Prerequisites:** [[2026-09-16-first-prediction-and-the-four-attempt-fold|the first-prediction doc]] for the Boltz baseline and [[2026-09-16-netsolp-colabfold-and-the-control-that-changed-the-answer|the NetSolP/ColabFold doc]] for the install and the first G1d attempt. Everything needed is restated below.
+**Prerequisites:** [the first-prediction doc](2026-09-16-first-prediction-and-the-four-attempt-fold.md) for the Boltz baseline and [the NetSolP/ColabFold doc](2026-09-16-netsolp-colabfold-and-the-control-that-changed-the-answer.md) for the install and the first G1d attempt. Everything needed is restated below.
 
 ---
 
@@ -121,7 +121,7 @@ That matters, because the 4,700-fold budget in the plan was derived from 34 s:
 **Boltz accepts a directory of inputs and folds them in one process.** Batching is worth roughly
 1.8× and is not yet implemented. Until it is, the honest budget is ~1,300 Fab folds, not 4,700 —
 back near the plan's original 1,400–1,800 estimate. This is stated as a correction to
-[[2026-09-16-first-prediction-and-the-four-attempt-fold|the earlier doc's §7]], which revised the
+[the earlier doc's §7](2026-09-16-first-prediction-and-the-four-attempt-fold.md), which revised the
 budget upward on the 34 s figure.
 
 ---

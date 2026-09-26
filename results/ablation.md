@@ -1,6 +1,6 @@
 # Hotspot ablation on the named design
 
-`scripts/38_ablation_fold.py` + `42_analyse_tonight.py`. Alanine substitutions in **`mpnn_T0.5_s104_036`**, two seeds each (41, 42), re-folded from scratch. Pre-registered in [[prereg_2026-09-20_ablation|the ablation pre-registration]], hotspots chosen from measured 5 Å heavy-atom contacts **before** folding.
+`scripts/38_ablation_fold.py` + `42_analyse_tonight.py`. Alanine substitutions in **`mpnn_T0.5_s104_036`**, two seeds each (41, 42), re-folded from scratch. Pre-registered in [the ablation pre-registration](prereg_2026-09-20_ablation.md), hotspots chosen from measured 5 Å heavy-atom contacts **before** folding.
 
 Parent over 8 seeds: ipSAE **0.856**, ΔG **-12.6**, contacts **97**, DockQ **0.747**.
 

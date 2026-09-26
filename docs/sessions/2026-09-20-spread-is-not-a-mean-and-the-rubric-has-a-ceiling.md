@@ -12,7 +12,7 @@ sentence and linked, not relocated.
 
 ## 0. Where the project was
 
-[[2026-09-19-three-seeds-is-the-worst-allocation|M3 closed on 2026-09-19]] with a named
+[M3 closed on 2026-09-19](2026-09-19-three-seeds-is-the-worst-allocation.md) with a named
 Challenge-1 design, `mpnn_T0.5_s104_036`, at a winner's-curse-discounted score of
 94.963 on the project's continuous ranking surrogate and **87.5** on the competition's
 own banded composite. The top of the ranking was not resolved — first and second sat

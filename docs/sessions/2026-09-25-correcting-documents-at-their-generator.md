@@ -4,7 +4,7 @@ tags:
   - locksmith-antibody-hackathon
 ---
 
-Tags: [[../../knowledge/Build the Judge Before the Contestant|the project's guiding idea — build the evaluator before the thing evaluated]], [[README|the session index]]
+Tags: [the project's guiding idea — build the evaluator before the thing evaluated](../../knowledge/Build%20the%20Judge%20Before%20the%20Contestant.md), [the session index](README.md)
 
 # Session 2026-09-25 — Correcting documents at their generator, and the class of bug that hides there
 
@@ -28,8 +28,8 @@ six-slide pitch deck rebuilt from the packaging run. `VALIDATION PASSED`, Challe
 **Prerequisites for this doc:** none specific. It defines its own terms. Some numbers
 reference earlier work — where they do, the earlier session doc is linked rather than
 restated at length. Useful but not required:
-[[2026-09-22-published-withdrawn-and-the-fix-that-killed-the-antibody|the session that established diffusion_samples=1 makes model_0 an argmax]]
-and [[2026-09-22-calibrating-the-rubric-against-things-that-should-fail|the calibration panel of 40 crystals]].
+[the session that established diffusion_samples=1 makes model_0 an argmax](2026-09-22-published-withdrawn-and-the-fix-that-killed-the-antibody.md)
+and [the calibration panel of 40 crystals](2026-09-22-calibrating-the-rubric-against-things-that-should-fail.md).
 
 ---
 
@@ -236,7 +236,7 @@ All **three** match. The numbers came from a different structure. Confirmed defi
 comparing sequences: the sweep's `model_0` and the shipped design differ at exactly one
 position — heavy chain 55, `N` → `Q` — i.e. the sweep was run on the **pre-`N55Q`** design,
 before the deamidation fix described in
-[[2026-09-22-fixing-liabilities-and-refuting-our-own-advice|the session that removed the NG deamidation motif]].
+[the session that removed the NG deamidation motif](2026-09-22-fixing-liabilities-and-refuting-our-own-advice.md).
 
 **Knock-on defect found by the same trail.** `methods_and_limitations.md` presented that
 sweep in a table whose first column was headed `0 (submitted)`, with DockQ **0.816** and

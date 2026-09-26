@@ -1,6 +1,6 @@
 # Negative control — does the viability gate mean anything?
 
-**2026-09-22.** Pre-registered in [[prereg_2026-09-22_calibration_and_negative_control|the pre-registration written before these folds finished]].
+**2026-09-22.** Pre-registered in [the pre-registration written before these folds finished](prereg_2026-09-22_calibration_and_negative_control.md).
 
 ## The argument
 
@@ -62,7 +62,7 @@ The same folds, collapsed to the **median over the five diffusion samples** — 
 
 The consequence is concrete and not hypothetical: under the sampling settings this project shipped with for most of its life, an antibody raised against hen egg lysozyme would have been certified a viable PD-1 binder on every metric in the rubric. That is not a near miss — it is a clean sweep of the gate set by a molecule that cannot possibly bind.
 
-This is an independent confirmation, from a completely different direction, of [[diffusion_samples_2026-09-22|the diffusion-sampling result]] — which was measured on our own designs and could have been dismissed as a quirk of them. It cannot be dismissed here.
+This is an independent confirmation, from a completely different direction, of [the diffusion-sampling result](diffusion_samples_2026-09-22.md) — which was measured on our own designs and could have been dismissed as a quirk of them. It cannot be dismissed here.
 
 ## Which of the five gates actually does any work
 

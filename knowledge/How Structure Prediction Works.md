@@ -55,7 +55,7 @@ the last of which was the GPU running out of memory. MSA data is one of the larg
 folding model holds — memory scales with alignment depth × sequence length — and we were
 building deep alignments for all three chains, including the two that shouldn't have had any.
 Removing them was simultaneously the scientifically correct choice and a two-thirds cut in
-memory. See [[The Environment Saga|the environment note]].
+memory. See [the environment note](The%20Environment%20Saga.md).
 
 *When the right thing and the cheap thing coincide, it usually means the right thing was right
 for a structural reason.*
@@ -73,7 +73,7 @@ We use **Boltz-2**, an open model in the AlphaFold-3 family. Two reasons:
   ensemble for free. More on why that matters below.
 
 AlphaFold remains valuable as an *independent second opinion* — see
-[[Confidence Is Not Truth|the validation note]].
+[the validation note](Confidence%20Is%20Not%20Truth.md).
 
 ## 4. pLDDT and PAE — the model's two confidence outputs
 
@@ -92,7 +92,7 @@ The distinction matters enormously for complexes. pLDDT can be high everywhere �
 individually well-modelled — while the model has no idea how they fit together. That shows up
 in the **inter-chain block** of the PAE matrix: the numbers describing residue pairs where one
 is in each protein. Low inter-chain PAE means the model is confident about the docking. That
-block is the raw material for [[The Eight Metrics|ipSAE]], the interface-confidence metric.
+block is the raw material for [ipSAE](The%20Eight%20Metrics.md), the interface-confidence metric.
 
 ## 5. A trap: pLDDT and B-factors live in the same place
 
@@ -111,11 +111,11 @@ So reading a beautifully resolved crystal structure as if its B-factors were pLD
 report the best possible input as maximally unconfident. We handle this by tracking
 *provenance* in the type system: a structure is tagged as experimental or predicted, and
 confidence metrics simply refuse to run on experimental ones. Full story in
-[[Eight Silent Failures|the traps note]].
+[the traps note](Eight%20Silent%20Failures.md).
 
 ## 6. Confidence is not correctness
 
-This deserves its own note and has one — [[Confidence Is Not Truth|Confidence Is Not Truth]] —
+This deserves its own note and has one — [Confidence Is Not Truth](Confidence%20Is%20Not%20Truth.md) —
 but the short version belongs here too.
 
 Every confidence number a folding model emits describes **the model's opinion of its own
@@ -164,8 +164,8 @@ confidence is discounted and independent evidence carries more weight.
   0.841.** Different scales measuring related things. They are not interchangeable, and the
   competition's thresholds were calibrated on AlphaFold's, not Boltz's.
 - **The heavy/light interface was the worst-scoring part of the model** — exactly the
-  under-constrained elbow predicted in [[Screening on Fv Confirming on Fab|the Fv/Fab note]].
+  under-constrained elbow predicted in [the Fv/Fab note](Screening%20on%20Fv%20Confirming%20on%20Fab.md).
 
 ---
 
-**Next:** [[The Eight Metrics|what we actually measure, and what good looks like]].
+**Next:** [what we actually measure, and what good looks like](The%20Eight%20Metrics.md).

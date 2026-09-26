@@ -6,7 +6,7 @@ been run.
 ## Why re-generate at all
 
 The existing pool yields **1 viable design in 30** under a correct fold, and that one
-([[challenge2_rescreen|`bb_1_0_dldesign_0`]]) sits 0.037 above the viability cutoff with a
+([`bb_1_0_dldesign_0`](../results/challenge2_rescreen.md)) sits 0.037 above the viability cutoff with a
 worst sample of 0.423. It is a real candidate and it is also the thinnest possible one.
 
 The question is whether the pool is thin because the *backbones* are poor or because the
@@ -24,10 +24,10 @@ Boltz ipSAE under a correct alignment is a different instrument, and it is the o
 
 | property | measured | where |
 |---|---|---|
-| tracks pose accuracy | Spearman **ρ = +0.702** vs DockQ, n=40 | [[calibration]] |
-| accepts a wrong pose | **0%** false positive (0 of 4 incorrect poses passed) | [[calibration]] |
-| rejects a right pose | **25%** false negative (4 of 16 good poses failed) | [[calibration]] |
-| separates cognate from non-cognate | **0.184** ipSAE, positives vs negatives | [[negative_control]] |
+| tracks pose accuracy | Spearman **ρ = +0.702** vs DockQ, n=40 | [calibration](../results/calibration.md) |
+| accepts a wrong pose | **0%** false positive (0 of 4 incorrect poses passed) | [calibration](../results/calibration.md) |
+| rejects a right pose | **25%** false negative (4 of 16 good poses failed) | [calibration](../results/calibration.md) |
+| separates cognate from non-cognate | **0.184** ipSAE, positives vs negatives | [negative_control](../results/negative_control.md) |
 
 **This would be the first campaign in which the selection filter and the final score are
 the same measured quantity, on an instrument with a published error rate on real

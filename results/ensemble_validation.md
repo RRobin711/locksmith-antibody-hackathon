@@ -1,6 +1,6 @@
 # Does ensemble tightness earn a place in selection?
 
-Analysis exactly as fixed in [[prereg_ensemble_validation|the pre-registration]], written before these designs were generated. **40 designs**, ProteinMPNN `v_48_020` at temperature 0.1, each folded as a Fab on **3 Boltz seeds**. No gating and no shortlisting before the correlation was measured.
+Analysis exactly as fixed in [the pre-registration](prereg_ensemble_validation.md), written before these designs were generated. **40 designs**, ProteinMPNN `v_48_020` at temperature 0.1, each folded as a Fab on **3 Boltz seeds**. No gating and no shortlisting before the correlation was measured.
 
 CDR-H3 ensemble RMSD is the pairwise CA deviation of positions 96–108 after superposing on the **framework** — never on the loop, which would hide what is being measured.
 

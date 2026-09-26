@@ -9,7 +9,7 @@ status: living
 **One fact, one place.** A claim that has been withdrawn, refuted or superseded is recorded
 here with the number that replaced it and the file that settles it. Chapters, results files
 and session docs are **not** retro-edited into agreement; that is the defect the project
-documents (see [[../docs/lecture/08-what-broke|the generated-artefact failure classes]]).
+documents (see [the generated-artefact failure classes](../docs/lecture/08-what-broke.md)).
 Where a document still carries retracted text it is named in the **live text** column, so
 the register is a work list rather than a monument.
 
@@ -19,7 +19,7 @@ enumerating them. A retraction that is only gestured at cannot be checked off, a
 `STATE.md` could not be cleaned while the list did not exist.
 
 **Scope.** The whole project.
-[[../docs/lecture/CORRECTIONS|The course's own corrections file]] is narrower — it covers what a reader of the lecture course must not trust — and its
+[The course's own corrections file](../docs/lecture/CORRECTIONS.md) is narrower — it covers what a reader of the lecture course must not trust — and its
 C1/C2 remain the fuller treatment of those two items. Where both cover a claim, this file
 is the index and that file is the detail.
 
@@ -56,7 +56,7 @@ convention triple `84.0 / 90.0 / 96.0` in **four places in the lecture course**
 (`01-the-biological-problem.md:701`, `02-the-engineering-problem.md:234` and `:730`,
 `07-the-campaign.md:466`) and in `results/pitch_outline.md`. The chapters are indexed rather
 than rewritten, per policy, under the new
-[[../docs/lecture/CORRECTIONS|C3 of the course corrections file]]; `pitch_outline.md` is
+[C3 of the course corrections file](../docs/lecture/CORRECTIONS.md); `pitch_outline.md` is
 marked superseded at its head. `PLAN.md:862` and `BUILD.md:204` already carried the
 correction inline.
 
@@ -71,7 +71,7 @@ Boltz compares the MSA's query length to the input chain and, on mismatch, **dis
 alignment and folds single-sequence**, announcing it only on stdout, which the harness
 captured and threw away. Every Challenge 2 fold paired a **123-residue** antigen with a
 **113-residue** cached alignment. Measured 2×2 on ipSAE in
-[[msa_silently_discarded|the 2×2 that isolates the alignment]]: with a correct alignment
+[the 2×2 that isolates the alignment](msa_silently_discarded.md): with a correct alignment
 **0.012** both pre- and post-fix; without, **0.773 / 0.686**.
 
 Specifically withdrawn: **"1 of 30 designs clears"** as measured then; **ipSAE 0.864** for
@@ -84,7 +84,7 @@ then itself superseded by the constrained re-design campaign, and the shipped Ch
 now **`bb_8_0`**, ipSAE **0.904** on `model_0` (median of 5 diffusion samples **0.859**),
 composite **93.6**, viable 5 of 5.
 
-**Live text:** [[../docs/lecture/CORRECTIONS|the course corrections file]] §C1 still ends on
+**Live text:** [the course corrections file](../docs/lecture/CORRECTIONS.md) §C1 still ends on
 `bb_1_0_dldesign_0` and still calls the zip stale. Fixed 2026-09-26; see §D1 below.
 
 ### A3 — `submission/LOCKSMITH_DEV.zip` is stale · **SUPERSEDED**
@@ -107,7 +107,7 @@ row of that budget was not even the one actually run.
 
 Caught by an independent audit 2026-09-20. The sentence had been promoted to `LEARNINGS.md`
 verbatim from a results file **where the refuting row was printed directly above it**.
-Evidence: [[m3_shortlist_depth|the allocation simulation]].
+Evidence: [the allocation simulation](m3_shortlist_depth.md).
 
 **Live text:** the phrase survives as the *filename* of the 2026-09-19 session doc, which
 cannot be renamed without breaking links; the session index line carries the correction.
@@ -124,7 +124,7 @@ edge, and **24/24** introduced new CDR liabilities.
 
 Note this refutes a recommendation *this project's own audit made* — see §B6 — which is the
 cleanest instance of a correction needing a correction.
-Evidence: [[ch1_ng_and_light_chain_2026-09-22|the light-chain sweep]].
+Evidence: [the light-chain sweep](ch1_ng_and_light_chain_2026-09-22.md).
 
 ### B3 — the contact-count rule · **REFUTED**
 
@@ -139,7 +139,7 @@ contacts in all five samples** and still collapses the interface **0.637 → 0.1
 **Three of its four instances were void anyway**, having been measured in the discarded-MSA
 condition of §A2. What survives is the weaker and older claim: *a prescribed fix is a design
 change and must be measured, not assumed.*
-Evidence: [[liability_fix_arms|the fix arms]], [[two_findings_from_the_matched_control|the matched control]].
+Evidence: [the fix arms](liability_fix_arms.md), [the matched control](two_findings_from_the_matched_control.md).
 
 ### B4 — the winner's-curse discount "was validated" · **WITHDRAWN**
 
@@ -168,7 +168,7 @@ Two riders, both corrections to the correction: the pLDDT↔spread correlation's
 first reported as "about a third" and is **about 13%** after disattenuating properly; and
 the aromatic half of the same analysis **replicated almost exactly** (−0.536 → −0.535 raw),
 so "the aromatic result reversed" was itself wrong.
-Evidence: [[audit_2026-09-20|the checks that found both]].
+Evidence: [the checks that found both](audit_2026-09-20.md).
 
 ### B6 — "ProteinMPNN degraded developability in 239/239 cases" · **WITHDRAWN**
 
@@ -194,7 +194,7 @@ against large aromatics. The rule selects for designs the scorer finds easy to p
 confidently: a metric gaming its own scorer.
 
 *When a result survives a good null but contradicts a strong prior, vary the **outcome**,
-not the test.* Evidence: [[g3_outcome_variable|the six-outcome re-run]].
+not the test.* Evidence: [the six-outcome re-run](g3_outcome_variable.md).
 
 ### B8 — "depth rescues backbones" and "bb_17_0 is a genuinely good backbone" · **WITHDRAWN**
 
@@ -207,7 +207,7 @@ and we saw 1.
 
 Both are the same error — reading structure off small counts without asking what a
 structureless model predicts — and it is the **third** instance on this project, after B7
-and the n=8 heterogeneity null. Evidence: [[depth_sweep|the depth sweep]].
+and the n=8 heterogeneity null. Evidence: [the depth sweep](depth_sweep.md).
 
 ### B9 — fold batching · **SUPERSEDED, then DISQUALIFIED**
 
@@ -269,7 +269,7 @@ returns one hit looks like a complete answer. Search prose with a newline-tolera
 re.compile(r'0%\s+false[- ]positive', re.I)   # \s+ spans the wrap
 ```
 
-This is the same family as [[../docs/lecture/08-what-broke|the silent-failure classes]] —
+This is the same family as [the silent-failure classes](../docs/lecture/08-what-broke.md) —
 a tool answering a slightly different question than the one asked, and saying nothing about
 the difference. The project's own wikilink guard exists because `[[a|b]]` split across a
 newline breaks the same way.
@@ -334,7 +334,7 @@ different quantity from §D2, which remains unresolved.
 
 ### D1 — the course corrections file had gone stale, and self-contradictory
 
-[[../docs/lecture/CORRECTIONS|C1]] listed the contact-count finding under *"what this does
+[C1](../docs/lecture/CORRECTIONS.md) listed the contact-count finding under *"what this does
 **not** invalidate"* ("treat the 60-fold ratio as intact") while **C2, in the same file**,
 refutes that finding outright. It also ended on `bb_1_0_dldesign_0` as the replacement
 Challenge 2 design and called the zip stale, both overtaken. Corrected 2026-09-26.

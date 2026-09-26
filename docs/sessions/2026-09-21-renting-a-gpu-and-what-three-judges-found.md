@@ -27,9 +27,9 @@ and was never retrieved**. None of the seven Challenge 2 metrics has a value. No
 submittable for Challenge 2.
 
 **Prerequisites:** antibody CDR architecture and the PD-1/PD-L1 axis — see
-[[2026-09-14-antibody-hackathon-spec-and-scoring|the spec extraction]]. Why RFantibody
-cannot run locally — see [[2026-09-20-why-rfantibody-cannot-run-on-blackwell|the Blackwell
-measurement]].
+[the spec extraction](2026-09-14-antibody-hackathon-spec-and-scoring.md). Why RFantibody
+cannot run locally — see [the Blackwell
+measurement](2026-09-20-why-rfantibody-cannot-run-on-blackwell.md).
 
 ## 1. The problem this session addressed
 

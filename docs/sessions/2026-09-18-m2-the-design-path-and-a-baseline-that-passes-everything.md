@@ -11,7 +11,7 @@ Tags: [[Protein Design|protein design]] · [[Structure Prediction|structure pred
 **Session:** 2026-09-17 → 2026-09-18. **Built:** `design/mpnn.py`, `select/`, `validate/`, four
 scripts, and `designs.parquet`. **Result:** ProteinMPNN at defaults clears **20/20** of the
 eight gates — which says more about the gates than about the designs.
-**Prerequisites:** [[2026-09-17-the-fv-screen-fails-and-ipsae-is-a-liveness-test|the panel doc]] for the ipSAE↔DockQ curve, and [[2026-09-17-validating-the-inputs-and-withdrawing-a-result|the validation doc]] for the splice guard this path relies on.
+**Prerequisites:** [the panel doc](2026-09-17-the-fv-screen-fails-and-ipsae-is-a-liveness-test.md) for the ipSAE↔DockQ curve, and [the validation doc](2026-09-17-validating-the-inputs-and-withdrawing-a-result.md) for the splice guard this path relies on.
 
 ---
 

@@ -13,7 +13,7 @@
 > 13 × 10 (+1.4789), not the 20 × 7 (+1.4659) that was actually run.
 >
 > Everything else here stands. Kept unedited below as the reasoning trail; see
-> [[2026-09-20-auditing-the-judge-reliability-is-not-validity|the audit]].
+> [the audit](2026-09-20-auditing-the-judge-reliability-is-not-validity.md).
 
 tags:
   - session
@@ -40,8 +40,8 @@ folding is built and accepted. Milestone M3 is complete.
 
 **Prerequisites.** General statistics (variance, correlation, standard error). No biology is
 assumed — §2 defines everything. Two earlier docs give fuller treatments of things restated
-briefly here: [[2026-09-18-the-ensemble-axis-loses-to-a-free-sequence-feature|the aromatic
-finding]] and [[2026-09-18-what-a-pre-fold-filter-has-to-beat|the random-pruning null]].
+briefly here: [the aromatic
+finding](2026-09-18-the-ensemble-axis-loses-to-a-free-sequence-feature.md) and [the random-pruning null](2026-09-18-what-a-pre-fold-filter-has-to-beat.md).
 
 ---
 

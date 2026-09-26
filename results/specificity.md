@@ -1,7 +1,7 @@
 # Specificity controls on the named design
 
 `scripts/37_specificity_fold.py` + `42_analyse_tonight.py`. Design **`mpnn_T0.5_s104_036`**, unchanged, folded against five antigens at three fresh seeds (31–33) each.
-Pre-registered in [[prereg_2026-09-20_specificity|the specificity pre-registration]] before any fold ran.
+Pre-registered in [the specificity pre-registration](prereg_2026-09-20_specificity.md) before any fold ran.
 
 | antigen | role | len | ipSAE | ΔG (kcal/mol) | contacts | iface pLDDT |
 |---|---|---|---|---|---|---|

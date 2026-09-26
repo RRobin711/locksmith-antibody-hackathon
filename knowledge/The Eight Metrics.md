@@ -13,7 +13,7 @@ these eight numbers. They are the definition of success, so understanding what e
 actually measures — and what it *fails* to measure — is the difference between designing a
 molecule and gaming a scoreboard.
 
-Background: [[How Structure Prediction Works|what a folding model produces]].
+Background: [what a folding model produces](How%20Structure%20Prediction%20Works.md).
 
 ---
 
@@ -65,7 +65,7 @@ Eight independent gates, all of which must pass.
 ### ipSAE — interface confidence
 
 **What it is:** a number from 0 to 1 distilled from the folding model's
-[[How Structure Prediction Works|PAE matrix]] — specifically the inter-chain block, which
+[PAE matrix](How%20Structure%20Prediction%20Works.md) — specifically the inter-chain block, which
 describes how confident the model is about where one protein sits relative to the other.
 
 **Intuition:** *does the model believe its own answer about how these two things fit together?*
@@ -74,7 +74,7 @@ describes how confident the model is about where one protein sits relative to th
 the model's own confidence is the only available signal about whether the binding pose is
 meaningful.
 
-**What it does not measure:** truth. It cannot — see [[Confidence Is Not Truth|the note on exactly this]]. A confidently wrong pose scores well.
+**What it does not measure:** truth. It cannot — see [the note on exactly this](Confidence%20Is%20Not%20Truth.md). A confidently wrong pose scores well.
 
 **Calibrated:** we measured **0.841 on a pose we independently verified as correct.** Since the
 good band starts at 0.80, a genuinely correct interface sits only just inside it. Anything much
@@ -140,7 +140,7 @@ binding interface.
 about the contact between them. Averaging over the whole structure would hide that.
 
 **Undefined on experimental structures** — a crystal has no pLDDT, and the field it would
-occupy holds something else entirely ([[Eight Silent Failures|trap #1]]). We measured **94.4**.
+occupy holds something else entirely ([trap #1](Eight%20Silent%20Failures.md)). We measured **94.4**.
 
 ### CDR SASA — is the binding surface exposed
 
@@ -198,7 +198,7 @@ only measured seven.
 **Intuition:** *did you design something, or copy something?*
 
 **Why it exists:** without it you could submit the original drug with one change and claim
-credit. See [[Antibody Architecture|why CDR-H3 specifically]].
+credit. See [why CDR-H3 specifically](Antibody%20Architecture.md).
 
 **The arithmetic, exactly:** pembrolizumab's CDR-H3 is 13 residues, so identity moves in steps
 of 7.7%. One substitution (92.3%) clears the gate; **four substitutions (69.2%) earn full
@@ -207,7 +207,7 @@ marks.**
 **A pleasing sanity check:** when we ran our harness on native pembrolizumab, it *failed* the
 novelty gate at 100% identity. That is the metric working correctly — pembrolizumab *is* the
 thing you're not allowed to copy. We initially wrote the test expecting it to pass everything,
-and had to correct the test rather than the code. See [[Build the Judge Before the Contestant|the calibration note]].
+and had to correct the test rather than the code. See [the calibration note](Build%20the%20Judge%20Before%20the%20Contestant.md).
 
 ---
 
@@ -221,4 +221,4 @@ something therapeutically useless.
 
 That is why we added a check the rubric doesn't make: the fraction of the PD-L1 binding site
 our antibody covers, with **58%** — pembrolizumab's own coverage — as the target. See
-[[PD-1 and Checkpoint Blockade|the target note]] and [[Confidence Is Not Truth|the validation note]].
+[the target note](PD-1%20and%20Checkpoint%20Blockade.md) and [the validation note](Confidence%20Is%20Not%20Truth.md).

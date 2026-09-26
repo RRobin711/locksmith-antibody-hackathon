@@ -31,10 +31,10 @@ did not swap the design, and why the result is better read as *confirmation* of 
 existing claim than as a new problem.
 
 **Prerequisites:** the rubric and its eight metrics —
-[[2026-09-14-antibody-hackathon-spec-and-scoring|the spec extraction]]. Why a continuous
-surrogate exists at all — [[2026-09-19-three-seeds-is-the-worst-allocation|the
-allocation session]]. What the audits found —
-[[2026-09-21-renting-a-gpu-and-what-three-judges-found|the previous session]].
+[the spec extraction](2026-09-14-antibody-hackathon-spec-and-scoring.md). Why a continuous
+surrogate exists at all — [the
+allocation session](2026-09-19-three-seeds-is-the-worst-allocation.md). What the audits found —
+[the previous session](2026-09-21-renting-a-gpu-and-what-three-judges-found.md).
 
 ---
 
@@ -339,7 +339,7 @@ every line, and the published headline recomputing to four decimals.
 
 That is strong evidence. **It is not a completed checksum pass**, and in a project whose
 argument is that it checks things, the difference is the whole argument. Recorded as
-amber in [[results/audit_response_2026-09-22|the audit response §A2]] rather than rounded
+amber in [the audit response §A2](../../results/audit_response_2026-09-22.md) rather than rounded
 up to done.
 
 **Root cause of the 502, found on stopping the pod.** RunPod's Details panel reports

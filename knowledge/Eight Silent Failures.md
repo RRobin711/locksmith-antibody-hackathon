@@ -234,13 +234,13 @@ Sort these by how they announced themselves:
 The dangerous failures are not the ones that crash. They are the ones that return something in
 the right range, with the right units, computed on the wrong thing.
 
-Which is why the [[Build the Judge Before the Contestant|validate-against-known-answers]]
+Which is why the [validate-against-known-answers](Build%20the%20Judge%20Before%20the%20Contestant.md)
 discipline is not fussiness. Three of these were caught *only* because we were running the
 harness on structures whose answers we already knew. On novel designs there would have been
 nothing to notice.
 
 ---
 
-**Related:** [[The Environment Saga|the infrastructure failures]] ·
-[[Build the Judge Before the Contestant|why we validated first]] ·
-[[Confidence Is Not Truth|the conceptual version of the same problem]]
+**Related:** [the infrastructure failures](The%20Environment%20Saga.md) ·
+[why we validated first](Build%20the%20Judge%20Before%20the%20Contestant.md) ·
+[the conceptual version of the same problem](Confidence%20Is%20Not%20Truth.md)

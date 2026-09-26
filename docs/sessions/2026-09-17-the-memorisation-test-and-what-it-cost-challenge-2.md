@@ -8,7 +8,7 @@ Tags: [[Protein Design|protein design]] · [[Structure Prediction|structure pred
 
 # The memorisation test, and what it cost Challenge 2
 
-> ⚠️ **SUPERSEDED IN PART — read [[2026-09-17-validating-the-inputs-and-withdrawing-a-result|the validation doc]] first.**
+> ⚠️ **SUPERSEDED IN PART — read [the validation doc](2026-09-17-validating-the-inputs-and-withdrawing-a-result.md) first.**
 > Four of the five targets were folded from coordinate-derived sequences with internal loops
 > spliced out. Re-run from SEQRES: the verdict is **MARGINAL, not FAIL** (median Fab DockQ
 > **0.291**, not 0.157); the ipSAE 'calibration collapse' is **withdrawn** (Spearman **+0.900**,
@@ -19,7 +19,7 @@ Tags: [[Protein Design|protein design]] · [[Structure Prediction|structure pred
 **Session:** 2026-09-17. **Result:** the post-cutoff test **fails** on the pre-registered
 criterion. Boltz-2 does not recover antibody–antigen binding modes on complexes it has not
 seen, and ipSAE's apparent calibration does not survive the move to novel structures.
-**Prerequisites:** [[2026-09-17-the-fv-screen-fails-and-ipsae-is-a-liveness-test|the panel doc]] for the ipSAE↔DockQ curve this is tested against. Everything needed is restated below.
+**Prerequisites:** [the panel doc](2026-09-17-the-fv-screen-fails-and-ipsae-is-a-liveness-test.md) for the ipSAE↔DockQ curve this is tested against. Everything needed is restated below.
 
 ---
 

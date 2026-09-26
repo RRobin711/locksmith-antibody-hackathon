@@ -1,6 +1,6 @@
 # The §9.2 constraint is free — and sequence depth, not backbones, was the bottleneck
 
-**2026-09-23.** Pre-registered in [[prereg_2026-09-23_constrained_paired]]. 18 local folds,
+**2026-09-23.** Pre-registered in [prereg_2026-09-23_constrained_paired](prereg_2026-09-23_constrained_paired.md). 18 local folds,
 ~50 minutes, no rental.
 
 ## Primary result: the constraint costs nothing measurable
@@ -96,7 +96,7 @@ and this project's SKEMPI work found no metric in the stack tracks measured ΔΔ
 
 *(Corrected 2026-09-26: this sentence also carried the unqualified "0% false-positive rate".
 An error rate is a property of a threshold; see the correction at the end of this file and
-[[retractions|the retraction register, §C1]].)*
+[the retraction register, §C1](retractions.md).)*
 
 The exploratory arm (8 backbones with no unconstrained partner) is reported for
 completeness and excluded from the test: medians 0.000–0.414, none clearing.
@@ -181,6 +181,6 @@ It is still not an affinity measurement.
 > ipSAE ≥ 0.60 gate gives 0% FP / **58.3%** FN; against DockQ ≥ 0.49 (Medium+) it gives
 > **12.5%** FP / 25.0% FN. The 0% additionally rests on **4 negatives** — Clopper–Pearson
 > 95% upper bound **0.602**, i.e. uninformative. See
-> [[retractions|the retraction register, §C1]].
+> [the retraction register, §C1](retractions.md).
 > The conclusion of this section is unchanged: ρ = +0.702 is what makes the confidence
 > worth reading, and it was never the error rate doing that work.

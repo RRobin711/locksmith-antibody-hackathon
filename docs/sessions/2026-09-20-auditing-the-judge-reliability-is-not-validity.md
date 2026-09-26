@@ -13,7 +13,7 @@ and linked rather than assumed.
 ## 0. Why this day happened
 
 The overnight run of
-[[2026-09-20-spread-is-not-a-mean-and-the-rubric-has-a-ceiling|the previous session]]
+[the previous session](2026-09-20-spread-is-not-a-mean-and-the-rubric-has-a-ceiling.md)
 landed 404 folds. Reviewing them, I gave a verdict — "the craft is top-decile, the
 target selection was poor" — and was challenged on whether I was being generous because
 I had done the work.

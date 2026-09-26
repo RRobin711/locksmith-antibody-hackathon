@@ -1,7 +1,7 @@
 # Depth sweep: more sequences buy more viable designs at a constant rate, not better ones
 
 **2026-09-24.** 144 folds, 18 backbones × 8 constrained sequences, zero failures, ~10.6 h
-local. Pre-registered in [[prereg_2026-09-23_depth_sweep]].
+local. Pre-registered in [prereg_2026-09-23_depth_sweep](prereg_2026-09-23_depth_sweep.md).
 
 ## The curve, with per-stratum rates
 

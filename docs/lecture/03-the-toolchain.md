@@ -6,7 +6,7 @@ status: review
 
 # 03 — The Toolchain
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [[CORRECTIONS|corrections C1 and C2, and what they do and do not invalidate]] — C2 also refutes the contact-count rule this course calls its best finding. Challenge 1 is unaffected.
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1 and C2, and what they do and do not invalidate](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding. Challenge 1 is unaffected.
 
 **What this chapter teaches.** Every piece of third-party software the campaign depended on: what it
 computes, exactly how it was invoked, and the specific way it goes wrong. The organising claim is
@@ -18,8 +18,8 @@ Blackwell saga, which is the best worked example you will find of *verify with a
 introspection*; and the local workflow — overnight jobs, resumability, and a process-table idiom that
 idled a GPU for four and a quarter hours. We finish with a costs-and-timings table.
 
-Companion chapters: [[02-the-engineering-problem|the pipeline these tools plug into]] and
-[[01-the-biological-problem|what the numbers are supposed to mean biologically]].
+Companion chapters: [the pipeline these tools plug into](02-the-engineering-problem.md) and
+[what the numbers are supposed to mean biologically](01-the-biological-problem.md).
 
 ---
 
@@ -82,7 +82,7 @@ temperature to hit a gate. The M3 primary arm was 239 designs: **T=0.1 × 60 (se
 
 **The limitation that shaped the whole campaign.** ProteinMPNN is fixed-backbone and therefore
 **cannot vary CDR loop length**. Since CDR-H3 length is one of the most important axes of antibody
-diversity ([[01-the-biological-problem|and the one V(D)J recombination varies most]]), this means
+diversity ([and the one V(D)J recombination varies most](01-the-biological-problem.md)), this means
 the length axis "is a new generator, not an arm" — you cannot explore it without RFdiffusion. It was
 left unexplored, and the project says so.
 
@@ -92,8 +92,8 @@ never on the exit code. (c) The returned heavy-chain length is asserted equal to
 because an indel means the design was built against the wrong frame. (d) Fixed-position lists are
 **1-based** over the chain's residues while `cdr_positions()` returns 0-based indices — an explicit,
 commented off-by-one boundary in the code. (e) **Solubility is not in its loss** — nor is
-glycosylation, [[01-the-biological-problem#6.2 The NG deamidation motif in Challenge 1's CDR-H2|deamidation]], oxidation or charge. It proposes post-translational liabilities at
-roughly the rate they occur in the PDB, which is how two [[01-the-biological-problem#6.1 Two N-glycosylation sequons in the Challenge 2 paratope|glycosylation sequons]] reached a shipped
+glycosylation, [deamidation](01-the-biological-problem.md#62-the-ng-deamidation-motif-in-challenge-1s-cdr-h2), oxidation or charge. It proposes post-translational liabilities at
+roughly the rate they occur in the PDB, which is how two [glycosylation sequons](01-the-biological-problem.md#61-two-n-glycosylation-sequons-in-the-challenge-2-paratope) reached a shipped
 paratope.
 
 A design-time trap worth carrying: `MpnnDesign` **names its fields by ROLE, not by chain**, so in the
@@ -129,7 +129,7 @@ mapped onto 5GGS by explicit alignment, passed on the CLI as `-h "T64,T66,..."`.
 1. `ab_pose.py:105-110` matches hotspots on `(chain, pdb_resnum)` and **silently skips misses**. Wrong
    numbering ⇒ zero hotspots ⇒ unconditioned generation wearing the target's name, with no error.
    Mitigation: the run log is grepped for exactly **26 "Using … as a hotspot"** lines. But note the
-   epistemic limit, established in [[05-experiment-design|the experiment chapter]]: *"26/26 hotspots
+   epistemic limit, established in [the experiment chapter](05-experiment-design.md): *"26/26 hotspots
    resolved" proves the tool RECEIVED your conditioning, not that it changed the output.* A
    manipulation check that cannot fail is not evidence; you still need an unconditioned arm or a
    patch null.
@@ -156,7 +156,7 @@ scoring fold**, "so both challenges rest on one predictor and their numbers are 
 a deliberate comparability decision, not laziness.
 
 The pod-side finding that justified keeping RF2 out of the scoring: its `interaction_pae` **cannot
-rank docks** — [[04-measurement-theory#2. The intraclass correlation, and metrics that turn out to be constants|intraclass correlation]] **−0.113** against a detectable floor of 0.317 at n=10, k=3 —
+rank docks** — [intraclass correlation](04-measurement-theory.md#2-the-intraclass-correlation-and-metrics-that-turn-out-to-be-constants) **−0.113** against a detectable floor of 0.317 at n=10, k=3 —
 and it disagreed with the eventual Boltz pose by **24.9 Å** on one design. A metric with negative ICC
 is not a weak ranker; it is noise.
 
@@ -217,7 +217,7 @@ correlation of only **0.432**. What survives is: *check convergence before inter
 failure — and "it changed when I sampled harder" is not the same as "it has now converged."*
 
 **`diffusion_samples` defaults to 1, and Boltz orders its models by its own confidence.** Therefore
-`model_0` at `diffusion_samples=1` is an **[[06-allocation-and-selection#5. Order statistics: when your prediction is silently a maximum|argmax by construction]]** — the maximum of a distribution
+`model_0` at `diffusion_samples=1` is an **[argmax by construction](06-allocation-and-selection.md#5-order-statistics-when-your-prediction-is-silently-a-maximum)** — the maximum of a distribution
 that was never drawn. Every pose-derived number the project reported for a week (ipSAE, DockQ, ΔG,
 contacts, interface pLDDT, CDR SASA) was an order statistic. Measured at 5 samples: Challenge 1 moved
 ipSAE 0.039 but **DockQ 0.109**, turning 96.0 into a **94.0–96.0** envelope; the de novo design moved
@@ -230,7 +230,7 @@ because the MSA, trunk and recycling are shared and only the diffusion head reru
 single best cost-benefit ratio in the whole toolchain, and it went unclaimed for a week.
 
 **Fab, not Fv.** The planned "cheap Fv screen → expensive Fab confirm" funnel was killed by
-measurement: Fv ipSAE seed [[04-measurement-theory#1.3 Reliability|reliability]] **0.607** versus Fab **0.965** — the unclamped VH/VL elbow
+measurement: Fv ipSAE seed [reliability](04-measurement-theory.md#13-reliability) **0.607** versus Fab **0.965** — the unclamped VH/VL elbow
 shows up directly as measurement noise. Matching Fab precision needs ≥4 Fv seeds, which is **2.9× the
 Fab's wall clock**, so the 2.5× residue saving inverts. *Any time a cheap proxy gates an expensive
 measurement, the proxy's failures are invisible by construction.*
@@ -458,7 +458,7 @@ docstring was never updated.
 structural element across antibodies of different loop length. Ranges used: **CDR1 27–38, CDR2 56–65,
 CDR3 105–117**.
 
-**The gotcha.** PD-1 is an immunoglobulin-superfamily member with an **[[01-the-biological-problem#2.5 The IgV fold, and the trap it set|IgV fold]]**, so ANARCII
+**The gotcha.** PD-1 is an immunoglobulin-superfamily member with an **[IgV fold](01-the-biological-problem.md#25-the-igv-fold-and-the-trap-it-set)**, so ANARCII
 recognises it as antibody-like and happily assigns it CDRs. Measured on 5GGS and 5WT9: true V domains
 score **30.8–30.9**; PD-1 scores **15.8–16.2**. A permissive threshold silently classifies the
 *antigen* as an antibody chain and every downstream CDR metric is then computed on the wrong
@@ -534,7 +534,7 @@ and **it was never written** until an independent reviewer found two N-linked gl
 the shipped Challenge 2 design's CDRs, both on antigen-contacting residues. Its docstring records the
 lesson: **"A planned check that does not exist is indistinguishable from a check that passed."** The
 chemistry and the sixty-fold difference between the two prescribed fixes are in
-[[01-the-biological-problem|the biology chapter]].
+[the biology chapter](01-the-biological-problem.md).
 
 ---
 
@@ -766,7 +766,7 @@ The eventual pass was **258/258 files verified, 0 mismatched, 0 unreachable**, w
 **server-side** by the Jupyter contents API so they are genuinely independent of the local copy, and a
 manifest written incrementally with an `fsync` per record so a crash cannot lose the work already
 done. Details and the exit criteria are in
-[[02-the-engineering-problem|the reproducibility section of the engineering chapter]].
+[the reproducibility section of the engineering chapter](02-the-engineering-problem.md).
 
 One cost lesson: the pod was left idle for about 2.5 hours (≈ $1.25) and, worse, was **stopped without
 retrieving 443 MB of artefacts**, which left every Challenge 2 headline number temporarily
@@ -873,7 +873,7 @@ the antibody MSAs — correct protocol *and* a two-thirds VRAM cut); and then su
 the swap work had addressed the wrong one of the two memory resources.
 *"Three of the four failures reported success or said nothing useful"* — which is what turned "check
 the artefacts, not the exit code" from a nice principle into a hard rule. See
-[[02-the-engineering-problem|the full catalogue of exit-0 failures]].
+[the full catalogue of exit-0 failures](02-the-engineering-problem.md).
 
 ---
 
@@ -939,5 +939,5 @@ schedule.*
 8. **Measure the deferred optimisation before its projection justifies a schedule.** 1.8× projected,
    1.16× measured, on a number that had been load-bearing in scheduling arguments for two days.
 
-Next: [[04-measurement-theory|how reliability, attenuation and range restriction were measured]], and
-[[08-what-broke|the full catalogue of what went wrong and what it cost]].
+Next: [how reliability, attenuation and range restriction were measured](04-measurement-theory.md), and
+[the full catalogue of what went wrong and what it cost](08-what-broke.md).

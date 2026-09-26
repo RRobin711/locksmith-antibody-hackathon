@@ -52,7 +52,7 @@ single value, for all 14 designs.
   novelty metric.
 - **H3.** Arm A or B reaches DockQ ≥ **0.80**, moving that metric from Medium to Good
   and `final` from 87.5 to 90.0 — demonstrating that the one reachable rubric point
-  (NetSolP's being pinned; see [[rubric_headroom|the headroom audit]]) is claimable
+  (NetSolP's being pinned; see [the headroom audit](rubric_headroom.md)) is claimable
   without touching the paratope.
 - **H4.** `cdrh3_identity` is, by construction, unable to separate B from C. Stated as a
   prediction so that the result is a measurement rather than a tautology: the point is

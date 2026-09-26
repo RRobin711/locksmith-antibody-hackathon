@@ -1,3 +1,11 @@
+> **What this is.** The brief written for an unattended overnight run on 2026-09-21 —
+> the machine works alone for hours with no one to ask. Kept in the repository because the
+> interesting part is not the task but the structure: a stated objective that is explicitly
+> *not* the obvious metric, pre-registered gates that can fail, and a self-verification
+> pass the run has to survive before its output is trusted. It is a planning artefact, not
+> documentation of the pipeline; see [the session index](sessions/README.md) for what
+> actually happened.
+
 # Task: Challenge 2 on CPU, unattended overnight — with self-verification
 
 Ryan is asleep or going to sleep. Nothing here blocks on him. **Runtime does not matter** — a

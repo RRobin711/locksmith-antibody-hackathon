@@ -1,7 +1,7 @@
 # Removing the paratope sequons: one fix is free, the other destroys the antibody
 
 **2026-09-22.** Run against the rule pre-registered in
-[[prereg_2026-09-22_sequon_fix|the pre-registration]], written before the folds.
+[the pre-registration](prereg_2026-09-22_sequon_fix.md), written before the folds.
 
 ## Result
 

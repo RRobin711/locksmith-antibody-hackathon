@@ -5,7 +5,7 @@
 ## The question
 
 Constrained re-design produces a §9.2-clean sequence on 18 of 18 backbones, median one
-attempt ([[constrained_redesign_yield]]). That establishes clean sequences *exist* and are
+attempt ([constrained_redesign_yield](constrained_redesign_yield.md)). That establishes clean sequences *exist* and are
 cheap to reach. It does **not** establish they fold to viable interfaces.
 
 The concern is specific and chemical: the constraint forbids asparagine at particular CDR

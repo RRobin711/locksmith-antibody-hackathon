@@ -9,7 +9,7 @@ Tags: [[Protein Design|protein design]] · [[Structure Prediction|structure pred
 # The first real prediction, and the four attempts it took
 
 **Session:** 2026-09-15 evening → 2026-09-16 early. **Gates closed:** G1a, G1b, G1e (DockQ half).
-**Prerequisite:** [[2026-09-15-environment-and-imgt-numbering-foundations|the environment and scoring-harness doc]]. This doc restates what it needs and links rather than repeating.
+**Prerequisite:** [the environment and scoring-harness doc](2026-09-15-environment-and-imgt-numbering-foundations.md). This doc restates what it needs and links rather than repeating.
 
 ---
 
@@ -84,7 +84,7 @@ Until it is, Challenge 2 confidence is discounted and independent evidence (cros
 consensus, specificity controls) carries proportionally more weight.
 
 A plausible-but-wrong version of this result would look identical on every number here. That is
-the point of [[../../knowledge/Confidence Is Not Truth|the confidence-is-not-truth argument]].
+the point of [the confidence-is-not-truth argument](../../knowledge/Confidence%20Is%20Not%20Truth.md).
 
 ## 4. The four attempts, and what each cost
 
@@ -191,7 +191,7 @@ parser would have produced a missing value with no explanation.
 - **The heavy–light interface scored worst** (DockQ 0.791) despite the *lowest* positional error
   (iRMSD 0.251 Å). Geometrically right, different contact set — the under-constrained Fv elbow,
   appearing in real data before we went looking. Supports
-  [[../../knowledge/Screening on Fv Confirming on Fab|the Fv-screen/Fab-confirm protocol]].
+  [the Fv-screen/Fab-confirm protocol](../../knowledge/Screening%20on%20Fv%20Confirming%20on%20Fab.md).
 
 ## 7. Compute budget, revised
 
@@ -202,8 +202,8 @@ is a floor.
 ## 8. Also this session: the documentation pass
 
 Thirteen teaching notes plus a narrative spine, written for a reader new to structural biology —
-see [[../../knowledge/README|the knowledge index]] and
-[[../../PROJECT-STORY|the project story]]. Frontmatter retrofitted to match
+see [the knowledge index](../../knowledge/README.md) and
+[the project story](../../PROJECT-STORY.md). Frontmatter retrofitted to match
 `.claude/rules/vault-notes.md` (date / tags / status, two-axis tags, named links only).
 
 One mechanical lesson worth keeping: **17 wikilinks were broken by line-wrapping.** Hard-wrapping

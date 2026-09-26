@@ -20,11 +20,11 @@ We close on the two integrity mechanisms: optional stopping, and pre-registratio
 committed the first and used the second, and the most interesting thing it did with
 pre-registration was document the contamination of its own.
 
-This chapter consumes the [[04-measurement-theory#1.3 Reliability|reliability]] numbers built in
-[[04-measurement-theory|the measurement-theory chapter]] and feeds
-[[06-allocation-and-selection|the allocation chapter]], which asks where the *next* measurement
+This chapter consumes the [reliability](04-measurement-theory.md#13-reliability) numbers built in
+[the measurement-theory chapter](04-measurement-theory.md) and feeds
+[the allocation chapter](06-allocation-and-selection.md), which asks where the *next* measurement
 should go once you know how noisy the current one is. Failures referenced here are catalogued in
-full in [[08-what-broke|the failure catalogue]]; terms are in [[10-glossary|the glossary]].
+full in [the failure catalogue](08-what-broke.md); terms are in [the glossary](10-glossary.md).
 
 ---
 
@@ -86,10 +86,10 @@ write down, and it is the honest one.
 Everything in §2 is what happens when you do not. Everything below is what it looks like when you
 do — the campaign applied it, pre-registered, in at least four places:
 
-- `results/ensemble_wide.md` §2: *"At n=239 and [[04-measurement-theory#4. Attenuation: why correlations between noisy things look weak|attenuation]] 0.828, the smallest true effect detectable
+- `results/ensemble_wide.md` §2: *"At n=239 and [attenuation](04-measurement-theory.md#4-attenuation-why-correlations-between-noisy-things-look-weak) 0.828, the smallest true effect detectable
   at 80% power (α=0.05) is ρ_true ≈ **0.218**."* Check it: `2.80/√236 = 0.1823`, `tanh(0.1823) =
   0.1803` on the observed scale, and dividing by the attenuation ceiling 0.828 (see
-  [[04-measurement-theory|the attenuation formula]]) gives `0.1803/0.828 = 0.2178`.
+  [the attenuation formula](04-measurement-theory.md)) gives `0.1803/0.828 = 0.2178`.
 - `results/skempi_validity.md`: *"At n=45 the smallest effect detectable at 80% power (α=0.05) is
   ρ ≈ **0.41**."* Check: `tanh(2.80/√42) = tanh(0.4320) = 0.4072`.
 - `results/calibration.md`: *"At n=20 per arm Mann–Whitney has roughly 80% power for a rank-biserial
@@ -122,7 +122,7 @@ By its own reckoning this is the campaign's most repeated mistake:
 
 Items 3 and 4 are not literally nulls — they are a misread table and a single confirming
 measurement mistaken for a validation, and both are dissected in
-[[06-allocation-and-selection|the allocation chapter]]. But they belong in the same family, because
+[the allocation chapter](06-allocation-and-selection.md). But they belong in the same family, because
 all four share one structure: **a quantity that could not have been resolved at the sample size
 available was read as though it had been resolved.**
 
@@ -144,7 +144,7 @@ circularity inflated things "by roughly a third". **Then that correction was its
 comparing a 1-pair estimate to a 3-pair one without disattenuating both. Done properly it is about
 **13%**, and the honest value is ρ ≈ −0.28 to −0.32."* A further mechanical deflation is recorded
 separately: spread correlates with mean deviation-from-crystal at **+0.589**, and partialling that
-out collapses the spread→[[03-the-toolchain#4.1 DockQ 2.1.3 — two flags that both default wrong|DockQ]] link to **−0.167**.
+out collapses the spread→[DockQ](03-the-toolchain.md#41-dockq-213-two-flags-that-both-default-wrong) link to **−0.167**.
 
 Three passes, three different answers, converging. That is what a working correction process looks
 like — and note that the *second* pass erred in the opposite direction from the first, which is
@@ -282,7 +282,7 @@ the matched control barely moves. That is a dose–response against a matched co
 as close to a clean positive as this kind of experiment gets, and the monotonicity is doing real work:
 a single knockout arm could be explained by any disruption, while a graded response is hard to fake.
 
-And the sting. **[[03-the-toolchain#4.2 PRODIGY 2.4.0 — ΔG and contacts|PRODIGY]] ΔG is blind — and it carries the largest single share of the ranking
+And the sting. **[PRODIGY](03-the-toolchain.md#42-prodigy-240-δg-and-contacts) ΔG is blind — and it carries the largest single share of the ranking
 variance.** The metric the selection leaned on hardest fails the specificity check outright.
 
 ### 4.2 The composition-matched scramble null
@@ -324,10 +324,10 @@ the identical cached alignment, and passed through the campaign's five hard viab
 result, run on day 9 of 9 (`results/negative_control.md`):
 
 **HyHEL-10 — an anti-hen-egg-lysozyme antibody, which has no business binding a human immune
-receptor — cleared all five cutoffs** on `model_0`: [[03-the-toolchain#4.3 ipSAE — interface confidence from the PAE|ipSAE]] **0.609**, ΔG **−12.4**, **77** contacts,
+receptor — cleared all five cutoffs** on `model_0`: [ipSAE](03-the-toolchain.md#43-ipsae-interface-confidence-from-the-pae) **0.609**, ΔG **−12.4**, **77** contacts,
 interface pLDDT **85.0**, CDR SASA **1084 Å²**. Its **median over five diffusion samples is ipSAE
 0.219**, which tells you exactly what happened and is the subject of
-[[06-allocation-and-selection|the order-statistics section of the next chapter]].
+[the order-statistics section of the next chapter](06-allocation-and-selection.md).
 
 Across the panel, **four of the five hard cutoffs reject 0 of 6 known-wrong antibodies**: viability
 rests on ipSAE alone, and ipSAE was itself read off a maximum. *"It costs eight folds and nobody ran
@@ -628,7 +628,7 @@ weight it could not otherwise carry.
 What pre-registration did **not** do here is worth naming too. The `prereg_*` files carry a detectable
 effect for every planned test — but the rule was **never applied to numbers computed outside a
 pre-registered experiment**, and every one of the campaign's nine withdrawals came from exactly there.
-The cheap fix, proposed in [[09-critique|the critique chapter]], is a four-field stamp on every number
+The cheap fix, proposed in [the critique chapter](09-critique.md), is a four-field stamp on every number
 that enters a results file: **its n; its estimand in words ("single seed", "7-seed mean", "median of
 five samples"); the effect it could have detected at that n; and its provenance.** Each of the four
 fields kills at least one of the nine withdrawals on its own.
@@ -663,5 +663,5 @@ fields kills at least one of the nine withdrawals on its own.
 8. **A pre-registration is worth exactly what it costs you.** Three fired here against their author,
    and one document discloses its own contamination — which is what makes the other two believable.
 
-Next: [[06-allocation-and-selection|where should the next measurement go]], which takes these
+Next: [where should the next measurement go](06-allocation-and-selection.md), which takes these
 reliability and power numbers and turns them into a budget.

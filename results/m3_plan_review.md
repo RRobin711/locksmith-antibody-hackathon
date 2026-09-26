@@ -1,6 +1,6 @@
 # Reviewing M3's assumptions against folds already paid for
 
-No new folds. 40 designs x 3 Boltz seeds from [[ensemble_validation|the ensemble validation pool]], re-interrogated to test what the M3 campaign plan assumes. Reproduce with `scripts/27_review_m3_assumptions.py`.
+No new folds. 40 designs x 3 Boltz seeds from [the ensemble validation pool](ensemble_validation.md), re-interrogated to test what the M3 campaign plan assumes. Reproduce with `scripts/27_review_m3_assumptions.py`.
 
 Every number below was computed on the same pool that *discovered* the aromatic effect, so none of it is out-of-sample evidence FOR that effect. It is evidence about the effect's **shape**, its **competitors**, and whether the planned **decision rule** can act on it — which is exactly what a campaign design needs and what a single correlation coefficient cannot supply.
 

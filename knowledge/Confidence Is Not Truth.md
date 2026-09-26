@@ -22,7 +22,7 @@ anything. Only two metrics come from the sequence.
 So most of the score is a function of a structure we produced, judged by a confidence measure
 we also produced.
 
-And [[How Structure Prediction Works|as covered elsewhere]], confidence measures describe the
+And [as covered elsewhere](How%20Structure%20Prediction%20Works.md), confidence measures describe the
 model's opinion of its own output. They never touch reality — they *cannot*, because for a
 molecule that has never been synthesised there is no truth to compare against.
 
@@ -121,7 +121,7 @@ Measure what fraction of PD-L1's binding site our antibody actually covers, agai
 pembrolizumab's measured **58%**.
 
 *Why it works:* this is the only check in the entire project that asks whether the molecule
-would **function as a drug**. [[The Eight Metrics|Nothing in the rubric asks this]] — ipSAE and
+would **function as a drug**. [Nothing in the rubric asks this](The%20Eight%20Metrics.md) — ipSAE and
 ΔG do not know what a checkpoint is. A design could score 90 and bind the wrong face of PD-1.
 
 ## 5. Why this is the actual deliverable
@@ -134,7 +134,7 @@ the numbers.** Demonstrating that the numbers correspond to something real is th
 and it is the part most teams skip because the rubric doesn't reward it.
 
 There is also a fit argument. Locksmith Bio's science is
-[[Intrinsically Disordered Proteins|intrinsically disordered proteins]] — molecules with no
+[intrinsically disordered proteins](Intrinsically%20Disordered%20Proteins.md) — molecules with no
 single fixed structure, properly described as *ensembles* rather than single shapes. A lab
 whose founding insight is "the average is the wrong statistic" is not going to be impressed by
 a high confidence score. They are going to ask how you know it means anything.
@@ -144,7 +144,7 @@ a high confidence score. They are going to ask how you know it means anything.
 There is a genuine connection between our problem and their science, and it is worth stating
 without overclaiming.
 
-[[Antibody Architecture|CDR-H3]] is the most conformationally variable element in an antibody —
+[CDR-H3](Antibody%20Architecture.md) is the most conformationally variable element in an antibody —
 that is precisely why it determines specificity and why it is hard to design. Representing it
 as a single set of coordinates plus one confidence number is exactly the modelling failure the
 IDP field exists to correct.
@@ -159,6 +159,6 @@ headline. Worth doing; not worth overselling.
 
 ---
 
-**Related:** [[Build the Judge Before the Contestant|validating the scoring first]] ·
-[[How Structure Prediction Works|where confidence numbers come from]] ·
-[[Intrinsically Disordered Proteins|why ensembles beat point estimates]]
+**Related:** [validating the scoring first](Build%20the%20Judge%20Before%20the%20Contestant.md) ·
+[where confidence numbers come from](How%20Structure%20Prediction%20Works.md) ·
+[why ensembles beat point estimates](Intrinsically%20Disordered%20Proteins.md)

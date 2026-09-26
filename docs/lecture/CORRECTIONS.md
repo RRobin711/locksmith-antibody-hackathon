@@ -9,7 +9,7 @@ status: living
 **One fact, one place.** When something in this course is overtaken, the correction is
 recorded *here* and the affected chapters carry a pointer to it. Chapters are not
 individually rewritten with provisional numbers — doing that is the exact defect the course
-documents (see [[08-what-broke|Class 2, generator (iv): a convention that lived in two places, or in none]]).
+documents (see [Class 2, generator (iv): a convention that lived in two places, or in none](08-what-broke.md)).
 
 Read this file before trusting any Challenge 2 number anywhere in the course.
 
@@ -17,7 +17,7 @@ Read this file before trusting any Challenge 2 number anywhere in the course.
 are the fullest treatment of those two items anywhere in the project. Every other claim the
 project has withdrawn — scores, method, shipped prose, and the figures that are flagged as
 not reproducing — is indexed in
-[[../../results/retractions|the project-wide retraction register]].
+[the project-wide retraction register](../../results/retractions.md).
 
 ---
 
@@ -37,7 +37,7 @@ flattering condition.
 
 ### The measurement
 
-From `results/msa_silently_discarded.md`, a 2×2 on [[03-the-toolchain#4.3 ipSAE — interface confidence from the PAE|ipSAE]]:
+From `results/msa_silently_discarded.md`, a 2×2 on [ipSAE](03-the-toolchain.md#43-ipsae-interface-confidence-from-the-pae):
 
 | | antigen MSA used | antigen MSA absent |
 |---|---|---|
@@ -75,7 +75,7 @@ the condition every prior fold was run in.
   gate but **fails handbook §9.2**, carrying two HIGH developability liabilities, and its
   worst diffusion sample sits at **0.423**, so it clears without comfort. A liability fix
   would cost interface quality it does not have to spare — see
-  [[01-the-biological-problem#6.3 N→Q versus S→A: the contact-count result|the contact-count result]] for why that trade is not free.
+  [the contact-count result](01-the-biological-problem.md#63-nq-versus-sa-the-contact-count-result) for why that trade is not free.
 
 ### What it does NOT invalidate
 
@@ -84,17 +84,17 @@ the condition every prior fold was run in.
   **Narrowed 2026-09-26:** this bullet originally ended "Every Challenge 1 number in this
   course stands", which is true of *this defect* and false as a blanket assurance —
   Challenge 1's composite changed 96.0 → 94.0 on 2026-09-24 for an unrelated reason. See
-  [[CORRECTIONS#C3 — Challenge 1's composite is 94.0, not 96.0|C3]]. *A correction scoped
+  [C3](CORRECTIONS.md#c3-challenge-1s-composite-is-940-not-960). *A correction scoped
   to one defect should not be worded as a general clearance.*
-- **Everything in [[04-measurement-theory|measurement theory]],
-  [[05-experiment-design|experiment design]] and
-  [[06-allocation-and-selection|allocation and selection]]** that is derived from the
-  Challenge 1 pool of 239 designs — [[04-measurement-theory#1.3 Reliability|reliability]], [[04-measurement-theory#2. The intraclass correlation, and metrics that turn out to be constants|ICC]], [[04-measurement-theory#5. Range restriction — and the insight that selection is the restricting operation|range restriction]], allocation, the
-  [[06-allocation-and-selection#3. Winner's curse|winner's curse]], the band-grid result. None of it touches Challenge 2.
+- **Everything in [measurement theory](04-measurement-theory.md),
+  [experiment design](05-experiment-design.md) and
+  [allocation and selection](06-allocation-and-selection.md)** that is derived from the
+  Challenge 1 pool of 239 designs — [reliability](04-measurement-theory.md#13-reliability), [ICC](04-measurement-theory.md#2-the-intraclass-correlation-and-metrics-that-turn-out-to-be-constants), [range restriction](04-measurement-theory.md#5-range-restriction-and-the-insight-that-selection-is-the-restricting-operation), allocation, the
+  [winner's curse](06-allocation-and-selection.md#3-winners-curse), the band-grid result. None of it touches Challenge 2.
 - ~~**The `N→Q` versus `S→A` contact-count finding.**~~ **This bullet was wrong and is
   withdrawn 2026-09-26.** It argued the comparison survives because both arms were measured
   within a single condition, and told the reader to "treat the 60-fold ratio as intact".
-  [[CORRECTIONS#C2 — The contact-count rule is refuted, and three of its four instances are void|C2, immediately below in this same file]],
+  [C2, immediately below in this same file](CORRECTIONS.md#c2-the-contact-count-rule-is-refuted-and-three-of-its-four-instances-are-void),
   raised the same day, refutes the finding outright — so C1 and C2 contradicted each other
   for three days. A within-condition comparison is not rescued by being internally
   consistent when the condition itself is the thing that moved: under a correct alignment
@@ -107,13 +107,13 @@ the condition every prior fold was run in.
 ### Why it belongs in the course rather than just being fixed
 
 This is the course's own thesis landing on the course while it was being written. It is a
-**[[08-what-broke#Class 1 — Silent failures|silent failure]] of exactly the catalogued kind**: nothing errored, the fold completed, the
+**[silent failure](08-what-broke.md#class-1-silent-failures) of exactly the catalogued kind**: nothing errored, the fold completed, the
 structure was confident, a plausible number came back — computed on an input the tool had
 quietly changed. The one diagnostic that would have caught it, a warning on stdout, was
 discarded by the harness.
 
 It is also the eighth member of the inherited-parameter family in
-[[07-the-campaign|the inheritance ledger]]: the 113-mer construct entered from 5GGS, was
+[the inheritance ledger](07-the-campaign.md): the 113-mer construct entered from 5GGS, was
 identified on day 9 as "the construct we fold is not the construct we submit", and its
 consequence for the *alignment* was not traced until now.
 
@@ -137,13 +137,13 @@ this course as **superseded**.
 > the inversion, which is the teachable part.
 >
 > Note the campaign that produced `bb_8_0` also withdrew two of its own claims — see
-> [[../../results/retractions|the retraction register, §B8]].
+> [the retraction register, §B8](../../results/retractions.md).
 
 The sharpest lesson is not that the number fell. It is that **the ranking inverted**: a
 silently degraded input did not add noise around a roughly-correct order, it produced an
 order that was actively misleading, with the eventual winner sitting 29th of 30. This is the
 same shape as the `recycling_steps=3` episode in
-[[06-allocation-and-selection#6. Compression versus noise in an under-converged sampler|compression versus noise]]
+[compression versus noise](06-allocation-and-selection.md#6-compression-versus-noise-in-an-under-converged-sampler)
 — under-informed prediction compresses and scrambles a ranking rather than blurring it.
 
 ---
@@ -154,8 +154,8 @@ same shape as the `recycling_steps=3` episode in
 
 ### What the course says
 
-[[00-orientation#4.4 Scientific findings|Chapter 00 §4.4]] calls this "the best result in the
-project", and [[01-the-biological-problem#6.3 N→Q versus S→A: the contact-count result|chapter 01 §6.3]]
+[Chapter 00 §4.4](00-orientation.md#44-scientific-findings) calls this "the best result in the
+project", and [chapter 01 §6.3](01-the-biological-problem.md#63-nq-versus-sa-the-contact-count-result)
 develops it at length: handbook §9 lists `N→Q` and `S→A` as interchangeable fixes for a
 glycosylation sequon; the asparagine acceptors carried **10 and 19** antigen contacts and
 the serines **zero**; `N→Q` collapsed ipSAE **0.864 → 0.014** while `S→A` stayed viable 5 of
@@ -180,7 +180,7 @@ not a solubility artefact.
 
 **And three of the rule's four instances are void.** Both original measurements — `N→Q`
 fatal at 10 and 19 contacts, `S→A` free at 0 — came from `runs/sequon_fix`, which folded
-with the antigen alignment silently discarded (see [[CORRECTIONS#C1 — Challenge 2's computational evidence is withdrawn|C1]]).
+with the antigen alignment silently discarded (see [C1](CORRECTIONS.md#c1-challenge-2s-computational-evidence-is-withdrawn)).
 Under a correct alignment that design scores **0.012 regardless of its sequence**. They are
 therefore two readings of a *condition*, not of a substitution.
 
