@@ -43,8 +43,8 @@ CLASH = 3.0          # A, heavy-atom; below this two atoms cannot coexist
 CONTACT = 4.5        # A, heavy-atom; the convention used everywhere else in this project
 
 TARGETS = {
-    1: "submission/LOCKSMITH_DEV/LOCKSMITH_DEV_Challenge1/structures/design_1_complex.pdb",
-    2: "submission/LOCKSMITH_DEV/LOCKSMITH_DEV_Challenge2/structures/design_1_complex.pdb",
+    1: "submission/RYAN_BINNY/RYAN_BINNY_Challenge1/structures/design_1_complex.pdb",
+    2: "submission/RYAN_BINNY/RYAN_BINNY_Challenge2/structures/design_1_complex.pdb",
 }
 
 

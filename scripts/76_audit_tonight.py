@@ -46,7 +46,7 @@ def close(a: float, b: float, tol: float) -> bool:
 
 # ---------------------------------------------------------------- A1: DockQ
 def audit_dockq() -> None:
-    pkg = Path("submission/LOCKSMITH_DEV/LOCKSMITH_DEV_Challenge1")
+    pkg = Path("submission/RYAN_BINNY/RYAN_BINNY_Challenge1")
     native = Path("data/refs/prepared/5ggs_ABZ.pdb")
     model = pkg / "structures" / "design_1_complex.pdb"
     if not model.exists():

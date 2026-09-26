@@ -51,7 +51,7 @@ from locksmith.fold import fold_is_complete
 from locksmith.fold.boltz import fold, PD1_MSA
 
 OUT = Path("runs/msa_register")
-PKG = Path("submission/LOCKSMITH_DEV/LOCKSMITH_DEV_Challenge2/sequences/design_1.fasta")
+PKG = Path("submission/RYAN_BINNY/RYAN_BINNY_Challenge2/sequences/design_1.fasta")
 CORE113 = ("PWNPPTFSPALLVVTEGDNATFTCSFSNTSESFVLNWYRMSPSNQTDKLAAFPEDRSQPGQDSRFRVTQLPNGRD"
            "FHMSVVRARRNDSGTYLCGAISLAPKAQIKESLRAELR")
 RECYCLING = 10

@@ -772,7 +772,7 @@ Not submitting removes the *artificial* constraints. It does not remove the real
 | Strict folder/FASTA packaging as a gate | Auto-validation | Canonical layout as the *output format*; drives nothing |
 | The Sunday deadline | Submission | Milestone ordering; no invented time estimates |
 | Risk-adjusted single-shot selection | One shot | **Margin as robustness of claim** (§14-C1), not as insurance |
-| Team name | Folder naming | Placeholder `LOCKSMITH_DEV`. Not raised again. |
+| Team name | Folder naming | Placeholder `RYAN_BINNY`. Not raised again. |
 
 **The winner's curse survives, reframed.** §5.4a justified it partly through one-shot pressure.
 That was the weaker argument. Taking the argmax over noisy measurements inflates the winner's
@@ -1036,7 +1036,7 @@ or different epitope approach). Contrast is worth more than a second near-copy, 
 Gates first, dossier second. A beautiful dossier on a non-viable design is worth nothing.
 
 ### M6 — Writeup  ◐ **PARTIAL 2026-09-20**
-Challenge 1 is packaged (`submission/LOCKSMITH_DEV.zip`) with `docs/methods_and_limitations.md`
+Challenge 1 is packaged (`submission/RYAN_BINNY.zip`) with `docs/methods_and_limitations.md`
 leading on the caveats, and validated by an artifact-only validator. The 3-minute pitch exists
 as five slides of correct argument with no design work. Per-session docs are complete.
 

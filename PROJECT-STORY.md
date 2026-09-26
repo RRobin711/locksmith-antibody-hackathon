@@ -1,135 +1,168 @@
 ---
-date: 2026-09-15
+date: 2026-09-26
 tags: [project, protein-design, antibody, locksmith-bio, learning, index]
 status: living
 ---
-
-Tags: [[Protein Design|protein design]] · [[Antibody|antibodies]] · [[Locksmith Bio|Locksmith Bio]] · [[Learning|things I'm learning]] · [[index|indexes]]
 
 # Designing a cancer drug on a laptop
 
 *Computational antibody design against PD-1 — and everything that went wrong on the way.*
 
-**Status:** scoring system built and validated. One structure predicted and scored. No
-antibodies designed yet.
+**Status:** two designs, packaged and validated, scoring 94.0 and 93.6. A scoring harness
+that was built before the designs and then used to show the scoring system itself is weak.
+A register of twenty claims this project withdrew. No wet lab, and no claim that needs one.
+
+> This is the narrative version. For the numbers and how to run it, see
+> [the README](README.md); for the current state, [`STATE.md`](STATE.md).
 
 ---
 
 ## The goal
 
-Design an antibody that binds **PD-1**, and show it would plausibly work — with no laboratory.
+Design an antibody that binds **PD-1**, and show it would plausibly work — with no
+laboratory.
 
 Your T cells can already kill cancer. Tumours survive by switching them off, pressing an
-"off switch" called PD-1 on the T cell's surface. A drug that blocks that contact leaves the
-brake unapplied. That is **checkpoint blockade**, and the drug that does it best — Keytruda —
-earns over $25bn a year. So: a real problem, a validated target, and a known-good answer to
-measure against.
+"off switch" called PD-1 on the T cell's surface. A drug that blocks that contact leaves
+the brake unapplied. That is **checkpoint blockade**, and the drug that does it best —
+Keytruda (pembrolizumab) — earns over $25bn a year. So: a real problem, a validated
+target, and a known-good answer to measure against.
 
-The task comes from a hackathon run by **Locksmith Bio**. **We are not submitting.** The point
-is to learn the field properly and build something a computational biology lab would respect —
-so the quality of the reasoning matters more than a score.
-
-→ [[knowledge/README|Start here for the science]], or read on for the arc.
+The task comes from a hackathon run by **Locksmith Bio** and **IBAB EC**. Its deadline
+(14 December 2025) had already passed when this work started, so nothing here was entered
+into anything. The brief was used because it is *specific* — eight named metrics, eight
+hard cutoffs, an exact scoring formula — and a specific brief is a far better teacher than
+an open-ended one.
 
 ## The two problems
 
-**Challenge 1** — take Keytruda's structure, rewrite the loops that do the binding, keep it
-working but make it new. Editing a known good answer.
+**Challenge 1 — remix Keytruda.** Take pembrolizumab, redesign the loops that touch PD-1,
+keep the binding, make the sequence novel. There is a safety net: the real answer exists,
+so you can measure how far you drifted.
 
-**Challenge 2** — no template. Design one from scratch. *Proposing* an answer, and it may
-simply not work.
+**Challenge 2 — invent the future.** Design a complete antibody against PD-1 from nothing.
+No safety net: no reference structure exists, so nothing external can tell you if you are
+right.
 
-→ [[knowledge/De Novo Design and the Two Challenges|Why the second is so much harder]]
+## The strategy, in one idea
 
-## The strategy, in two ideas
+**Build the judge before the contestant.**
 
-**Build the judge before the contestant.** We generate thousands of candidates and pick the
-best, so the scoring decides everything — and if the scoring is subtly wrong, *nothing visible
-happens*. So we rebuilt the scoring system first and tested it on molecules whose answers we
-already knew, including a deliberate fake that had to fail.
+Six of the eight scored metrics are computed from files *the entrant generates*. The
+organisers do not re-fold anyone's design. So a high score is partly a statement about how
+confident your structure predictor is in itself — and a confidently wrong pose scores
+exactly like a correct one.
 
-→ [[knowledge/Build the Judge Before the Contestant|Including the test that failed for the
-right reason]]
-
-**Confidence is not truth.** Most of the score comes from files we generate ourselves — our
-predicted structure, our own confidence in it. Nobody checks them against reality, because for
-a molecule that has never been made there *is* no reality to check. So a confidently wrong
-answer scores well, and anyone willing to hill-climb can hit the numbers. Hitting them isn't
-the achievement; showing they mean something is.
-
-→ [[knowledge/Confidence Is Not Truth|Goodhart, the winner's curse, and what counts as
-evidence]]
-
-## Where we are
-
-The harness reproduces ground truth: pembrolizumab passes every binding gate and correctly
-*fails* the novelty gate, because it is the molecule you're not allowed to copy.
-
-We then gave a folding model nothing but two sequences — no template — and asked how
-pembrolizumab binds PD-1. It recovered the real structure at **DockQ 0.820**, where two copies
-of the same crystal score 0.867 against each other.
-
-**⚠ What that proves and doesn't.** The reference structure is from 2017 and is almost
-certainly in the model's training data, so this is partly retrieval. It establishes that the
-pipeline works end to end. It does **not** establish that the model can place a
-never-before-seen antibody — which is exactly what Challenge 2 needs. The honest test is a
-post-training-cutoff complex, and we haven't run it.
-
-→ [[knowledge/How Structure Prediction Works|What the model does and what its numbers mean]]
+That makes the first deliverable not a design but an evaluator, and the first test of the
+evaluator is whether it scores **pembrolizumab itself** correctly: passing every binding
+gate and correctly *failing* the novelty gate, because it is the molecule you are not
+allowed to copy. It does.
 
 ## What broke
 
-The most valuable part. **Eight silent failures** — not one raised an exception, each would
-have produced a confident wrong number. A structure format where experimental and predicted
-files store different quantities in the same field. A tool numbering the *target* as an
-antibody because they share an evolutionary fold. A reference structure whose chains are paired
-crosswise. A comparison tool whose defaults would have refused to score every design we plan to
-make. A folding model exiting successfully after failing, twice.
+The most valuable part, and the reason this repo is worth reading.
 
-→ [[knowledge/Eight Silent Failures|All eight: cause, catch, fix, principle]]
+**The silent failures.** Not one of them raised an exception; each produced a confident
+wrong number. A structure format where experimental and predicted files store different
+quantities in the same field. A tool numbering the *target* as an antibody because they
+share an evolutionary fold. A folding model exiting **successfully** after failing, twice.
+A comparison tool whose defaults refuse to score any redesigned antibody — exit 1, no
+output — which would have scored a viable design as zero.
+→ [All of them, with cause, catch, fix and principle](knowledge/Eight%20Silent%20Failures.md)
 
-Plus half a day lost to infrastructure: a dependency conflict forcing four separate
-environments, a prediction that took four attempts for four different reasons, and two mistakes
-of my own.
+**The worst one took nine days to find.** The folding model compares an alignment's length
+against the input chain and, on mismatch, **throws the alignment away and folds the
+sequence alone** — announcing it only on a text stream the harness was discarding. Every
+Challenge 2 number the project produced was measured in that condition. Fixing it did not
+add noise to the ranking; it very nearly **inverted** it. The design that came out on top
+had previously ranked 29th of 30, and the one already packaged for submission fell from
+first to last.
+→ [The 2×2 that isolates it](results/msa_silently_discarded.md)
 
-→ [[knowledge/The Environment Saga|Symptom, real cause, fix, generalisation]]
+**And a self-inflicted one.** Challenge 1 scored 96.0 for nine days because the code read
+the comparison tool's *printed* summary, which rounds to three decimals. The true value is
+0.7995794972281312 — **0.00042** below a threshold at 0.80. Two points came from a
+`printf`. A project whose whole argument is that the rubric is gameable cannot keep them,
+so the score is now 94.0.
 
 **The one lesson I'd keep:**
 
-> A tool that refuses to produce output is the good failure. The dangerous ones hand you a
-> number anyway — right range, right units, computed on the wrong thing.
+> A tool that refuses to produce output is the *good* failure. The dangerous ones hand you
+> a number anyway — right range, right units, computed on the wrong thing.
+
+## What the judge found when pointed at the rubric
+
+This is the result I did not expect and the one worth an outsider's time.
+
+**HyHEL-10 is an antibody raised against hen egg lysozyme.** It has no business binding
+PD-1. Run through this pipeline against PD-1, it **clears all five of the hackathon's hard
+cutoffs.** Across six deliberately wrong antibodies, four of the five gates reject **none
+of them**.
+
+The reason is mechanical and general: ΔG, contact count, interface confidence and buried
+surface area all measure *that a complex was built*, not that it is the right complex. Give
+a structure predictor two proteins and it will place them against each other. Only one of
+the five gates carries real information, and even that one puts a wrong antibody within
+0.006 of passing.
+
+Underneath it sits a second trap. The predictor returns five candidate structures **ranked
+by its own confidence**, and the default is to keep one. So the number everybody reports is
+an **argmax, not a sample**. HyHEL-10's *median* across five draws is 0.219 — it fails
+easily. Its best draw is 0.609 — it passes. Same molecule, same run.
+→ [The negative control](results/negative_control.md)
 
 ## Where we got to
 
-**Challenge 1 has a named candidate.** `mpnn_T0.5_s104_036` — CDR-H3 `ALRPRDVDRGFYK`, 38.5%
-identity to pembrolizumab, rubric score **87.5**, viable on all eight gates, fresh-seed DockQ
-**0.749**. Chosen from 239 designs generated across four sampling temperatures, every one of
-them folded rather than filtered, then re-measured at seven random seeds.
+**Challenge 1:** `mpnn_T0.5_s104_036` with a deamidation fix, **94.0/100**, viable. Chosen
+from 239 designs across four sampling temperatures — every one of them folded rather than
+filtered, deliberately, so that every filter and threshold stays evaluable offline without
+the circularity of testing a filter on the run that used it.
 
-Three things the campaign taught that outlast it:
+**Challenge 2:** `bb_8_0`, **93.6/100**, viable on all five diffusion samples. From 144
+folds over 18 backbones conditioned on the epitope that PD-L1 itself uses.
 
-- **A cheap filter has to beat the same filter applied at random.** The CDR-H3 aromatic screen
-  does — by +0.0241 mean DockQ against an equal-size random subset, p<0.0001. But it does not
-  move the *maximum*, and the design we named would have been thrown away by it. A filter that
-  raises a pool's average is not a filter that finds you a winner.
-- **Three seeds is the worst way to spend a fold budget.** Given noisy measurements, extra
-  *candidates* stop helping almost immediately while extra *precision per candidate* keeps
-  paying. Twenty designs at seven seeds beats sixty at three, for the same compute.
-- **The winner's curse is real, correctable, and we proved the correction.** The best-looking
-  design is best-looking partly by luck. Shrinking its score by the measurement's reliability
-  landed within **0.001 points** of an independent re-measurement — a coincidence, not a validation: that measurement is one fold with sd 0.467, so it cannot separate the discount from no discount (corrected 2026-09-20) — against a raw number
-  that was 0.155 too high, which is seven times the gap separating first place from second.
+Three things the campaigns taught that outlast them:
+
+- **A cheap filter has to beat the same filter applied at random**, at equal budget. The
+  aromatic screen does, on mean quality, p<0.0001 — and it is still refuted as a design
+  rule, because it only wins on outcomes that are properties of the *predictor* rather
+  than of the interface, and on the one chemically meaningful outcome it runs backwards.
+  *When a result survives a good null but contradicts a strong prior, vary the outcome,
+  not the test.*
+- **The winner's curse is real and correctable.** The best-looking design is best-looking
+  partly by luck; shrink its score by the measurement's reliability. The correction is
+  worth applying on theory — and the single fresh measurement that appeared to confirm it
+  **cannot** confirm it, because one fold's standard error is three times the size of the
+  effect. Discriminating it properly needs about 73 more folds.
+- **More candidates or more precision?** Simulating the whole procedure — shortlist,
+  re-measure, take the best — shows depth beats breadth *once the budget is large enough*,
+  and not before. An earlier, stronger version of this claim appeared in my own notes and
+  was **false against the very table it was drawn from**. Read the table you are
+  summarising.
+
+## Being wrong on the record
+
+Twenty claims were withdrawn, refuted or superseded over this project, and five figures
+are flagged as not reproducing. They are all
+[enumerated in one place](results/retractions.md), with what replaced them.
+
+That file exists because of a smaller failure: for three sessions the project carried a
+note saying "five stale retractions are outstanding" without anyone ever writing the list.
+A known-issues list that exists only as a count is not a list — there is nothing to check
+off, so it survives indefinitely at no cost to whoever carries it. When finally
+enumerated, the count was twenty.
 
 ## What's next
 
-Resolve the top of the ranking — first and second differ by a tenth of a standard error, so we
-have *a* best design rather than *the* best (~20 more folds settles it) · then the validation
-dossier the whole project was aimed at: specificity controls, hotspot ablation, epitope overlap
-· and, if the length axis is ever to be explored, a second generator, because ProteinMPNN
-cannot change a loop's length.
+The controls that need a GPU and have not been run: a decoy-patch control that could
+falsify the epitope-conditioning result, and sequencing the 18 unconditioned backbones.
+Neither changes a design; both would change how much the evidence supports.
+Full list in [`STATE.md`](STATE.md) §6–7.
 
 ## Working documents
 
-[[PLAN|Delivery plan, including a review of its own weaknesses]] ·
-[[BUILD|Code skeleton]] · [[docs/sessions/README|Session logs]] ·
-[[knowledge/README|Knowledge notes index]]
+[The delivery plan, including a review of its own weaknesses](PLAN.md) ·
+[Code skeleton](BUILD.md) ·
+[Session logs](docs/sessions/README.md) ·
+[Knowledge notes](knowledge/README.md) ·
+[The 12-chapter course](docs/lecture/README.md)

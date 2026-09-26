@@ -9,7 +9,7 @@ __all__ = ["write_pae_json", "Design", "PackagingError", "HEADERS",
            "build_challenge", "build_zip", "write_fasta", "write_structure"]
 
 
-def packaged_scores(challenge: int, team: str = "LOCKSMITH_DEV") -> dict:
+def packaged_scores(challenge: int, team: str = "RYAN_BINNY") -> dict:
     """The scores as they appear IN THE PACKAGE, parsed from the shipped `scores.md`.
 
     WHY THE PACKAGE AND NOT A RUN DIRECTORY. The deck is a scored deliverable, and it has

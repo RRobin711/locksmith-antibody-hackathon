@@ -45,7 +45,7 @@ Validated on cases whose answers are derivable: a verbatim germline junction sco
 ## Verifying the package end to end
 
 ```
-uv run python scripts/58_validate_submission.py submission/LOCKSMITH_DEV
+uv run python scripts/58_validate_submission.py submission/RYAN_BINNY
 ```
 
 Reads **only** this folder — no run directory, no cached score — and re-derives all seven

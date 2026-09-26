@@ -43,7 +43,7 @@ from locksmith.score import evaluate
 from locksmith.submit.package import Design, build_challenge, build_zip
 from locksmith.submit.docs import challenge2_repro_md
 
-TEAM, CHALLENGE = "LOCKSMITH_DEV", 2
+TEAM, CHALLENGE = "RYAN_BINNY", 2
 ROOT = Path("submission")
 DID = "bb_8_0"
 LABEL = f"cf_{DID}"

@@ -11,3 +11,6 @@ submission/*.zip
 *.egg-info/
 .pytest_cache/
 runs/challenge2_pod/
+
+# The organisers' handbook is their material, not mine to redistribute.
+source/antibody-design-hackathon-handbook.*

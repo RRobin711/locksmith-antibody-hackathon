@@ -32,7 +32,7 @@ from locksmith.score import evaluate
 from locksmith.submit import Design, build_challenge, build_zip
 from locksmith.submit.docs import challenge2_repro_md
 
-TEAM = "LOCKSMITH_DEV"
+TEAM = "RYAN_BINNY"
 CHALLENGE = 2
 ROOT = Path("submission")
 # THE RECYCLING-10 RUN, not the original. The first pass folded at recycling_steps=3

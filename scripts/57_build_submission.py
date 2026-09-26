@@ -27,7 +27,7 @@ from locksmith.types import Provenance, Structure
 # to put here. Decided 2026-09-22. If that ever changes, this is the single place to
 # change it -- `build_challenge` and `build_zip` both take the team name as an argument
 # and the folder names are derived, so a rename is one edit plus a rebuild.
-TEAM = "LOCKSMITH_DEV"
+TEAM = "RYAN_BINNY"
 ROOT = Path("submission")
 
 # The challenge this driver packages. `build_challenge()` and `build_zip()` in

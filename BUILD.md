@@ -10,7 +10,7 @@ first — several decisions here exist to fix problems found in review.
 gate to an output convenience — we still emit the canonical layout because it makes results
 directly comparable to what the hackathon would have scored, and because it forces artefacts to
 exist rather than living in notebooks. It drives no technical decision. Team name is the fixed
-placeholder `LOCKSMITH_DEV`.
+placeholder `RYAN_BINNY`.
 
 ---
 

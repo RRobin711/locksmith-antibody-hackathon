@@ -42,9 +42,9 @@ PD1 = ("PWNPPTFSPALLVVTEGDNATFTCSFSNTSESFVLNWYRMSPSNQTDKLAAFPEDRSQPGQDSRFRVTQLPN
 
 ARMS = [
     ("neg_ch1-design", "Challenge 1 design", "PD-1 (ours)",
-     "submission/LOCKSMITH_DEV/LOCKSMITH_DEV_Challenge1/sequences/design_1.fasta"),
+     "submission/RYAN_BINNY/RYAN_BINNY_Challenge1/sequences/design_1.fasta"),
     ("neg_ch2-design", "Challenge 2 design", "PD-1 (ours)",
-     "submission/LOCKSMITH_DEV/LOCKSMITH_DEV_Challenge2/sequences/design_1.fasta"),
+     "submission/RYAN_BINNY/RYAN_BINNY_Challenge2/sequences/design_1.fasta"),
 ]
 
 

@@ -20,7 +20,7 @@ pipeline honestly, and the deliverable is the whole record, not the score.
 | **Challenge 1** | `mpnn_T0.5_s104_036` **N55Q** | **94.0** | ✅ | ✅ |
 | **Challenge 2** | **`bb_8_0`** | **93.6** | ✅ | ✅ |
 
-`submission/LOCKSMITH_DEV.zip` was rebuilt 2026-09-25 11:47 and **passes validation from
+`submission/RYAN_BINNY.zip` was rebuilt 2026-09-25 11:47 and **passes validation from
 its own files** — `scripts/58_validate_submission.py` imports nothing from `runs/`, reads
 no cached score, and re-derives every metric from the three files per design. Timestamps
 inside the tree are within seconds of each other, which is the healthy signature; a day's
