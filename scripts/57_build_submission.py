@@ -124,9 +124,9 @@ def main() -> int:
 
     metrics_md = ["# Our own recomputation of the eight scored metrics", "",
                   "**DockQ will not score this submission at its defaults.** It exits 1",
-                  "with no output. `--allowed_mismatches` is required and the minimum",
-                  "value that works is **15**, exactly the number of substitutions in this",
-                  "design; we pass 40 for headroom:",
+                  "with no output. `--allowed_mismatches` is required; the minimum",
+                  "value that works is **16** (15 still exits 1 -- measured, not",
+                  "inferred). We pass 40 for headroom:",
                   "",
                   "```",
                   "$ DockQ structures/design_1_complex.pdb 5ggs_ABZ.pdb",
@@ -135,7 +135,7 @@ def main() -> int:
                   "",
                   "$ DockQ structures/design_1_complex.pdb 5ggs_ABZ.pdb \\",
                   "      --allowed_mismatches 40 --mapping ABC:ABC",
-                  "Total DockQ over 3 native interfaces: 0.816 with ABC:ABC model:native mapping",
+                  "Total DockQ over 3 native interfaces: 0.800 with ABC:ABC model:native mapping",
                   "```",
                   "",
                   "`--allowed_mismatches` defaults to **0**, and a redesigned CDR is by",
@@ -154,7 +154,14 @@ def main() -> int:
                   f"`netsolp_chain_agg={c['netsolp_chain_agg']}`.", "",
                   "| metric | value | band | sub-score |", "|---|---|---|---|"]
     for m in sorted(raw):
-        metrics_md.append(f"| `{m}` | {raw[m]:.3f} | {sc.bands.get(m,'-')} | {sc.sub.get(m,0):.1f} |")
+        # PRINT ENOUGH DIGITS TO MAKE THE BAND LEGIBLE. At 3 dp this table rendered
+        # dockq as `0.800 | medium` against a >=0.80 Good edge, which reads as a bug
+        # rather than as the correction it is -- the true value is 0.7995794972281312.
+        # Where a value sits within its display precision of a band edge, show more.
+        _v = raw[m]
+        _risk = any(m in r for r in getattr(sc, "rounding_risk", []))
+        _fmt = f"{_v:.6f}".rstrip("0") if _risk else f"{_v:.3f}"
+        metrics_md.append(f"| `{m}` | {_fmt} | {sc.bands.get(m,'-')} | {sc.sub.get(m,0):.1f} |")
     metrics_md += ["", f"Categories: " + ", ".join(f"{k} {v:.3f}" for k, v in sc.categories.items()),
                    "", f"**Final: {sc.final} / 100. Viable: {sc.viable}.**", "",
                    "Band values are a handbook ambiguity; see `docs/` and",
@@ -287,11 +294,17 @@ Boltz's `--diffusion_samples` defaults to 1, so every pose-derived metric here c
 single diffusion draw. Five samples from one run (MSA shared, so this is pure diffusion
 variability):
 
-| diffusion sample | 0 (submitted) | 1 | 2 | 3 | 4 | spread |
+| diffusion sample | 0 | 1 | 2 | 3 | 4 | spread |
 |---|---|---|---|---|---|---|
 | ipSAE | 0.822 | 0.841 | 0.827 | 0.840 | 0.861 | 0.039 |
 | **DockQ** | **0.816** | 0.798 | 0.801 | 0.820 | **0.711** | **0.109** |
 | composite | **96.0** | 94.0 | 96.0 | 96.0 | 94.0 | **94.0–96.0** |
+
+**This sweep was run on the pre-`N55Q` design, not on the submitted one** — the two differ
+at exactly one position (heavy 55, N→Q) and we did not re-run the sweep after the fix. So
+read it as a measurement of *diffusion variability on this complex*, which is what it is
+for, and not as the submitted design's own envelope. The submitted structure scores DockQ
+**0.7996**, just below the 0.80 band edge; sample 0 above scores 0.8160, just above it.
 
 **ipSAE is stable and DockQ is not.** We expected the opposite — this complex is nearly
 invariant to Boltz recycling depth (ipSAE range 0.036 over depths 3→20), and we predicted
@@ -375,24 +388,30 @@ $ echo $?
 ```
 
 Exit status **1**, no score printed. **`--allowed_mismatches` is mandatory and the
-minimum value that works is 15** — exactly the number of substitutions in this
-design, so the flag is not arbitrary. We pass 40 for headroom. `--mapping ABC:ABC`
-is *not* strictly required (DockQ resolves the same mapping on its own and returns
-the identical 0.816), but we pass it because leaving the search free means a
-different input could silently be scored under a different correspondence:
+smallest value that works is 16** — measured by bisection, not inferred: 15 still
+exits 1, 16 scores. We pass 40 for headroom. `--mapping ABC:ABC` is *not* strictly
+required (DockQ resolves the same correspondence on its own and returns the
+identical 0.800), but we pass it because leaving the search free means a different
+input could silently be scored under a different mapping:
 
 ```
 $ DockQ structures/design_1_complex.pdb 5ggs_ABZ.pdb \\
       --allowed_mismatches 40 --mapping ABC:ABC
-Total DockQ over 3 native interfaces: {raw['dockq']:.3f} with ABC:ABC model:native mapping
-  A,B  DockQ 0.931      (heavy-light framework -- near-perfect by construction)
-  A,C  DockQ 0.723      <-- the interface the design actually creates
-  B,C  DockQ 0.794
+Total DockQ over 3 native interfaces: 0.800 with ABC:ABC model:native mapping
+  A,B  DockQ 0.8716     (heavy-light framework -- near-perfect by construction)
+  A,C  DockQ 0.7308     <-- the interface the design actually creates
+  B,C  DockQ 0.7963
 ```
+
+Those three are read from `--json`, not from the printed summary, which rounds to 3 dp.
+An earlier draft of this document reported 0.931 / 0.723 / 0.794 here. Those numbers are
+real, but they belong to a **different structure** — model 0 of the five-diffusion-sample
+sweep below, which was run on the pre-`N55Q` design. The submitted design carries the
+deamidation fix, and it is the one scored here.
 
 - `--allowed_mismatches` defaults to **0**. A redesigned CDR is not identical to the
   native by definition, so the default refuses *every* mutated design instead of scoring
-  it badly. 40 is comfortably above our 15 substitutions.
+  it badly. 40 is comfortably above the measured minimum of 16.
 - `--mapping ABC:ABC` pins the correspondence §4.2.2 already fixes (A=heavy, B=light,
   C=antigen). Left free, DockQ searches, and a wrong mapping scores a good design badly.
 
@@ -400,9 +419,9 @@ Total DockQ over 3 native interfaces: {raw['dockq']:.3f} with ABC:ABC model:nati
 Total over the three interfaces, because that is what an organiser reads off the tool's
 summary line. The handbook says only that DockQ "returns a docking quality score between
 0 and 1" and does not say how to combine three interfaces. Worth knowing when comparing:
-the Total averages in the **heavy-light framework interface (0.931)**, which no design
+the Total averages in the **heavy-light framework interface (0.8716)**, which no design
 touches and which is near-perfect by construction. The interface our design is actually
-responsible for is **A-C = 0.723**.
+responsible for is **A-C = 0.7308**.
 
 ## The native reference, and a trap in it
 

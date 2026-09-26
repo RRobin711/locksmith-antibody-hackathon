@@ -77,277 +77,127 @@ def build(path: Path, *, c1: dict, c2: dict, calib: dict | None = None) -> Path:
             p.space_after = Pt(7)
         return tb
 
-    # ---------------------------------------------------------------- 1
-    s = slide("We built the judge before the contestant — then used it to break our own results",
-              "Anti-PD-1 antibody design · Challenge 1 and Challenge 2 · LOCKSMITH_DEV")
+
+    # ================================================================= SLIDE 1
+    # Approved list, 2026-09-24. Six slides. Everything that failed its own
+    # interval is excluded BY NAME at the bottom of this module so a future
+    # editor cannot reinstate it by accident.
+    s = slide("Two designs that score 94.0 and 93.6 — and that is the least "
+              "interesting thing here",
+              "Locksmith Bio x IBAB de novo antibody design - anti-PD-1")
     bullets(s, [
-        ("Six of the eight scored metrics are computed from files we generate ourselves.", 0, True, INK),
-        ("So the rubric is gameable by anyone willing to submit a flattering structure, and every "
-         "serious team's numbers will look alike. Hitting the numbers is not a differentiator.", 1, False, MUTED),
+        (f"Challenge 1 - humanised anti-PD-1, composite {c1['final']:.1f} / 100, viable.", 0, True, INK),
+        (f"Challenge 2 - de novo anti-PD-1, composite {c2['final']:.1f} / 100, viable.", 0, True, INK),
         ("", 0, False, INK),
-        ("We spent the week building controls that could FAIL, and then reporting it when they did.", 0, True, INK),
-        ("Epitope knockout · SKEMPI ΔΔG against 45 measured mutants · composition-matched scramble null "
-         "· a contiguous-patch epitope null · three independent adversarial audits.", 1, False, MUTED),
+        ("Six of the eight scored metrics are computed from files we generate ourselves. "
+         "The rubric is gameable, so every competent team's numbers will look like ours.", 0, False, INK),
+        ("What is rare is a team that built the evaluation harness before the designs, "
+         "then used it to break its own published results - and shipped the receipts.", 0, True, ACCENT),
         ("", 0, False, INK),
-        (f"Both challenges are packaged and viable. Challenge 1 {c1['final']:.1f}/100, "
-         f"Challenge 2 {c2['final']:.1f}/100.", 0, False, MUTED),
-        ("That is the least interesting thing in this deck.", 1, True, MUTED),
+        ("The next five slides are what the harness found. Three of them are about us.", 0, False, MUTED),
     ])
 
-    # ---------------------------------------------------------------- 1b
-    if calib and calib.get("negctrl"):
-        rows = list(calib["negctrl"].values())
-        neg = [r for r in rows if r["expected"] == "negative"]
-        pos = [r for r in rows if r["expected"] == "positive"]
-        swept = [r for r in neg if r.get("ipsae_m0") is not None
-                 and r["ipsae_m0"] >= 0.60]
-        if neg:
-            hero = max(neg, key=lambda r: r.get("ipsae_m0") or 0)
-            s = slide("We docked an anti-lysozyme antibody onto PD-1. "
-                      "The rubric certified it.",
-                      "The control that could have sunk this project. It costs eight "
-                      "folds. Nobody ran it for a week.")
-            items = [
-                (f"{hero['name']} is a real antibody raised against hen egg lysozyme. "
-                 f"It cannot bind PD-1.", 0, True, INK),
-                (f"Folded against our exact PD-1 construct, our exact cached alignment, "
-                 f"our exact flags — only the antibody changed:", 1, False, MUTED),
-                ("", 0, False, INK),
-                (f"ipSAE {hero.get('ipsae_m0', 0):.3f}  ·  ΔG {hero.get('dg_m0', 0):.1f}  ·  "
-                 f"{hero.get('contacts_m0', 0):.0f} contacts  ·  "
-                 f"interface pLDDT {hero.get('iface_plddt_m0', 0):.1f}  ·  "
-                 f"CDR SASA {hero.get('cdr_sasa_m0', 0):.0f} Å²", 0, True, WARN),
-                ("Every one of the five §7.2 hard cutoffs. A clean sweep, by a molecule "
-                 "that cannot possibly bind.", 0, True, WARN),
-                ("", 0, False, INK),
-                ("Because that is `model_0` — and Boltz ranks its diffusion outputs by its "
-                 "own confidence, so the default `diffusion_samples=1` returns an ARGMAX, "
-                 "not a draw.", 0, True, INK),
-                (f"Across five samples its median is ipSAE {hero.get('ipsae', 0):.3f}. It "
-                 f"fails comfortably the moment you actually sample.", 1, False, MUTED),
-                ("", 0, False, INK),
-            ]
-            inert = [n for n in ("ΔG", "contacts", "interface pLDDT", "CDR SASA")]
-            items.append(
-                ("Four of the five gates are cleared by EVERY antibody in the negative "
-                 "arm. The §7.2 viability decision rests on ipSAE alone; the other four "
-                 "supply the appearance of a check.", 0, True, INK))
-            if pos:
-                items.append(
-                    (f"The panel works: both licensed anti-PD-1 antibodies "
-                     f"({', '.join(r['name'] for r in pos)}) pass. A negative arm without "
-                     f"a working positive proves nothing, and we have published that "
-                     f"mistake before.", 0, False, MUTED))
-            items.append(("A gate has to be calibrated against something that should fail "
-                          "it. Until this experiment, nothing in this project ever was.",
-                          0, True, ACCENT))
-            bullets(s, items, size=15)
-
-    # ---------------------------------------------------------------- 1c
-    if calib and calib.get("panel"):
-        panel = list(calib["panel"].values())
-        post = [r for r in panel if r["arm"] == "post" and r.get("ipsae") is not None]
-        pre = [r for r in panel if r["arm"] == "pre" and r.get("ipsae") is not None]
-        paired = [r for r in panel
-                  if r.get("ipsae") is not None and r.get("dockq") is not None]
-        tests = [r for r in calib.get("negctrl", {}).values()
-                 if r["expected"] == "test"]
-        if len(paired) >= 10:
-            import statistics as _st
-            try:
-                from scipy.stats import spearmanr
-                rho, pv = spearmanr([r["ipsae"] for r in paired],
-                                    [r["dockq"] for r in paired])
-            except Exception:                                # noqa: BLE001
-                rho, pv = float("nan"), float("nan")
-            good = [r for r in paired if r["dockq"] >= 0.49]
-            bad = [r for r in paired if r["dockq"] < 0.23]
-            fn = sorted([r for r in good if r["ipsae"] < 0.60],
-                        key=lambda r: -r["dockq"])
-            fp = [r for r in bad if r["ipsae"] >= 0.60]
-            fnr = 100.0 * len(fn) / max(len(good), 1)
-
-            s = slide(f"We ran the gate against {len(paired)} real crystals. "
-                      f"It rejects {fnr:.0f}% of correct answers.",
-                      "Same pipeline, same flags. Every complex here has a solved "
-                      "structure, so for once we can ask whether the number is right — "
-                      "which is impossible on a de novo design")
-            items = [
-                (f"ipSAE genuinely does track pose accuracy: Spearman ρ = {rho:+.3f} "
-                 f"against DockQ (p = {pv:.4f}). We are not claiming it is noise.",
-                 0, True, INK),
-                ("", 0, False, INK),
-                (f"But at the handbook's ipSAE ≥ 0.60 cutoff, against the CAPRI "
-                 f"convention for a good pose (DockQ ≥ 0.49):", 0, True, INK),
-                (f"{len(good) - len(fn)} of {len(good)} correct structures pass · "
-                 f"{len(fn)} are REJECTED — a {fnr:.0f}% false-negative rate",
-                 0, True, WARN),
-            ]
-            if fn:
-                h = fn[0]
-                items.append(
-                    (f"{h['pdb_id']}: DockQ {h['dockq']:.3f} — a near-perfect "
-                     f"reproduction of the crystal — scores ipSAE {h['ipsae']:.3f}. "
-                     f"The rubric calls it non-viable.", 1, False, MUTED))
-            items += [
-                ("", 0, False, INK),
-                ("So the problem is not that the metrics are meaningless. It is sharper "
-                 "than that:", 0, True, INK),
-                ("four of the five §7.2 gates reject NOTHING · the one that works is "
-                 "mis-thresholded · and on one diffusion sample it certifies an "
-                 "anti-lysozyme antibody", 1, True, WARN),
-            ]
-            if len(post) >= 5 and len(pre) >= 5:
-                items += [
-                    ("", 0, False, INK),
-                    (f"Memorisation is worth a lot: median ipSAE {_st.median([r['ipsae'] for r in pre]):.3f} "
-                     f"pre-cutoff (n={len(pre)}, Boltz has seen these) vs "
-                     f"{_st.median([r['ipsae'] for r in post]):.3f} post-cutoff "
-                     f"(n={len(post)}, genuinely novel).", 0, False, MUTED),
-                ]
-                for t in tests:
-                    if t.get("ipsae") is None:
-                        continue
-                    pc = 100.0 * sum(1 for r in post if r["ipsae"] < t["ipsae"]) / len(post)
-                    items.append(
-                        (f"{t['name']}: ipSAE {t['ipsae']:.3f} — {pc:.0f}th percentile of "
-                         f"novel real complexes", 1, True, ACCENT))
-            items += [
-                ("", 0, False, INK),
-                ("A high percentile is not evidence our design binds — only that the "
-                 "predictor is as confident about it as about real complexes it has never "
-                 "seen. The one metric here that checks against external truth is DockQ, "
-                 "and for a de novo design there is no crystal to check.", 0, True, INK),
-            ]
-            bullets(s, items, size=14)
-
-    # ---------------------------------------------------------------- 2
-    s = slide("The rubric's own metrics, measured against controls that could fail",
-              "Every number below is ours, and several are against our own interest")
+    # ================================================================= SLIDE 2
+    s = slide("A silently discarded MSA: ipSAE 0.012 vs 0.773 on the same molecule",
+              "The finding that invalidated every Challenge 2 number we had")
     bullets(s, [
-        ("Epitope knockout — delete PD-1's binding face, with a matched off-interface control:", 0, True, INK),
-        ("ipSAE and interface pLDDT respond at 17× and 64× their own seed noise. "
-         "PRODIGY ΔG and contact count do not — and ΔG carried the largest share of our ranking.", 1, False, MUTED),
-        ("45 point mutants with measured ΔΔG (SKEMPI 2.0, 3HFM):", 0, True, INK),
-        ("No metric in the stack tracks affinity. A mutation that ABOLISHES binding scores "
-         "ipSAE 0.917 against the wild type's 0.903.", 1, False, MUTED),
-        ("Variance decomposition across the pool:", 0, True, INK),
-        ("Contacts ICC 0.003, CDR SASA 0.000 — sampler noise. Five of eight metrics are near-constant "
-         "across our designs, so the harness effectively ranks on three.", 1, False, MUTED),
+        ("Boltz compares the MSA's query length against the input chain. On a mismatch it "
+         "DISCARDS the alignment and folds single-sequence - announcing it only on stdout.", 0, False, INK),
+        ("Our harness captured stdout and threw it away. For nine days every Challenge 2 fold "
+         "paired a 123-residue antigen with a 113-residue cached alignment.", 0, False, INK),
         ("", 0, False, INK),
-        ("Conclusion we act on: this stack separates a destroyed interface from an intact one. "
-         "It cannot rank two intact ones by affinity, and we do not claim it can.", 0, True, ACCENT),
-    ])
-
-    # ---------------------------------------------------------------- 3  (the chart)
-    s = slide("The finding: a de novo interface is not converged, and one number hides it",
-              "ipSAE of the SAME input re-folded at increasing Boltz recycling depth")
-    data = CategoryChartData()
-    data.categories = ["recycling 3", "recycling 10", "recycling 20"]
-    data.add_series("Crystallised complex (pembrolizumab + PD-1)", (0.842, 0.835, 0.885))
-    data.add_series("Our Challenge 1 design (near-native)", (0.824, 0.850, 0.859))
-    data.add_series("Our Challenge 2 design (de novo)", (0.263, 0.864, 0.795))
-    gf = s.shapes.add_chart(XL_CHART_TYPE.LINE_MARKERS, Inches(0.7), Inches(1.9),
-                            Inches(7.5), Inches(4.7), data)
-    ch = gf.chart
-    ch.has_legend = True
-    ch.legend.position = XL_LEGEND_POSITION.BOTTOM
-    ch.legend.include_in_layout = False
-    ch.legend.font.size = Pt(11)
-    ch.value_axis.maximum_scale, ch.value_axis.minimum_scale = 1.0, 0.0
-    ch.value_axis.has_major_gridlines = True
-    ch.value_axis.tick_labels.font.size = Pt(11)
-    ch.category_axis.tick_labels.font.size = Pt(11)
-    bullets(s, [
-        ("ipSAE range across recycling depth", 0, True, INK),
-        ("crystallised   0.050", 1, False, MUTED),
-        ("Challenge 1    0.036", 1, False, MUTED),
-        ("Challenge 2    0.601   ← 12–17×", 1, True, WARN),
+        ("Measured 2x2 on the same design: with a correct alignment 0.012 both before and after "
+         "the fix; without it, 0.773 / 0.686. The no-MSA cells reproduce our entire historical "
+         "envelope - which is how the condition was identified at all.", 0, True, WARN),
         ("", 0, False, INK),
-        ("A near-native complex is essentially invariant in sampling depth.", 0, False, INK),
-        ("Ours is not converged at any depth we tested.", 0, True, INK),
-        ("", 0, False, INK),
-        ("A second axis, same story:", 0, True, INK),
-        ("Boltz returns its models RANKED. With diffusion_samples=1 you get the argmax, "
-         "not a sample. Asking for five costs 2m54s vs 2m.", 1, False, MUTED),
-        ("Ch1 94.0–96.0 · the Ch2 design this replaced, 91.2–96.0", 1, True, WARN),
-        ("The SHIPPED Ch2 design scores 91.2 on all five — its ipSAE envelope "
-         "(0.619–0.781) sits entirely inside one band, so the sequon fix bought "
-         "band stability as well as removing the liability.", 1, False, MUTED),
-        ("", 0, False, INK),
-        ("Every pose-derived number we have ever reported sat at the top of a "
-         "distribution we never sampled.", 0, True, ACCENT),
-    ], top=1.95, width=4.6, size=14)
-
-    # ---------------------------------------------------------------- 4
-    s = slide("Four things we published this week and then broke ourselves",
-              "Each was found by a control or an audit we built and ran on our own work")
-    bullets(s, [
-        ("“0 of 30 designs clear the gates.”", 0, True, WARN),
-        ("An artefact of folding at recycling 3, a setting inherited from Challenge 1 unexamined. "
-         "Re-folded: 1 of 30 clears. We withdrew the result and the essay attached to it.", 1, False, MUTED),
-        ("“The distribution is bimodal — 29 designs Boltz will not place at all.”", 0, True, WARN),
-        ("An artefact of ipSAE's hard PAE cutoff. The 15 designs at exactly 0.000 carry ipTM "
-         "0.556–0.674 — an ordinary continuum. The metric manufactured the gap.", 1, False, MUTED),
-        ("“Our aromatic CDR-H3 filter is validated (p < 0.0001).”", 0, True, WARN),
-        ("It beat its null only on outcomes that measure the PREDICTOR, and it reduces contact "
-         "count — it selects against Tyr/Trp. Refuted and withdrawn as a design rule.", 1, False, MUTED),
-        ("“Real epitope 0.712” — quoted for our submitted design.", 0, True, WARN),
-        ("That was a POOL MEAN. This design's own value is 0.625, below the pool median. Our own "
-         "catalogued error, committed inside the deliverable, caught by an outside reviewer.", 1, False, MUTED),
-        ("", 0, False, INK),
-        ("Every correction is in the submitted package, with the number that replaced it.", 0, True, ACCENT),
+        ("A degraded input did not blur the ranking, it nearly INVERTED it. Re-screening all 30 "
+         "designs: the one that clears had ranked 29th of 30; the design we had packaged fell "
+         "0.864 -> 0.013 from 1st.", 0, True, WARN),
+        ("Transferable: capture a tool's stdout and stderr, and grep them for the words it uses "
+         "when it gives up on something.", 0, False, MUTED),
     ], size=15)
 
-    # ---------------------------------------------------------------- 5
-    s = slide("Two textbook fixes for the same liability. They differ by 60×.",
-              "Our Challenge 2 design had two N-glycosylation sequons in its paratope — "
-              "handbook §9.2 forbids them")
+    # ================================================================= SLIDE 3
+    s = slide("We calibrated the gate against 40 real crystals. It is on the wrong variable.",
+              "Every number below recomputed from runs/calibration/scores.json")
     bullets(s, [
-        ("§9 prescribes two remedies and presents them as interchangeable: N→Q or S→A.", 0, True, INK),
-        ("The structure said which, before we folded anything:", 0, True, INK),
-        ("the glycosylation acceptors ARE the binding residues — H N52 and L N49 carry 29 "
-         "antigen contacts between them. The serines completing the motifs carry ZERO.", 1, False, MUTED),
+        ("ipSAE tracks pose accuracy: Spearman rho = +0.702, 95% CI [0.50, 0.83], n = 40.", 0, True, INK),
         ("", 0, False, INK),
-        ("N→Q  (mutate the asparagines):  ipSAE 0.864 → 0.014.  Dead, ±0.001 over 5 samples.",
-         0, True, WARN),
-        ("S→A  (mutate the serines):      viable 5/5, both sequons gone, §9.2 passes.",
-         0, True, ACCENT),
+        ("Error rates only mean something at ONE threshold:", 0, True, INK),
+        ("DockQ >= 0.49 (Medium+):  12.5% false-positive, 25.0% false-negative.", 1, False, INK),
+        ("DockQ >= 0.23 (Acceptable+):  0% false-positive, 58.3% false-negative.", 1, False, INK),
+        ("The 0% rests on 4 negatives - Clopper-Pearson 95% upper bound 0.602, i.e. uninformative. "
+         "Our own earlier text paired the 0% with the 25%: the favourable half of each, reachable "
+         "at neither. Corrected in this package.", 1, True, WARN),
         ("", 0, False, INK),
-        ("A developability fix is a DESIGN CHANGE. Prescribed fixes are not "
-         "interchangeable, and the structure tells you which one in a minute.", 0, True, INK),
+        ("The rubric gates on ipSAE. At Medium+, interface pLDDT separates good poses at "
+         "AUC 0.992 against ipSAE's 0.911 - the rubric gates on the weaker of its own two "
+         "confidence metrics.", 0, True, ACCENT),
+        ("Stated honestly: that ordering REVERSES at Acceptable+ (0.750 vs 0.833), so the claim "
+         "is 'better at the Medium boundary', not 'better everywhere'.", 0, False, MUTED),
+    ], size=14)
+
+    # ================================================================= SLIDE 4
+    s = slide("We built a 1.65x speed-up, measured it corrupting structures, and threw it away",
+              "The cheapest result here, and the one we were most tempted not to run")
+    bullets(s, [
+        ("Batched folding promised 1.65x. Verification against the single-fold path: only "
+         "1 of 4 designs came back byte-identical.", 0, True, INK),
+        ("The other three moved 72-89 Angstrom in ligand RMSD and +/-0.28 ipSAE - not noise, "
+         "different structures.", 0, True, WARN),
         ("", 0, False, INK),
-        ("We submitted S→A — and it costs us 4.8 points, because its best sample falls "
-         "below the ipSAE Good edge. §9.2 asks for it; §5.2 does not pay for it.", 0, False, MUTED),
-        ("A candidate with glycans in its binding site is not a candidate.", 0, True, ACCENT),
+        ("Rejected. The 0.8 h it would have saved is worth less than one silently wrong pose.", 0, True, ACCENT),
+        ("", 0, False, INK),
+        ("WITHDRAWN, same evidence: we asserted a padding mechanism for the corruption. The four "
+         "folds ran 94 s apart, so no batch ever formed. We still do not know the cause, and we "
+         "are not going to invent one.", 0, True, WARN),
+        ("A reproducibility test needs a determinism CONTROL first, or you will blame your own "
+         "code and exonerate it with equal justification.", 0, False, MUTED),
     ], size=15)
 
-    # ---------------------------------------------------------------- 6
-    s = slide("What the designs honestly are, and what we would do next",
-              "Stated at the front of both submissions, not the back")
+    # ================================================================= SLIDE 5
+    s = slide("What the designs honestly are - including where one misses the brief",
+              "The section a reviewer should read before the score")
     bullets(s, [
-        (f"Challenge 1 — {c1['final']:.1f}/100 (94.0–96.0 across diffusion samples). "
-         f"15 substitutions, 93.5% identical to Keytruda; CDR-H2 changed at ONE position. "
-         f"One loop genuinely redesigned.", 0, True, INK),
-        ("It also fails §9.2 — an NG deamidation motif in CDR-H2, at a position we made "
-         "designable and left alone. Found by the scanner we built after missing the "
-         "Challenge 2 sequons.", 1, False, MUTED),
-        (f"Challenge 2 — {c2['final']:.1f}/100, the ONE design of 30 that cleared, "
-         f"sequon-fixed.", 0, True, INK),
-        ("All six CDRs designed de novo — onto RFantibody's fixed trastuzumab framework, "
-         "carried over unchanged. Targeting is evidenced: 17/18 backbones beat a "
-         "contiguous-patch null. Binding is evidenced by nothing here.", 1, False, MUTED),
-        ("Viable in 5 of 5 diffusion samples — with the lowest 0.019 above the cutoff.", 1, True, WARN),
+        ("Challenge 1 is humanised pembrolizumab: ~93% identical, 16 substitutions, and 6 of "
+         "those touch the antigen nowhere. It is a good design and it is not a novel one.", 0, True, INK),
         ("", 0, False, INK),
-        ("We tested our own advice and it failed: 24 ProteinMPNN light chains move VL "
-         "+0.023 against a required +0.131, 0/24 reach the edge, and 24/24 add new CDR "
-         "liabilities. The NetSolP ceiling is the HEAVY chain, by 0.001.", 0, True, WARN),
-        ("Next: a solubility-aware design objective — ProteinMPNN optimises sequence "
-         "recovery given a backbone, and solubility is not in its loss. Not: "
-         "more of the same sampler.", 0, False, MUTED),
-        ("We would rather hand you a design we can characterise than one we can only score.",
-         0, True, ACCENT),
+        ("Challenge 2 sits on RFantibody's stock trastuzumab framework. About 25% of its paratope "
+         "is unchanged trastuzumab, including two of the three largest single contributors.", 0, True, INK),
+        ("Section 3.2 asks for complete VH/VL de novo. THIS DOES NOT MEET THAT.", 0, True, WARN),
+        ("", 0, False, INK),
+        ("Nothing here is an affinity measurement. Every pose-derived number is a prediction "
+         "compared to another prediction; our SKEMPI arm found no metric in this stack tracks "
+         "measured binding free energy.", 0, False, INK),
+        ("We would rather hand you a design we can characterise than one we can only score.", 0, True, ACCENT),
     ], size=15)
+
+    # ================================================================= SLIDE 6
+    s = slide("We ran four independent audits against the finished package. They found plenty.",
+              "Diagnosis: the publish step fires before the verification does")
+    bullets(s, [
+        ("Four auditors, separate mandates, given the handbook, the repo and the package - and "
+         "none of our conclusions. Our own results files were handed over as CLAIMS TO VERIFY, "
+         "not as evidence.", 0, False, INK),
+        ("", 0, False, INK),
+        ("A stale pitch deck describing designs no longer in the submission.", 1, False, WARN),
+        ("A DockQ documentation error worth all of Challenge 1 in the bad case: at defaults the "
+         "tool exits 1 with empty output, and we documented the wrong minimum flag value.", 1, False, WARN),
+        ("Four headline claims stated one confidence level above their own intervals.", 1, False, WARN),
+        ("", 0, False, INK),
+        ("~24 claims withdrawn across 66 commits, several inside shipped deliverables. "
+         "Every one self-caught.", 0, True, ACCENT),
+        ("The measurements were near-always arithmetically right and then stated too strongly. "
+         "That is one correctable failure, not many - and it is now a check that fails the "
+         "build, not a habit.", 0, False, MUTED),
+    ], size=14)
+
+    # Deliberately NOT on any slide, each having failed its own interval:
+    #   * "backbones are exchangeable"      - 20%-power null, rho interval reaches 0.269
+    #   * the contact-count fix refutation  - REFUTED; 3 of its 4 instances were readings
+    #                                         of the discarded-MSA condition
+    #   * "the NetSolP ceiling didn't move" - true but rests on the refuted arm
+    #   * "depth rescues backbones"         - withdrawn against the flat-rate null
 
     path.parent.mkdir(parents=True, exist_ok=True)
     prs.save(str(path))

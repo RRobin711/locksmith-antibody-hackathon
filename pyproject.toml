@@ -15,10 +15,15 @@ dependencies = [
     "tqdm>=4.66",
     "anarcii>=2.0.8",
     "freesasa>=2.2.1",
+    # The pitch deck is a scored deliverable (SS4.4, 50 points) and src/locksmith/submit/deck.py
+    # imports this. It was undeclared until 2026-09-25, so `scripts/57` crashed at the deck
+    # step on a clean env -- AFTER writing the package files, so the package looked built.
+    "python-pptx>=1.0",
 ]
 
 [project.optional-dependencies]
 analysis = ["scikit-learn>=1.5", "matplotlib>=3.9", "scipy>=1.14"]
+dev = ["pytest>=8"]   # the 34-test suite could not be run at all on 2026-09-26: undeclared.
 
 [build-system]
 requires = ["hatchling"]
