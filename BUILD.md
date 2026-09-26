@@ -201,7 +201,8 @@ conventions:
   # results/handbook_conformance.md for the finalist's score under every reading.
   band_value: top          # bottom | midpoint | top. §5.2 gives RANGES ("Good (9-10)")
                            # and never says how to pick inside one. Finalist scores
-                           # 84.0 / 90.0 / 96.0. Default `top` because §7.3 states the
+                           # 81.0 / 87.5 / 94.0 (was 84.0/90.0/96.0 before the
+                           # 2026-09-25 DockQ unrounding fix). Default `top` because §7.3 states the
                            # range as 0-100 and only `top` attains it. A uniform monotone
                            # relabelling: moves the number, never the ranking.
   dockq_interface_agg: global   # min | mean | max | global. A 3-chain complex has three

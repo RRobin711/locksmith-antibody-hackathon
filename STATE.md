@@ -5,13 +5,24 @@ It records what is **verified**, what is **taken on trust**, what is **blocked**
 shortest path to a complete submission. Every number below was recomputed from files on
 this machine during this session unless it says otherwise.
 
-> ## ⚠️ HEADLINE, REWRITTEN 2026-09-23: **Challenge 2 has no surviving computational
-> evidence of binding. Challenge 1 is unaffected.**
+> ## ⚠️ HEADLINE, REWRITTEN 2026-09-25. Both rows below changed since 2026-09-23.
 >
 > | | design | score | status |
 > |---|---|---|---|
-> | **Challenge 1** | `mpnn_T0.5_s104_036` **N55Q** | **96.0** | ✅ viable, unaffected |
-> | **Challenge 2** | `bb_2_0_dldesign_1` (S→A) | 91.2 *as packaged* | ❌ **withdrawn as evidence** |
+> | **Challenge 1** | `mpnn_T0.5_s104_036` **N55Q** | **94.0** | ✅ viable |
+> | **Challenge 2** | **`bb_8_0`** | **93.6** | ✅ viable |
+>
+> **Challenge 1 moved 96.0 → 94.0 on 2026-09-24, and it is a correction, not a regression.**
+> `dockq.compute` parsed DockQ's *printed* summary, which rounds to 3 dp. True
+> `GlobalDockQ = 0.7995794972281312` bands **medium**; the printed `0.800` banded **good**.
+> Any true value in `[0.7995, 0.800)` is misbanded that way — this one by **0.00042**. The
+> module now reads `--json`. A project whose argument is that the rubric is gameable cannot
+> keep two points won by display rounding.
+>
+> **Challenge 2 is `bb_8_0` at 93.6**, not `bb_2_0_dldesign_1` (S→A) at 91.2. The MSA
+> discovery below invalidated every number the old design had; re-screening all 30 designs
+> against a correct alignment promoted a design that had ranked **29th of 30**, while the
+> packaged one fell **0.864 → 0.013** from 1st.
 >
 > **Why.** Every Challenge 2 fold this project ever ran paired the 123-residue antigen with
 > a cached alignment whose query is 113 residues. Boltz compares lengths, **discards the

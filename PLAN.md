@@ -859,7 +859,7 @@ defensible claim; the other is not.
 ### M3 — Challenge 1 campaign  ✅ **COMPLETE 2026-09-19**
 
 > **Deliverable: `mpnn_T0.5_s104_036`** — CDR-H3 `ALRPRDVDRGFYK`, 38.5% identity to
-> pembrolizumab, arm T=0.5. Discounted surrogate **94.963**, rubric `final` **87.5**, viable, *(the 87.5 is convention-dependent and superseded: under the handbook-conformant `band_value: top` + `dockq_interface_agg: global` it is **96.0**; the same design scores 84.0/90.0/96.0 across the three readings the handbook permits — see `results/handbook_conformance.md`)*
+> pembrolizumab, arm T=0.5. Discounted surrogate **94.963**, rubric `final` **87.5**, viable, *(the 87.5 is convention-dependent and superseded: under the handbook-conformant `band_value: top` + `dockq_interface_agg: global` it is **94.0**; the same design scores **81.0 / 87.5 / 94.0** across the three readings the handbook permits — see `results/handbook_conformance.md`)* *(corrected 2026-09-25: this line previously read 96.0 and 84.0/90.0/96.0, computed when `dockq.compute` parsed DockQ's printed 3-dp summary. True `GlobalDockQ = 0.79958` bands `medium`, not `good`; the printed `0.800` banded `good`. Recomputed above from the unrounded value.)*
 > fresh-seed DockQ **0.749**, CDR-H3 ensemble RMSD 0.52 Å over 7 seeds.
 > See [[results/m3_winner|the winner report]].
 >

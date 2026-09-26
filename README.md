@@ -27,11 +27,15 @@ PDF.
 | `designs/` | Candidate designs — structures, PAE files, sequences. Empty. |
 | `scripts/` | Local re-implementation of the scoring pipeline. Empty. |
 
-## Status — 2026-09-22 (final)
+## Status — 2026-09-25 (current)
 
 > **Both challenges packaged, validated, and §9.2-clean.**
-> Challenge 1 `mpnn_T0.5_s104_036` **N55Q** — 96.0, envelope 94.0–96.0.
-> Challenge 2 `bb_2_0_dldesign_1` **S→A** — 91.2 on all five diffusion samples (ipSAE envelope 0.619–0.781, entirely within one band). The 91.2–96.0 envelope belongs to the unfixed design this replaced.
+> Challenge 1 `mpnn_T0.5_s104_036` **N55Q** — **94.0**. Was 96.0 until 2026-09-24; the
+> difference is a double-rounding fix, not a design change (true DockQ **0.79958** bands
+> `medium`, the printed `0.800` banded `good`).
+> Challenge 2 **`bb_8_0`** — **93.6** on all five diffusion samples. This replaced
+> `bb_2_0_dldesign_1` (S→A, 91.2) after the silently-discarded-MSA finding invalidated every
+> number the earlier design had.
 > Both viable across all five diffusion samples; `VALIDATION PASSED` from the packaged
 > files alone. 29 tests. Deck is 6 slides, generated from the packaging run.
 >
