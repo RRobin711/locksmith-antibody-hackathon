@@ -94,12 +94,29 @@ def compute(
         allowed_mismatches = int(_convention("dockq_allowed_mismatches", 40))
     if interface_agg is None:
         interface_agg = str(_convention("dockq_interface_agg", "global"))
-    proc = subprocess.run(
-        [DOCKQ, str(model.pdb), str(native.pdb),
-         "--allowed_mismatches", str(allowed_mismatches),
-         "--mapping", "ABC:ABC"],
-        capture_output=True, text=True, timeout=900,
-    )
+    # READ THE JSON, NOT THE PRINTED SUMMARY. DockQ formats its summary line to 3 dp,
+    # and this function then rounded again -- a value can therefore cross a BAND EDGE on
+    # display rounding alone. Measured 2026-09-24 on the shipped Challenge 1 design:
+    # GlobalDockQ = 0.7995794972281312, printed as `0.800`, banded Good against a
+    # 0.80 edge. The true value is 0.00042 BELOW the edge and is Medium. Two composite
+    # points were won by a printf.
+    #
+    # The general form, which is why this is a mechanism and not a patch: any parse of a
+    # *rendered* number inherits that renderer's precision, and a threshold comparison is
+    # exactly where the lost digits matter. Parse the machine-readable output when one
+    # exists.
+    import json as _json
+    import tempfile as _tempfile
+    from pathlib import Path as _Path
+    with _tempfile.TemporaryDirectory() as _td:
+        _jf = _Path(_td) / "dockq.json"
+        proc = subprocess.run(
+            [DOCKQ, str(model.pdb), str(native.pdb),
+             "--allowed_mismatches", str(allowed_mismatches),
+             "--mapping", "ABC:ABC", "--json", str(_jf)],
+            capture_output=True, text=True, timeout=900,
+        )
+        _blob = _json.loads(_jf.read_text()) if _jf.exists() else {}
     if "no identical corresponding chain" in (proc.stdout + proc.stderr):
         return {"dockq": MetricResult(
             None,
@@ -122,10 +139,19 @@ def compute(
     if interface_agg not in AGGREGATORS:
         raise ValueError(f"unknown dockq_interface_agg {interface_agg!r}; "
                          f"expected one of {sorted(AGGREGATORS)}")
-    gm = _TOTAL.search(out)
-    value = AGGREGATORS[interface_agg](binding, float(gm.group(1)) if gm else None)
-    detail = " ".join(f"{k}={v:.3f}" for k, v in sorted(per_interface.items()))
+    # Prefer the unrounded JSON values over the 3-dp printed ones wherever present.
+    best = _blob.get("best_result") or {}
+    for k, v in best.items():
+        if isinstance(v, dict) and v.get("DockQ") is not None:
+            per_interface["".join(sorted(k))] = float(v["DockQ"])
+    binding = {k: v for k, v in per_interface.items() if "C" in k}
+    gj = _blob.get("GlobalDockQ")
+    if gj is None:
+        gm = _TOTAL.search(out)
+        gj = float(gm.group(1)) if gm else None
+    value = AGGREGATORS[interface_agg](binding, gj)
+    detail = " ".join(f"{k}={v:.4f}" for k, v in sorted(per_interface.items()))
     return {"dockq": MetricResult(
-        round(value, 3),
-        detail=f"agg={interface_agg} {detail}",
+        value,                       # NOT rounded -- banding must see the true value
+        detail=f"agg={interface_agg} {detail} (unrounded; printed summary is 3 dp)",
     )}
