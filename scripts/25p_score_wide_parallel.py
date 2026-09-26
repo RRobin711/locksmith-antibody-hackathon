@@ -18,6 +18,7 @@ running several would oversubscribe. It stays in scripts/25 (serial).
 """
 from __future__ import annotations
 import json, os, sys
+import multiprocessing
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 
@@ -81,7 +82,14 @@ def main() -> int:
           f"on {WORKERS} workers")
     FOLDSC.parent.mkdir(parents=True, exist_ok=True)
     n_err = 0
-    with ProcessPoolExecutor(max_workers=WORKERS) as ex:
+    # `fork` (the Linux default) cannot re-initialise CUDA in the child. Today this
+    # parent never touches CUDA -- the metric imports live inside `score_one` -- so
+    # fork happens to work. One CUDA-touching line added above this point would kill
+    # every worker with `Cannot re-initialize CUDA in forked subprocess`; that cost
+    # 239/239 workers once already. Pinned by
+    # tests/test_invariants.py::test_every_process_pool_uses_spawn_not_fork.
+    _ctx = multiprocessing.get_context("spawn")
+    with ProcessPoolExecutor(max_workers=WORKERS, mp_context=_ctx) as ex:
         futs = {ex.submit(score_one, t): t["key"] for t in todo}
         for i, fut in enumerate(as_completed(futs), 1):
             res = fut.result()

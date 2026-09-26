@@ -662,3 +662,49 @@ def test_fold_raises_on_a_boltz_warning_that_only_reaches_stdout(monkeypatch, tm
         # reaches assert_artefacts (no files on disk) rather than the stdout guard
         B.fold("t3", "QVQ", "DIQ", "PWNPP", out_root=tmp_path, antigen_msa=None,
                diffusion_samples=1, recycling_steps=1)
+
+
+def test_every_process_pool_uses_spawn_not_fork():
+    """PROMOTED FROM LEARNINGS.md 2026-09-26. The mechanism IS the memory.
+
+    `ProcessPoolExecutor` defaults to **fork** on Linux, and a forked child cannot
+    re-initialise CUDA. Merging a serial NetSolP stage (which touches CUDA in the parent)
+    into the same script as a 6-worker parallel scorer killed **239/239** workers with
+    `RuntimeError: Cannot re-initialize CUDA in forked subprocess`.
+
+    The original code kept the two stages in separate *processes*, and that boundary was
+    load-bearing with nothing recording it. General rule the incident bought:
+    **a refactor that removes a process boundary must say what was crossing it.**
+
+    This test greps source rather than behaviour, which is weaker than a behavioural test
+    -- but the failure only reproduces on a CUDA-initialised parent with real workers, so
+    a behavioural version would not run in CI. Stated plainly rather than oversold.
+    """
+    import re
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[1]
+    offenders = []
+    for py in sorted(list((root / "scripts").glob("*.py")) + list((root / "src").rglob("*.py"))):
+        text = py.read_text(encoding="utf-8", errors="replace")
+        for m in re.finditer(r"ProcessPoolExecutor\s*\(", text):
+            # Look at the call site: the argument list, up to the matching depth-0 ')'.
+            depth, j = 0, m.end() - 1
+            while j < len(text):
+                if text[j] == "(":
+                    depth += 1
+                elif text[j] == ")":
+                    depth -= 1
+                    if depth == 0:
+                        break
+                j += 1
+            call = text[m.end():j]
+            if "mp_context" not in call:
+                line = text[:m.start()].count("\n") + 1
+                offenders.append(f"{py.relative_to(root)}:{line}")
+
+    assert not offenders, (
+        "ProcessPoolExecutor without an explicit mp_context defaults to fork on Linux, "
+        "and a forked child cannot re-initialise CUDA (239/239 workers died once). "
+        "Pass mp_context=multiprocessing.get_context('spawn'). Offenders: " + ", ".join(offenders)
+    )
