@@ -6,7 +6,10 @@ status: living
 
 Tags: [[Pattern|patterns worth reusing]] · [[Problem|problems and debugging]] · [[Learning|things I'm learning]]
 
-# Eight Silent Failures
+# Nine Silent Failures
+
+*(The filename still says eight. It was eight when written; the ninth arrived on
+2026-09-26, and renaming the file would break ten inbound links for no gain.)*
 
 **Why this note exists:** these are the most valuable things we found. Not one of them raised an
 exception on its own. Every one would have produced a confident, well-formed, *wrong* number and
@@ -223,13 +226,56 @@ not validated.** Run it across the whole reference set before trusting it.
 
 ---
 
+## 9. A sweep that read the working tree and was asked about the repository
+
+**What:** before making the repository public, a pre-publication sweep grepped every tracked
+file for third-party email addresses, credentials, cloud keys and the organisers' handbook.
+It reported **CLEAN** on all four. Both the handbook — a 712 KB PDF — and three people's
+email addresses were nonetheless still *in the repository*, reachable from 77 earlier
+commits, and were pushed to the remote.
+
+**Why it matters more than an ordinary miss:** both removals had been made as ordinary
+commits — `git rm --cached` for the handbook, a text edit for the emails. That changes what
+`HEAD` contains and **nothing about what the repository contains**. `git grep`, `find`, and
+any script that opens files all read the *working tree*; none of them can observe a blob
+that is reachable only from an old commit. So the sweep returned a true answer to a narrower
+question than the one being asked, and said nothing about the difference — which is this
+project's signature defect, in a new syntax.
+
+It also had a deadline the other traps did not. The repository was private and had never
+been public, so the fix was a history rewrite and a force-push. After public exposure it
+would have been unfixable: GitHub retains unreachable objects, and forks and caches index
+quickly.
+
+**Generalises to:** **removing a file from a repository and removing it from a
+repository's history are two different operations, and every tool that greps files reports
+the first as though it were the second.** For anything that must not ship, verify over
+history rather than over the checkout:
+
+```bash
+git log --all --diff-filter=A --name-only -- '<path>'   # was it ever added?
+git log -p --all | grep -c '<secret>'                   # is it in any diff?
+```
+
+And do it at the moment you are already rewriting history, because the second rewrite costs
+a second force-push. A related trap sits one step further on: `refs/original/*` and any
+backup branch left by an earlier rewrite still hold the unscrubbed commits, so they must be
+deleted and the objects expired — and such a repository must never be pushed with `--mirror`
+or `--all`.
+
+---
+
 ## The unifying lesson
 
 Sort these by how they announced themselves:
 
 **Announced loudly** — #3 (tool refused), #5 (explicit error message), #8 (exception).
 **Announced by luck** — #7 (our parser happened to be strict).
-**Did not announce at all** — #1, #2, #4, #6. Each would have handed us a plausible number.
+**Did not announce at all** — #1, #2, #4, #6, #9. Each would have handed us a plausible number.
+
+**#9 is the worst of the set**, because the others merely produce a wrong number: a wrong
+number can be recomputed. #9 publishes someone else's data irreversibly, and it does so
+while a check is actively reporting that everything is clean.
 
 The dangerous failures are not the ones that crash. They are the ones that return something in
 the right range, with the right units, computed on the wrong thing.
