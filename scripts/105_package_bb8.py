@@ -41,6 +41,7 @@ from locksmith.config import load
 from locksmith.metrics import liabilities
 from locksmith.score import evaluate
 from locksmith.submit.package import Design, build_challenge, build_zip
+from locksmith.submit.docs import challenge2_repro_md
 
 TEAM, CHALLENGE = "LOCKSMITH_DEV", 2
 ROOT = Path("submission")
@@ -212,8 +213,12 @@ SKEMPI work found no metric in the stack tracks measured ΔΔG.
 
 **Can: that the confidence is calibrated.** Against 40 real crystallised complexes folded
 through this identical pipeline, ipSAE tracks pose accuracy at Spearman **ρ = +0.702** with
-a **0% false-positive rate** — it never accepted an incorrect pose in 40 tries — against a
-25% false-negative rate. The post-cutoff (novel-antigen) median in that panel is 0.165.
+error rates that **must be quoted at one threshold**. Against DockQ ≥ 0.49 (Medium+) the
+ipSAE ≥ 0.60 gate gives **12.5% false-positive / 25.0% false-negative**; against DockQ ≥ 0.23
+(Acceptable+) it gives **0% false-positive / 58.3% false-negative**, and that 0% rests on
+only 4 negatives — a Clopper–Pearson 95% upper bound of **0.602**, i.e. uninformative. An
+earlier version of this document paired the 0% with the 25%, which is the favourable half of
+each threshold and is reachable at neither. The post-cutoff (novel-antigen) median is 0.165.
 
 **Can: that the targeting is evidenced.** Backbones were conditioned on the PD-L1
 competitive footprint; against 2000 random contiguous surface patches of the same size on
@@ -226,8 +231,14 @@ the same chain, 17 of 18 backbones sit at p<0.05 (real epitope 0.712 vs patch 0.
                  plddt_npz=RUN / f"plddt_{LABEL}_model_0.npz",
                  confidence_json=(RUN / f"confidence_{LABEL}_model_0.json"
                                   if (RUN / f"confidence_{LABEL}_model_0.json").exists() else None))
+    # Regenerate reproducing_our_numbers.md too. Leaving it out is what orphaned the
+    # previous one: scripts/75 wrote it for the design this replaces, and swapping the
+    # design without rewriting the doc shipped a file describing a structure that is no
+    # longer in the package. `m0` is model_0, which is the design actually written here.
+    repro = challenge2_repro_md(m0, cfg.conventions, TEAM, d["heavy"])
     base = build_challenge(ROOT, TEAM, CHALLENGE, dsn,
-                           metrics_md="\n".join(rows), docs_md=docs)
+                           metrics_md="\n".join(rows), docs_md=docs,
+                           extra_docs={"reproducing_our_numbers.md": repro})
     print(f"built {base}")
     print(f"  model_0 composite {sc0.final}, median-metrics composite {scm.final}, "
           f"viable {n_viable}/5")
