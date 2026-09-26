@@ -1,401 +1,212 @@
-# Project state — 2026-09-22 (overnight run)
+# Project state — 2026-09-26
 
-**For a cold reader.** This file is the single place to find out where the project is.
-It records what is **verified**, what is **taken on trust**, what is **blocked**, and the
-shortest path to a complete submission. Every number below was recomputed from files on
-this machine during this session unless it says otherwise.
+**For a cold reader.** This is the single place to find out where the project is: what is
+**verified**, what is **taken on trust**, what is **blocked**, and what is left. Every
+number here was read from a file on this machine while writing it. Where a number has a
+history, the history is in
+[[results/retractions|the retraction register]] rather than inlined, because this file
+kept accreting corrections until it contradicted itself in three places.
 
-> ## ⚠️ HEADLINE, REWRITTEN 2026-09-25. Both rows below changed since 2026-09-23.
->
-> | | design | score | status |
-> |---|---|---|---|
-> | **Challenge 1** | `mpnn_T0.5_s104_036` **N55Q** | **94.0** | ✅ viable |
-> | **Challenge 2** | **`bb_8_0`** | **93.6** | ✅ viable |
->
-> **Challenge 1 moved 96.0 → 94.0 on 2026-09-24, and it is a correction, not a regression.**
-> `dockq.compute` parsed DockQ's *printed* summary, which rounds to 3 dp. True
-> `GlobalDockQ = 0.7995794972281312` bands **medium**; the printed `0.800` banded **good**.
-> Any true value in `[0.7995, 0.800)` is misbanded that way — this one by **0.00042**. The
-> module now reads `--json`. A project whose argument is that the rubric is gameable cannot
-> keep two points won by display rounding.
->
-> **Challenge 2 is `bb_8_0` at 93.6**, not `bb_2_0_dldesign_1` (S→A) at 91.2. The MSA
-> discovery below invalidated every number the old design had; re-screening all 30 designs
-> against a correct alignment promoted a design that had ranked **29th of 30**, while the
-> packaged one fell **0.864 → 0.013** from 1st.
->
-> **Why.** Every Challenge 2 fold this project ever ran paired the 123-residue antigen with
-> a cached alignment whose query is 113 residues. Boltz compares lengths, **discards the
-> alignment**, and folds the antigen single-sequence — announcing it only on a stdout
-> stream this code captured and threw away. Measured 2×2 in
-> `results/msa_silently_discarded.md`:
->
-> | | antigen MSA used | antigen MSA absent |
-> |---|---|---|
-> | baseline (pre-fix) | **0.012** | 0.773 |
-> | S→A (packaged) | **0.012** | 0.686 |
->
-> The mutation is irrelevant; the alignment is the whole effect. The no-MSA cells reproduce
-> the project's historical envelopes exactly, so **"1 of 30 designs clears" was measured
-> entirely in the flattering condition.**
->
-> **Re-screen in progress** with a correct alignment (`data/msa_cache/pd1_123_handbook.csv`,
-> 3407 sequences, query matching the antigen exactly). First 5 designs: **0/5 clear**, and
-> the ranking is scrambled — the packaged design falls 0.864 → **0.013** while the worst of
-> the five rises from 0.116 to **0.440**. The old ranking carries no information about the
-> correct one.
->
-> **Challenge 1 is not affected**: its folds used a server MSA matched to its own antigen
-> (`runs/diffusion_samples.log` shows the discard warning once, for the Challenge 2 arm
-> only).
->
-> **`submission/LOCKSMITH_DEV.zip` is stale** and must not be sent as-is.
+There is **no deadline and this is not being submitted** to the live event — see
+[[PLAN|§15 of the plan]]. What the project is now is a worked example of measuring a design
+pipeline honestly, and the deliverable is the whole record, not the score.
 
 ---
 
-## 0. What changed on 2026-09-23 (calibration session)
+## 1. Headline
 
-| finding | where |
-|---|---|
-| Challenge 2 folds had no antigen alignment; 2×2 isolates it | `results/msa_silently_discarded.md` |
-| Calibration panel, 40 real complexes either side of the training cutoff | `results/calibration.md` |
-| Gate vs crystal: ρ=+0.702, **0% false positives, 25% false negatives** | `results/calibration.md` |
-| Negative control: HyHEL-10 clears all 5 §7.2 gates on `model_0` | `results/negative_control.md` |
-| 4 of 5 §7.2 gates reject 0/6 wrong antibodies | `results/negative_control.md` |
-| Positive control failed → diagnosed → repaired (nivolumab 0.017 → 0.691) | `results/negative_control.md` |
-| Guards added: MSA length, boltz stdout, chain-copy pairing, resume predicate | `tests/test_invariants.py` (33) |
-
----
-
-## 1. What was done tonight, in order
-
-| # | Task | Status |
-|
-## 1b. Later the same day — liability fixes and a refuted recommendation
-
-| item | outcome |
-|---|---|
-| Challenge 1 `NG` deamidation motif (§9.2) | ✅ **fixed free** — `N55Q`, composite stays 96.0, envelope 0.044 vs baseline 0.039 |
-| Challenge 2 glycosylation sequons (§9.2) | ✅ fixed earlier — `S→A`, 4.8 points paid deliberately |
-| "redesign the light chain" | ❌ **REFUTED** — ceiling is VH by 0.001; 24 designs reach +0.023 of a required +0.131; 24/24 add liabilities |
-| PDB chain termination | ✅ 3 `TER` records per structure |
-| Challenge 2 reproduction doc | ✅ shipped, closing the asymmetry with Challenge 1 |
-
-**The contact-count rule is now confirmed in both directions** — Ch2's `N→Q` on acceptors
-carrying 10 and 19 contacts was fatal; Ch1's `N55Q` on one carrying 3 was free. Prescribed
-developability fixes are not interchangeable, and the structure decides which in a minute.
-
----|---|---|
-| 1 | Finish the sha256 pass on the retrieved pod artefacts | ✅ **DONE** — 258/258 verified, 0 mismatches |
-| 2 | Challenge 2 end to end | ✅ **DONE** — 30/30 folded at recycling 10, **1/30 clears** |
-| 3 | Select and package Challenge 2 | ✅ **RUN** — packaged and validated; the rule was inapplicable (one candidate) |
-| 4 | Audit tonight's own work | ✅ **DONE** — 46 checks, 0 failures, 3 findings |
-| 5 | Resolve the G3 aromatic filter | ✅ **DONE** — refuted as a design rule, propagated |
-
----
-
-## 2. Challenge 2 — **1 of 30 viable, packaged, validated**
-
-| step | status |
-|
-> ### ⚠ CORRECTION 2026-09-22, after a three-judge adversarial audit
->
-> **The 96.0 for Challenge 2 is not stable.** Re-folding the identical input at Boltz
-> recycling 20 gives ipSAE **0.795 / 0.883 / 0.731** across seeds — 0.795 falls below the
-> 0.80 Good edge, so the composite is **93.6 / 96.0 / 93.6**. Convergence is non-monotone
-> (0.263 → 0.864 → 0.795) and **96.0 reproduces in one of three r20 seeds**. Report it as
-> **93.6–96.0 depending on sampling depth and seed**.
->
-> By contrast, on the same machine a real crystallised complex moves only 0.050 across the
-> same depths and our Challenge 1 design only 0.036 — while this de novo design swings
-> **0.601**. That variance is the real finding about de novo design, and it is larger than
-> the score.
->
-> **Challenge 1's 96.0 survives** — refolded at r10 and r20, every band holds.
->
-> Two further corrections: the "bimodality" was an artefact of ipSAE's hard PAE cutoff
-> (the 15 designs at exactly 0.000 carry ipTM 0.556–0.674, an ordinary continuum), and
-> "≤ 0.161" for the rest of the pool was **false** — third place is 0.311.
-
----|---|
-| Germline novelty wired for Ch2 (§6.3.1) | ✅ scored 30.0% on the winner; pinned by 3 tests |
-| `challenge=1` un-hardcoded in 57 and 58 | ✅ |
-| Fold all 30 (recycling 10) | ✅ 30/30, zero failures |
-| PAE → submission format | ✅ |
-| Seven metrics + §7.2 gates | ✅ **1 of 30 clears** |
-| Positive control | ✅ Fab 0.776 / **Fv 0.842** |
-| **Step 3 — select and package** | ✅ **RUN** — pre-registered rule, §4.3 tree, validated |
-
-**The winner, re-derived by the validator from the package alone:**
-
-`ipsae` **0.864** · `dg` −12.400 · `contacts` 98 · `iface_plddt` 83.580 ·
-`cdr_sasa` 1066.900 · `cdrh3_identity` 30.000 (germline) · `netsolp` 0.562 (medium)
-→ binding 10.0, developability 8.0, novelty 10.0 → **final 96.0, viable**.
-
-**The 29 others** all fail on `ipsae` alone, range 0.000–0.331.
-
-### The withdrawn `0/30`, and what it cost
-
-`recycling_steps=3` was inherited from Challenge 1 and never re-examined. At that setting
-15 of 30 designs scored exactly 0.000 and the best was 0.372 — a pool piled up at the
-floor, which is a convergence diagnosis, not a result. The ranking was actively
-misleading: **the design that clears ranked 2nd; the one ranked 1st still fails.**
-
-The positive control I built to test this **passed and was blind to it**, because it ran
-at recycling 3 too. It correctly exonerated the Fv construct and printed a verdict about
-Challenge 2 that was wrong within the hour. *A control eliminates the confound you thought
-of and is silent on the one you did not.*
-
-A signal was also available and dropped: my own PAE diagnostic flagged
-`bb_2_0_dldesign_1` at **81.4%** of cross-chain pairs under PAE 10 Å, by far the highest
-of the nine checked. It was noted, then not followed up before `0/30` was written up.
-
----|---|
-| Germline novelty wired for Ch2 (§6.3.1) | ✅ pinned by 3 tests |
-| `challenge=1` un-hardcoded in 57 and 58 | ✅ |
-| Fold + score + gate machinery | ✅ runs end to end; the packager's refusal guard fires correctly |
-| Positive control | ✅ **Fab 0.776, Fv 0.842** — the pipeline places a real cognate pair well above the gate |
-| **Gate pass rate** | ✅ **1 of 30** at recycling 10 — but see the depth caveat below |
-
-**What went wrong.** The first pass used `recycling_steps=3`, inherited from Challenge 1's
-fold settings without re-examination — the same class of error as inheriting the Fv/Fab
-decision, which is what the positive control was built to check. Recycling depth turns out
-to matter enormously for these complexes:
-
-| design | recycling 3, seed 1 | recycling 10, seeds 1/2/3 |
-|---|---|---|
-| `bb_2_0_dldesign_1` | 0.263 | **0.864 / 0.842 / 0.856** |
-| `bb_4_0_dldesign_2` | 0.372 | 0.331 / 0.416 / 0.361 |
-| `bb_6_0_dldesign_2` | 0.242 | 0.011 / 0.267 / 0.105 |
-| `bb_4_0_dldesign_0` | 0.235 | 0.000 / 0.000 / 0.000 |
-| `bb_7_0_dldesign_1` | 0.234 | 0.161 / 0.169 / 0.000 |
-
-**Note it is not a uniform lift.** Four of the five got no better or worse; one moved
-decisively and reproducibly. Extra recycling does not rescue bad designs — it **resolves**
-which are which, and at recycling 3 the pool was too noisy to tell them apart. The
-single-seed ranking at recycling 3 was near-worthless: the design that clears was ranked
-**2nd**, and the one ranked 1st does not clear.
-
-**A signal I had and under-weighted.** My own PAE diagnostic, run hours earlier, flagged
-`bb_2_0_dldesign_1` as having **81.4%** of cross-chain residue pairs under PAE 10 Å — by
-far the highest of the nine I checked. I noted it, said the gate outcome was "genuinely
-open", and then reported `0/30` without going back to it.
-
----|---|
-| Germline novelty wired for Ch2 (§6.3.1) | ✅ `novelty.compute(..., challenge=2)` routes to `metrics/germline.py`; pinned by 3 tests |
-| `challenge=1` un-hardcoded in 57 and 58 | ✅ 57 uses a `CHALLENGE` constant; 58 passes `challenge=` to novelty and reads DockQ applicability from config instead of `if challenge == 1` |
-| Fold the 30 designs | ✅ **30/30, zero failures**, Boltz-2, seed 1, handbook §4.2.2 antigen |
-| PAE → submission format | ✅ `submit/pae.py` path exercised by the packager (which then refused) |
-| Seven Ch2 metrics + §7.2 gates | ✅ **0 of 30 clear** |
-
-**Which metric failed, by how much, on how many designs:**
-
-| metric | cutoff | min | median | max | failed on |
-|---|---|---|---|---|---|
-| `cdr_sasa` | ≥ 250 Å² | 929.1 | 1344.6 | 2209.5 | 0/30 |
-| `cdrh3_identity` (germline) | < 95 % | 16.7 | 32.1 | 44.4 | 0/30 |
-| `contacts` | ≥ 10 | 44 | 77.5 | 114 | 0/30 |
-| `dg` | ≤ −6 | −14.0 | −10.95 | −8.0 | 0/30 |
-| `iface_plddt` | ≥ 65 | 65.91 | 73.74 | 94.29 | 0/30 |
-| `netsolp` | ≥ 0.50 | 0.552 | 0.586 | 0.629 | 0/30 |
-| **`ipsae`** | **≥ 0.60** | **0.000** | **0.006** | **0.372** | **30/30** |
-
-**The shortfall is not marginal.** Best design 0.372 vs 0.60 needed — **0.228 short,
-1.6×**. Median 0.006. Exactly zero on 15 of 30. Only one design reaches 0.3.
-
-**Why, mechanically.** `ipsae` is the only metric computed from the **PAE** — the model's
-uncertainty about where the chains sit relative to each other. The other six read
-coordinates or sequence. On `bb_10_0_dldesign_0`: 61 heavy-atom contacts, ΔG −9.6,
-interface pLDDT 75.7, **ipSAE 0.000**, because not one cross-chain residue pair has PAE
-below 10 Å (minimum 18.40 Å). Verified this is genuine and not the known empty-table
-failure: ipsae wrote a full 14-line table and scored the heavy–light interface at 0.876.
-
-**This confirms a prediction rather than discovering a surprise.**
-`results/challenge2_scope.md` declined Challenge 2 in part because Boltz-2's median Fab
-DockQ on post-cutoff complexes is **0.291**, and these designs are more novel than that
-test set.
-
-**Does NOT establish that the designs fail to bind** — ipSAE is a statement about the
-predictor's uncertainty, and `results/skempi_validity.md` shows this stack does not track
-affinity in either direction. **Does NOT establish that conditioning failed** — it
-demonstrably worked (17/18 backbones beat a contiguous-patch null).
-
-### Step 3 — not run, deliberately
-
-No selection was made, no folder built, no zip changed. The packager refused with exit 2
-and printed its reason. The pre-registered selection rule (hotspot contacts, tie-broken on
-`frac_iface_on_epitope`) is implemented in `scripts/75_challenge2_package.py` and ready
-should a future run produce a viable design; it was **not** applied to a non-viable pool.
-
----
-
-## 3. Step 1 — the checksum pass ✅
-
-**Verified:** 258 of 258 files match a **sha256 computed on the server**, 0 mismatched,
-0 unreachable. Manifest `runs/challenge2_pod/CHECKSUMS.jsonl`, summary
-`CHECKSUM_SUMMARY.json`, sentinel `CHECKSUMS.DONE`. 258 rather than 256 because the
-earlier pull had skipped two `workspace/lock/` files.
-
-**Budget:** ~20 minutes of the 90-minute ceiling, 1 of 3 restart cycles. Pod stopped.
-
-**What failed on the way, and what I did about it:**
-
-| attempt | configuration | outcome |
-|---|---|---|
-| 1 | "Automatically migrate your Pod data" (the only path to a real machine) | **failed — "There are no instances currently available"** |
-| 2 | "Start Pod using CPUs" | pass completed |
-
-**The pre-transfer allocation check FAILED and I proceeded anyway — on purpose.** With
-the pod running, the console reported **vCPU 0, Memory 0 GB**, the identical configuration
-that OOM-killed Jupyter previously. Migration was unavailable, so there was no
-real-RAM option. I ran it because the pass checkpoints every hash to disk immediately, so
-the downside of a mid-run death was a partial manifest a later attempt resumes from —
-which is what the instruction itself asked for. Jupyter survived the whole pass.
-
-**Taken on trust:** whether "vCPU 0 / Memory 0 GB" is a genuine allocation or a console
-display artefact for a GPU pod started on CPU. I cannot establish which. The pod plainly
-had *some* memory (it served 258 hash requests and 427 MB of files, showing 16–18% memory
-utilisation), but I did not verify the number from inside the pod.
-
-**Deviation from the instruction, stated plainly:** the script does **not** stop the pod
-itself. That needs a RunPod API key, which does not exist on this machine, and I was not
-willing to create an account credential unasked. I polled the artefact instead (not the
-process table) and stopped the pod manually within a minute of the sentinel appearing.
-
-Full write-up: [[results/checksum_pass_2026-09-22|the checksum pass]].
-
----
-
-## 4. Step 4 — auditing tonight's own work ✅
-
-`scripts/76_audit_tonight.py` re-derives every headline number in
-`results/audit_response_2026-09-22.md` from the files, and checks
-`scripts/70_epitope_patch_null.py` against its own docstring.
-
-**Result: PASS 46, FAIL 0, UNVERIFIABLE 0.** Machine-readable in
-`results/audit_of_audit_2026-09-22.json`.
-
-**Verified to reproduce exactly:** DockQ exits 1 at defaults and gives 0.816 with the
-flags (A–C 0.723, A–B 0.931); conditioned 0.7119 vs unconditioned 0.5005, d = 1.4747,
-CI [0.733, 2.216]; the whole winner-change analysis (old winner `mpnn_T0.5_s104_036`,
-new winner `mpnn_T0.2_s102_032`, shipped design falls to 4th, 18/20 ranks change,
-Spearman 0.755, gap 0.1908, within-sd 0.2263); patch null 0.712 vs 0.154, 17/18; all four
-RF2 ICCs and the 0.317 floor; B3's 1-of-30 at 32.86 Å and Spearman +0.415; and every
-sequence claim (15 subs, 93.53%, CDR-H2 by one, charge +2 vs 0, aromatics 2 vs 4,
-VH 0.699, VL 0.569).
-
-**Three findings:**
-
-1. **One figure was wrong and is corrected.** Shortlist reliability was written as 0.28;
-   that is the `midpoint` value quoted in a `top` context. It is **0.296**.
-   Convention-mixing, committed in the document that reports convention-mixing.
-2. **The audit script carried the night's characteristic bug on its first run.** Its
-   summary tested `ok is True`, but numpy returns `np.bool_` and `np.True_ is True` is
-   `False`, so seven genuine passes printed PASS *and* were listed UNVERIFIABLE, and
-   `json.dumps` refused them.
-3. **A limitation of the patch null.** Its contiguous patches are **more compact than the
-   real epitope** (7.73 Å RMS spread vs 10.08 Å; uniform draws 13.21 Å). The null is the
-   right *family* but is not shape-matched, which plausibly makes the test
-   **anti-conservative** by an unquantified amount. The result stands (17/18, 0.712 vs
-   0.154); the honest phrasing of the null is "a compact 26-residue patch elsewhere",
-   not "an epitope-like patch elsewhere".
-
-**Also verified: the new test suite genuinely fails when the bugs are reintroduced.**
-Five mutations, five localised failures, suite restored to green after each — see
-`results/mutation_test_2026-09-22.md`.
-
----
-
-## 5. Step 5 — the G3 aromatic filter: REFUTED ✅
-
-`scripts/74_g3_outcome_variable.py` re-runs G3's own equal-budget random-subset test with
-**each** scored metric as the outcome (n=239, 10,000 resamples).
-
-| outcome | filtered | random | margin | one-sided p |
+| | design | composite | viable | packaged |
 |---|---|---|---|---|
-| `dockq` | 0.7287 | 0.7050 | +0.0237 | **0.0001** ✅ |
-| `iface_plddt` | 91.52 | 90.40 | +1.12 | **0.0001** ✅ |
-| `dg` | −12.355 | −12.196 | +0.159 | 0.064 |
-| `ipsae` | 0.7981 | 0.7947 | +0.0034 | 0.241 |
-| `cdr_sasa` | 1519.06 | 1519.85 | −0.79 | 0.547 |
-| `contacts` | 99.82 | 101.62 | **−1.80** | 0.988 |
+| **Challenge 1** | `mpnn_T0.5_s104_036` **N55Q** | **94.0** | ✅ | ✅ |
+| **Challenge 2** | **`bb_8_0`** | **93.6** | ✅ | ✅ |
 
-**It wins on 2 of 6, and both are properties of the PREDICTOR rather than the interface** —
-DockQ here is pose retention against the parent crystal, and interface pLDDT is Boltz's own
-confidence. Every quantity about the interface itself is null or against it, and
-**`contacts` runs the wrong way**: filtered designs make 1.80 *fewer* heavy-atom contacts,
-exactly as the chemistry predicts when you select against large aromatics.
+`submission/LOCKSMITH_DEV.zip` was rebuilt 2026-09-25 11:47 and **passes validation from
+its own files** — `scripts/58_validate_submission.py` imports nothing from `runs/`, reads
+no cached score, and re-derives every metric from the three files per design. Timestamps
+inside the tree are within seconds of each other, which is the healthy signature; a day's
+gap is the orphan tell that caught a stale document here once.
 
-So the filter selects for designs the scorer finds easy to place confidently — a metric
-gaming its own scorer — and **neither surviving quantity even exists for a de novo
-target**. The original statistics were sound; the outcome variable never supported the
-conclusion.
-
-**Propagated in the same pass:** `PLAN.md` (G3 ✅→❌), `README.md`,
-`results/pitch_outline.md`, `results/m3_g3_verdict.md` (SUPERSEDED banner),
-`LEARNINGS.md`.
-
-**Downstream checked, not assumed:** `scripts/32_shortlist_and_reseed.py:76` sorts on
-`-x["surrogate"]`; aromatic count appears only in a reporting line. **The filter was never
-a selection step, so refuting it does not disturb the Challenge 1 selection.**
-
-**Bonus defect found while propagating:** the shipped `methods_and_limitations.md`
-contained a reference to `results/g3_verdict_reexamined.md`, **a file that never existed** —
-written into the submission during last session's pass. Replaced with the result inline.
+Working tree is **clean**, 34/34 tests pass, and the 2026-09-25 session is committed
+(7 commits, `4241bb6..d5cf334`).
 
 ---
 
-## 6. Challenge 1 — unchanged and still valid
+## 2. Challenge 1 — remix Keytruda
 
-Rebuilt and re-validated tonight after the doc edits: **final 96.0, viable True**,
-validator passes from the package's own files, `structures/` contains exactly the two
-files §4.2.1 lists.
+`mpnn_T0.5_s104_036` with the `N55Q` deamidation fix. CDR-H3 `ALRPRDVDRGFYK`, **38.5%**
+identity to pembrolizumab, from the T=0.5 arm.
 
-**Left alone deliberately, as instructed:** the deck, and any decision about swapping the
-submitted design for `mpnn_T0.2_s102_032`. The winner-change finding is documented in
-`results/audit_response_2026-09-22.md` §B0; the decision is the user's.
+| metric | value | band | sub-score |
+|---|---|---|---|
+| `dockq` | **0.799579** | medium | 8.0 |
+| `ipsae` | 0.821 | good | 10.0 |
+| `dg` | −13.3 kcal/mol | good | 10.0 |
+| `contacts` | 97 | good | 10.0 |
+| `iface_plddt` | 88.630 | good | 10.0 |
+| `cdr_sasa` | 1596.5 Å² | good | 10.0 |
+| `cdrh3_identity` | 38.5% | good | 10.0 |
+| `netsolp` | 0.569 | medium | 8.0 |
+
+**→ final 94.0 / 100, viable.**
+
+**Read the DockQ value carefully — it is the project's sharpest self-inflicted wound.** It
+is printed to 6 dp deliberately. The true `GlobalDockQ` is **0.7995794972281312**, which is
+**0.00042 below** the 0.80 Good edge and therefore `medium`. For nine days this scored
+**96.0**, because `dockq.compute` parsed DockQ's *printed* summary, which rounds to 3 dp,
+and `0.800` bands `good`. A project whose central argument is that the rubric is gameable
+cannot keep two points won by a printf. Mechanism: the module now reads `--json`, and
+`score.evaluate` flags any value within ±0.5 ulp of a band edge into
+`Scored.rounding_risk`.
+
+**Not affected by the MSA defect** in §3: its folds used a server MSA matched to its own
+antigen. The discard warning appears once in `runs/diffusion_samples.log`, for the
+Challenge 2 arm only.
+
+**Known limit.** The top two designs in the shortlist were separated by **0.1 standard
+errors**, so this is *a* best design, not *the* best. The winner-change analysis is in
+[[results/audit_response_2026-09-22|§B0 of the audit response]]; swapping for
+`mpnn_T0.2_s102_032` was left as the user's call and has not been made.
 
 ---
 
-## 7. Test suite and version control
+## 3. Challenge 2 — invent the future
 
-- `tests/test_invariants.py` — **20 tests**, all passing.
-- Repo under git; this session added a commit per unit of work.
+`bb_8_0`, from the constrained re-design campaign. Seven metrics, not eight: §5.2 applies
+DockQ to Challenge 1 only, because a de novo design has no reference structure.
+
+| metric | `model_0` | median of 5 | band | sub-score |
+|---|---|---|---|---|
+| `ipsae` | **0.904** | 0.859 | good | 10.0 |
+| `dg` | −10.9 kcal/mol | −10.9 | medium | 8.0 |
+| `contacts` | 99 | 98 | good | 10.0 |
+| `iface_plddt` | 88.620 | 88.620 | good | 10.0 |
+| `cdr_sasa` | 1110.5 Å² | 1159.6 | good | 10.0 |
+| `cdrh3_identity` | 18.2% (germline) | 18.2 | good | 10.0 |
+| `netsolp` | 0.555 | 0.555 | medium | 8.0 |
+
+**→ final 93.6 / 100, viable on 5 of 5 diffusion samples.**
+
+**Every Challenge 2 number produced before 2026-09-23 is withdrawn.** Boltz compares the
+MSA's query length against the input chain and, on mismatch, **discards the alignment and
+folds single-sequence**, announcing it only on stdout — which the harness captured and
+threw away. Every fold paired a 123-residue antigen with a 113-residue cached alignment.
+The 2×2 that isolates it is in
+[[results/msa_silently_discarded|the alignment-discard measurement]]: with a correct
+alignment **0.012** both pre- and post-fix, without it **0.773 / 0.686**.
+
+The consequence was not noise but **near-inversion of the ranking** — re-screening all 30
+designs promoted one that had ranked **29th of 30** while the packaged design fell
+**0.864 → 0.013** from 1st. `model_0` fold now asserts the alignment was used (processed
+MSA width 123 = antigen length 123), pinned by tests.
+
+**The ceiling is measured, and it is the generator's.** 144 folds over 18 backbones × 8
+constrained sequences: viability arrives at a **constant ~8% per sequence** with no
+backbone heterogeneity (χ² = 22.91 on 17 df, p = 0.152; beta-binomial LRT p = 0.202), and
+eight times the sequences produced **nothing better than the first pass found** — best
+0.859 at depth 1, 0.854 at depth 8. So more backbones and more sequences are the same
+experiment at different prices, and **renting a GPU is not justified**. Reaching past ~0.86
+needs a different generator, not more samples from this one. See
+[[results/depth_sweep|the depth sweep]].
+
+**What the 0.904 does and does not mean.** It is Boltz's confidence, not an affinity
+measurement. What the 40-crystal calibration panel buys is that this confidence tracks pose
+accuracy at **ρ = +0.702**. Its error rates must be quoted at a stated DockQ threshold —
+0% FP / 58.3% FN at Acceptable+, 12.5% FP / 25.0% FN at Medium+ — and never as the
+flattering half of each; see [[results/retractions|§C1 of the register]].
 
 ---
 
-## 8. What is blocked, and on what
+## 4. What is verified, and what is taken on trust
 
-| item | blocked on |
-|---|---|
-| **The decoy-patch control** (hotspots on the opposite face of PD-1) | a GPU run. Still the only control that could falsify the conditioning result. |
-| **Sequencing the 18 unconditioned backbones** | ~2–4 GPU-hours (~$1–2). Separates range restriction from a dead `interaction_pae`. |
-| **Shape-matching the patch null** to the real epitope's spread | nothing — it is cheap, and §4 finding 3 says why it matters. |
-| **The reliability figure 0.629** in the record | the original script. Does not reproduce (plug-in gives 0.276 `midpoint` / 0.296 `top`). Flagged, not corrected. |
-| **Promoting the last LEARNINGS entry over cap** | `assert_artefacts()` fixtures. 41 bullets against a 40 cap. |
+**Verified on this machine.**
+
+- The package re-derives its own scores from its own files (`scripts/58`, exits non-zero on
+  any structural problem or failed cutoff).
+- 258/258 retrieved pod artefacts sha256-match the server —
+  [[results/checksum_pass_2026-09-22|the checksum pass]].
+- 34 invariant tests, several mutation-verified.
+- The harness scores pembrolizumab itself correctly (the standing canary).
+
+**Taken on trust.**
+
+- **Boltz-2's confidence as a proxy for binding.** Six of the eight scored metrics are
+  computed from files we generated; a confidently wrong pose scores exactly like a right
+  one. This is stated in both shipped `methods_and_limitations.md` files rather than
+  buried.
+- **The negative-control result cuts against the rubric, not for us.** HyHEL-10, raised
+  against hen egg lysozyme, clears **all five** §7.2 hard cutoffs on `model_0`; four of the
+  five gates reject **0 of 6** wrong antibodies. §7.2 rests on ipSAE alone. See
+  [[results/negative_control|the negative control]].
+- **Nothing here is wet-lab evidence.** No claim in the package says otherwise.
 
 ---
 
-## 9. Shortest path to a complete submission from here
+## 5. Test suite and repository
 
-**Challenge 1 is complete and viable** (96.0, validates from its own files). Nothing on
-this list is required for it.
+- `tests/test_invariants.py` — **34 tests**, all passing (`uv run pytest`, ~24 s).
+- Git: `master`, no remote, linear history, one commit per unit of work.
+- `pytest` and `python-pptx` are now declared in `pyproject.toml`. Both had been
+  undeclared; the suite could not be run at all, and `scripts/57` crashed at the deck step
+  *after* writing the package files, so a failed build looked like a successful one.
 
-**Challenge 2 needs a design its own predictor will place.** In rough order of
-cost-effectiveness:
+---
 
-1. **Re-fold the existing 30 with more seeds and more recycling.** Cheapest possible test
-   of whether ipSAE ~0 is stable or sampling noise. We ran **one seed, 3 recycling steps**.
-   If the best design moves 0.372 → 0.6 on a better sample, everything downstream unblocks.
-   ~1 GPU-hour. **Do this first — it is the only step that could change the verdict without
-   new designs.**
-2. **Give the antibody chains an MSA.** Ours were folded with an antigen MSA only, which is
-   this project's standing convention for *redesigns of a known antibody*. A de novo VH/VL
-   is a different case and the convention was inherited without re-examination.
-3. **Generate more backbones.** 10 backbones × 3 sequences is a thin pool; the pilot was
-   sized as a tooling demonstration, not a campaign.
-4. **Run the decoy-patch control** before any Challenge 2 claim goes in the deck.
+## 6. What is blocked, and on what
 
-**If none of that lifts ipSAE, the honest submission is no Challenge 2 folder plus the
-measurement** — which is what exists now, and is a stronger artefact than a packaged
-design that fails a hard cutoff.
+| item | blocked on | cost |
+|---|---|---|
+| **The decoy-patch control** — hotspots on the opposite face of PD-1 | a GPU run | still the only control that could falsify the conditioning result |
+| **Sequencing the 18 unconditioned backbones** | a GPU run | ~2–4 GPU-hours (~$1–2); separates range restriction from a dead `interaction_pae` |
+| **Shape-matching the patch null** to the real epitope's spread | nothing — it is cheap | the drawn patches are more compact (7.73 Å RMS vs the epitope's 10.08 Å), making the test anti-conservative by an unquantified amount |
+| **The reliability figure 0.629** | the original script | does not reproduce; plug-in gives 0.276 `midpoint` / 0.296 `top`. Flagged, not guessed at |
+
+---
+
+## 7. What is left
+
+In order of what unblocks what.
+
+1. **Mutation-test the inert tests.** Several assert over *source text* rather than
+   behaviour. The MSA guard first, since it guards §3's defect. This project has already
+   shipped a guard that matched `Number of failed examples` — a string Boltz prints
+   **unconditionally**, including as `: 0` — so it failed every healthy fold it saw. A
+   check written from a LEARNINGS sentence rather than from the tool's real output has not
+   been tested against the tool.
+2. **`results/rubric_headroom.md`** — regenerate under `band_value=top` or retract
+   explicitly. It uses midpoint bands (max 95.0) against a `top` config and quotes a design
+   at `dockq 0.747`. It does not ship, which is why it has survived.
+3. **Split the NetSolP entry in `LEARNINGS.md`, then promote half of it.** The entry has
+   absorbed a second, unrelated lesson (an error rate is a property of a threshold), so
+   promoting the `ESM1b` half would strand the other. Split first; the test is then ~10
+   lines (`netsolp.MODEL_TYPE == "ESM1b"`, plus pembrolizumab Fv VH **0.733** / VL
+   **0.569** passing where `ESM12` 0.35/0.31 and `Distilled` 0.49/0.45 fail on Fab).
+4. **The GPU-blocked controls in §6**, if a card is ever available. Note the depth sweep
+   already decided *against* renting for design purposes; these are validity controls, a
+   different justification.
+
+**Done 2026-09-26 and no longer on this list:** per-interface DockQ verification in the
+documentation guard (`check_docs_against_scores` now compares element-wise; mutation-tested
+by restoring `A,B DockQ 0.931`), the `ProcessPoolExecutor` spawn fix and its test, and
+[[results/retractions|the retraction register]], which is what had been blocking a clean
+version of this file.
+
+---
+
+## 8. Reading order for a cold reader
+
+1. This file.
+2. [[results/retractions|The retraction register]] — everything the project withdrew, and
+   the four figures flagged as not reproducing. Read before trusting a number found
+   anywhere else in the repo.
+3. [[docs/sessions/README|The session index]] — one line per working session; the teaching
+   lives in the per-session docs.
+4. [[docs/lecture/README|The lecture course]], with
+   [[docs/lecture/CORRECTIONS|its own corrections file]] read first.
+5. [[README|The repo README]] for the organising idea, and [[PLAN|PLAN §15]] for how the
+   milestones were re-scoped.
+
+**One warning about this repo's prose.** Its errors cluster in sentences, not in code — the
+documentation guard found a shipped file asserting seven metrics of a design that was no
+longer in the package, and a mixed-threshold error rate survived four independent audits.
+Where a results file and a generated artefact disagree, the artefact is right, because the
+artefact was recomputed and the sentence was copied.

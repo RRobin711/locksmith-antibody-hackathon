@@ -13,6 +13,12 @@ documents (see [[08-what-broke|Class 2, generator (iv): a convention that lived 
 
 Read this file before trusting any Challenge 2 number anywhere in the course.
 
+**Scope.** This file covers what a *reader of the course* must not trust, and C1/C2 below
+are the fullest treatment of those two items anywhere in the project. Every other claim the
+project has withdrawn — scores, method, shipped prose, and the figures that are flagged as
+not reproducing — is indexed in
+[[../../results/retractions|the project-wide retraction register]].
+
 ---
 
 ## C1 — Challenge 2's computational evidence is withdrawn
@@ -81,11 +87,18 @@ the condition every prior fold was run in.
   [[06-allocation-and-selection|allocation and selection]]** that is derived from the
   Challenge 1 pool of 239 designs — [[04-measurement-theory#1.3 Reliability|reliability]], [[04-measurement-theory#2. The intraclass correlation, and metrics that turn out to be constants|ICC]], [[04-measurement-theory#5. Range restriction — and the insight that selection is the restricting operation|range restriction]], allocation, the
   [[06-allocation-and-selection#3. Winner's curse|winner's curse]], the band-grid result. None of it touches Challenge 2.
-- **The `N→Q` versus `S→A` contact-count finding.** Its *relative* claim — that the fix
-  mutating 10 and 19 antigen contacts destroys the interface while the one mutating zero does
-  not — was measured within a single condition, so the comparison survives even though the
-  absolute values were inflated. Treat the 60-fold ratio as intact and the 0.864 baseline as
-  withdrawn.
+- ~~**The `N→Q` versus `S→A` contact-count finding.**~~ **This bullet was wrong and is
+  withdrawn 2026-09-26.** It argued the comparison survives because both arms were measured
+  within a single condition, and told the reader to "treat the 60-fold ratio as intact".
+  [[CORRECTIONS#C2 — The contact-count rule is refuted, and three of its four instances are void|C2, immediately below in this same file]],
+  raised the same day, refutes the finding outright — so C1 and C2 contradicted each other
+  for three days. A within-condition comparison is not rescued by being internally
+  consistent when the condition itself is the thing that moved: under a correct alignment
+  that design scores **0.012 regardless of its sequence**, which is not a ratio of
+  anything. Read C2, not this bullet.
+
+  *Noted rather than quietly deleted, because it is the register's own failure mode: a
+  corrections file is a generated-adjacent artefact and goes stale like any other.*
 
 ### Why it belongs in the course rather than just being fixed
 
@@ -108,8 +121,19 @@ something.*
 ### Where this leaves Challenge 2
 
 All 30 designs have been re-screened. Treat every Challenge 2 figure printed in the body of
-this course as **superseded by the table above**. The packaged submission
-(`submission/LOCKSMITH_DEV.zip`) is stale and must not be sent as-is.
+this course as **superseded**.
+
+> **Updated 2026-09-26 — the table above is itself no longer the end of the story, and the
+> zip is no longer stale.** `bb_1_0_dldesign_0` was the best of the *re-screened original
+> pool*; it was then superseded by the constrained re-design campaign (18 backbones × 8
+> constrained sequences, 144 folds). **The shipped Challenge 2 design is `bb_8_0`** — ipSAE
+> **0.904** on `model_0`, median of five diffusion samples **0.859**, composite **93.6**,
+> viable on **5 of 5** samples. The package was rebuilt on 2026-09-25 and passes validation
+> from its own files. The re-screen table stays as written because it is what demonstrates
+> the inversion, which is the teachable part.
+>
+> Note the campaign that produced `bb_8_0` also withdrew two of its own claims — see
+> [[../../results/retractions|the retraction register, §B8]].
 
 The sharpest lesson is not that the number fell. It is that **the ranking inverted**: a
 silently degraded input did not add noise around a roughly-correct order, it produced an

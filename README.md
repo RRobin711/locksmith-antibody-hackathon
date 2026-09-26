@@ -203,6 +203,12 @@ filter's evaluation non-circular. `submit/` empty.
 
 See [[docs/sessions/README|the session index]] for the full arc.
 
+**Before trusting any number in this repo, read
+[[results/retractions|the retraction register]]** — 20 claims this project withdrew,
+superseded or refuted, plus 5 figures flagged as not reproducing, each with the file that
+settles it and any document still carrying the stale wording. Current state, including what
+is blocked and what is left, is in [[STATE|the state file]].
+
 Not submitting — see [[PLAN|§15]]. No deadline.
 
 ## The organising idea
