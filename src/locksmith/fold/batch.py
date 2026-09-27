@@ -5,7 +5,15 @@ quiet. The *fold itself* is roughly 34 s; the rest is fixed per-invocation cost 
 loading the checkpoint, building the featuriser, parsing the antigen MSA. Boltz
 accepts a DIRECTORY of FASTA files and pays that cost once for the whole directory,
 so batching N complexes converts N x (fixed + fold) into fixed + N x fold. At the
-measured split that is ~1.8x for large N.
+measured split that projected to ~1.8x for large N.
+
+*** THIS MODULE IS RETAINED FOR THE RECORD AND SHOULD NOT BE USED. ***
+The ~1.8x above was a PROJECTION and is withdrawn: measured, batching gave 1.16x on
+the 239-fold arm. Worse, a later throughput arm measured 1.65x while CORRUPTING the
+structures -- only 1 of 4 byte-identical to its serial reference, ipSAE moving up to
+0.30 and atoms by 72-89 A, with every file present and every score plausible. The
+cause is unknown (the padding explanation was withdrawn: the folds ran 94 s apart, so
+no batch formed). Folding runs SERIALLY. See results/retractions.md SSB9 and SSB10.
 
 This was deferred twice, correctly, with an explicit condition for un-deferring it:
 "once the funnel pattern is known and stable". The pattern is now N independent

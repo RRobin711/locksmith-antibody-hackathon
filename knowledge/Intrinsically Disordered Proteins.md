@@ -30,7 +30,7 @@ instructions must live in the sequence itself.
 
 Uversky's opening sentence names the mental image this produces: the **"lock-and-key" model** —
 a rigid, precisely shaped protein meeting a precisely shaped partner. Hold onto that phrase; it
-comes back in [why the company is called what it is](Locksmith%20Bio%20%E2%80%94%20Company%20Context.md).
+comes back in why the company is called what it is *(that note is kept private and is not in this repository)*.
 
 **Intrinsically disordered proteins (IDPs)** break it. They are functional proteins that never
 adopt a unique structure. **Intrinsically disordered protein regions (IDPRs)** are the same thing

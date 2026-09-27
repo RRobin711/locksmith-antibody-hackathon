@@ -1,5 +1,13 @@
 # Challenge 2 pilot — RFantibody on a rented GPU — 2026-09-22
 
+> ⚠️ **SUPERSEDED in two ways.** (1) The hotspot-conditioning result below (d=1.47,
+> p=0.0016) came from an interim look at n=10 v 5 extended to 18 v 18 and tested at
+> nominal α — **optional stopping**, so that p is not the type-I rate and d is upward
+> biased (95% CI [0.73, 2.22]). It was replaced by a deterministic per-backbone
+> contiguous-patch null in `challenge2_patch_null.md`. (2) "`interaction_pae` CANNOT
+> select between docks" is recorded as **too strong as stated** at §D5. See
+> [the register](retractions.md).
+
 **Run:** RunPod RTX 3090 (`sm_86`), upstream pins unmodified (torch 2.3.1+cu118, dgl 2.4.0+cu118).
 ~5.5 h wall, **$2.77**. Pre-registration: `results/prereg_2026-09-21_challenge2.md`.
 

@@ -1,5 +1,10 @@
 # Challenge 2: **1 of 30 designs clears every §7.2 cutoff** (provisional)
 
+> ⚠️ **SUPERSEDED.** "1 of 30 designs clears" and `bb_2_0_dldesign_1` scoring 96.0 were
+> both measured with the antigen alignment silently discarded. Under a correct alignment
+> that design scores **0.013** and ranks last; the shipped Challenge 2 design is
+> **`bb_8_0`** at composite **93.6**. See [the register, §A2](retractions.md).
+
 **2026-09-22 — PROVISIONAL, corrected after adversarial review.** All 30 RFantibody designs folded with Boltz-2 at
 `recycling_steps=10`, seed 1, against the handbook's §4.2.2 antigen (30/30 successful) and
 scored on the seven metrics §7.2 applies to Challenge 2.

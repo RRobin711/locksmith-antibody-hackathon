@@ -1,5 +1,15 @@
 # Removing the paratope sequons: one fix is free, the other destroys the antibody
 
+> ⚠️ **SUPERSEDED — read before the numbers below.** Every fold in this file comes from
+> `runs/sequon_fix`, which ran with the antigen alignment silently discarded. Under a
+> correct alignment that design scores **0.012 regardless of its sequence**, so the two
+> measurements here are readings of a *condition*, not of a substitution. The
+> contact-count rule this file states — that the mutated residue's antigen contact count
+> predicts which prescribed fix is safe — is **refuted**; a later arm collapsed the
+> interface mutating a residue with zero contacts, and a matched framework control showed
+> region, not contact count, is what matters. See
+> [the register, §A2 and §B3](retractions.md).
+
 **2026-09-22.** Run against the rule pre-registered in
 [the pre-registration](prereg_2026-09-22_sequon_fix.md), written before the folds.
 

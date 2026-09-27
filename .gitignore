@@ -23,3 +23,9 @@ source/antibody-design-hackathon-handbook.*
 # validator defaults to data/refs/prepared/5ggs_ABZ.pdb and a clone without it cannot
 # reproduce the Challenge 1 DockQ. Do not add data/refs/**/*.pdb.
 !data/refs/prepared/5ggs_ABZ.pdb
+
+# A private strategic assessment of named, identifiable third parties: it is tagged
+# job-search, names a private WhatsApp channel, identifies a co-founder, and speculates
+# about an employer' unpublished commercial thesis. Fine as personal notes; not something
+# to attach permanently to a public repo under my own name. Kept locally, not published.
+knowledge/Locksmith Bio — Company Context.md

@@ -455,7 +455,7 @@ Written into `knowledge/` (2026-09-14), tagged with existing hubs plus new ones
 |---|---|---|
 | ✅ **Intrinsically Disordered Proteins** | Uversky 2019 (full text), Kulkarni 2022 (abstract only — AIP 403), Chen & Kriwacki 2018 (full text) | Anfinsen's dogma and its limit; why ensemble-averaging is a category error for IDPs |
 | ✅ **Nanopore Sensing of Disordered Proteins** | Shaji 2026 *Nat Nanotech* (full 24-page PDF), Peng 2025 *ACS Nano* (abstract only — ACS 403) | Single-molecule measurement; and Peng is itself a *de novo design* paper |
-| ✅ **Locksmith Bio — Company Context** | Handbook + inference | What they likely do, the lock-and-key naming, how to pitch |
+| ✅ **Locksmith Bio — Company Context** *(written; kept private, not in this repo)* | Handbook + inference | What they likely do, the lock-and-key naming, how to pitch |
 | ⬜ PD-1/PD-L1 structural basis | Tan 2017, Na 2017, PDB 5GGS/5IUS/5WT9 | The epitope definition for both challenges |
 | ⬜ ProteinMPNN & RFdiffusion mechanics | Dauparas 2022, Watson 2023 | Our generative engines; sampling temperature controls the novelty frontier |
 | ⬜ Antibody developability guidelines | Raybould 2019, Jain 2017 | The 40% of the score that is not binding |

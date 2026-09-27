@@ -45,7 +45,7 @@ Start with [the project story](../PROJECT-STORY.md) for the narrative arc.
 |---|---|
 | [Intrinsically Disordered Proteins](Intrinsically%20Disordered%20Proteins.md) | Anfinsen's dogma and its limit; why ensemble-averaging is a category error |
 | [Nanopore Sensing of Disordered Proteins](Nanopore%20Sensing%20of%20Disordered%20Proteins.md) | Single-molecule measurement, and a de novo protein design paper pointed at sensors |
-| [Locksmith Bio — Company Context](Locksmith%20Bio%20%E2%80%94%20Company%20Context.md) | What the company works on, where the name comes from, and how to pitch to them |
+| *Locksmith Bio — Company Context* (kept private, not published) | A private assessment of the organising company and the people running the event. It names identifiable individuals and a private channel, so it is deliberately excluded from this repository. |
 
 ## Still to write
 

@@ -3,7 +3,7 @@
 Computational antibody design for the Locksmith Bio × IBAB EC *De Novo Antibody Design
 Hackathon*: redesign pembrolizumab's binding loops, and design a complete VH/VL antibody
 against PD-1 from scratch. Everything here ran on **one laptop GPU** (RTX 5070 Ti, 16 GB)
-plus **$2.82** of rented compute.
+plus about **$2.80** of rented compute.
 
 The designs score 94.0 and 93.6 out of 100 on the organisers' rubric. **That is the least
 interesting thing in this repository**, and the reason why is the point of the project:
@@ -59,12 +59,30 @@ Re-screening all 30 designs against a correct alignment promoted a design that h
 → [`results/msa_silently_discarded.md`](results/msa_silently_discarded.md)
 
 **3. A 1.65× speed-up was measured corrupting structures and thrown away.**
-Boltz pads a batch to its longest sequence, so a design's score depends on **which other
-designs share its batch**. Against byte-identical serial references: 1 of 4 structures
+Against byte-identical serial references: 1 of 4 structures
 reproduced, ipSAE moved by up to **0.30**, atoms by **72–89 Å**. All files present, all
 scores plausible. The staggered alternative is byte-identical 4 of 4 at 1.30×, below the
 pre-registered 1.5× bar, so folding runs serially.
 → [`results/throughput_arms.md`](results/throughput_arms.md)
+
+---
+
+## Stack
+
+| stage | tool | notes |
+|---|---|---|
+| backbone generation | **RFdiffusion / RFantibody** | Challenge 2's 18 epitope-conditioned backbones, on a rented RTX 3090 |
+| sequence design | **ProteinMPNN** | fixed-backbone; four temperatures for Challenge 1 |
+| structure prediction | **Boltz-2** | `recycling_steps=10`, `diffusion_samples=5`; local RTX 5070 Ti |
+| cross-check predictor | **ColabFold / AF2** | ipSAE cross-calibration |
+| interface confidence | **ipSAE** (DunbrackLab), pinned commit | hard 10 Å PAE cutoff; floors at 0 |
+| pose accuracy | **DockQ v2** | Challenge 1 only — a de novo design has no reference |
+| binding energetics | **PRODIGY** | ΔG, heavy-atom contacts |
+| solubility | **NetSolP** (ESM1b ensemble) | `min(VH, VL)` on the Fv |
+| numbering / CDRs | **ANARCII**, **freesasa** | IMGT numbering, CDR SASA |
+
+Python 3.12, `uv`, PyTorch ≥2.7 on CUDA 12.8 (Blackwell `sm_120` needs the pinned cu128
+index — older wheels install fine and then fail at runtime with no PTX to JIT from).
 
 ---
 

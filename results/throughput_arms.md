@@ -40,9 +40,14 @@ comparison artefact:
 | bb_3_0 | 0.8162 | 0.8162 | 0.000 |
 | bb_4_0 | 0.3071 | **0.0117** | **−0.30** |
 
-One design gains 0.28, two collapse by ~0.29, one is untouched. Boltz pads a batch to the
-longest sequence in it, and these designs differ in Fv length (122+109 down to 116+105).
-**A design's score therefore depends on which other designs share its batch.**
+One design gains 0.28, two collapse by ~0.29, one is untouched.
+
+> **Mechanism WITHDRAWN 2026-09-27.** This paragraph asserted that Boltz pads a batch to
+> its longest sequence and that a design's score therefore depends on which other designs
+> share its batch. **The four folds ran 94 s apart, so no batch ever formed** — padding
+> cannot be the explanation. The corruption is real and the arm stays disqualified; **the
+> cause is unknown and we are not going to invent one.** See
+> [the register, §B9](retractions.md).
 
 That is disqualifying regardless of speed. A sweep run this way would produce numbers that
 cannot be compared with the re-screen, the paired test, the matched control, or each other

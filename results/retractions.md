@@ -216,10 +216,30 @@ that projection justified scheduling decisions for two days. Built and measured:
 (84 s → 72 s per fold), saving 0.8 h on a 239-fold arm rather than 2.4 h.
 
 A separate throughput arm later measured batching at **1.65×** and **disqualified it
-outright**: Boltz pads a batch to its longest sequence, so a design's score depends on which
-other designs share its batch. Only 1 of 4 structures was byte-identical to its serial
+outright**. Only 1 of 4 structures was byte-identical to its serial
 reference; ipSAE moved up to **0.30** and atoms by **72–89 Å**. Staggering gives 1.30× and
 is byte-identical 4 of 4, below the pre-registered 1.5× bar, so folding runs serially.
+
+---
+
+### B10 — the batch-corruption MECHANISM ("Boltz pads a batch to its longest sequence") · **WITHDRAWN**
+
+The batching arm is disqualified and that is not in dispute: 1.65×, only 1 of 4 structures
+byte-identical to its serial reference, ipSAE moving up to **0.30**, atoms by **72–89 Å**.
+
+What is withdrawn is the *explanation*. The project asserted that Boltz pads a batch to its
+longest sequence, so a design's score depends on which other designs share its batch. **The
+four folds ran 94 seconds apart — no batch ever formed.** Padding cannot be the cause.
+
+**The cause is unknown, and no replacement mechanism is offered.** That is the honest state:
+a reproducible corruption with no explanation is a better record than a plausible
+explanation that the timing refutes.
+
+**Where this was found is the interesting part.** The withdrawal existed in exactly one
+place — `src/locksmith/submit/deck.py`, i.e. only on a shipped slide — while `README.md`,
+`results/throughput_arms.md` and §B9 of this register all still stated the mechanism as
+fact. A withdrawal that lives only in a generator, is shown to a reviewer, and never
+reaches the register whose purpose is enumerating withdrawals. Propagated 2026-09-27.
 
 ---
 
@@ -431,6 +451,24 @@ refutes that finding outright. It also ended on `bb_1_0_dldesign_0` as the repla
 Challenge 2 design and called the zip stale, both overtaken. Corrected 2026-09-26.
 
 *A corrections register is an artefact like any other and goes stale like any other.*
+
+### D6 — the rented-GPU cost, `$2.77` vs `$2.82` · **FLAGGED**
+
+The run write-up that owns the number says **$2.77** (`results/challenge2_pilot.md`).
+**Fourteen** downstream files say **$2.82**, including `README.md`'s front page and
+`docs/challenge2_regeneration_plan.md`, which calls "the pilot's $2.82 … the honest
+anchor" while citing the file that says 2.77.
+
+Neither is derivable from anything in the repo — both are bare assertions of a ~5.5 h
+rental, with no rate recorded. **Not corrected, because picking one would be a guess**, and
+this register exists partly to stop that. The magnitude is five cents and nothing turns on
+it; what is worth recording is that a primary source and fourteen copies disagreed and the
+copies won by weight of numbers.
+
+The front page now says **~$2.80** rather than asserting a precision the record does not
+support.
+
+---
 
 ### D2 — shortlist reliability **0.629** · **FLAGGED**
 

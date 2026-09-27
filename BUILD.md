@@ -1,5 +1,15 @@
 # Build skeleton
 
+> ⚠️ **This is the original build plan (2026-09-15), kept as a record of what was intended.
+> It is not a description of the repository as it stands.** Several things it presents as
+> fact never existed or were renamed: `scripts/06_score.py`, `07_select.py`,
+> `08_validate.py`, `09_package.py`, `config/run.yaml` and `config/versions.lock.yaml` are
+> not in the repo, and `data/refs/` ships fewer structures than listed. Its environment
+> layout (`~/.venvs/locksmith`) also predates the move to `uv sync` and `.venv`. For what
+> the repository actually contains, see [the README](README.md); for current state, see
+> [STATE.md](STATE.md). The install steps in §6b are still accurate and are what the
+> README's prerequisites point at.
+
 Concrete structure for the code. Companion to [the delivery plan](PLAN.md); read §14 of that
 first — several decisions here exist to fix problems found in review.
 

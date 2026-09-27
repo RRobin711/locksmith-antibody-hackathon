@@ -132,6 +132,6 @@ folded one. A pitch that notices this — that positions the antibody work as a 
 design capability the company's own roadmap explicitly asks for — lands differently from one that
 just reports metrics.
 
-See [the company-context note](Locksmith%20Bio%20%E2%80%94%20Company%20Context.md) for how far that inference can
+See the company-context note *(that note is kept private and is not in this repository)* for how far that inference can
 honestly be pushed, [the design-problem note](De%20Novo%20Design%20and%20the%20Two%20Challenges.md) for what
 de novo design means in our case, and [the project story](../PROJECT-STORY.md) for the arc.
