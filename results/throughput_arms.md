@@ -42,7 +42,7 @@ comparison artefact:
 
 One design gains 0.28, two collapse by ~0.29, one is untouched.
 
-> **Mechanism WITHDRAWN 2026-09-27.** This paragraph asserted that Boltz pads a batch to
+> **Mechanism WITHDRAWN 2026-09-26.** This paragraph asserted that Boltz pads a batch to
 > its longest sequence and that a design's score therefore depends on which other designs
 > share its batch. **The four folds ran 94 s apart, so no batch ever formed** — padding
 > cannot be the explanation. The corruption is real and the arm stays disqualified; **the

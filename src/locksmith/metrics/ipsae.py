@@ -52,7 +52,7 @@ def compute(
     # scripts/58_validate_submission.py does -- it drops three stray files into
     # `structures/`, and `submit/package.py` then refuses to rebuild because SS4.2.1
     # specifies exactly design_X_complex.pdb and design_X_pae.json. Running the validator
-    # therefore broke the packager. Found 2026-09-27.
+    # therefore broke the packager. Found 2026-09-26.
     #
     # Basenames are preserved exactly on the way in, because ipsae.py locates the pLDDT
     # array by string-substituting 'pae'->'plddt' in the PAE path. Rename or relocate

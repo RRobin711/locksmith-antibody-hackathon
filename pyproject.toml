@@ -17,7 +17,7 @@ dependencies = [
     "freesasa>=2.2.1",
     # Used directly by 7 tracked files including io/pdb.py, submit/package.py and
     # submit/pae.py -- i.e. it is on the validator's own import path. It was undeclared
-    # until 2026-09-27 and arrived only as a transitive of `anarcii`; if anarcii ever
+    # until 2026-09-26 and arrived only as a transitive of `anarcii`; if anarcii ever
     # drops it, `import locksmith.io.pdb` breaks. A core import satisfied by accident.
     "gemmi>=0.6",
     # The pitch deck is a scored deliverable (SS4.4, 50 points) and src/locksmith/submit/deck.py

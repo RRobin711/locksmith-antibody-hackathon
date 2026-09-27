@@ -65,6 +65,49 @@ this course stands" — true of the MSA defect it was scoped to, and read as a g
 clearance. *A correction scoped to one defect must not be worded as a blanket exoneration;
 the next defect will be unrelated.*
 
+### A1b — the shipped Challenge 1 §9.2 section and novelty table described the PRE-FIX molecule · **WITHDRAWN**
+
+The submitted variant is `mpnn_T0.5_s104_036` **+ N55Q**. Two shipped blocks described the
+design *before* that fix, for as long as the package existed.
+
+**The §9.2 self-report was false about its own molecule.**
+`Challenge1/docs/methods_and_limitations.md` stated the design "carries `NG` at heavy chain
+position 55" and that the redesign "left `N55-G56` intact". The shipped heavy chain reads
+**`LQGG`** at 54–57 — **position 55 is Q** — and line 133 of the same file says the fix was
+applied. A motif scan of the shipped CDRs returns **none**; the wild type returns
+`[('NG', 55)]`.
+
+**The novelty table was wrong in four ways**, verified by positional diff against the
+handbook's 232-aa wild type (`scripts/55::HB_HEAVY`):
+
+| quantity | shipped | true |
+|---|---|---|
+| substitutions | 15 | **16** |
+| whole-chain identity | 93.5% | **93.1%** |
+| designable positions changed | 15 of 29 | **16 of 29** |
+| CDR-H2 | `INPSNGGT -> INPLNGGT` (1 change) | `INPSNGGT -> INPLQGGT` (**2**) |
+
+`INPLNGGT` **exists nowhere in the package** — it is the pre-fix loop with the N55Q edit
+never applied to the prose. Three other things in the same package already said 16,
+including the `--allowed_mismatches 16` minimum, which *is* the substitution count. The
+table was the sole dissenter, and `_BANNED` already carried `"our 15 substitutions"` — the
+guard banned one phrasing and the table evaded it as a `|`-row.
+
+**Fixed by computation, not correction.** `submit/docs.py::challenge1_novelty_table` and
+`::deamidation_motifs` derive both blocks from the shipped sequence, with a length guard
+that refuses to emit a table if the chain and the wild type differ in length.
+
+**Live text:** `results/audit_response_2026-09-22.md:268` still carries `15` and `93.5%`.
+Left unedited — it is a historical audit recording what was believed that day — and covered
+by this entry.
+
+*The transferable point: a hand-written table beside a generated artefact will describe
+whichever molecule it was written for, and no per-file check can see the mismatch, because
+the table is internally consistent and the structure is valid. Only recomputation catches
+it.*
+
+---
+
 ### A2 — every Challenge 2 number before 2026-09-23 · **WITHDRAWN**
 
 Boltz compares the MSA's query length to the input chain and, on mismatch, **discards the
@@ -239,7 +282,7 @@ explanation that the timing refutes.
 place — `src/locksmith/submit/deck.py`, i.e. only on a shipped slide — while `README.md`,
 `results/throughput_arms.md` and §B9 of this register all still stated the mechanism as
 fact. A withdrawal that lives only in a generator, is shown to a reviewer, and never
-reaches the register whose purpose is enumerating withdrawals. Propagated 2026-09-27.
+reaches the register whose purpose is enumerating withdrawals. Propagated 2026-09-26.
 
 ---
 

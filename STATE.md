@@ -13,6 +13,36 @@ pipeline honestly, and the deliverable is the whole record, not the score.
 
 ---
 
+## 0. Publication status — read this first
+
+**There is no remote.** The repository was created on GitHub (private) on 2026-09-26,
+found to be serving pre-scrub history, and **deleted**. Nothing is public and nothing has
+ever been public.
+
+**Why it was deleted rather than force-pushed.** `git filter-repo` scrubbed a copyrighted
+handbook and three organisers' email addresses from local history, and the force-push made
+the old commits unreachable — but GitHub retains unreachable objects and serves them by
+SHA. Three organiser emails and a 727 KB PDF were retrievable from the remote for ~3 hours
+*after* a fresh-clone verification reported five zeros. A clone performs a reachability
+walk, so it structurally cannot distinguish "deleted" from "orphaned".
+
+**Before any future push, verify against the remote, not a clone:**
+
+```bash
+gh api repos/<owner>/<repo>/commits/<old-sha>       # 200 = still retained
+gh api repos/<owner>/<repo>/commits/<never-pushed>  # 422 = control works
+```
+
+Old SHAs come from `.git/filter-repo/commit-map`. After the deletion both probes return
+404. Local history is clean: 0 handbook blobs, 0 full email addresses, all commits authored
+`Ryan Robin <79134609+RRobin711@users.noreply.github.com>`.
+
+**Do not push this repository with `--mirror` or `--all`** without re-checking
+`refs/original/*` first — that namespace held all 34 work-email commits after an earlier
+rewrite.
+
+---
+
 ## 1. Headline
 
 | | design | composite | viable | packaged |
@@ -169,33 +199,48 @@ flattering half of each; see [§C1 of the register](results/retractions.md).
 
 ## 7. What is left
 
-In order of what unblocks what.
+Ordered by what unblocks what. Five adversarial agent reviews on 2026-09-26 produced ~40
+findings; the ones below are what survived verification and were not fixed the same day.
 
-1. **Mutation-test the inert tests.** Several assert over *source text* rather than
-   behaviour. The MSA guard first, since it guards §3's defect. This project has already
-   shipped a guard that matched `Number of failed examples` — a string Boltz prints
-   **unconditionally**, including as `: 0` — so it failed every healthy fold it saw. A
-   check written from a LEARNINGS sentence rather than from the tool's real output has not
-   been tested against the tool.
-2. **`results/rubric_headroom.md`** — regenerate under `band_value=top` or retract
-   explicitly. It uses midpoint bands (max 95.0) against a `top` config and quotes a design
-   at `dockq 0.747`. It does not ship, which is why it has survived.
-3. **Split the NetSolP entry in `LEARNINGS.md`, then promote half of it.** The entry has
-   absorbed a second, unrelated lesson (an error rate is a property of a threshold), so
-   promoting the `ESM1b` half would strand the other. Split first; the test is then ~10
-   lines (`netsolp.MODEL_TYPE == "ESM1b"`, plus pembrolizumab Fv VH **0.733** / VL
-   **0.569** passing where `ESM12` 0.35/0.31 and `Distilled` 0.49/0.45 fail on Fab).
-4. **The GPU-blocked controls in §6**, if a card is ever available. Note the depth sweep
-   already decided *against* renting for design purposes; these are validity controls, a
-   different justification.
+1. **No CI.** The sharpest structural criticism available of a repo whose argument is
+   "mechanise the lesson rather than writing it down". A ten-line GitHub Action running
+   `uv sync --locked --group dev && uv run pytest` would have caught both the undeclared
+   `pytest` and the stale `uv.lock` on the commits that introduced them.
+2. **`scripts/00_doctor.py` cannot fail.** Every external tool (`DockQ`, `prodigy`,
+   `ipsae.py`, `anarcii`, `freesasa`) is `required=False`, so a machine missing all four
+   prints "All required checks passed." Meanwhile "running inside project venv" *is*
+   required, so renaming the clone directory fails the preflight for the one reason that
+   does not matter. This is the project's own "a check that cannot fail is not evidence",
+   applied to its own preflight.
+3. **~18 `96.0` derivations remain in the lecture body**, including chapter 02's worked
+   composite arithmetic, which now sums wrong (it computes `binding = 10.000` where the
+   package says 9.667). Indexed under [C3](docs/lecture/CORRECTIONS.md) rather than
+   rewritten, per the no-retro-edit policy — but the worked derivation is a teaching
+   artefact and arguably should be recomputed.
+4. **`docs/sessions/README.md` is 5,065 words** under a first line promising "one line per
+   working session", with single table cells over 500 words. It fails its own stated
+   purpose and renders badly on GitHub.
+5. **`docs/challenge2_regeneration_plan.md`** still carries the retracted `0% FP / 25% FN`
+   pair (register §C1) and calls the 40-crystal panel's association "validated".
+6. **The withdrawn NetSolP triple** (§C5) is live in `docs/lecture/00-orientation.md` and
+   `10-glossary.md`, including the retracted "the CLI default would have failed every
+   design" clause that the shipped package now contradicts.
+7. **§D2 (`0.629`) may itself be wrong.** Four documents dated 2026-09-23 say the flag
+   resolves as an estimand mismatch (0.629 is the 7-seed-mean reliability; 0.276/0.296 are
+   single-seed) and that what survives is a narrower Spearman–Brown inconsistency. The
+   register still records it as simply not reproducing, and this file's blocked list
+   carries a work item that may already be done.
+8. **The GPU-blocked validity controls** (decoy-patch; sequencing the 18 unconditioned
+   backbones) — unchanged, ~2–4 GPU-hours.
+9. **Then republish**: recreate the repo private, push, verify old SHAs 404, read the
+   rendered README/PROJECT-STORY/retractions, and flip public.
 
-**Done 2026-09-26 and no longer on this list:** per-interface DockQ verification in the
-documentation guard (`check_docs_against_scores` now compares element-wise; mutation-tested
-by restoring `A,B DockQ 0.931`), the `ProcessPoolExecutor` spawn fix and its test, and
-[the retraction register](results/retractions.md), which is what had been blocking a clean
-version of this file.
-
----
+**Done 2026-09-26 and off this list:** the remote leak; the shipped §9.2 section describing
+the pre-fix molecule; the novelty table (now computed); the convention triple
+`84.0/90.0/96.0` → `81.0/87.5/94.0` in all three shipped documents; the HyHEL-10 construct
+correction (§C9); the batch-padding mechanism withdrawal (§B10); the validator polluting
+the package; `pytest`/`uv.lock`/`gemmi`/prerequisites; case-duplicate PDBs; the private
+company-context note; `config/metrics.yaml`'s withdrawn values and refuted ranking claim.
 
 ## 8. Reading order for a cold reader
 

@@ -16,7 +16,7 @@ conventions:
                                # interpolation is a fourth reading the text permits.
                                # The choice is a uniform monotone relabelling, so it
                                # moves the headline number. It was ALSO claimed here to
-                               # "never change the ranking" -- FALSE, corrected 2026-09-27:
+                               # "never change the ranking" -- FALSE, corrected 2026-09-26:
                                # monotone is not affine, and the band grid has 39 strict
                                # ordering reversals. See docs/lecture/09-critique.md.
   cdr_sasa_chains: AB          # AB | A -- AMBIGUOUS. S6.1.6: SASA of "the CDR loops
@@ -41,7 +41,7 @@ conventions:
                                # handbook says only that DockQ "returns a docking quality
                                # score between 0 and 1". STALE NUMBERS BELOW (kept for the reasoning trail):
                                # these came from an earlier fold -- the PRE-N55Q structure,
-                               # not the shipped one. Corrected 2026-09-27: this comment used
+                               # not the shipped one. Corrected 2026-09-26: this comment used
                                # to call 0.723 / 0.794 / 0.816 "the SHIPPED structure"; those
                                # values are withdrawn at results/retractions.md SSC3. The
                                # structure actually shipped measures A-B 0.8716, A-C 0.7308,
