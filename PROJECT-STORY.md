@@ -96,8 +96,16 @@ This is the result I did not expect and the one worth an outsider's time.
 
 **HyHEL-10 is an antibody raised against hen egg lysozyme.** It has no business binding
 PD-1. Run through this pipeline against PD-1, it **clears all five of the hackathon's hard
-cutoffs.** Across six deliberately wrong antibodies, four of the five gates reject **none
-of them**.
+cutoffs on `model_0`** — and `model_0` is what the rubric gets by default, because the
+folding tool returns five candidate structures ranked by its own confidence and keeps one
+unless told otherwise. **On the median of those five it fails**, at 0.219 against a 0.60
+cutoff, versus 0.609 for the single draw. So the finding is not "this molecule passes"; it
+is *a rubric evaluated at its own default setting accepts an anti-lysozyme antibody as a
+PD-1 binder*, and that is the criticism, because it is what a grader following the
+instructions would actually compute.
+
+Separately, and measured on the **median** rather than the best draw: across six
+deliberately wrong antibodies, four of the five gates reject **none of them**.
 
 The reason is mechanical and general: ΔG, contact count, interface confidence and buried
 surface area all measure *that a complex was built*, not that it is the right complex. Give

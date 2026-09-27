@@ -134,8 +134,13 @@ flattering half of each; see [§C1 of the register](results/retractions.md).
   one. This is stated in both shipped `methods_and_limitations.md` files rather than
   buried.
 - **The negative-control result cuts against the rubric, not for us.** HyHEL-10, raised
-  against hen egg lysozyme, clears **all five** §7.2 hard cutoffs on `model_0`; four of the
-  five gates reject **0 of 6** wrong antibodies. §7.2 rests on ipSAE alone. See
+  against hen egg lysozyme, clears **all five** §7.2 hard cutoffs **on `model_0`** — the
+  argmax of five diffusion draws, and what the tool's default hands a grader. **On the
+  median of those five it fails** (ipSAE 0.219 vs 0.609). Separately, and measured **on the
+  median**, four of the five gates reject **0 of 6** wrong antibodies, so §7.2 rests on
+  ipSAE alone. *Those two figures come from different estimators and are labelled here
+  because an unlabelled pair is how this project got the false-positive rates wrong — see*
+  [the register, §C1 and §C8](results/retractions.md). See
   [the negative control](results/negative_control.md).
 - **Nothing here is wet-lab evidence.** No claim in the package says otherwise.
 

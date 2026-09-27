@@ -818,7 +818,9 @@ score is a point on it."*
    evidence of specificity, and the project says so. The SKEMPI correlations are reported beside
    their ρ ≈ 0.41 detectable floor.
 6. **A high score from a self-referential harness is not evidence of binding.** An anti-lysozyme
-   antibody cleared all five hard cutoffs as a PD-1 binder, and a mutant that experimentally
+   antibody cleared all five hard cutoffs as a PD-1 binder **on `model_0`** — the argmax of five
+   diffusion draws, and what `diffusion_samples=1` hands a grader by default; on the median of
+   five it fails (ipSAE 0.219 vs 0.609). And a mutant that experimentally
    abolishes binding (ΔΔG +21.8 kcal/mol) scored *above* the wild type. Knowing that, and shipping
    it in the submission documents, is the most valuable thing in this project.
 

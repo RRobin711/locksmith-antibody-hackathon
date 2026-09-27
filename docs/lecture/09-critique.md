@@ -350,8 +350,9 @@ the real complex.
 What the nine days *did* establish is a set of bounded negative results about the
 measurement stack, and these are the actual deliverable:
 
-1. Four of five hard cutoffs reject **0 of 6** known-wrong antibodies; viability
-   rests on ipSAE alone.
+1. Four of five hard cutoffs reject **0 of 6** known-wrong antibodies — measured on the
+   **median of five** diffusion draws; viability rests on ipSAE alone. (Point 2 below is a
+   `model_0` figure: the two use different estimators, deliberately stated.)
 2. Under the shipped default of one diffusion sample, **HyHEL-10 — an
    anti-lysozyme antibody — sweeps the entire gate set** as a PD-1 binder.
 3. Five of eight rubric metrics are constants; the harness ranks on three; one of

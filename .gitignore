@@ -14,3 +14,6 @@ runs/challenge2_pod/
 
 # The organisers' handbook is their material, not mine to redistribute.
 source/antibody-design-hackathon-handbook.*
+
+# Syncthing conflict copies -- vault sync artefacts, never part of the repo.
+*.sync-conflict-*

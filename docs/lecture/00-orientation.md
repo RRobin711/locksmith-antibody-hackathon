@@ -284,10 +284,13 @@ was folded*. Confirmed in the opposite direction the same day: Challenge 1's
 The project's real output is a set of bounded negative results about its own
 measurement stack:
 
-1. Four of five hard cutoffs reject **0 of 6** known-wrong antibodies. Viability
-   rests on ipSAE alone.
-2. **HyHEL-10, an anti-lysozyme antibody, cleared all five cutoffs as a PD-1
-   binder.**
+1. Four of five hard cutoffs reject **0 of 6** known-wrong antibodies (measured on
+   the **median of five** diffusion draws). Viability rests on ipSAE alone.
+2. **HyHEL-10, an anti-lysozyme antibody, cleared all five cutoffs as a PD-1 binder
+   on `model_0`** — the argmax of five draws, and the default a grader gets. On the
+   **median** it fails (ipSAE 0.219 vs 0.609). Note points 1 and 2 use *different
+   estimators*; a pass rate is a property of the estimator, so neither is quotable
+   without it.
 3. Five of eight rubric metrics are constants across the design pool; the harness
    ranks on three; one of those three ([PRODIGY](03-the-toolchain.md#42-prodigy-240-δg-and-contacts) ΔG) is blind to the epitope while
    carrying the largest share of the ranking variance.

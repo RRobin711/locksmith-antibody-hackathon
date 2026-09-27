@@ -646,8 +646,10 @@ fields kills at least one of the nine withdrawals on its own.
 3. **Controls come in three kinds and you need all three.** A matched control with a dose–response
    (0 → 349 → 527 contacts removed) partitioned the metrics cleanly — ipSAE at 17.1× seed sd and
    interface pLDDT at 64.0× see the epitope; ΔG at 0.9× and contacts at 1.2× are blind. A negative
-   control run on day 9 showed an anti-lysozyme antibody sweeping all five viability gates, and four
-   of five gates rejecting **0 of 6** known-wrong inputs.
+   control run on day 9 showed an anti-lysozyme antibody sweeping all five viability gates **on
+   `model_0`** (the argmax of five draws; on the median it fails, ipSAE 0.219 vs 0.609), and — **on
+   the median** — four of five gates rejecting **0 of 6** known-wrong inputs. The two figures use
+   different estimators and neither is quotable without one.
 4. **Match the null's geometry, not just its size.** Contiguous patches 0.154 against the real epitope
    0.712 is a result; uniform draws at 0.231 = 26/113 is the denominator. And then check your own
    null: the drawn patches are more compact (7.73 Å vs 10.08 Å), so the test is plausibly

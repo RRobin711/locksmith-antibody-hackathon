@@ -94,8 +94,8 @@ and 165,333 words of documentation.
 
 And five results that matter more than either score:
 
-1. Four of five hard cutoffs reject **0 of 6** known-wrong antibodies.
-2. **HyHEL-10, an anti-lysozyme antibody, cleared all five cutoffs as a PD-1 binder.**
+1. Four of five hard cutoffs reject **0 of 6** known-wrong antibodies (on the **median of five** draws).
+2. **HyHEL-10, an anti-lysozyme antibody, cleared all five cutoffs as a PD-1 binder on `model_0`** — the argmax of five draws and the grader's default; on the **median** it fails (ipSAE 0.219 vs 0.609). Points 1 and 2 use different estimators, deliberately stated: a pass rate is a property of the estimator.
 3. Five of eight metrics are constants; the harness ranks on three; one of those is blind to the epitope.
 4. Median [DockQ](03-the-toolchain.md#41-dockq-213-two-flags-that-both-default-wrong) on genuinely novel antibody–antigen pairs: **0.291**, against **0.818** on the memorised reference.
 5. A mutation that abolishes binding experimentally (ΔΔG **+21.8 kcal/mol**) scores [ipSAE](03-the-toolchain.md#43-ipsae-interface-confidence-from-the-pae) **0.917** against the wild type's **0.903**.

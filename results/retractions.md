@@ -330,6 +330,62 @@ different quantity from §D2, which remains unresolved.
 
 ---
 
+### C8 — "an anti-lysozyme antibody clears all five hard cutoffs", unqualified · **SUPERSEDED**
+
+The project's single most-quoted finding, and for nine days it was stated as a property of
+the molecule when it is a property of **the molecule and the estimator**.
+
+| estimator | HyHEL-10 ipSAE | vs the 0.60 cutoff |
+|---|---|---|
+| `model_0` (argmax of 5 diffusion draws) | **0.609** | clears — all five gates pass |
+| median of the same 5 draws | **0.219** | fails — §7.2's own table has ipSAE rejecting **6/6** |
+
+Same molecule, same run, same five structures. Boltz ranks its outputs by its own
+confidence and `diffusion_samples=1` keeps the top one, so `model_0` is an argmax by
+construction.
+
+**`model_0` is the right number to headline, but that has to be the argument, not an
+omission.** It is what a grader following the tool's defaults actually computes, which is
+exactly what makes the result a criticism *of the rubric* rather than a curiosity about one
+antibody. Stated with the estimator the claim is also **stronger**, because it survives
+someone re-running it; stated without, the first person to check the median concludes the
+project overstated its headline.
+
+**Where the unqualified version had spread** (found 2026-09-26 by a newline-tolerant sweep;
+4 of 10 instances were unqualified):
+
+| file | note |
+|---|---|
+| `PROJECT-STORY.md` | the narrative's central claim; the estimator *was* explained 12 lines below, which is not the same as being in the sentence |
+| `docs/lecture/00-orientation.md` | adjacent to the `0/6` figure, which is median-derived |
+| `docs/lecture/01-the-biological-problem.md` | numbered lesson list |
+| `docs/lecture/README.md` | adjacent to the `0/6` figure, same mixing |
+
+**It never shipped.** No packaged document and no deck slide contains the claim in any
+phrasing, so no generator fix and no rebuild were required — checked explicitly rather than
+assumed.
+
+**The sibling figure was swept at the same time.** The `four of five gates reject 0/6`
+claim is median-derived and was stated correctly everywhere, but **4 of its 13 instances
+did not say so**, and one — `STATE.md` — carried *both* figures in a single sentence with
+only the `model_0` half labelled. That is §C1's failure mode exactly: two rates from two
+parameters, adjacent, neither named. Labelled in `STATE.md`,
+`docs/lecture/09-critique.md` and `docs/lecture/05-experiment-design.md`; left unedited in
+`docs/sessions/2026-09-22-...md`, which is a historical record and is covered by this
+entry instead.
+
+**Why this is its own entry rather than a footnote to §C1.** §C1 is *an error rate is a
+property of a threshold*. This is *a pass rate is a property of an estimator*. Same disease,
+different variable, and the project made it twice without noticing the first was a special
+case — which is the argument for stating the general form: **a rate is meaningless without
+the parameter it was computed at, and "which parameter" is a different question each time.**
+
+In two of the four locations the two estimators sat in **adjacent numbered points** — `0/6`
+from the median directly above "cleared all five" from the argmax, neither labelled. That
+adjacency is precisely how §C1 happened, and both are now labelled explicitly.
+
+---
+
 ## D. Flagged — known not to reproduce, deliberately not guessed at
 
 ### D1 — the course corrections file had gone stale, and self-contradictory
