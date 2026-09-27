@@ -143,17 +143,39 @@ indistinguishable from a measurement a week later.
 
 ## Reproducing it
 
+**Tests need only the repo:**
+
 ```bash
-uv sync                                   # Blackwell needs the pinned cu128 index
-uv run pytest tests/                      # 34 invariant tests
-uv run python scripts/58_validate_submission.py submission/RYAN_BINNY
+uv sync                    # Blackwell needs the pinned cu128 index; installs the dev group
+uv run pytest tests/       # 34 invariant tests, ~2.4 s
+```
+
+**The validator needs four external tools that are deliberately not pip dependencies.**
+`prodigy-prot` requires `numpy>=2` while `DockQ` and `boltz` require `numpy<2`, so they
+cannot share an environment — each gets its own, which is also what lets a grader pin them
+independently:
+
+```bash
+uv tool install prodigy-prot            # ΔG, contacts
+uv tool install DockQ                   # Challenge 1 only
+git clone https://github.com/DunbrackLab/IPSAE vendor/ipsae \
+  && git -C vendor/ipsae checkout 6174cf9e71cb1bd660cc805856a18c4871a6dec3
+# NetSolP (solubility, ~4.7 GB of ONNX): see BUILD.md §6b
+uv run python scripts/00_doctor.py      # checks all four before you spend time
+uv run python scripts/58_validate_submission.py submission/RYAN_BINNY   # ~7 min
 ```
 
 The validator takes **only the packaged folder**. It imports nothing from `runs/`, reads
-no cached score, and re-derives every metric from the three files per design; its one
-external input is the DockQ reference (PDB 5GGS), passed as an argument so it cannot
-silently fall back on ours. A correct package exits 0; lowercasing a single FASTA header
-exits 1 and names the violated handbook section.
+no cached score, and re-derives every metric from the three files per design. Its one
+external input is the DockQ reference (PDB 5GGS) at
+`data/refs/prepared/5ggs_ABZ.pdb`, which ships here — pass `--reference` to point it at
+your own copy instead. A correct package exits 0; lowercasing a single FASTA header exits
+1 and names the violated handbook section.
+
+*An earlier version of this section claimed the reference was "passed as an argument so it
+cannot silently fall back on ours". That was false: `--reference` has a default pointing at
+our copy, and the command printed above does not override it. The honest version is that
+the reference is ours unless you say otherwise, and the path is stated so you can.*
 
 *Validate the artifacts, not the pipeline that produced them* — a check that reuses your
 own intermediate state proves nothing about what an evaluator sees.

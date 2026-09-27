@@ -15,6 +15,11 @@ dependencies = [
     "tqdm>=4.66",
     "anarcii>=2.0.8",
     "freesasa>=2.2.1",
+    # Used directly by 7 tracked files including io/pdb.py, submit/package.py and
+    # submit/pae.py -- i.e. it is on the validator's own import path. It was undeclared
+    # until 2026-09-27 and arrived only as a transitive of `anarcii`; if anarcii ever
+    # drops it, `import locksmith.io.pdb` breaks. A core import satisfied by accident.
+    "gemmi>=0.6",
     # The pitch deck is a scored deliverable (SS4.4, 50 points) and src/locksmith/submit/deck.py
     # imports this. It was undeclared until 2026-09-25, so `scripts/57` crashed at the deck
     # step on a clean env -- AFTER writing the package files, so the package looked built.
@@ -23,7 +28,13 @@ dependencies = [
 
 [project.optional-dependencies]
 analysis = ["scikit-learn>=1.5", "matplotlib>=3.9", "scipy>=1.14"]
-dev = ["pytest>=8"]   # the 34-test suite could not be run at all on 2026-09-26: undeclared.
+
+# `dev` lives in [dependency-groups], NOT [project.optional-dependencies]. `uv sync`
+# installs dependency-groups by default and extras only on request, so declaring pytest as
+# an extra meant the README's own `uv run pytest tests/` still failed on a clean clone --
+# the exact defect the 2026-09-26 comment below claimed to have fixed.
+[dependency-groups]
+dev = ["pytest>=8"]
 
 [build-system]
 requires = ["hatchling"]

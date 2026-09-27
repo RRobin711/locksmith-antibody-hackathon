@@ -17,3 +17,9 @@ source/antibody-design-hackathon-handbook.*
 
 # Syncthing conflict copies -- vault sync artefacts, never part of the repo.
 *.sync-conflict-*
+
+# data/refs/*.pdb above does NOT recurse into prepared/, which is the only reason the
+# DockQ reference ships at all. That was luck, not design. Keep it deliberate: the
+# validator defaults to data/refs/prepared/5ggs_ABZ.pdb and a clone without it cannot
+# reproduce the Challenge 1 DockQ. Do not add data/refs/**/*.pdb.
+!data/refs/prepared/5ggs_ABZ.pdb

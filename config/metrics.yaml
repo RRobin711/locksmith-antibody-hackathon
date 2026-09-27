@@ -15,7 +15,10 @@ conventions:
                                # than a claim of attainability, and within-band
                                # interpolation is a fourth reading the text permits.
                                # The choice is a uniform monotone relabelling, so it
-                               # moves the headline number and never the ranking.
+                               # moves the headline number. It was ALSO claimed here to
+                               # "never change the ranking" -- FALSE, corrected 2026-09-27:
+                               # monotone is not affine, and the band grid has 39 strict
+                               # ordering reversals. See docs/lecture/09-critique.md.
   cdr_sasa_chains: AB          # AB | A -- AMBIGUOUS. S6.1.6: SASA of "the CDR loops
                                # (paratope) on the antibody". Plural loops and "paratope"
                                # favour all six CDRs (heavy+light), which is what the code
@@ -37,8 +40,12 @@ conventions:
                                # band. A 3-chain complex has three interfaces and the
                                # handbook says only that DockQ "returns a docking quality
                                # score between 0 and 1". STALE NUMBERS BELOW (kept for the reasoning trail):
-                               # these came from an earlier fold. The SHIPPED structure
-                               # measures A-C 0.723, B-C 0.794, global 0.816.
+                               # these came from an earlier fold -- the PRE-N55Q structure,
+                               # not the shipped one. Corrected 2026-09-27: this comment used
+                               # to call 0.723 / 0.794 / 0.816 "the SHIPPED structure"; those
+                               # values are withdrawn at results/retractions.md SSC3. The
+                               # structure actually shipped measures A-B 0.8716, A-C 0.7308,
+                               # B-C 0.7963, global 0.799579.
                                # On an earlier mpnn_T0.5_s104_036 fold: min 0.755
                                # (Medium), mean 0.805, global 0.850, max 0.855 (all Good).
                                # `global` is DockQ v2's own Total DockQ, i.e. what an
@@ -50,8 +57,9 @@ conventions:
                                # CAVEAT worth stating wherever the band is quoted: `global`
                                # averages in the heavy-light FRAMEWORK interface, which no
                                # design touches and which is near-perfect by construction.
-                               # The interface the design actually creates is A-C = 0.723 (shipped)
-                               # (Medium). Quote the A-C number as the DESIGN result and
+                               # The interface the design actually creates is A-C = 0.7308
+                               # on the shipped structure (Medium). Quote the A-C number as
+                               # the DESIGN result and
                                # `global` only as "what an organiser running the tool gets".
                                # Every result that depends on the DockQ band must state its agg.
   dockq_chain_mapping: ABC:ABC # pin it; a wrong auto-mapping silently scores a good design badly

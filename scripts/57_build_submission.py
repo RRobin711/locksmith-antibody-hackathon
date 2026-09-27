@@ -167,7 +167,14 @@ def main() -> int:
                    "", f"**Final: {sc.final} / 100. Viable: {sc.viable}.**", "",
                    "Band values are a handbook ambiguity; see `docs/` and",
                    "`results/handbook_conformance.md`. Under the three readings the same design",
-                   "scores 81.0 / 87.5 / 94.0, which is a property of the reading, not the design."]
+                   "scores 81.0 / 87.5 / 94.0, which is a property of the reading, not the design.", "",
+                   "**One number here is not bit-reproducible from this folder, and it is ours "
+                   "to disclose.** `ipsae` above is computed from the full-precision PAE in our "
+                   "run directory. The `design_1_pae.json` shipped here stores PAE at **2 decimal "
+                   "places** (the handbook's format), so recomputing ipSAE from the packaged files "
+                   "returns **0.820**, not 0.821. The band is Good either way and the composite is "
+                   "unaffected, but a document titled *our own recomputation* should say which "
+                   "input it recomputed from."]
 
     docs_md = f"""# Methods and limitations — {TEAM}, Challenge 1
 

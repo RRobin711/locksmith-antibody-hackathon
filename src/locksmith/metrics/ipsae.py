@@ -18,8 +18,10 @@ never specifies -- they are configuration, defaulting to the repo's documented
 """
 from __future__ import annotations
 
+import shutil
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 from locksmith.types import MetricResult, Structure
@@ -44,20 +46,42 @@ def compute(
                 skipped_reason=f"Boltz PAE needs sibling {sib.name}; ipsae.py derives it "
                                f"by replacing 'pae'->'plddt' in the path",
             )}
-    proc = subprocess.run(
-        [sys.executable, str(IPSAE), str(pae), str(struct.pdb),
-         str(pae_cutoff), str(dist_cutoff)],
-        capture_output=True, text=True, timeout=600,
-    )
-    stem = str(struct.pdb).rsplit(".", 1)[0]
-    table = Path(f"{stem}_{pae_cutoff}_{dist_cutoff}.txt")
-    if not table.exists():
-        candidates = sorted(Path(struct.pdb).parent.glob(f"{Path(stem).name}*.txt"))
-        if not candidates:
-            raise RuntimeError(f"ipsae produced no table:\n{proc.stdout}\n{proc.stderr}")
-        table = candidates[0]
+    # RUN IN A TEMP DIRECTORY. ipsae.py derives its output paths from the INPUT path, so
+    # it writes `<pdb-stem>_<pae>_<dist>.txt`, `_byres.txt` and a `.pml` next to whatever
+    # it was pointed at. Pointed at the packaged submission -- which is what
+    # scripts/58_validate_submission.py does -- it drops three stray files into
+    # `structures/`, and `submit/package.py` then refuses to rebuild because SS4.2.1
+    # specifies exactly design_X_complex.pdb and design_X_pae.json. Running the validator
+    # therefore broke the packager. Found 2026-09-27.
+    #
+    # Basenames are preserved exactly on the way in, because ipsae.py locates the pLDDT
+    # array by string-substituting 'pae'->'plddt' in the PAE path. Rename or relocate
+    # either file and it writes an EMPTY table and exits 0.
+    with tempfile.TemporaryDirectory(prefix="ipsae_") as td:
+        work = Path(td)
+        staged_pae = work / pae.name
+        shutil.copy2(pae, staged_pae)
+        staged_pdb = work / Path(struct.pdb).name
+        shutil.copy2(struct.pdb, staged_pdb)
+        if pae.suffix == ".npz":
+            sib = pae.with_name(pae.name.replace("pae", "plddt"))
+            shutil.copy2(sib, work / sib.name)
 
-    lines = [ln.split() for ln in table.read_text().splitlines() if ln.strip()]
+        proc = subprocess.run(
+            [sys.executable, str(IPSAE.resolve()), str(staged_pae), str(staged_pdb),
+             str(pae_cutoff), str(dist_cutoff)],
+            capture_output=True, text=True, timeout=600,
+        )
+        stem = str(staged_pdb).rsplit(".", 1)[0]
+        table = Path(f"{stem}_{pae_cutoff}_{dist_cutoff}.txt")
+        if not table.exists():
+            candidates = sorted(work.glob(f"{Path(stem).name}*.txt"))
+            if not candidates:
+                raise RuntimeError(f"ipsae produced no table:\n{proc.stdout}\n{proc.stderr}")
+            table = candidates[0]
+        text = table.read_text()
+
+    lines = [ln.split() for ln in text.splitlines() if ln.strip()]
     if not lines:
         return {"ipsae": MetricResult(
             None, skipped_reason=f"ipsae produced an empty table; stderr: {proc.stderr[-300:]}")}
