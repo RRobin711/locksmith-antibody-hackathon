@@ -43,4 +43,4 @@ Categories: binding 9.667, developability 8.000, novelty 10.000
 
 Band values are a handbook ambiguity; see `docs/` and
 `results/handbook_conformance.md`. Under the three readings the same design
-scores 84.0 / 90.0 / 96.0, which is a property of the reading, not the design.
+scores 81.0 / 87.5 / 94.0, which is a property of the reading, not the design.

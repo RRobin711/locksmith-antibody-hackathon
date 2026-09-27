@@ -6,7 +6,7 @@ status: review
 
 # 08 — What Broke: a failure catalogue organised by generating mechanism
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1 and C2, and what they do and do not invalidate](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding. Challenge 1 is unaffected.
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1, C2 and C3](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected".
 
 ## What this chapter teaches
 

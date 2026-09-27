@@ -18,6 +18,7 @@ from locksmith.config import load
 from locksmith.metrics import dockq, ipsae, netsolp, novelty, plddt, prodigy, sasa
 from locksmith.score import evaluate
 from locksmith.submit import Design, build_challenge, build_zip
+from locksmith.submit.docs import challenge1_novelty_table, deamidation_motifs
 from locksmith.types import Provenance, Structure
 
 # DELIBERATE PLACEHOLDER, not an unfixed §4.1 failure. §4.1 requires the master folder
@@ -166,7 +167,7 @@ def main() -> int:
                    "", f"**Final: {sc.final} / 100. Viable: {sc.viable}.**", "",
                    "Band values are a handbook ambiguity; see `docs/` and",
                    "`results/handbook_conformance.md`. Under the three readings the same design",
-                   "scores 84.0 / 90.0 / 96.0, which is a property of the reading, not the design."]
+                   "scores 81.0 / 87.5 / 94.0, which is a property of the reading, not the design."]
 
     docs_md = f"""# Methods and limitations — {TEAM}, Challenge 1
 
@@ -250,14 +251,7 @@ antibody is from Keytruda, and we would rather say so than let the number speak.
 
 Measured against pembrolizumab over the same 232-residue heavy-chain construct:
 
-| quantity | value |
-|---|---|
-| substitutions | **15** |
-| whole-chain identity | **93.5%** |
-| designable positions changed | **15 of 29** |
-| CDR-H1 | `GYTFTNYY` -> `KSDMENNY` (6 changes) |
-| CDR-H2 | `INPSNGGT` -> `INPLNGGT` (**1** change) |
-| CDR-H3 | `ARRDYRFDMGFDY` -> `ALRPRDVDRGFYK` (8 changes) |
+{challenge1_novelty_table(hbc['heavy'])}
 
 The light chain is pembrolizumab's, unchanged. So a reader who opens the FASTA sees a
 nearly-identical antibody with one substantially rewritten loop, and §3.1's phrase
@@ -323,12 +317,24 @@ output by confidence, so what we submit is an argmax rather than a sample.
 
 ## Developability liabilities in this design, found by our own scan
 
-Handbook §9.2 asks for no NG/DG deamidation motifs in CDRs. **This design carries `NG` at
-heavy chain position 55, inside CDR-H2.**
+Handbook §9.2 asks for no NG/DG deamidation motifs in CDRs. **This design carries none.**
+A scan of the shipped heavy chain's three CDRs returns `{deamidation_motifs(hbc['heavy']) or 'no NG/DG motifs'}`.
 
-It is pembrolizumab's own motif, not one we introduced — but both positions sat inside the
-29 IMGT positions we made designable, so removing it was free and we did not take it. Our
-redesign changed CDR-H2 at exactly one position (S54L) and left `N55-G56` intact.
+Pembrolizumab itself carries `NG` at heavy 55–56, inside CDR-H2, and our first submitted
+design inherited it. The fix is `N55Q`, and it is the design packaged here: heavy 54–57
+reads `LQGG`, so CDR-H2 differs from the wild type at **two** positions (S54L from the
+redesign, N55Q from the fix) rather than one.
+
+**It was free.** The composite is unchanged by it and the five-sample envelope moved 0.044
+against a baseline spread of 0.039 — inside the noise. That is worth stating precisely
+because this project separately measured three §9.2 fixes on the Challenge 2 design that
+each destroyed the interface; a prescribed fix is a design change and cannot be assumed
+safe. This one was measured, and it was safe.
+
+*An earlier version of this section said the opposite — that the design "carries `NG` at
+heavy chain position 55" and that we "left `N55-G56` intact". That text described the
+pre-fix molecule and shipped beside the fixed one. It is now computed from the sequence in
+this package rather than written by hand.*
 
 Also present and worth stating: `M29` in CDR-H1, introduced by our redesign alongside the
 inherited `M34` (§9.2: no exposed methionines in CDRs) — though measured CDR-H1 hydrophobic
@@ -386,7 +392,7 @@ open.
 
 | ambiguity | handbook | our choice | cost if wrong |
 |---|---|---|---|
-| band → 0-10 value | ranges only, "Good (9-10)" | `top` | 84.0 / 90.0 / 96.0 across readings |
+| band → 0-10 value | ranges only, "Good (9-10)" | `top` | 81.0 / 87.5 / 94.0 across readings |
 | DockQ over 3 interfaces | "a docking quality score" | `global` (tool's own Total) | one band |
 | NetSolP chain combination | "combined into a single value" | `min` | none here; both bands equal |
 | CDR SASA scope | "the CDR loops (paratope)" | all six CDRs | none; Good either way |
@@ -461,7 +467,7 @@ the handbook, and therefore change the number:
 
 | metric | convention | our setting | why it matters |
 |---|---|---|---|
-| all | `band_value` | `{cfg.band_value}` | the same design scores 84.0 / 90.0 / 96.0 under the three readings |
+| all | `band_value` | `{cfg.band_value}` | the same design scores 81.0 / 87.5 / 94.0 under the three readings |
 | `dockq` | `dockq_interface_agg` | `{c['dockq_interface_agg']}` | one band |
 | `netsolp` | `netsolp_construct` | `{c.get('netsolp_construct')}` | Fv, per §6.2.1; we used Fab until 2026-09-20 |
 | `netsolp` | `netsolp_chain_agg` | `{c['netsolp_chain_agg']}` | VH 0.699 vs VL 0.569 -- `min` picks the light chain |

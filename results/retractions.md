@@ -386,6 +386,41 @@ adjacency is precisely how §C1 happened, and both are now labelled explicitly.
 
 ---
 
+### C9 — "an anti-lysozyme antibody clears all five hard gates" · **SUPERSEDED, a third time**
+
+§C8 attached the *estimator* to this claim and stopped. The claim is also a property of the
+**antigen construct**, and on the better construct it is false.
+
+| construct | HyHEL-10 median | best of 5 | gates cleared | positive control |
+|---|---|---|---|---|
+| 113-mer (used first) | 0.219 | **0.609** | **5/5** | **FAILED** — nivolumab 0.017 |
+| 119-mer (repaired) | 0.228 | **0.409** | **4/5**, fails ipSAE | 2/2 clear |
+
+The 113-mer was missing 6 of nivolumab's 14 epitope residues, which is why its positive
+control failed and why the panel was **pre-registered INCONCLUSIVE** — `negative_control.md:53`
+says in terms that the negative arm "must not be read as evidence that the gate
+discriminates." It was read that way anyway, on the front page, for days.
+
+On the repaired construct the gate resolves cleanly: **2/2 positives clear, 6/6 negatives
+fail, separated by 0.184 ipSAE**. So the flattering result and the broken positive control
+had the **same cause** — a truncated antigen.
+
+**What survives, and it is still strong:** four of the five gates reject **0 of 6** on
+*both* constructs. §7.2 rests on ipSAE alone. That claim never depended on the truncation.
+
+**What does not:** "the rubric accepts an antibody that cannot bind." It accepts one only
+on a construct whose own positive control it also fails.
+
+Also corrected by the same table: `README.md` said "even there cetuximab's median lands
+**0.006** under the cutoff." That is the 113-mer figure (0.594). On the repaired construct
+cetuximab's median is **0.052**, i.e. 0.548 under — the 0.006 was the flattering construct.
+
+*The generalisation, now stated three times in three variables: a rate is a property of
+every parameter it was computed under — threshold (§C1), estimator (§C8), and input
+construct (§C9). Each time the project fixed one axis and assumed it had finished.*
+
+---
+
 ## D. Flagged — known not to reproduce, deliberately not guessed at
 
 ### D1 — the course corrections file had gone stale, and self-contradictory

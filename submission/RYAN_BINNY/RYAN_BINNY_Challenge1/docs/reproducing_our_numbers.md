@@ -65,7 +65,7 @@ the handbook, and therefore change the number:
 
 | metric | convention | our setting | why it matters |
 |---|---|---|---|
-| all | `band_value` | `top` | the same design scores 84.0 / 90.0 / 96.0 under the three readings |
+| all | `band_value` | `top` | the same design scores 81.0 / 87.5 / 94.0 under the three readings |
 | `dockq` | `dockq_interface_agg` | `global` | one band |
 | `netsolp` | `netsolp_construct` | `fv` | Fv, per §6.2.1; we used Fab until 2026-09-20 |
 | `netsolp` | `netsolp_chain_agg` | `min` | VH 0.699 vs VL 0.569 -- `min` picks the light chain |

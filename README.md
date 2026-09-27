@@ -20,18 +20,29 @@ that try to break it.
 
 ## The three findings worth your time
 
-**1. An antibody that cannot bind PD-1 passes the rubric's hard gates.**
-HyHEL-10 is raised against hen egg lysozyme. Docked against PD-1 through this identical
-pipeline it clears **all five** of the handbook's §7.2 cutoffs on `model_0` — ipSAE 0.609,
-ΔG −12.4 kcal/mol, 77 contacts, interface pLDDT 85.0, CDR SASA 1084 Å². Across six wrong
-antibodies, **four of the five gates reject 0 of 6**. ΔG, contacts, interface pLDDT and
-CDR SASA measure *that a complex was built*, not that it is the right one, so §7.2 rests
-on ipSAE alone — and even there cetuximab's median lands **0.006** under the cutoff.
+**1. Four of the rubric's five hard gates reject nothing.**
+Six antibodies that cannot bind PD-1 — anti-lysozyme, anti-HER2, anti-VEGF, anti-EGFR,
+anti-influenza — were docked against PD-1 through this identical pipeline. **ΔG, contact
+count, interface pLDDT and CDR SASA each reject 0 of 6.** They are satisfied by any pair
+of proteins the predictor places in contact at all, so they measure *that a complex was
+built*, not that it is the right one. §7.2's five-way check is a one-way check: viability
+rests on ipSAE alone. This holds on both antigen constructs tested, and it is the finding
+I would defend.
 
-The mechanism matters: Boltz-2 defaults to `diffusion_samples=1` and ranks its outputs by
-its own confidence, so `model_0` is **an argmax by construction, not a sample**. HyHEL-10's
-*median* over five samples is 0.219. A default setting turned a distribution into its
-maximum, silently, for every number this project produced for a week.
+**The stronger-sounding version of this does not survive, and the correction is the more
+interesting result.** On the 113-residue construct the project first used, HyHEL-10's
+`model_0` cleared **all five** gates (ipSAE 0.609). But that construct's own positive
+control had failed — nivolumab scored 0.017, because the construct was missing 6 of its 14
+epitope residues — so the panel was pre-registered INCONCLUSIVE and must not be read as
+evidence about the gate. Restoring those six residues (a 119-mer) resolves it: **2 of 2
+positives clear, 6 of 6 negatives fail, separated by 0.184 ipSAE**, and HyHEL-10 fails at
+best-of-five 0.409. So ipSAE, given a construct that contains the epitopes, works.
+
+Two mechanisms worth taking away. `diffusion_samples=1` makes `model_0` **an argmax of
+five draws, not a sample** — HyHEL-10's median is 0.228 against its best 0.409. And **a
+truncated antigen construct silently produces a flattering negative control**: the
+"passes everything" result was an artefact of the same truncation that broke the positive
+control, which is why a control that fails is worth more than one that passes.
 → [`results/negative_control.md`](results/negative_control.md)
 
 **2. A silently discarded input inverted a ranking — it did not merely add noise.**
@@ -124,7 +135,7 @@ indistinguishable from a measurement a week later.
 | `results/` | **73** result write-ups, including **13** pre-registrations. |
 | `docs/lecture/` | A 12-chapter course (~79k words) teaching the project from first principles. |
 | `docs/sessions/` | **25** self-contained session docs — what was built, and what broke. |
-| `knowledge/` | 14 teaching notes on the biology, method and toolchain. |
+| `knowledge/` | 13 teaching notes on the biology, method and toolchain, plus an index. |
 | `submission/` | The packaged deliverable, rebuilt by generators — nothing here is hand-edited. |
 | `config/metrics.yaml` | Every scoring convention, each with the evidence that chose it. |
 

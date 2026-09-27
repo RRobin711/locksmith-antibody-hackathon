@@ -6,7 +6,7 @@ status: living
 
 # Designing a cancer drug on a laptop — a complete course
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1 and C2, and what they do and do not invalidate](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding. Challenge 1 is unaffected.
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1, C2 and C3](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected".
 
 A twelve-chapter lecture course built from the nine-day Locksmith Bio antibody
 design campaign (2026-09-14 → 2026-09-22). It teaches the whole thing from first
@@ -85,12 +85,23 @@ main result, and it is why the course is worth reading.
 
 | | design | shipped | note |
 |---|---|---|---|
-| Challenge 1 | `mpnn_T0.5_s104_036` + N55Q | **96.0** | CDR-H3 `ALRPRDVDRGFYK`, 38.5% identity to pembrolizumab |
-| Challenge 2 | `bb_2_0_dldesign_1` + S→A | **91.2** | 1 of 30; ships 4.8 points low on purpose, to strip two glycosylation sequons from the paratope |
+| Challenge 1 | `mpnn_T0.5_s104_036` + N55Q | **94.0** | CDR-H3 `ALRPRDVDRGFYK`, 38.5% identity to pembrolizumab |
+| Challenge 2 | **`bb_8_0`** | **93.6** | viable on 5/5 diffusion samples |
 
-**18,020 lines of Python** (of which roughly 53% exists to check the other half),
-30 tests, 1,274 predicted structures, 11 pre-registrations, 3 adversarial audits,
-and 165,333 words of documentation.
+> **Updated 2026-09-26.** This table read `96.0` and `bb_2_0_dldesign_1` + S→A at `91.2`
+> until today. Both were superseded: Challenge 1 fell to 94.0 when DockQ was read unrounded
+> (see [C3](CORRECTIONS.md)), and `bb_2_0_dldesign_1` is the design the silently-discarded
+> MSA promoted — it scores **0.013** under a correct alignment and was replaced by `bb_8_0`
+> (see [C1](CORRECTIONS.md)). The course body still derives 96.0 in places; those are
+> indexed in C3 rather than rewritten.
+
+**21,367 lines of Python** (src 3,699 · scripts 16,834 · tests 710), 34 tests,
+13 pre-registrations, 5 adversarial audits, and ~280,000 words of tracked Markdown
+(the twelve chapters here are 75,166 of it).
+
+*These were frozen at 2026-09-23 and were wrong by 2026-09-26 — the block previously
+claimed 18,020 lines, 30 tests, 11 pre-registrations and 165,333 words. A count in prose
+is a claim like any other; these were recomputed from `git ls-files` on 2026-09-26.*
 
 And five results that matter more than either score:
 
@@ -104,8 +115,8 @@ And five results that matter more than either score:
 
 ## Provenance and known defects
 
-This course was assembled on 2026-09-23 from the project's own record: 62 results
-files, 23 session documents, 14 knowledge notes, `config/metrics.yaml`, `PLAN.md`,
+This course was assembled on 2026-09-23 from the project's own record — at the time
+62 results files, 23 session documents and 14 knowledge notes; today 73, 25 and 13 — `config/metrics.yaml`, `PLAN.md`,
 `STATE.md`, and the source. Every figure is cited to a file so you can check it.
 
 Three findings in [the critique](09-critique.md) contradict statements in the
@@ -115,9 +126,11 @@ project's own files and were produced while writing this course:
   number and never the ranking"* is **false as stated** — the relabelling is
   monotone but not affine, and there are 39 strict ordering reversals on the band
   grid.
-- `STATE.md`, which declares itself the single source of truth, is **stale on a
-  headline number** — it reports Challenge 2 at 96.0 where the shipped design
-  scores 91.2.
+- ~~`STATE.md` … is **stale on a headline number** — it reports Challenge 2 at 96.0
+  where the shipped design scores 91.2.~~ **Resolved 2026-09-26, and this bullet had
+  itself gone stale:** `STATE.md` and the package both now read **93.6**, and the design
+  is `bb_8_0`, not the one named here. Kept struck through because a defect list that
+  quietly drops its own entries is worth less than one that shows them closing.
 - The open `0.629` [reliability](04-measurement-theory.md#13-reliability) question resolves as an estimand mismatch, but a
   **real [Spearman–Brown](04-measurement-theory.md#3-spearmanbrown-what-averaging-buys) inconsistency survives underneath it**.
 

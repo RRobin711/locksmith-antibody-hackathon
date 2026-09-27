@@ -97,3 +97,62 @@ was folded locally with Boltz-2 at `recycling_steps=10`, seed 1, `diffusion_samp
 `methods_and_limitations.md`, which gives the measured envelopes rather than a single
 number.
 """
+
+
+# The handbook SS4.2.2 wild-type heavy chain (pembrolizumab, 232 aa). Duplicated from
+# scripts/55_handbook_construct_fold.py::HB_HEAVY, and pinned by a test so the two cannot
+# drift -- see tests/test_invariants.py::test_wt_heavy_matches_the_handbook_construct.
+HANDBOOK_WT_HEAVY = (
+    "QVQLVQSGVEVKKPGASVKVSCKASGYTFTNYYMYWVRQAPGQGLEWMGGINPSNGGTNFNEKFKNRVTLTTDS"
+    "STTTAYMELKSLQFDDTAVYYCARRDYRFDMGFDYWGQGTTVTVSSASTKGPSVFPLAPSSKSTSGGTAALGCL"
+    "VKDYFPEPVTVSWNSGALTSGVHTFPAVLQSSGLYSLSSVVTVPSSSLGTQTYICNVNHKPSNTKVDKKVEPKS"
+    "CDKTHHHHHH"
+)
+
+# CDR windows, 1-based inclusive, on that construct. Chosen to reproduce the loop strings
+# the submission has always quoted (H1 GYTFTNYY, H2 INPSNGGT, H3 ARRDYRFDMGFDY).
+_CDR_H = {"CDR-H1": (26, 33), "CDR-H2": (51, 58), "CDR-H3": (97, 109)}
+
+# The SS4.2.2 designable set: the IMGT positions this campaign allowed ProteinMPNN to change.
+N_DESIGNABLE = 29
+
+
+def challenge1_novelty_table(heavy: str) -> str:
+    """The 'how novel is this, really' table, COMPUTED from the shipped heavy chain.
+
+    It used to be a hardcoded markdown block in scripts/57 and it drifted off the molecule:
+    it shipped `substitutions 15` / `93.5%` / `CDR-H2 ... (1 change)` / `INPLNGGT` while the
+    packaged design has **16** substitutions, **93.1%** identity, **2** CDR-H2 changes
+    (S54L and N55Q) and reads `INPLQGGT`. The `INPLNGGT` it printed is a sequence that
+    exists nowhere in the package -- it was the pre-N55Q design's loop with the N55Q edit
+    never applied to the prose.
+
+    Three other things in the same package already said 16 (the deck, and the
+    `--allowed_mismatches 16` minimum in two docs, which IS the substitution count), so the
+    table was the only dissenter. Computing it removes the possibility.
+    """
+    wt = HANDBOOK_WT_HEAVY
+    if len(heavy) != len(wt):
+        raise ValueError(
+            f"heavy chain is {len(heavy)} aa, handbook wild type is {len(wt)} aa; "
+            "a positional diff would be meaningless -- refusing to emit a novelty table")
+    subs = [(i + 1, wt[i], heavy[i]) for i in range(len(wt)) if wt[i] != heavy[i]]
+    ident = (len(wt) - len(subs)) / len(wt) * 100
+    rows = [f"| substitutions | **{len(subs)}** |",
+            f"| whole-chain identity | **{ident:.1f}%** |",
+            f"| designable positions changed | **{len(subs)} of {N_DESIGNABLE}** |"]
+    for name, (lo, hi) in _CDR_H.items():
+        w, s = wt[lo - 1:hi], heavy[lo - 1:hi]
+        n = sum(1 for a, b in zip(w, s) if a != b)
+        rows.append(f"| {name} | `{w}` -> `{s}` ({n} change{'s' if n != 1 else ''}) |")
+    return ("| quantity | value |\n|---|---|\n" + "\n".join(rows))
+
+
+def deamidation_motifs(heavy: str) -> list[tuple[str, int]]:
+    """Every NG/DG motif inside a CDR of `heavy`, as (motif, 1-based start)."""
+    out = []
+    for lo, hi in _CDR_H.values():
+        for i in range(lo - 1, min(hi, len(heavy) - 1)):
+            if heavy[i:i + 2] in ("NG", "DG"):
+                out.append((heavy[i:i + 2], i + 1))
+    return out

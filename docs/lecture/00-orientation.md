@@ -6,7 +6,7 @@ status: review
 
 # Chapter 00 — Orientation: the four questions, answered
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1 and C2, and what they do and do not invalidate](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding. Challenge 1 is unaffected.
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1, C2 and C3](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected".
 
 ## What this chapter teaches
 
@@ -260,8 +260,11 @@ The designs:
 
 | | design | shipped score | status |
 |---|---|---|---|
-| Challenge 1 | `mpnn_T0.5_s104_036` + N55Q | **96.0** | viable; CDR-H3 `ALRPRDVDRGFYK`, 38.5% identity to pembrolizumab |
-| Challenge 2 | `bb_2_0_dldesign_1` + S→A | **91.2** | viable; 1 of 30 |
+| Challenge 1 | `mpnn_T0.5_s104_036` + N55Q | **94.0** | viable; CDR-H3 `ALRPRDVDRGFYK`, 38.5% identity to pembrolizumab |
+| Challenge 2 | **`bb_8_0`** | **93.6** | viable on 5/5 diffusion samples |
+
+> **Updated 2026-09-26** — was `96.0` and `bb_2_0_dldesign_1` at `91.2`; see
+> [C1 and C3](CORRECTIONS.md).
 
 Challenge 2 ships **4.8 points below** its unfixed score on purpose, to remove
 two [glycosylation sequons](01-the-biological-problem.md#61-two-n-glycosylation-sequons-in-the-challenge-2-paratope) from the binding site.

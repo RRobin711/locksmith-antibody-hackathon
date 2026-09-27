@@ -27,7 +27,7 @@ inside the tree are within seconds of each other, which is the healthy signature
 gap is the orphan tell that caught a stale document here once.
 
 Working tree is **clean**, 34/34 tests pass, and the 2026-09-25 session is committed
-(7 commits, `4241bb6..d5cf334`).
+(7 commits). *Commit SHAs are deliberately not quoted here: the history was rewritten on 2026-09-26 to scrub a copyrighted PDF and third-party emails, which re-hashed every commit. An earlier version of this line cited `4241bb6..d5cf334`, neither of which resolves.*
 
 ---
 
@@ -148,7 +148,7 @@ flattering half of each; see [§C1 of the register](results/retractions.md).
 
 ## 5. Test suite and repository
 
-- `tests/test_invariants.py` — **34 tests**, all passing (`uv run pytest`, ~24 s).
+- `tests/test_invariants.py` — **34 tests**, all passing (`uv run pytest`, ~2.4 s).
 - Git: `master`, no remote, linear history, one commit per unit of work.
 - `pytest` and `python-pptx` are now declared in `pyproject.toml`. Both had been
   undeclared; the suite could not be run at all, and `scripts/57` crashed at the deck step
@@ -201,7 +201,7 @@ version of this file.
 
 1. This file.
 2. [The retraction register](results/retractions.md) — everything the project withdrew, and
-   the four figures flagged as not reproducing. Read before trusting a number found
+   the five figures flagged as not reproducing. Read before trusting a number found
    anywhere else in the repo.
 3. [The session index](docs/sessions/README.md) — one line per working session; the teaching
    lives in the per-session docs.
