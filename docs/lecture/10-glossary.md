@@ -6,7 +6,7 @@ status: review
 
 # Chapter 10 — Glossary
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1, C2 and C3](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected".
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C5](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight) and **C5** (the NetSolP triple) were added 2026-09-28.
 
 ## What this chapter teaches
 
@@ -208,6 +208,9 @@ knockout).
 **[NetSolP](03-the-toolchain.md#44-netsolp-10--sequence-only-solubility-and-a-positive-control-that-chose-the-model)** — a sequence-only solubility predictor. Ships **three** model
 variants scoring a licensed antibody at 0.379 / 0.463 / 0.733 against a 0.50
 cutoff. Aggregated here as `min(VH, VL)`.
+*(⚠️ That triple is corrected by [C5](CORRECTIONS.md) — it mixes VH and VL across three
+variants and two constructs. Per chain, on Fv: VH 0.733 / 0.569, 0.637 / 0.463, 0.379 /
+0.346.)*
 
 **[PRODIGY](03-the-toolchain.md#42-prodigy-240--δg-and-contacts)** — predicts binding free energy ΔG in kcal/mol from a structure. It is
 a **contact-count regression over an unminimised predicted pose**, with no

@@ -405,4 +405,61 @@ rather than from what the job needs.*
 
 ---
 
+## C5 — the NetSolP triple `0.379 / 0.463 / 0.733`
+
+**Raised 2026-09-28 (withdrawn project-wide 2026-09-23). Affects
+[Class 0 §orientation](00-orientation.md) and [the glossary](10-glossary.md).**
+
+*Numbering note: the project-wide register also calls this §C5. The two numbering schemes
+are independent and the coincidence is accidental — this file's C1–C4 are not the
+register's C1–C4.*
+
+### The claim
+
+Both chapters state that NetSolP "ships three model variants that score a licensed
+antibody at **0.379, 0.463 and 0.733** against a 0.50 cutoff", and Class 0 adds that
+"the CLI default **would have failed every design**".
+
+### Why it is wrong
+
+The triple **mixes VH and VL across three different variants and two different
+constructs**. It reads as one antibody scored three ways; it is in fact ESM12-VH,
+Distilled-VL and ESM1b-VH. The numbers are **per-chain pairs** and must be quoted as
+such. [Class 3 §4.4](03-the-toolchain.md#44-netsolp-10--sequence-only-solubility-and-a-positive-control-that-chose-the-model)
+already prints the correct table:
+
+| | ESM1b (5-fold) | ESM1b-distilled | ESM12 (5-fold) |
+|---|---|---|---|
+| VH | 0.733 | 0.637 | 0.379 |
+| VL | 0.569 | 0.463 | 0.346 |
+| Fab heavy | 0.623 | 0.491 | 0.352 |
+| Fab light | 0.626 | 0.448 | 0.312 |
+
+On **Fab** chains `ESM12` gives 0.35 / 0.31 and `Distilled` 0.49 / 0.45, both failing the
+cutoff, while the ESM1b ensemble passes at 0.57–0.73. On **Fv** — which is what the
+handbook specifies, twice — pembrolizumab reads VH **0.733** / VL **0.569**, which inverts
+*which chain limits* `min(VH, VL)`.
+
+The second clause is separately retracted: NetSolP's `predict.py` **defaults to ESM1b**,
+which passes, so the CLI default would not have failed every design. The counterfactual was
+also never computed on the right input, because the construct convention was independently
+wrong (Fab fed where the handbook says Fv). The shipped
+`reproducing_our_numbers.md` says the opposite of the course, and the shipped document is
+right. [Class 3 §4.4](03-the-toolchain.md#44-netsolp-10--sequence-only-solubility-and-a-positive-control-that-chose-the-model)
+already records this self-correction; Class 0 and the glossary did not inherit it.
+
+### What survives
+
+The lesson the bullet was written to carry is untouched and is *stronger* stated correctly:
+**anything that can move a result across a threshold belongs in the config with its
+evidence, not left at whatever the tool ships.** Pinned as `netsolp_model_type: ESM1b` in
+`config/metrics.yaml`. The variant choice really did decide viability — it just did so
+per chain, and not via the CLI default.
+
+*Transferable: quote a per-chain metric per chain, or you will compare two different
+quantities later. A single number summarising a 4×3 table is a claim that the table has
+one dimension.*
+
+---
+
 *No further corrections at this time.*

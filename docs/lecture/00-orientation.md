@@ -6,7 +6,7 @@ status: review
 
 # Chapter 00 — Orientation: the four questions, answered
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1, C2 and C3](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected".
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C5](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight) and **C5** (the NetSolP triple) were added 2026-09-28.
 
 ## What this chapter teaches
 
@@ -155,7 +155,11 @@ turn on it.
   variants that score a licensed antibody at 0.379, 0.463 and 0.733 against a
   0.50 cutoff — a spread wider than the distance from cutoff to "good". The CLI
   default would have failed every design and looked exactly like a design
-  problem. Separately, [DockQ](03-the-toolchain.md#41-dockq-213--two-flags-that-both-default-wrong) at its defaults **refuses to score the submission at
+  problem.
+  *(⚠️ Both numbers in this bullet are corrected by [C5](CORRECTIONS.md): the triple
+  mixes VH and VL across three variants and two constructs, and the CLI default is
+  ESM1b, which passes. The lesson — a tool default that can move a result across a
+  threshold belongs in your config — stands, and is stronger stated per chain.)* Separately, [DockQ](03-the-toolchain.md#41-dockq-213--two-flags-that-both-default-wrong) at its defaults **refuses to score the submission at
   all**, exiting 1 with no output.
 - **Full-chain identity is a useless novelty screen for antibodies.** Framework
   conservation puts every antibody at 86–94% identity to something. You must
