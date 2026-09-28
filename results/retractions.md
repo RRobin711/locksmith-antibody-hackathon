@@ -513,14 +513,82 @@ support.
 
 ---
 
-### D2 — shortlist reliability **0.629** · **FLAGGED**
+### D2 — shortlist reliability **0.629** · **RESOLVED 2026-09-28. The flag was wrong.**
 
-Does not reproduce from the recorded inputs under any standard estimator tried: the plug-in
-variance ratio gives **0.276** under `midpoint` and **0.296** under `top` (scale-invariant,
-as it should be). The original script would settle it; guessing would add a fifth number.
+This entry said the figure "does not reproduce from the recorded inputs under any standard
+estimator tried", and that "the original script would settle it". **Both claims are false**,
+and four documents dated 2026-09-23 had already said so — the register never absorbed them,
+so `STATE.md`'s blocked list carried a work item that was already done.
 
-**Live text:** `STATE.md`, `PLAN.md`, `docs/lecture/04-measurement-theory.md:470`. Each
-should carry the flag until the script is found or the figure recomputed.
+**1. It reproduces. It is a *k*-seed-mean reliability, not a single-seed one.**
+From the recorded components (`results/m3_winner.md` §1: between-design sd of the 7-seed
+means 0.290, noise sd of a 7-seed mean 0.176):
+
+```
+r₇ = 1 − 0.176² / 0.290² = 1 − 0.030976 / 0.084100 = 0.6317      (recorded 0.629)
+```
+
+and the noise chain is internally consistent: 0.467 / √7 = 0.1765 ≈ 0.176. The 0.276/0.296
+are **single-seed** plug-in estimates. Diffing them against 0.629 is the project's own
+*never diff a single observation against an aggregate*, one level up: never diff two
+reliabilities without checking they are reliabilities *of the same thing*.
+
+**2. The stated blocker does not exist.** "The original script would settle it" implies it
+was lost. `scripts/35_winner.py` is tracked and has been since the initial commit, and
+lines 202–206 are the estimator verbatim:
+
+```python
+between  = float(np.std([r["surr_mean"] for r in rows], ddof=1))
+var_noise = within7 ** 2 / s_used
+rel = max(0.0, 1 - var_noise / (between ** 2))
+```
+
+`s_used` is 7. Nobody opened the file. *A blocker is a claim and decays like any other; this
+one was never checked and it gated the entry for six days.*
+
+**3. Independently recomputed from the raw folds**, 2026-09-28, replicating that estimator
+read-only over `runs/designs_reseed7` + seed 1, 20 designs × 7 seeds, fresh seed 23 excluded:
+
+| quantity | recomputed | recorded |
+|---|---|---|
+| reliability of a 7-seed mean | **0.660** | 0.629 |
+| implied single-seed reliability | **0.217** | 0.276 / 0.296 |
+| within-design sd | 0.226 | 0.467 |
+| between-design sd of 7-seed means | 0.147 | 0.290 |
+
+**The sds are ~2× smaller and that is expected, not a discrepancy:** they were computed
+under the pre-2026-09-22 surrogate anchors (2.5 / 7.0 / 9.5) and today's config is `top`
+(5 / 8 / 10). Reliability is a ratio and survives the rescale; an sd does not. So "does not
+reproduce" was true of the *standard deviations* and never of the *reliability*.
+
+---
+
+**What survives, narrower, and now quantified.** The recorded single-seed figures are
+inconsistent with the same variance components. Spearman–Brown, both directions:
+
+```
+r₁ = 0.296, k = 7  ⇒  r₇ = 0.746   (recorded r₇ = 0.629)
+r₇ = 0.629, k = 7  ⇒  r₁ = 0.195   (recorded r₁ = 0.296)
+```
+
+and the components imply r₁ = 0.053124 / (0.053124 + 0.467²) = **0.196** directly, matching
+the back-implication rather than the record. Recomputed from raw folds: **0.217**. So
+**0.296 is the outlier, adrift by roughly +0.08 to +0.10**, and the inconsistency is
+one-sided rather than a two-way puzzle.
+
+**And 0.276/0.296 have no provenance.** `grep -rn "0\.296\|0\.276" scripts/ src/` returns
+nothing: no code computes them. They were produced in prose during the 2026-09-22 audit.
+*A figure that lives in prose and never in a data file has no provenance* — the register's
+own §C1 lesson, and it was the number used to challenge a figure that a tracked script
+does compute.
+
+**Status:** 0.629 stands as the 7-seed-mean reliability and is correct for its one use,
+shrinking a 7-seed mean. Anything quoting 0.276/0.296 as *the* single-seed reliability
+should read **≈0.20** with the caveat that no script produces any of the three.
+
+**Live text:** `STATE.md`, `PLAN.md`, `docs/lecture/04-measurement-theory.md:470`,
+`docs/lecture/08-what-broke.md:454` (X5, which still says "does not reproduce and has never
+been corrected").
 
 ### D3 — `results/rubric_headroom.md` · **FLAGGED, does not ship**
 

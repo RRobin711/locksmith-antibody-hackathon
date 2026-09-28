@@ -206,8 +206,7 @@ ordering reversals between the midpoint and top band mappings. Confirm there are
 **A4 — Settle the Spearman–Brown inconsistency.** Reconcile the 7-seed-mean
 reliability of 0.629 against the single-seed figures of 0.276 and 0.296. Show
 that 0.629 reproduces as `1 − 0.176²/0.290²`, then show that the two remain
-mutually inconsistent, and quantify by how much. This is a real open item in the
-project, not a made-up exercise.
+mutually inconsistent, and quantify by how much. This was a real open item in the project, not a made-up exercise — **closed on 2026-09-28**, so do the work before reading [register §D2](../../results/retractions.md), which gives the answer: r₇ reproduces, the recorded single-seed 0.296 is the outlier at ≈0.20, and no script produces any of the competing figures.
 
 **A5 — Audit a claim you choose.** Pick any numeric claim in any `results/*.md`
 file. Find its provenance, its n, and its estimand. Decide whether it is stated

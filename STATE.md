@@ -193,7 +193,7 @@ flattering half of each; see [§C1 of the register](results/retractions.md).
 | **The decoy-patch control** — hotspots on the opposite face of PD-1 | a GPU run | still the only control that could falsify the conditioning result |
 | **Sequencing the 18 unconditioned backbones** | a GPU run | ~2–4 GPU-hours (~$1–2); separates range restriction from a dead `interaction_pae` |
 | **Shape-matching the patch null** to the real epitope's spread | nothing — it is cheap | the drawn patches are more compact (7.73 Å RMS vs the epitope's 10.08 Å), making the test anti-conservative by an unquantified amount |
-| **The reliability figure 0.629** | the original script | does not reproduce; plug-in gives 0.276 `midpoint` / 0.296 `top`. Flagged, not guessed at |
+| ~~**The reliability figure 0.629**~~ | ~~the original script~~ | **RESOLVED 2026-09-28** — it reproduces as a *7-seed-mean* reliability (1 − 0.176²/0.290² = 0.6317), and `scripts/35_winner.py:202-206` was tracked all along. See [register §D2](results/retractions.md) |
 
 ---
 
@@ -225,11 +225,14 @@ findings; the ones below are what survived verification and were not fixed the s
 6. **The withdrawn NetSolP triple** (§C5) is live in `docs/lecture/00-orientation.md` and
    `10-glossary.md`, including the retracted "the CLI default would have failed every
    design" clause that the shipped package now contradicts.
-7. **§D2 (`0.629`) may itself be wrong.** Four documents dated 2026-09-23 say the flag
-   resolves as an estimand mismatch (0.629 is the 7-seed-mean reliability; 0.276/0.296 are
-   single-seed) and that what survives is a narrower Spearman–Brown inconsistency. The
-   register still records it as simply not reproducing, and this file's blocked list
-   carries a work item that may already be done.
+7. ~~**§D2 (`0.629`) may itself be wrong.**~~ **DONE 2026-09-28 — and it was wrong twice.**
+   0.629 reproduces as a *7-seed-mean* reliability, and the flag's stated blocker ("the
+   original script would settle it") was void: `scripts/35_winner.py` has been tracked
+   since the initial commit and lines 202–206 are the estimator verbatim. Recomputed
+   read-only from the raw folds (20 × 7): **0.660**, against 0.629 recorded, the gap being
+   the 2026-09-22 surrogate re-anchoring. What survives is narrower and now one-sided:
+   the recorded single-seed **0.296** is the outlier (the components imply ≈**0.20**), and
+   no script anywhere produces 0.276 or 0.296. [Register §D2](results/retractions.md).
 8. **The GPU-blocked validity controls** (decoy-patch; sequencing the 18 unconditioned
    backbones) — unchanged, ~2–4 GPU-hours.
 9. **Then republish**: recreate the repo private, push, verify old SHAs 404, read the
