@@ -1,0 +1,82 @@
+# Continuous integration for the locksmith pipeline.
+#
+# WHY THIS EXISTS. Two defects shipped on the commits that introduced them, and both
+# were mechanically catchable:
+#   * `pytest` was declared under [project.optional-dependencies] rather than
+#     [dependency-groups]. `uv sync` installs groups by default and extras only on
+#     request, so the README's own `uv run pytest tests/` failed on a clean clone --
+#     the 34-test suite could not be run at all.
+#   * `uv.lock` went stale against `pyproject.toml` and nobody noticed, because
+#     nothing ever installed from the lock in a fresh environment.
+# A clean-clone install plus a test run catches both. That is the whole remit; this
+# workflow deliberately does not lint, type-check or score anything.
+#
+# WHY THE FULL DEPENDENCY SET. It is tempting to skip torch: the four modules the
+# tests import (config, metrics, score, select) pull in no heavy dependency at
+# module level. Measured 2026-09-28, that is misleading -- `anarcii` (IMGT numbering)
+# imports torch at CALL time, and `uv sync --no-install-package torch` turns
+# 34 passed into `4 failed, 30 passed` while saving only 1.6 GB of 7.1 GB, because
+# the 4.2 GB of nvidia CUDA libraries stay in the resolved graph regardless. A CI that
+# silently dropped those four tests would be this project's own "a check that cannot
+# fail is not evidence", applied to itself.
+#
+# WHY A CPU RUNNER IS FINE. The lock pins `torch 2.11.0+cu128` for Blackwell (sm_120).
+# That wheel installs and imports on a machine with no GPU; only kernel launches need
+# one, and no test launches a kernel. Verified 2026-09-28 by running the suite with
+# CUDA_VISIBLE_DEVICES="" -- 34 passed in 9.2 s.
+#
+# UNVERIFIED, AND STATED PLAINLY. The install is ~7.1 GB on disk plus ~2.5 GB of
+# downloaded wheels, against roughly 14 GB free on a GitHub-hosted runner. That fits
+# with little room, so the reclaim step below is insurance that has never been observed
+# to run out of space -- because this workflow has never run. There is no remote (see
+# STATE.md ss0). The first push is also this file's first real test.
+
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    name: clean-clone install + 34 invariant tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reclaim runner disk
+        # ~7.1 GB venv + ~2.5 GB wheel cache against ~14 GB free is too close to the
+        # edge to rely on. These two trees are the largest things preinstalled that
+        # this project can never need, and removing them takes a few seconds.
+        run: |
+          sudo rm -rf /usr/local/lib/android /usr/share/dotnet
+          df -h /
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: uv.lock is current against pyproject.toml
+        # Fails in under a second. `uv sync --locked` below would also catch a stale
+        # lock, but only after resolving and downloading, and the distinct error
+        # message here is what tells a reader to run `uv lock`.
+        run: uv lock --check
+
+      - name: Install from the lock, exactly
+        # --locked forbids updating the lock, so this asserts the committed lock is
+        # installable as committed. --group dev is redundant today (uv installs
+        # dependency-groups by default) and is written out so that a future change to
+        # default-groups cannot silently stop installing pytest again.
+        run: uv sync --locked --group dev
+
+      - name: pytest
+        run: uv run --no-sync pytest -q
