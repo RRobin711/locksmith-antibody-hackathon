@@ -485,11 +485,32 @@ mechanism built in response was itself blind to bold text.
 
 Two items, both decisions rather than tasks.
 
-**The GPU-blocked validity controls**, ~2–4 GPU-hours (~$1–2 on a rented sm_86 card). The
-**decoy-patch control** — hotspots on the opposite face of PD-1 — is now the *only*
-outstanding way the conditioning result could be shown to be wrong, since it survived
-shape-matching and got stronger. **Sequencing the 18 unconditioned backbones** separates
-range restriction from a dead `interaction_pae`.
+**The two validity controls — prepared this session, not run.** Doing the free part first
+changed the job. The estimate "~2–4 GPU-hours" had never been measured; the previous run
+timed 10 backbones at **161 s** mean (median 148, max 288), and the decoy control needs
+**RFdiffusion only** — targeting is measured on *backbones*, so no ProteinMPNN and no RF2
+for that arm. That is **0.81 GPU-hours, ≈$0.50** at the pilot's realised rate, about a third
+of the old estimate.
+
+The decoy patch is selected and verified on CPU: 26 residues, RMS spread **10.15 Å** against
+the epitope's 9.85 Å, **zero overlap**, **165.9°** around the centroid. Two free pre-run
+checks that could each have invalidated it both passed — the ordinal mapping is valid (113
+residues either side, and mixing the two numberings returns a believable zero), and **the 18
+existing conditioned backbones score 0.000 on the decoy** against 0.712 on the real epitope,
+so the faces separate behaviourally rather than only on paper. Limitation recorded: the
+nearest pair is 4.9 Å, so the patches share an edge.
+
+The outcome is pre-registered, including the row that is easy to forget: **both-low is
+inconclusive, not a pass** — a decoy face that simply cannot be docked proves nothing.
+
+The unconditioned arm's targeting baseline was computed locally and free: **0.500** (n = 18,
+sd 0.168) against the conditioned **0.712**, reproducing the pilot's 0.501. Only ProteinMPNN
+needs the rented card, because RFantibody pins `torch==2.3.*` with no PTX and cannot reach
+`sm_120` — the local card is too **new**, not too small. Folding and scoring run here for
+free.
+
+See [the run brief](../gpu-run-brief-2026-09-28.md), `scripts/95`, `scripts/96`,
+`pod/02_decoy.sh`.
 
 **Republish.** Recreate private, push, verify old SHAs return 404 **against the remote**
 (a fresh clone structurally cannot answer this), read the rendered docs, flip public. The
