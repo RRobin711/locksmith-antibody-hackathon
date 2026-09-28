@@ -163,14 +163,23 @@ flattering half of each; see [§C1 of the register](results/retractions.md).
   computed from files we generated; a confidently wrong pose scores exactly like a right
   one. This is stated in both shipped `methods_and_limitations.md` files rather than
   buried.
-- **The negative-control result cuts against the rubric, not for us.** HyHEL-10, raised
-  against hen egg lysozyme, clears **all five** §7.2 hard cutoffs **on `model_0`** — the
-  argmax of five diffusion draws, and what the tool's default hands a grader. **On the
-  median of those five it fails** (ipSAE 0.219 vs 0.609). Separately, and measured **on the
-  median**, four of the five gates reject **0 of 6** wrong antibodies, so §7.2 rests on
-  ipSAE alone. *Those two figures come from different estimators and are labelled here
-  because an unlabelled pair is how this project got the false-positive rates wrong — see*
-  [the register, §C1 and §C8](results/retractions.md). See
+- **The negative-control result cuts against the rubric, not for us — but it is narrower
+  than this entry used to claim.** HyHEL-10, raised against hen egg lysozyme, clears
+  **all five** §7.2 hard cutoffs **on `model_0`** (the argmax of five diffusion draws, and
+  what the tool's default hands a grader) **on the truncated 113-residue antigen**. Three
+  qualifiers, not one, and each was added only after the previous fix was assumed to have
+  finished the job: **on the median** of those five it fails (ipSAE 0.219 vs 0.609), and on
+  the **repaired 119-residue** antigen its best of five is **0.409** and it clears nothing.
+  The 113-mer was missing 6 of nivolumab's 14 epitope residues, so that panel's own positive
+  control failed and it was pre-registered **INCONCLUSIVE**; the flattering result and the
+  broken control had the same cause.
+  **What survives on both constructs:** four of the five gates reject **0 of 6** wrong
+  antibodies (measured on the median), so §7.2 rests on ipSAE alone. **What does not:**
+  "the rubric accepts an antibody that cannot bind" — it accepts one only on a construct
+  whose own positive control it also fails. *A rate is a property of every parameter it was
+  computed under — threshold (§C1), estimator (§C8), construct (§C9) — and each time this
+  project fixed one axis it assumed it had found them all; see*
+  [the register](results/retractions.md). See
   [the negative control](results/negative_control.md).
 - **Nothing here is wet-lab evidence.** No claim in the package says otherwise.
 

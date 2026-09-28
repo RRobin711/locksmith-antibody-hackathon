@@ -6,7 +6,7 @@ status: review
 
 # 02 — The Engineering Problem
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C5](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight) and **C5** (the NetSolP triple) were added 2026-09-28.
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C6](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight), **C5** (the NetSolP triple) and **C6** were added 2026-09-28 — and **C6 applies to this course's most-quoted finding**: "an anti-lysozyme antibody cleared all five cutoffs" holds on the **truncated 113-mer only**; on the repaired 119-mer it clears nothing.
 
 **What this chapter teaches.** How to build a system that turns a prose rubric into a number you can
 defend. We work through the five-stage pipeline and the contract each stage signs; then we spend the
@@ -401,7 +401,7 @@ structures whose answers were known.
 What Gate 0 did **not** buy is equally important and the project says so: the real negative control
 — a real antibody against an unrelated target, docked onto PD-1 — "costs eight folds and nobody ran
 it for a week". When finally run, HyHEL-10 (anti-lysozyme) cleared all five hard cutoffs on
-`model_0`. That story is in [the biology chapter's closing section](01-the-biological-problem.md) and
+`model_0`. *(⚠️ **113-mer only** — see [C6](CORRECTIONS.md). On the repaired 119-residue antigen HyHEL-10's best of five is **0.409** and it clears nothing; that panel's own positive control failed on the 113-mer, and it was pre-registered INCONCLUSIVE. What survives on both constructs: four of five gates reject 0 of 6.)* That story is in [the biology chapter's closing section](01-the-biological-problem.md) and
 [the critique](09-critique.md).
 
 ---

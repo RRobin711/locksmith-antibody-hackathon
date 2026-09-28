@@ -56,6 +56,9 @@ The same folds, collapsed to the **median over the five diffusion samples** — 
 
 1 of 6 irrelevant antibodies — **HyHEL-10** (anti-hen egg lysozyme) — clear **every one of the §7.2 hard cutoffs** on `model_0`, the model a default `diffusion_samples=1` run returns.
 
+> **On the 113-mer only.** Every row in this section uses the truncated construct named in §Design. The follow-up below repairs it to 119 residues, and there HyHEL-10's best of five is **0.409** — it clears nothing. Register [§C9](retractions.md). Quoting this paragraph without the construct is how the claim travelled to nine other files.
+
+
 - **HyHEL-10**, whose real target is hen egg lysozyme, docked onto PD-1: ipSAE **0.609**, ΔG **-12.4 kcal/mol**, **77** heavy-atom contacts, interface pLDDT **85.0**, CDR SASA **1084 Å²**. Its median across five samples is ipSAE 0.219 — it fails comfortably when you actually sample.
 
 **Read the mechanism, not just the number.** Boltz orders its diffusion outputs by its own confidence, so `model_0` is the maximum of five draws, and the maximum of five draws from a broad low distribution routinely lands above a threshold the distribution's centre is nowhere near. The gate is not broken. **Reading the gate off a single diffusion sample is.**

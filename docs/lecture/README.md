@@ -6,7 +6,7 @@ status: living
 
 # Designing a cancer drug on a laptop — a complete course
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C5](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight) and **C5** (the NetSolP triple) were added 2026-09-28.
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C6](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight), **C5** (the NetSolP triple) and **C6** were added 2026-09-28 — and **C6 applies to this course's most-quoted finding**: "an anti-lysozyme antibody cleared all five cutoffs" holds on the **truncated 113-mer only**; on the repaired 119-mer it clears nothing.
 
 A twelve-chapter lecture course built from the nine-day Locksmith Bio antibody
 design campaign (2026-09-14 → 2026-09-22). It teaches the whole thing from first
@@ -107,6 +107,7 @@ And five results that matter more than either score:
 
 1. Four of five hard cutoffs reject **0 of 6** known-wrong antibodies (on the **median of five** draws).
 2. **HyHEL-10, an anti-lysozyme antibody, cleared all five cutoffs as a PD-1 binder on `model_0`** — the argmax of five draws and the grader's default; on the **median** it fails (ipSAE 0.219 vs 0.609). Points 1 and 2 use different estimators, deliberately stated: a pass rate is a property of the estimator.
+   *(⚠️ **113-mer only** — see [C6](CORRECTIONS.md). On the repaired 119-residue antigen HyHEL-10's best of five is **0.409** and it clears nothing; that panel's own positive control failed on the 113-mer, and it was pre-registered INCONCLUSIVE. What survives on both constructs: four of five gates reject 0 of 6.)*
 3. Five of eight metrics are constants; the harness ranks on three; one of those is blind to the epitope.
 4. Median [DockQ](03-the-toolchain.md#41-dockq-213--two-flags-that-both-default-wrong) on genuinely novel antibody–antigen pairs: **0.291**, against **0.818** on the memorised reference.
 5. A mutation that abolishes binding experimentally (ΔΔG **+21.8 kcal/mol**) scores [ipSAE](03-the-toolchain.md#43-ipsae--interface-confidence-from-the-pae) **0.917** against the wild type's **0.903**.

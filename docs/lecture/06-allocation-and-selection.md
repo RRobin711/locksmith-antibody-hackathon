@@ -6,7 +6,7 @@ status: review
 
 # 06 — Allocation and Selection
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C5](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight) and **C5** (the NetSolP triple) were added 2026-09-28.
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C6](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight), **C5** (the NetSolP triple) and **C6** were added 2026-09-28 — and **C6 applies to this course's most-quoted finding**: "an anti-lysozyme antibody cleared all five cutoffs" holds on the **truncated 113-mer only**; on the repaired 119-mer it clears nothing.
 
 **What this chapter teaches.** You have a noisy instrument, a pool of candidates, and a budget. Where
 does the next measurement go — a new candidate, or another replicate of an old one? The answer is not
@@ -561,6 +561,7 @@ found on day 9 of 9.
 **The independent confirmation is devastating**, and it links straight back to
 [the negative-control panel](05-experiment-design.md): HyHEL-10, an anti-lysozyme antibody, cleared all
 five hard viability cutoffs on `model_0` — while its **median over five samples is ipSAE 0.219**.
+*(⚠️ **113-mer only** — see [C6](CORRECTIONS.md). On the repaired 119-residue antigen HyHEL-10's best of five is **0.409** and it clears nothing; that panel's own positive control failed on the 113-mer, and it was pre-registered INCONCLUSIVE. What survives on both constructs: four of five gates reject 0 of 6.)*
 *"The maximum of five draws from a broad low distribution routinely lands above a threshold the
 distribution's centre is nowhere near. The gate is not broken. Reading the gate off a single diffusion
 sample is."*

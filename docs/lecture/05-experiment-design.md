@@ -648,7 +648,9 @@ fields kills at least one of the nine withdrawals on its own.
    interface pLDDT at 64.0× see the epitope; ΔG at 0.9× and contacts at 1.2× are blind. A negative
    control run on day 9 showed an anti-lysozyme antibody sweeping all five viability gates **on
    `model_0`** (the argmax of five draws; on the median it fails, ipSAE 0.219 vs 0.609), and — **on
-   the median** — four of five gates rejecting **0 of 6** known-wrong inputs. The two figures use
+   the median** — four of five gates rejecting **0 of 6** known-wrong inputs.
+   *(⚠️ **113-mer only** — see [C6](CORRECTIONS.md). On the repaired 119-residue antigen HyHEL-10's best of five is **0.409** and it clears nothing; that panel's own positive control failed on the 113-mer, and it was pre-registered INCONCLUSIVE. What survives on both constructs: four of five gates reject 0 of 6.)*
+   The two figures use
    different estimators and neither is quotable without one.
 4. **Match the null's geometry, not just its size.** Contiguous patches 0.154 against the real epitope
    0.712 is a result; uniform draws at 0.231 = 26/113 is the denominator. And then check your own

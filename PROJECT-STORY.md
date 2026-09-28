@@ -95,14 +95,26 @@ so the score is now 94.0.
 This is the result I did not expect and the one worth an outsider's time.
 
 **HyHEL-10 is an antibody raised against hen egg lysozyme.** It has no business binding
-PD-1. Run through this pipeline against PD-1, it **clears all five of the hackathon's hard
-cutoffs on `model_0`** — and `model_0` is what the rubric gets by default, because the
-folding tool returns five candidate structures ranked by its own confidence and keeps one
-unless told otherwise. **On the median of those five it fails**, at 0.219 against a 0.60
-cutoff, versus 0.609 for the single draw. So the finding is not "this molecule passes"; it
-is *a rubric evaluated at its own default setting accepts an anti-lysozyme antibody as a
-PD-1 binder*, and that is the criticism, because it is what a grader following the
-instructions would actually compute.
+PD-1. Run through this pipeline against PD-1 **on the truncated 113-residue antigen**, it
+**clears all five of the hackathon's hard cutoffs on `model_0`** — and `model_0` is what
+the rubric gets by default, because the folding tool returns five candidate structures
+ranked by its own confidence and keeps one unless told otherwise. **On the median of those
+five it fails**, at 0.219 against a 0.60 cutoff, versus 0.609 for the single draw.
+
+**Both qualifiers are load-bearing, and the second one was added late.** The result is a
+property of the *estimator* — argmax versus median — **and** of the *input construct*. On
+the repaired **119-residue** antigen, HyHEL-10's best of five is **0.409** and it fails the
+gate outright. The 113-mer was missing 6 of nivolumab's 14 epitope residues, which is also
+why that panel's own positive control failed and why it was pre-registered **INCONCLUSIVE**.
+The flattering result and the broken control had the same cause: a truncated antigen. See
+[§C9 of the register](results/retractions.md) and
+[the negative control](results/negative_control.md).
+
+So the honest finding is narrower than the one this page used to lead with, and it is the
+one that survives on **both** constructs: *four of the five gates reject none of six
+deliberately wrong antibodies, so §7.2 rests on ipSAE alone.* What does **not** survive is
+"the rubric accepts an antibody that cannot bind" — it accepts one only on a construct
+whose own positive control it also fails.
 
 Separately, and measured on the **median** rather than the best draw: across six
 deliberately wrong antibodies, four of the five gates reject **none of them**.
@@ -110,13 +122,19 @@ deliberately wrong antibodies, four of the five gates reject **none of them**.
 The reason is mechanical and general: ΔG, contact count, interface confidence and buried
 surface area all measure *that a complex was built*, not that it is the right complex. Give
 a structure predictor two proteins and it will place them against each other. Only one of
-the five gates carries real information, and even that one puts a wrong antibody within
-0.006 of passing.
+the five gates carries real information.
+
+*This paragraph used to end "and even that one puts a wrong antibody within **0.006** of
+passing." That is cetuximab's median on the **113-mer** (0.594 against a 0.60 cutoff). On
+the repaired 119-mer its median is **0.052**, i.e. **0.548 under** the cutoff — about 90×
+further away. Corrected 2026-09-28; the margin was a property of the truncated construct,
+not of the gate.*
 
 Underneath it sits a second trap. The predictor returns five candidate structures **ranked
 by its own confidence**, and the default is to keep one. So the number everybody reports is
 an **argmax, not a sample**. HyHEL-10's *median* across five draws is 0.219 — it fails
-easily. Its best draw is 0.609 — it passes. Same molecule, same run.
+easily. Its best draw is 0.609 — it passes. Same molecule, same run. (Both figures are on
+the 113-mer; on the repaired 119-mer its best of five is **0.409** and it passes nothing.)
 → [The negative control](results/negative_control.md)
 
 ## Where we got to

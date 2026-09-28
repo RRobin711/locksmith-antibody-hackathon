@@ -6,7 +6,7 @@ status: review
 
 # 01 — The Biological Problem
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C5](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight) and **C5** (the NetSolP triple) were added 2026-09-28.
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C6](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight), **C5** (the NetSolP triple) and **C6** were added 2026-09-28 — and **C6 applies to this course's most-quoted finding**: "an anti-lysozyme antibody cleared all five cutoffs" holds on the **truncated 113-mer only**; on the repaired 119-mer it clears nothing.
 
 **What this chapter teaches.** Why anyone would want to design an anti-PD-1 antibody at all, and
 what "designing" one has to mean if the result is to be a drug rather than a number. We start from
@@ -749,7 +749,7 @@ broken. Reading the gate off a single diffusion sample is.** (See
 And the generalisation is worse than the single case. **Four of the five hard cutoffs — ΔG,
 contacts, interface pLDDT, CDR SASA — reject 0 of 6 known-wrong antibodies.** They are inert.
 Practically, the viability decision rests on **ipSAE alone**, and even there cetuximab's median
-(0.594) sits 0.006 under the cutoff. The panel's own verdict is **INCONCLUSIVE**, because one of two
+(0.594) sits 0.006 under the cutoff. *(⚠️ **0.006 is the 113-mer figure** — see [C6](CORRECTIONS.md). On the repaired 119-mer cetuximab's median is **0.052**, i.e. **0.548 under** the cutoff, ~90× further away.)* The panel's own verdict is **INCONCLUSIVE**, because one of two
 positive controls (nivolumab) failed — for the construct-truncation reason in §3.4, not because the
 pipeline is broken.
 
@@ -820,7 +820,9 @@ score is a point on it."*
 6. **A high score from a self-referential harness is not evidence of binding.** An anti-lysozyme
    antibody cleared all five hard cutoffs as a PD-1 binder **on `model_0`** — the argmax of five
    diffusion draws, and what `diffusion_samples=1` hands a grader by default; on the median of
-   five it fails (ipSAE 0.219 vs 0.609). And a mutant that experimentally
+   five it fails (ipSAE 0.219 vs 0.609).
+   *(⚠️ **113-mer only** — see [C6](CORRECTIONS.md). On the repaired 119-residue antigen HyHEL-10's best of five is **0.409** and it clears nothing; that panel's own positive control failed on the 113-mer, and it was pre-registered INCONCLUSIVE. What survives on both constructs: four of five gates reject 0 of 6.)*
+   And a mutant that experimentally
    abolishes binding (ΔΔG +21.8 kcal/mol) scored *above* the wild type. Knowing that, and shipping
    it in the submission documents, is the most valuable thing in this project.
 

@@ -462,4 +462,83 @@ one dimension.*
 
 ---
 
+## C6 — "an anti-lysozyme antibody cleared all five cutoffs" is true only on the truncated antigen
+
+**Raised 2026-09-28. Withdrawn project-wide as [register §C9](../../results/retractions.md)
+on 2026-09-26; the course never inherited it.** Affects **nine** places in this course, listed
+below.
+
+### The claim
+
+HyHEL-10, an antibody raised against hen egg lysozyme, docked onto PD-1 and **cleared all
+five §7.2 hard cutoffs** — ipSAE 0.609, ΔG −12.4, 77 contacts, interface pLDDT 85.0, CDR
+SASA 1084. It is the course's single most-quoted finding and the front page's rhetorical
+peak.
+
+### What is wrong with it
+
+It is a property of **three** parameters, and the course names only one.
+
+| parameter | course says | also true |
+|---|---|---|
+| estimator | ✅ `model_0`, the argmax of five draws | on the **median** it fails, 0.219 |
+| **input construct** | ❌ not named | on the **113-mer** only |
+| threshold | n/a here | see [C1's sibling, register §C1](../../results/retractions.md) |
+
+On the **repaired 119-residue** antigen HyHEL-10's best of five is **0.409** and it clears
+nothing:
+
+| construct | HyHEL-10 median | best of 5 | gates cleared | positive control |
+|---|---|---|---|---|
+| 113-mer (used first) | 0.219 | **0.609** | **5/5** | **FAILED** — nivolumab 0.017 |
+| 119-mer (repaired) | 0.228 | **0.409** | **4/5**, fails ipSAE | 2/2 clear |
+
+The 113-mer was missing **6 of nivolumab's 14 epitope residues**. That is why the panel's own
+positive control failed, and why it was pre-registered **INCONCLUSIVE** —
+`results/negative_control.md` says in terms that the negative arm *"must not be read as
+evidence that the gate discriminates."* It was read that way anyway. **The flattering result
+and the broken control had the same cause: a truncated antigen.**
+
+### The cetuximab margin is wrong by about 90×
+
+Three places say cetuximab's median "sits **0.006** under the cutoff" (0.594 against 0.60).
+That is the 113-mer. On the repaired construct cetuximab's median is **0.052** — **0.548
+under**. This one is not merely unqualified, it is superseded, and it is built to be
+memorable, which is exactly why it travelled.
+
+### What survives, and it is still strong
+
+**Four of the five gates reject 0 of 6 known-wrong antibodies on *both* constructs.** §7.2
+rests on ipSAE alone. That claim never depended on the truncation. On the repaired construct
+the control resolves cleanly: **2/2 positives clear, 6/6 negatives fail, separated by 0.184
+ipSAE**.
+
+**What does not survive:** *"the rubric accepts an antibody that cannot bind."* It accepts
+one only on a construct whose own positive control it also fails.
+
+### Where it is live in this course
+
+Indexed rather than rewritten, per this file's standing policy — these are prose quoting a
+number, not arithmetic a reader reruns (see [C3](#c3--challenge-1s-composite-is-940-not-960)
+for where that boundary falls). Each site now carries an inline pointer here.
+
+| file | line | claim |
+|---|---|---|
+| `README.md` | 109 | "cleared all five cutoffs as a PD-1 binder" |
+| `00-orientation.md` | 296 | same |
+| `01-the-biological-problem.md` | 821 | "cleared all five hard cutoffs as a PD-1 binder" |
+| `01-the-biological-problem.md` | 752 | cetuximab "0.006 under the cutoff" |
+| `02-the-engineering-problem.md` | 403 | "cleared all five hard cutoffs on `model_0`" |
+| `05-experiment-design.md` | 649 | "sweeping all five viability gates" |
+| `06-allocation-and-selection.md` | 562 | "cleared all five hard viability cutoffs" |
+| `07-the-campaign.md` | 608 | "cleared all five §7.2 hard cutoffs" |
+| `07-the-campaign.md` | 614 | cetuximab "0.006 under the cutoff" |
+
+*Transferable, and stated three times in three variables now: a rate is a property of every
+parameter it was computed under — threshold, estimator, input construct. Fixing one axis is
+not evidence you have found them all, and each time this project fixed one it stopped
+looking.*
+
+---
+
 *No further corrections at this time.*

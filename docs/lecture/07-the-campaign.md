@@ -6,7 +6,7 @@ status: review
 
 # 07 — The Campaign: nine days, 1,266 folds, in order
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C5](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight) and **C5** (the NetSolP triple) were added 2026-09-28.
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C6](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight), **C5** (the NetSolP triple) and **C6** were added 2026-09-28 — and **C6 applies to this course's most-quoted finding**: "an anti-lysozyme antibody cleared all five cutoffs" holds on the **truncated 113-mer only**; on the repaired 119-mer it clears nothing.
 
 ## What this chapter teaches
 
@@ -607,11 +607,12 @@ shared and only the diffusion head reruns.
 **The negative control — eight folds, on day 9 of 9.** One variable: identical PD-1, identical
 cached MSA, only the antibody changes. **HyHEL-10, raised against hen egg lysozyme, cleared all
 five §7.2 hard cutoffs on `model_0`** — ipSAE 0.609, ΔG −12.4, 77 contacts, interface pLDDT 85.0,
+*(⚠️ **113-mer only** — see [C6](CORRECTIONS.md). On the repaired 119-residue antigen HyHEL-10's best of five is **0.409** and it clears nothing; that panel's own positive control failed on the 113-mer, and it was pre-registered INCONCLUSIVE. What survives on both constructs: four of five gates reject 0 of 6.)*
 CDR SASA 1084 — because `model_0` is the maximum of five draws Boltz ranked by its own confidence;
 its median is **0.219**. The general result: **four of five gates reject 0 of 6 negatives**,
 because ΔG, contacts, interface pLDDT and CDR SASA measure *that a complex was built*, not that it
 is the right one. §7.2 rests on ipSAE alone, and even there cetuximab's median (0.594) sits
-**0.006** under the cutoff.
+**0.006** under the cutoff. *(⚠️ **0.006 is the 113-mer figure** — see [C6](CORRECTIONS.md). On the repaired 119-mer cetuximab's median is **0.052**, i.e. **0.548 under** the cutoff, ~90× further away.)*
 
 The pre-registered Rule 3 fired and was not retracted: **nivolumab**, a licensed anti-PD-1
 antibody used as the positive arm, scored ipSAE **0.017**, making the experiment **INCONCLUSIVE**
@@ -678,7 +679,7 @@ residues uniformly scores 0.231 — just 26/113 of the chain, the denominator ra
 | inherited thing | entered | examined | consequence when examined |
 |---|---|---|---|
 | `recycling_steps=3` | day 3, `fold/boltz.py:80`, for Challenge 1 | **day 9** | published `0/30` → `1/30`; ipSAE 0.263 → 0.864 |
-| `diffusion_samples=1` | day 3, Boltz's own default | **day 9** | every pose number was an argmax; Ch1 94.0–96.0, Ch2 91.2–96.0; an anti-lysozyme antibody sweeps all five gates |
+| `diffusion_samples=1` | day 3, Boltz's own default | **day 9** | every pose number was an argmax; Ch1 94.0–96.0, Ch2 91.2–96.0; an anti-lysozyme antibody sweeps all five gates (**113-mer only — [C6](CORRECTIONS.md)**) |
 | antigen-only MSA | day 3, correct for redesigning a known antibody | **never** | `STATE.md:350` lists it as step 2 of the shortest path forward; still open |
 | Fv vs Fab | day 4 — G1c concluded "Fab-only" (0.607 vs 0.965); Ch2 folded as Fv anyway | day 9, positive control | exonerated (Fab 0.776 / Fv 0.842) — but the control ran at recycling 3 and was blind to the real problem |
 | NetSolP on Fab | day 3, unrecorded | **day 7** | inverts which chain limits `min(VH,VL)`; 0/239 Good → 168/239 VH-in-Good |
