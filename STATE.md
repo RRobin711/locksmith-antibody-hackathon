@@ -192,7 +192,7 @@ flattering half of each; see [§C1 of the register](results/retractions.md).
 |---|---|---|
 | **The decoy-patch control** — hotspots on the opposite face of PD-1 | a GPU run | still the only control that could falsify the conditioning result |
 | **Sequencing the 18 unconditioned backbones** | a GPU run | ~2–4 GPU-hours (~$1–2); separates range restriction from a dead `interaction_pae` |
-| **Shape-matching the patch null** to the real epitope's spread | nothing — it is cheap | the drawn patches are more compact (7.73 Å RMS vs the epitope's 10.08 Å), making the test anti-conservative by an unquantified amount |
+| ~~**Shape-matching the patch null**~~ | ~~nothing — it is cheap~~ | **DONE 2026-09-28** (`scripts/94_shape_matched_patch_null.py`). Worth **+0.019** on the null mean (0.153 → 0.172) against a real 0.712; conditioning result goes **17/18 → 18/18**. [Register §D4](results/retractions.md) |
 | ~~**The reliability figure 0.629**~~ | ~~the original script~~ | **RESOLVED 2026-09-28** — it reproduces as a *7-seed-mean* reliability (1 − 0.176²/0.290² = 0.6317), and `scripts/35_winner.py:202-206` was tracked all along. See [register §D2](results/retractions.md) |
 
 ---
