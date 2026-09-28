@@ -1,4 +1,4 @@
-# Project state — 2026-09-26
+# Project state — 2026-09-28
 
 **For a cold reader.** This is the single place to find out where the project is: what is
 **verified**, what is **taken on trust**, what is **blocked**, and what is left. Every
@@ -56,8 +56,8 @@ no cached score, and re-derives every metric from the three files per design. Ti
 inside the tree are within seconds of each other, which is the healthy signature; a day's
 gap is the orphan tell that caught a stale document here once.
 
-Working tree is **clean**, 34/34 tests pass, and the 2026-09-25 session is committed
-(7 commits). *Commit SHAs are deliberately not quoted here: the history was rewritten on 2026-09-26 to scrub a copyrighted PDF and third-party emails, which re-hashed every commit. An earlier version of this line cited `4241bb6..d5cf334`, neither of which resolves.*
+Working tree is **clean**, **42/42** tests pass, and the 2026-09-28 session is committed
+(9 commits). *Commit SHAs are deliberately not quoted here: the history was rewritten on 2026-09-26 to scrub a copyrighted PDF and third-party emails, which re-hashed every commit. An earlier version of this line cited `4241bb6..d5cf334`, neither of which resolves.*
 
 ---
 
@@ -154,7 +154,7 @@ flattering half of each; see [§C1 of the register](results/retractions.md).
   any structural problem or failed cutoff).
 - 258/258 retrieved pod artefacts sha256-match the server —
   [the checksum pass](results/checksum_pass_2026-09-22.md).
-- 34 invariant tests, several mutation-verified.
+- 42 invariant tests, most mutation-verified.
 - The harness scores pembrolizumab itself correctly (the standing canary).
 
 **Taken on trust.**
@@ -178,7 +178,8 @@ flattering half of each; see [§C1 of the register](results/retractions.md).
 
 ## 5. Test suite and repository
 
-- `tests/test_invariants.py` — **34 tests**, all passing (`uv run pytest`, ~2.4 s).
+- `tests/test_invariants.py` — **42 tests**, all passing (`uv run pytest`, ~7 s), and
+  `.github/workflows/ci.yml` runs them on a clean clone.
 - Git: `master`, no remote, linear history, one commit per unit of work.
 - `pytest` and `python-pptx` are now declared in `pyproject.toml`. Both had been
   undeclared; the suite could not be run at all, and `scripts/57` crashed at the deck step
@@ -199,44 +200,57 @@ flattering half of each; see [§C1 of the register](results/retractions.md).
 
 ## 7. What is left
 
-Ordered by what unblocks what. Five adversarial agent reviews on 2026-09-26 produced ~40
-findings; the ones below are what survived verification and were not fixed the same day.
+**Items 1–7 were cleared on 2026-09-28** (9 commits); what they turned into is recorded in
+[that session's doc](docs/sessions/2026-09-28-clearing-the-backlog-and-three-guards-that-could-not-see.md).
+Two remain and **both need a decision rather than an hour**:
 
-1. **No CI.** The sharpest structural criticism available of a repo whose argument is
-   "mechanise the lesson rather than writing it down". A ten-line GitHub Action running
-   `uv sync --locked --group dev && uv run pytest` would have caught both the undeclared
-   `pytest` and the stale `uv.lock` on the commits that introduced them.
-2. **`scripts/00_doctor.py` cannot fail.** Every external tool (`DockQ`, `prodigy`,
-   `ipsae.py`, `anarcii`, `freesasa`) is `required=False`, so a machine missing all four
-   prints "All required checks passed." Meanwhile "running inside project venv" *is*
-   required, so renaming the clone directory fails the preflight for the one reason that
-   does not matter. This is the project's own "a check that cannot fail is not evidence",
-   applied to its own preflight.
-3. **~18 `96.0` derivations remain in the lecture body**, including chapter 02's worked
-   composite arithmetic, which now sums wrong (it computes `binding = 10.000` where the
-   package says 9.667). Indexed under [C3](docs/lecture/CORRECTIONS.md) rather than
-   rewritten, per the no-retro-edit policy — but the worked derivation is a teaching
-   artefact and arguably should be recomputed.
-4. **`docs/sessions/README.md` is 5,065 words** under a first line promising "one line per
-   working session", with single table cells over 500 words. It fails its own stated
-   purpose and renders badly on GitHub.
-5. **`docs/challenge2_regeneration_plan.md`** still carries the retracted `0% FP / 25% FN`
-   pair (register §C1) and calls the 40-crystal panel's association "validated".
-6. **The withdrawn NetSolP triple** (§C5) is live in `docs/lecture/00-orientation.md` and
-   `10-glossary.md`, including the retracted "the CLI default would have failed every
-   design" clause that the shipped package now contradicts.
-7. ~~**§D2 (`0.629`) may itself be wrong.**~~ **DONE 2026-09-28 — and it was wrong twice.**
-   0.629 reproduces as a *7-seed-mean* reliability, and the flag's stated blocker ("the
-   original script would settle it") was void: `scripts/35_winner.py` has been tracked
-   since the initial commit and lines 202–206 are the estimator verbatim. Recomputed
-   read-only from the raw folds (20 × 7): **0.660**, against 0.629 recorded, the gap being
-   the 2026-09-22 surrogate re-anchoring. What survives is narrower and now one-sided:
-   the recorded single-seed **0.296** is the outlier (the components imply ≈**0.20**), and
-   no script anywhere produces 0.276 or 0.296. [Register §D2](results/retractions.md).
-8. **The GPU-blocked validity controls** (decoy-patch; sequencing the 18 unconditioned
-   backbones) — unchanged, ~2–4 GPU-hours.
-9. **Then republish**: recreate the repo private, push, verify old SHAs 404, read the
-   rendered README/PROJECT-STORY/retractions, and flip public.
+1. **The GPU-blocked validity controls**, ~2–4 GPU-hours (~$1–2 on a rented sm_86 card).
+   - **The decoy-patch control** — hotspots on the opposite face of PD-1. Still the only
+     experiment that could *falsify* the conditioning result rather than survive it. Note
+     that result got stronger on 2026-09-28, not weaker: under a size- **and**
+     shape-matched null it is 18/18 rather than 17/18 ([§D4](results/retractions.md)), so
+     the decoy control is now the only outstanding way to be wrong about it.
+   - **Sequencing the 18 unconditioned backbones** — separates range restriction from a
+     dead `interaction_pae`.
+2. **Republish.** Recreate the repo private, push, verify old SHAs 404 **against the
+   remote** (a fresh clone structurally cannot answer this — see §0), read the rendered
+   README / PROJECT-STORY / retractions, then flip public. `.github/workflows/ci.yml` now
+   exists and its first push is also its first real test.
+
+### Cleared 2026-09-28
+
+1. ~~No CI.~~ `.github/workflows/ci.yml` — clean-clone install plus the suite, with
+   `uv lock --check` first. Mutation-tested: a stale lock and `pytest`-as-an-extra each
+   turn it red. Full torch is required (anarcii imports it at call time), CPU-only is fine.
+2. ~~`00_doctor.py` cannot fail.~~ Now `--scope {fold,validate,all}` with the required set
+   declared per scope. The set was **backwards**: validation needs the five tools and no
+   GPU, the preflight demanded a GPU and none of the tools, and never checked NetSolP at
+   all. Five tests, all mutation-verified.
+3. ~~~18 stale `96.0` derivations.~~ §3.3's worked arithmetic **recomputed** (it printed
+   `dockq 0.800 | good | 10.0`, i.e. the rounding defect presented as correct working);
+   everything else indexed. [C3](docs/lecture/CORRECTIONS.md)'s index went from **4 rows to
+   32**, grouped by kind, and ships the command that regenerates it.
+4. ~~The 5,448-word session index.~~ Now 926 words, one line per session. Checked first
+   that the long cells were derivative: 93.4% of their distinctive tokens already appear in
+   the doc each row links to. Also fixed **66 broken cross-references** — a heading with an
+   em dash slugs to a *double* hyphen on GitHub and every link used one; they resolved in
+   Obsidian, so the whole set was broken only in the renderer we publish to.
+5. ~~The regeneration plan's retracted rates.~~ Corrected per threshold, "validated" →
+   "characterised", stale 96.0 → 94.0, and the document marked **superseded**: the depth
+   sweep already answered its central question with "do not spend the money".
+6. ~~The withdrawn NetSolP triple.~~ Indexed as course correction
+   [C5](docs/lecture/CORRECTIONS.md) with the correct per-chain table; banner updated
+   across 11 files.
+7. ~~§D2 (`0.629`).~~ **The flag was wrong and so was its blocker.** It reproduces as a
+   *7-seed-mean* reliability (1 − 0.176²/0.290² = 0.6317), and `scripts/35_winner.py` —
+   "the original script" said to be needed — has been tracked since the initial commit with
+   the estimator at lines 202–206. Recomputed from raw folds: 0.660. What survives is
+   narrower: the recorded single-seed **0.296** is the outlier (components imply ≈0.20),
+   and **no script produces 0.276 or 0.296** — they were computed in prose.
+
+Also cleared, from §6 rather than this list: **shape-matching the patch null**
+(`scripts/94_shape_matched_patch_null.py`), worth **+0.019** on the null mean against a
+real 0.712, taking the conditioning result 17/18 → **18/18**.
 
 **Done 2026-09-26 and off this list:** the remote leak; the shipped §9.2 section describing
 the pre-fix molecule; the novelty table (now computed); the convention triple
