@@ -290,8 +290,13 @@ def analyse(bb_dir: Path) -> int:
         "_pn", Path(__file__).resolve().parent / "70_epitope_patch_null.py")
     pn = importlib.util.module_from_spec(spec); spec.loader.exec_module(pn)
     meta = json.loads(OUT_JSON.read_text())
+    # Accept BOTH naming schemes. The pod ran one invocation per backbone, giving
+    # `bb_7_0.pdb`; the local CPU run uses a single invocation with num_designs=K, giving
+    # `dec_0.pdb` ... `dec_17.pdb`. A `*_0.pdb` glob silently matches ONE of eighteen --
+    # it would have reported n=1 and looked like a working analysis.
+    cands = sorted(set(bb_dir.glob("*.pdb")) - set(bb_dir.glob("*_traj*.pdb")))
     rows = []
-    for p in sorted(bb_dir.glob("*_0.pdb")):
+    for p in cands:
         chains, order, loop_abs = pn.parse(p)
         if not {"H", "L", "T"} <= set(chains) or not loop_abs:
             continue
