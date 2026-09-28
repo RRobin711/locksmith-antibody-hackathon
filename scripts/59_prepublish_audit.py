@@ -78,6 +78,41 @@ def _nl(pattern_words: str) -> str:
     return r"\s+".join(re.escape(w) for w in pattern_words.split())
 
 
+# ...but newline-tolerance is NOT enough, found 2026-09-28 while sweeping for a withdrawn
+# claim. `\s+` bridges a wrapped line and nothing else, so INLINE MARKUP inside the phrase
+# defeats it. Measured against this module's own `_nl("0% false-positive rate")`:
+#
+#     with a 0% false-positive rate      -> FOUND
+#     with a 0%\nfalse-positive rate     -> FOUND   (the bug this file was built for)
+#     with a **0%** false-positive rate  -> MISSED
+#     with a *0% false-positive* rate    -> MISSED
+#     with a `0%` false-positive rate    -> MISSED
+#
+# Only the case where the emphasis brackets the WHOLE phrase survives, because then the
+# markers fall outside the matched span. In a repo whose prose bolds almost every number,
+# that is most of the corpus -- and the first sweep run with this weakness reported **0**
+# matches where a corrected search finds 17. A banned-text auditor that returns zero looks
+# exactly like a clean repo.
+#
+# NOTE: the worked examples above contain the literal phrase, so running this auditor with
+# `--banned-text '0% false-positive rate'` flags THIS FILE. That is correct behaviour, not a
+# bug -- the phrase really is in the repo -- and it is the third time in one session that a
+# guard matched its own description of the defect it exists to catch (see also
+# `test_doctor_venv_check_is_functional_not_a_substring_of_the_path`, which had to be moved
+# from grep to AST for the same reason). Worth knowing before reading the finding as a leak.
+#
+# The fix is to search the text a READER sees as well as the bytes on disk. `_` is left
+# alone deliberately: in this codebase it is far more often an identifier (`snake_case`,
+# `runs/calibration/scores.json`) than an emphasis marker, and stripping it would both
+# invent false positives and break patterns that legitimately contain it.
+_MARKUP = re.compile(r"[*`~]+")
+
+
+def _strip_markup(text: str) -> str:
+    """Drop inline emphasis so a phrase is found however it was typeset."""
+    return _MARKUP.sub("", text)
+
+
 SECRET_PATTERNS: dict[str, str] = {
     "AWS access key":      r"AKIA[0-9A-Z]{16}|ASIA[0-9A-Z]{16}",
     "GitHub token":        r"gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}",
@@ -134,11 +169,20 @@ def check_blob_contents(extra_patterns: dict[str, str]) -> list[str]:
     compiled = {k: re.compile(v, re.I) for k, v in pats.items()}
     out, seen = [], set()
     for sha, text in _all_blob_texts():
+        # Both forms: the raw bytes, and the text with inline emphasis removed. A phrase
+        # typeset as `**0%** false-positive` exists only in the second.
+        forms = ((text, ""), (_strip_markup(text), " [markup-stripped]"))
         for name, rx in compiled.items():
-            m = rx.search(text)
-            if m and (name, m.group(0)[:40]) not in seen:
-                seen.add((name, m.group(0)[:40]))
-                out.append(f"{name} in blob {sha[:10]}: {m.group(0)[:60]!r}")
+            for body, note in forms:
+                m = rx.search(body)
+                if not m:
+                    continue
+                key = (name, m.group(0)[:40])
+                if key in seen:
+                    break
+                seen.add(key)
+                out.append(f"{name} in blob {sha[:10]}{note}: {m.group(0)[:60]!r}")
+                break
     return out
 
 

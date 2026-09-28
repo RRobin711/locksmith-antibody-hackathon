@@ -3,6 +3,20 @@
 **2026-09-23. Written to be read before anything starts.** Nothing in this document has
 been run.
 
+> ⚠️ **Superseded 2026-09-28, and its central question has since been answered — "no".**
+> This plan exists to decide whether the thin Challenge 2 pool is thin because the
+> *backbones* are poor or because the *selection* was, and it argues for spending money to
+> find out. [The depth sweep](../results/depth_sweep.md) answered it without a new campaign:
+> across 144 folds over 18 backbones × 8 constrained sequences, viability arrives at a
+> constant **~8% per sequence** with no backbone heterogeneity (χ² = 22.91 on 17 df,
+> p = 0.152; beta-binomial LRT p = 0.202), and eight times the sequences produced **nothing
+> better than the first pass found** (best 0.859 at depth 1, 0.854 at depth 8). More
+> backbones and more sequences are the same experiment at different prices, so **renting a
+> GPU is not justified** — reaching past ~0.86 needs a different generator.
+>
+> It is kept, not deleted, because the reasoning is the record of a decision. Two numbers
+> inside it were also wrong independently of that, and are corrected in place below.
+
 ## Why re-generate at all
 
 The existing pool yields **1 viable design in 30** under a correct fold, and that one
@@ -20,22 +34,32 @@ its poses sat **24.9 Å** from the designed docks. **The pilot screened on noise
 survived did so for reasons unrelated to the objective.
 
 Boltz ipSAE under a correct alignment is a different instrument, and it is the one the
-40-crystal panel validated this week:
+40-crystal panel **characterised** this week (*"validated" until 2026-09-28; a measured
+association is not a validation*):
 
 | property | measured | where |
 |---|---|---|
 | tracks pose accuracy | Spearman **ρ = +0.702** vs DockQ, n=40 | [calibration](../results/calibration.md) |
-| accepts a wrong pose | **0%** false positive (0 of 4 incorrect poses passed) | [calibration](../results/calibration.md) |
-| rejects a right pose | **25%** false negative (4 of 16 good poses failed) | [calibration](../results/calibration.md) |
+| accepts a wrong pose / rejects a right pose | **threshold-dependent, and the pair below was withdrawn** — see note | [calibration](../results/calibration.md) |
 | separates cognate from non-cognate | **0.184** ipSAE, positives vs negatives | [negative_control](../results/negative_control.md) |
 
+> **Corrected 2026-09-28.** This row originally read *"**0%** false positive (0 of 4
+> incorrect poses passed)"* beside *"**25%** false negative (4 of 16 good poses failed)"*.
+> Those are two different DockQ thresholds quoted as though they shared one, and the pair
+> **is reachable at neither** — recomputed from `runs/calibration/scores.json`, n=40, for
+> the ipSAE ≥ 0.60 gate: **0% FP / 58.3% FN** at Acceptable+ (≥ 0.23), **12.5% FP / 25.0%
+> FN** at Medium+ (≥ 0.49). The 0% also rests on **4 negatives**, a Clopper–Pearson 95%
+> upper bound of **0.602**, i.e. uninformative. Withdrawn as
+> [§C1 of the register](../results/retractions.md). *An error rate is a property of a
+> threshold.*
+
 **This would be the first campaign in which the selection filter and the final score are
-the same measured quantity, on an instrument with a published error rate on real
-crystals.** That is what the panel licenses, and it is the entire justification for
-spending money again. A 25% false-negative rate is the price: we will discard roughly one
-good backbone in four. That is acceptable when generation is cheap and evaluation is the
-bottleneck, and it is stated here so the yield is not later mistaken for the backbones'
-quality.
+the same measured quantity, on an instrument with a measured association to pose accuracy
+on real crystals.** That is what the panel licenses — and note "association", not
+"validated": ρ = +0.702 is a real correlation on n=40, not a validation, and the error
+rates it would be spent on are the withdrawn pair above. The false-negative price cannot be
+stated as "one good backbone in four" without naming the threshold that makes it 25%; at
+Acceptable+ the same gate discards **58.3%**.
 
 ## Budget, from measured rates only
 
@@ -168,7 +192,7 @@ disclosure.
 
 ## Order of operations
 
-**Package the current submission first.** Challenge 1 at 96.0 and Challenge 2 at whatever
+**Package the current submission first.** Challenge 1 at 94.0 (96.0 when this was written; see [C3](lecture/CORRECTIONS.md)) and Challenge 2 at whatever
 the §9.2 decision lands on, validated from packaged files alone, zipped, on disk. Nothing
 above starts until something shippable exists — the pilot's artefacts were left on a
 stopped pod once already.

@@ -862,3 +862,40 @@ def test_the_session_index_is_one_line_per_session():
         f"session and the teaching belongs in the per-session doc. Offender: "
         f"{worst.split('|')[1].strip()[:60]}"
     )
+
+
+def test_prepublish_auditor_sees_through_markdown_emphasis():
+    """`_nl()` makes a pattern newline-tolerant, which is what the auditor was built for.
+    It is not enough. `\\s+` bridges a wrapped line and nothing else, so inline markup
+    inside the phrase defeats it: measured 2026-09-28, `**0%** false-positive rate`,
+    `*0% false-positive* rate` and `` `0%` false-positive rate `` were all MISSED, while
+    only emphasis bracketing the whole phrase survived (the markers fall outside the span).
+
+    The sweep that found this returned **0** matches where a corrected search finds 17 --
+    and a banned-text auditor returning zero looks exactly like a clean repo."""
+    import importlib.util
+    import re as _re
+    root = Path(__file__).resolve().parents[1]
+    spec = importlib.util.spec_from_file_location(
+        "_aud", root / "scripts" / "59_prepublish_audit.py")
+    aud = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(aud)
+
+    rx = _re.compile(aud._nl("0% false-positive rate"), _re.I)
+
+    def finds(s: str) -> bool:
+        return bool(rx.search(s)) or bool(rx.search(aud._strip_markup(s)))
+
+    for variant in ["a 0% false-positive rate",
+                    "a 0%\nfalse-positive rate",
+                    "a **0%** false-positive rate",
+                    "a *0% false-positive* rate",
+                    "a `0%` false-positive rate",
+                    "a **0%** false-positive\nrate"]:
+        assert finds(variant), f"auditor blind to: {variant!r}"
+
+    assert not finds("a 12% true-positive rate"), "matched an unrelated phrase"
+    # `_` is deliberately NOT stripped: here it is an identifier far more often than
+    # emphasis, and stripping it would invent false positives.
+    assert aud._strip_markup("runs/calibration/scores_v2.json") == \
+        "runs/calibration/scores_v2.json"
