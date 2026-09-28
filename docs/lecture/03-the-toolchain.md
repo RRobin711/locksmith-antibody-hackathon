@@ -728,6 +728,8 @@ thinner than measured. Untested.
 
 ### 6.6 The preflight that encodes all of it
 
+> ⚠️ **Corrected 2026-09-28 — see [C4](CORRECTIONS.md#c4--66s-preflight-did-not-require-the-tools-it-lists).** The list below reads as one required set. In the code everything from `DockQ` onwards was `required=False`, so a machine missing all five external tools printed *All required checks passed*; the venv check, which **was** required, tested a substring of the path and failed a correct checkout in a renamed directory; and NetSolP was not checked at all. The preflight now takes `--scope {fold,validate,all}`.
+
 `scripts/00_doctor.py` exits 0 only if every required check passes: Python is 3.12.x; running inside
 the project venv; `torch >= 2.7` built against cu128+; `cuda.is_available()`; **`sm_120` in
 `get_arch_list()`**; **PTX fallback present** (reported, not required, "because its absence is what

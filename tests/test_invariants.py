@@ -708,3 +708,99 @@ def test_every_process_pool_uses_spawn_not_fork():
         "and a forked child cannot re-initialise CUDA (239/239 workers died once). "
         "Pass mp_context=multiprocessing.get_context('spawn'). Offenders: " + ", ".join(offenders)
     )
+
+
+# --------------------------------------------------------------------------------
+# 12. A preflight whose required set does not match what the job needs.
+# --------------------------------------------------------------------------------
+# `scripts/00_doctor.py` marked every external tool `required=False`, so a machine
+# with none of DockQ, prodigy, ipsae.py, anarcii or freesasa installed printed
+# "All required checks passed." Meanwhile `"locksmith" in sys.prefix` WAS required,
+# so a correct checkout in a renamed directory failed the preflight.
+#
+# The required set was backwards, not merely short: README ss"Reproducing it" sends a
+# grader here from the VALIDATOR section, and `scripts/58_validate_submission.py`
+# imports seven metric modules and touches CUDA nowhere -- so validation needs the
+# tools and no GPU, while the script demanded a GPU and no tools.
+#
+# These tests pin the required SETS rather than running the script, because running it
+# needs the very tools whose absence is the thing under test.
+
+def _doctor():
+    import importlib.util
+    root = Path(__file__).resolve().parents[1]
+    spec = importlib.util.spec_from_file_location(
+        "_doctor", root / "scripts" / "00_doctor.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+# Every external dependency the validator cannot re-derive a score without.
+_VALIDATOR_TOOLS = {
+    "dockq", "prodigy", "ipsae", "anarcii", "freesasa",
+    "netsolp_models", "netsolp_python",
+}
+_GPU_CHECKS = {"torch_cu128", "cuda_available", "sm120", "matmul"}
+
+
+def test_doctor_requires_every_external_tool_the_validator_needs():
+    missing = _VALIDATOR_TOOLS - _doctor().REQUIRED["validate"]
+    assert not missing, (
+        f"scope 'validate' does not require {sorted(missing)}. A preflight that passes "
+        "on a machine missing the tools the validator imports is this project's own "
+        "'a check that cannot fail is not evidence', applied to its own preflight."
+    )
+
+
+def test_doctor_does_not_require_a_gpu_to_validate():
+    """`scripts/58` imports dockq, ipsae, netsolp, novelty, plddt, prodigy, sasa and
+    touches CUDA nowhere (NetSolP is quantized ONNX on CPU by construction). Requiring
+    a GPU here failed a grader whose only sin was not having one."""
+    over = _GPU_CHECKS & _doctor().REQUIRED["validate"]
+    assert not over, f"scope 'validate' needlessly requires a GPU for {sorted(over)}"
+
+
+def test_doctor_requires_the_gpu_it_actually_folds_on():
+    """The converse, so the fix above cannot be 'require nothing'."""
+    assert _GPU_CHECKS <= _doctor().REQUIRED["fold"]
+
+
+def test_doctor_venv_check_is_functional_not_a_substring_of_the_path():
+    """The question is never "is this venv called locksmith" -- it is "if I
+    `import locksmith`, do I get THIS checkout". Verified 2026-09-28 on a checkout
+    copied to a directory named `citest`: the old test failed a correct tree."""
+    import ast
+    src = (Path(__file__).resolve().parents[1] / "scripts" / "00_doctor.py").read_text()
+
+    # Walk the AST rather than grepping. The first version of this test grepped for
+    # the literal `"locksmith" in sys.prefix` and failed on the FIXED file, because
+    # the module docstring quotes that expression to explain what was wrong with it.
+    # A guard that reads prose cannot tell a bug from its own description of the bug --
+    # the same defect as the `Number of failed examples` guard written from a sentence.
+    for node in ast.walk(ast.parse(src)):
+        if not (isinstance(node, ast.Compare) and node.ops
+                and isinstance(node.ops[0], ast.In)):
+            continue
+        right = node.comparators[0]
+        if isinstance(right, ast.Attribute) and right.attr == "prefix":
+            raise AssertionError(
+                "the preflight is testing membership in sys.prefix again; renaming "
+                "the clone directory must not fail it"
+            )
+
+    assert "locksmith_import" in _doctor().REQUIRED["validate"]
+
+
+def test_doctor_checks_the_dockq_reference_the_validator_actually_defaults_to():
+    """A config value and a hardcoded constant encoding the same convention will
+    diverge. The doctor's reference path and `scripts/58 --reference`'s default are
+    that pair, so they are compared rather than trusted."""
+    import re
+    root = Path(__file__).resolve().parents[1]
+    validator = (root / "scripts" / "58_validate_submission.py").read_text()
+    m = re.search(r'default=Path\("([^"]*5ggs[^"]*)"\)', validator)
+    assert m, "could not find the validator's --reference default"
+    assert m.group(1) in (root / "scripts" / "00_doctor.py").read_text(), (
+        f"doctor does not check {m.group(1)}, which is what the validator will use"
+    )

@@ -285,4 +285,60 @@ precision of a decision boundary, print more digits rather than fewer.*
 
 ---
 
+## C4 — §6.6's preflight did not require the tools it lists
+
+**Raised 2026-09-28. Status: FIXED in code. Affects [Class 3 §6.6](03-the-toolchain.md).**
+
+### What the chapter says
+
+§6.6 introduces `scripts/00_doctor.py` with "exits 0 only if every required check
+passes", then enumerates, in one list: the Python version, the venv, the torch/CUDA
+chain, the matmul, RAM, swap, disk, "`DockQ` and `prodigy` on PATH; `vendor/ipsae/ipsae.py`
+present; `anarcii` and `freesasa` importable; and the four reference PDBs present."
+
+Only two items in that sentence are marked as exceptions — PTX and the bf16 matmul,
+both flagged "reported, not required".
+
+### What the code did
+
+Everything from `DockQ` onwards was `required=False`. A machine with **none** of the
+five external tools installed printed `All required checks passed.` and exited 0.
+
+The inverse error sat beside it. `check("running inside project venv", "locksmith" in
+sys.prefix)` **was** required, and tests a substring of a path — so a correct checkout
+in a directory not named `locksmith` failed the preflight. Verified 2026-09-28 by
+copying the tree to a directory named `citest`: the old expression evaluates False on
+a perfectly good checkout.
+
+### Why this is worse than a short list
+
+The required set was **backwards**, not merely incomplete. The README sends a grader
+here from the *validator* section, and `scripts/58_validate_submission.py` imports
+`dockq, ipsae, netsolp, novelty, plddt, prodigy, sasa` and touches CUDA nowhere. So
+validating the package needs the five tools and **no GPU**, while the preflight
+demanded a GPU and **none of the tools**. It could not fail for a grader missing
+everything it needed, and did fail for a grader whose only sin was a CPU.
+
+A third gap the chapter's list also has: the course and the README both tell you to
+install ~4.7 GB of NetSolP ONNX models, and the preflight checked NetSolP **zero**
+times.
+
+### The fix
+
+`--scope {fold,validate,all}`, with the required set declared per scope in a
+`REQUIRED` dict rather than as a flag on each call, and NetSolP's paths *imported*
+from `locksmith.metrics.netsolp` so the preflight cannot drift from the metric.
+Five tests in `tests/test_invariants.py` pin the sets, all mutation-verified.
+
+Behaviour now (measured, this machine): tools off `PATH` → `2 required check(s)
+failed for scope 'validate'`; `NETSOLP_DIR` unset → 2 failed; `CUDA_VISIBLE_DEVICES=""`
+with `--scope fold` → 3 failed; unmutated → exit 0 in all three scopes.
+
+*The transferable point is the one this course already makes about controls, turned on
+the course's own tooling: **a check that cannot fail is not evidence**, and the way it
+usually cannot fail is that its required set was written from what was easy to check
+rather than from what the job needs.*
+
+---
+
 *No further corrections at this time.*

@@ -165,8 +165,15 @@ indistinguishable from a measurement a week later.
 
 ```bash
 uv sync                    # Blackwell needs the pinned cu128 index; installs the dev group
-uv run pytest tests/       # 34 invariant tests, ~2.4 s
+uv run pytest tests/       # 39 invariant tests, ~7 s
 ```
+
+`.github/workflows/ci.yml` runs exactly that on a clean checkout, plus `uv lock --check`.
+Both steps exist because both defects shipped: `pytest` was once declared as an extra
+rather than a dependency-group, so `uv sync` never installed it and the command above
+could not run at all; and `uv.lock` went stale unnoticed because nothing ever installed
+from it in a fresh environment. The suite needs no GPU — verified with
+`CUDA_VISIBLE_DEVICES=""`.
 
 **The validator needs four external tools that are deliberately not pip dependencies.**
 `prodigy-prot` requires `numpy>=2` while `DockQ` and `boltz` require `numpy<2`, so they
@@ -179,7 +186,7 @@ uv tool install DockQ                   # Challenge 1 only
 git clone https://github.com/DunbrackLab/IPSAE vendor/ipsae \
   && git -C vendor/ipsae checkout 6174cf9e71cb1bd660cc805856a18c4871a6dec3
 # NetSolP (solubility, ~4.7 GB of ONNX): see BUILD.md §6b
-uv run python scripts/00_doctor.py      # checks all four before you spend time
+uv run python scripts/00_doctor.py --scope validate   # exits 1 if any is missing
 uv run python scripts/58_validate_submission.py submission/RYAN_BINNY   # ~7 min
 ```
 
