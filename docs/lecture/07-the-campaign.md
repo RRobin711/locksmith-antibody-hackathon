@@ -25,7 +25,7 @@ inherited for bad reasons*.
 
 ## The ledger, before the narrative
 
-**Folds per day**, from the modification times of the `pae_*.npz` files [Boltz-2](03-the-toolchain.md#31-boltz-2-the-primary-predictor) writes for
+**Folds per day**, from the modification times of the `pae_*.npz` files [Boltz-2](03-the-toolchain.md#31-boltz-2--the-primary-predictor) writes for
 every completed prediction. One fold = one prediction that produced a parseable Predicted
 Aligned Error (PAE) matrix.
 
@@ -63,9 +63,9 @@ Final Score (0–100) = [ 0.60 × Binding_struct + 0.20 × Developability
 ```
 
 Each category term is 0–10. `Binding_struct` is the **mean** of six sub-scores for Challenge 1
-([ipSAE](03-the-toolchain.md#43-ipsae-interface-confidence-from-the-pae), [DockQ](03-the-toolchain.md#41-dockq-213-two-flags-that-both-default-wrong), ΔG, interface contacts, interface pLDDT, CDR SASA) and of five for Challenge 2,
+([ipSAE](03-the-toolchain.md#43-ipsae--interface-confidence-from-the-pae), [DockQ](03-the-toolchain.md#41-dockq-213--two-flags-that-both-default-wrong), ΔG, interface contacts, interface pLDDT, CDR SASA) and of five for Challenge 2,
 which has no DockQ because a de novo design has no reference structure. `Developability` is
-one metric ([NetSolP](03-the-toolchain.md#44-netsolp-10-sequence-only-solubility-and-a-positive-control-that-chose-the-model) solubility); `Novelty` is one (CDR-H3 identity). Each of the eight metrics
+one metric ([NetSolP](03-the-toolchain.md#44-netsolp-10--sequence-only-solubility-and-a-positive-control-that-chose-the-model) solubility); `Novelty` is one (CDR-H3 identity). Each of the eight metrics
 maps a raw value onto 0–10 through three bands and carries a hard cutoff below which the
 design is not penalised but **non-viable**. Challenge 1 redesigns pembrolizumab's heavy-chain
 CDRs on PDB entry **5GGS**; Challenge 2 designs a VH/VL de novo. 100 + 100 + 50 presentation =
@@ -88,7 +88,7 @@ could later separate "we chose a convention" from "the handbook said so". CDR SA
 specified bound or unbound, and the two readings *conflict in sign* with the contacts metric
 (better burial ⇒ more contacts but **less** bound CDR SASA). The example FASTA is Fab-length with
 a His-tag while NetSolP is documented on Fv. Band-edge ties are undefined. And contacts and ΔG
-both come from [PRODIGY](03-the-toolchain.md#42-prodigy-240-δg-and-contacts) on the same interface yet occupy two of six binding slots — prophetic,
+both come from [PRODIGY](03-the-toolchain.md#42-prodigy-240--δg-and-contacts) on the same interface yet occupy two of six binding slots — prophetic,
 since on day 7 PRODIGY's ΔG proves blind to the interface.
 
 **Inherited by day 2:** a rubric expressed as data, and the commitment in `PLAN.md` §3 —
@@ -127,7 +127,7 @@ into RAM one at a time; 3.2 GB took minutes and looked like a hang. Additive bea
 **Two traps that would have produced confident wrong numbers**, caught only because the harness
 was run on molecules whose answers were known.
 
-*[ANARCII](03-the-toolchain.md#45-anarcii-208-imgt-numbering-and-the-antigen-it-numbered-as-an-antibody) numbers PD-1 as an antibody.* PD-1 is an immunoglobulin-superfamily member with an
+*[ANARCII](03-the-toolchain.md#45-anarcii-208--imgt-numbering-and-the-antigen-it-numbered-as-an-antibody) numbers PD-1 as an antibody.* PD-1 is an immunoglobulin-superfamily member with an
 **[IgV fold](01-the-biological-problem.md#25-the-igv-fold-and-the-trap-it-set)** — by fold it *is* a V domain — so ANARCII assigns it `CDR3=GAISLAPKA`. Correct
 behaviour on out-of-distribution input, not a bug. The separation is in the score: true V
 domains **30.7–30.9**, PD-1 **15.8–16.2**. Mitigation: `MIN_V_DOMAIN_SCORE = 25.0` plus explicit
@@ -209,7 +209,7 @@ problem rather than a configuration one. The spread across variants is **0.35, w
 0.20 cutoff-to-Good span**. ESM1b became a *declared convention* in `config/metrics.yaml` with
 evidence attached. Cost ~11 s/sequence against ~2 s for ESM12, paid on CPU while the GPU folds.
 
-[ColabFold](03-the-toolchain.md#32-colabfold-alphafold2-multimer)/AF2 was installed and JAX verified on Blackwell by matmul. The first cross-predictor
+[ColabFold](03-the-toolchain.md#32-colabfold--alphafold2-multimer)/AF2 was installed and JAX verified on Blackwell by matmul. The first cross-predictor
 number looked like a scale offset — Boltz ipSAE **0.841** versus AF2's **0.654** on the same
 complex — until DockQ showed AF2's pose was genuinely worse (0.690 vs 0.820), so part of the gap
 was *deserved*. **When comparing two estimators' confidence, first compare their accuracy.**
@@ -441,7 +441,7 @@ pure seed noise. **Five of eight rubric metrics are constants across the pool**;
 on three (`dg`, `ipsae`, `dockq`), one of which is the blind one. This is arithmetic over folds
 already on disk; run after the day-5 baseline it would have redesigned the campaign.
 
-**The other pre-registered experiments.** *Specificity*: the named design is **[TIM-3](01-the-biological-problem.md#64-tim-3-cross-reactivity-a-specificity-failure)-reactive** —
+**The other pre-registered experiments.** *Specificity*: the named design is **[TIM-3](01-the-biological-problem.md#64-tim-3-cross-reactivity--a-specificity-failure)-reactive** —
 ipSAE **0.568** against pembrolizumab's 0.323 and a real TIM-3 binder's 0.682 on the same antigen
 — tripping its **own pre-declared per-seed failure condition** on 2 of 3 seeds. The arm *mean*
 would have passed; the rule was written per-seed before the data existed and was applied as
@@ -473,7 +473,7 @@ an RTX 5070 Ti Laptop at compute capability **`sm_120`**, needing CUDA ≥ 12.8.
 *before* the ~10 GB install and tested with arithmetic: a 512² fp32 matmul against numpy (cuBLAS)
 and a plain elementwise **ReLU** (PyTorch's own kernels). Both failed with `CUDA error: no kernel
 image is available for execution on the device` while `torch.cuda.is_available()` returned
-**True**, and `get_arch_list()` printed **`PTX entries: NONE`** — a CUDA binary carries [SASS](03-the-toolchain.md#62-sass-versus-ptx-the-mechanism-you-need)
+**True**, and `get_arch_list()` printed **`PTX entries: NONE`** — a CUDA binary carries [SASS](03-the-toolchain.md#62-sass-versus-ptx--the-mechanism-you-need)
 (machine code for one architecture) and/or PTX (a virtual ISA the driver can JIT to a newer chip),
 and with no PTX there is no forward-compatibility fallback. DGL's wheels stop at cu124 (cu126 and
 cu128 both HTTP 403), and `dgl-2.4.0+cu124` **pins `torch==2.4.0` exactly**, silently replacing

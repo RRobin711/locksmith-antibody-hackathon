@@ -804,3 +804,61 @@ def test_doctor_checks_the_dockq_reference_the_validator_actually_defaults_to():
     assert m.group(1) in (root / "scripts" / "00_doctor.py").read_text(), (
         f"doctor does not check {m.group(1)}, which is what the validator will use"
     )
+
+
+# --------------------------------------------------------------------------------
+# 13. Cross-references that only break once rendered.
+# --------------------------------------------------------------------------------
+# 66 of the course's internal links pointed at anchors that do not exist on GitHub, all
+# from one cause: a heading containing an em dash slugs to a DOUBLE hyphen, because the
+# dash is stripped as punctuation and the spaces either side both become hyphens.
+# "### 3.1 Boltz-2 — the primary predictor" is `#31-boltz-2--the-primary-predictor`, and
+# every link in the course was written with one. They resolve in Obsidian, which matches
+# heading text, so the whole set was broken only in the renderer the project is about to
+# publish to -- and the repo had never been public, so nothing had ever exercised them.
+
+def _heading_slug(h: str) -> str:
+    """GitHub's slugger: lowercase, drop punctuation, spaces to hyphens."""
+    import re
+    return re.sub(r"\s", "-", re.sub(r"[^\w\s-]", "", h.strip().lower(), flags=re.UNICODE))
+
+
+def test_every_internal_markdown_anchor_resolves():
+    import re
+    root = Path(__file__).resolve().parents[1]
+    files = [f for f in root.rglob("*.md")
+             if not {".venv", "vendor", "node_modules"} & set(f.parts)]
+    heads = {}
+    for f in files:
+        heads[f.resolve()] = [
+            _heading_slug(m.group(2))
+            for m in (re.match(r"^(#{1,6})\s+(.*)", l) for l in f.read_text().splitlines())
+            if m
+        ]
+    broken = []
+    for f in files:
+        for m in re.finditer(r"\]\(([A-Za-z0-9_./-]*\.md)#([^)]+)\)", f.read_text()):
+            target = (f.parent / m.group(1)).resolve()
+            if target in heads and m.group(2) not in heads[target]:
+                broken.append(f"{f.relative_to(root)} -> {m.group(1)}#{m.group(2)}")
+    assert not broken, (
+        f"{len(broken)} internal anchor(s) do not resolve:\n  " + "\n  ".join(broken[:10])
+    )
+
+
+def test_the_session_index_is_one_line_per_session():
+    """`docs/sessions/README.md` promises "One line per working session" in its own first
+    line and had grown to 5,448 words, with single table cells at 416. A file that fails
+    the promise in its opening sentence is the cheapest kind of documentation defect to
+    find and the easiest to let rot."""
+    root = Path(__file__).resolve().parents[1]
+    idx = root / "docs" / "sessions" / "README.md"
+    rows = [l for l in idx.read_text().splitlines() if l.startswith("| 2026")]
+    assert rows, "no session rows found"
+    worst = max(rows, key=lambda r: len(r.split("|")[3].split()))
+    n = len(worst.split("|")[3].split())
+    assert n <= 30, (
+        f"a session index row's summary is {n} words; the file promises one line per "
+        f"session and the teaching belongs in the per-session doc. Offender: "
+        f"{worst.split('|')[1].strip()[:60]}"
+    )

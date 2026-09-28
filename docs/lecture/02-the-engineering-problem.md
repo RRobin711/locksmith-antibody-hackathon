@@ -50,7 +50,7 @@ Two consequences follow, opposite in sign.
 
 **The structure predictor is not infrastructure; it is a scored component** (`PLAN.md:28-31`).
 Choosing it and configuring it is a first-class design decision, on the same footing as choosing the
-sequence. If [Boltz-2](03-the-toolchain.md#31-boltz-2-the-primary-predictor) produces an optimistic pose, that optimism is *in the submitted file* and is
+sequence. If [Boltz-2](03-the-toolchain.md#31-boltz-2--the-primary-predictor) produces an optimistic pose, that optimism is *in the submitted file* and is
 what gets graded.
 
 **The evaluation is deterministic given our files.** Nothing the organisers do introduces variance.
@@ -157,7 +157,7 @@ Final Score (0–100) = [ 0.60 × Binding_struct + 0.20 × Developability + 0.20
 ```
 
 Each category is the **unweighted mean of its members' 0–10 sub-scores**. Challenge 1's binding mean
-is over **six** metrics; Challenge 2's over **five**, because [DockQ](03-the-toolchain.md#41-dockq-213-two-flags-that-both-default-wrong) is excluded. Implemented at
+is over **six** metrics; Challenge 2's over **five**, because [DockQ](03-the-toolchain.md#41-dockq-213--two-flags-that-both-default-wrong) is excluded. Implemented at
 `src/locksmith/score.py:76-84`:
 
 ```python
@@ -379,7 +379,7 @@ the *expectation*: pembrolizumab must fail novelty, because it is the molecule y
 to copy. The rewritten assertion — passes all binding gates **and** fails novelty — is strictly
 stronger than the one it replaced.
 
-*Three-valued viability.* With [ipSAE](03-the-toolchain.md#43-ipsae-interface-confidence-from-the-pae), interface pLDDT and [NetSolP](03-the-toolchain.md#44-netsolp-10-sequence-only-solubility-and-a-positive-control-that-chose-the-model) unmeasurable at that point, the
+*Three-valued viability.* With [ipSAE](03-the-toolchain.md#43-ipsae--interface-confidence-from-the-pae), interface pLDDT and [NetSolP](03-the-toolchain.md#44-netsolp-10--sequence-only-solubility-and-a-positive-control-that-chose-the-model) unmeasurable at that point, the
 harness reported viability **UNKNOWN**, not `True`. Returning "viable because nothing measured
 failed" is the bug. `score.py:71-74` makes this structural: a missing metric yields `viable=None`,
 never `True`, and `final` is withheld unless every category is present. `select.rank` then partitions
@@ -395,7 +395,7 @@ baseline viability, not 0%.
 5GGS C/D/Y must agree with it; 5WT9 nivolumab must look like a genuine binder; and a **deliberate
 decoy** — pembrolizumab paired with the PD-1 copy it does *not* touch — **must be rejected**.
 *"Showing your measurement gives good scores to good things is only half a validation."* Three of
-the project's eight catalogued [silent failures](08-what-broke.md#class-1-silent-failures) were caught *only* because the harness was running on
+the project's eight catalogued [silent failures](08-what-broke.md#class-1--silent-failures) were caught *only* because the harness was running on
 structures whose answers were known.
 
 What Gate 0 did **not** buy is equally important and the project says so: the real negative control
@@ -420,7 +420,7 @@ tabulates all 16 band edges plus 8 minimums and reports **24/24 MATCH** at the e
 **The margin rule, and why its original justification was wrong.** The original rule (`PLAN.md:650-676`)
 was: "≥2σ margin on every gate because our estimates will not agree with the organisers' run." That
 reasoning is simply false — *the organisers do not re-fold.* Given the same PDB and PAE, ipSAE,
-DockQ, [PRODIGY](03-the-toolchain.md#42-prodigy-240-δg-and-contacts) and SASA are deterministic. What actually varies between our run and theirs is
+DockQ, [PRODIGY](03-the-toolchain.md#42-prodigy-240--δg-and-contacts) and SASA are deterministic. What actually varies between our run and theirs is
 **implementation**: tool version, numbering scheme, SASA probe radius, bound versus unbound, chain
 pairing. That is reducible by *pinning*, not by margin.
 

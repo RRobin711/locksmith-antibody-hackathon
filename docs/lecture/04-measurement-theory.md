@@ -57,7 +57,7 @@ Three assumptions are packed in there and all three are testable, so name them:
    it fails here.
 
 Units: `x`, `τ` and `ε` all carry the metric's units — surrogate points on a 0–100 scale, ångströms
-of RMSD, kcal/mol of predicted free energy, or dimensionless in the case of [ipSAE](03-the-toolchain.md#43-ipsae-interface-confidence-from-the-pae) and [DockQ](03-the-toolchain.md#41-dockq-213-two-flags-that-both-default-wrong).
+of RMSD, kcal/mol of predicted free energy, or dimensionless in the case of [ipSAE](03-the-toolchain.md#43-ipsae--interface-confidence-from-the-pae) and [DockQ](03-the-toolchain.md#41-dockq-213--two-flags-that-both-default-wrong).
 `σ²_noise` carries the square of those units.
 
 ### 1.2 The variance identity

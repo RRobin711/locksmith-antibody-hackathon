@@ -97,7 +97,7 @@ CDRs, framework regions, V(D)J recombination and why CDR-H3 is special, IMGT
 numbering.
 
 **Tier 6 — Structure prediction.** What a folding model does. MSAs and
-co-evolution. pLDDT, PAE, ipTM, [ipSAE](03-the-toolchain.md#43-ipsae-interface-confidence-from-the-pae) and what each is a statement *about*.
+co-evolution. pLDDT, PAE, ipTM, [ipSAE](03-the-toolchain.md#43-ipsae--interface-confidence-from-the-pae) and what each is a statement *about*.
 Recycling and diffusion sampling. Training cutoffs and memorisation.
 
 **Tier 7 — Design tools.** [ProteinMPNN](03-the-toolchain.md#21-proteinmpnn), [RFdiffusion](03-the-toolchain.md#22-rfdiffusion-via-rfantibody), and their limits — notably

@@ -51,7 +51,7 @@ of the gates' inertness.
 
 **Pre-registration that cost something.** Eleven pre-registration documents exist
 and at least three fired against the author's interest. `results/specificity.md`
-records the pre-declared failure condition triggering on [TIM-3](01-the-biological-problem.md#64-tim-3-cross-reactivity-a-specificity-failure) in 2 of 3 seeds,
+records the pre-declared failure condition triggering on [TIM-3](01-the-biological-problem.md#64-tim-3-cross-reactivity--a-specificity-failure) in 2 of 3 seeds,
 and notes explicitly that *the arm mean would have passed* — the rule was written
 per-seed before the data existed and was applied as written. The design ships
 carrying a cross-reactivity caveat that a post-hoc analysis choice would have
@@ -65,9 +65,9 @@ document the contamination of their own pre-registration.
 **Nulls with matched geometry.** The epitope knockout in `results/validity.md` §1
 carries a matched off-interface alanine control, a fresh MSA for every mutant so
 the alignment cannot leak native residues back, and a dose–response across 0, 349
-and 527 deleted antigen contacts. It yields a falsifiable partition: [ipSAE](03-the-toolchain.md#43-ipsae-interface-confidence-from-the-pae) moves
+and 527 deleted antigen contacts. It yields a falsifiable partition: [ipSAE](03-the-toolchain.md#43-ipsae--interface-confidence-from-the-pae) moves
 **17.1×** its own seed standard deviation, interface pLDDT **64.0×**, while
-[PRODIGY](03-the-toolchain.md#42-prodigy-240-δg-and-contacts) ΔG moves **0.9×** and contacts **1.2×** — the last two are blind. The
+[PRODIGY](03-the-toolchain.md#42-prodigy-240--δg-and-contacts) ΔG moves **0.9×** and contacts **1.2×** — the last two are blind. The
 composition-matched CDR-H3 scramble holds length, composition, aromatic count and
 charge constant, so every cheap sequence feature the project used as a predictor
 is controlled by construction.
@@ -287,7 +287,7 @@ actually stops it.
 **Optimising a component that could not move the result.** *"Redesign the
 light-chain CDRs"* appeared in three documents and was echoed by two independent
 reviewers over two days. The refutation is two lines of arithmetic that were
-available the whole time: [NetSolP](03-the-toolchain.md#44-netsolp-10-sequence-only-solubility-and-a-positive-control-that-chose-the-model) aggregates as `min(VH, VL)`; the shipped
+available the whole time: [NetSolP](03-the-toolchain.md#44-netsolp-10--sequence-only-solubility-and-a-positive-control-that-chose-the-model) aggregates as `min(VH, VL)`; the shipped
 design's VH is **0.699** against a Good edge of **0.70**; therefore the maximum
 over all possible light chains of `min(0.699, VL)` is 0.699, and the band cannot
 move — **by 0.001**. The empirical half was free too, NetSolP being
@@ -357,7 +357,7 @@ measurement stack, and these are the actual deliverable:
    anti-lysozyme antibody — sweeps the entire gate set** as a PD-1 binder.
 3. Five of eight rubric metrics are constants; the harness ranks on three; one of
    the three is blind to the epitope.
-4. The predictor's median [DockQ](03-the-toolchain.md#41-dockq-213-two-flags-that-both-default-wrong) on genuinely novel antibody–antigen pairs is
+4. The predictor's median [DockQ](03-the-toolchain.md#41-dockq-213--two-flags-that-both-default-wrong) on genuinely novel antibody–antigen pairs is
    **0.291**.
 5. A mutation that abolishes binding scores above the wild type on the primary
    gate.

@@ -144,7 +144,7 @@ circularity inflated things "by roughly a third". **Then that correction was its
 comparing a 1-pair estimate to a 3-pair one without disattenuating both. Done properly it is about
 **13%**, and the honest value is ρ ≈ −0.28 to −0.32."* A further mechanical deflation is recorded
 separately: spread correlates with mean deviation-from-crystal at **+0.589**, and partialling that
-out collapses the spread→[DockQ](03-the-toolchain.md#41-dockq-213-two-flags-that-both-default-wrong) link to **−0.167**.
+out collapses the spread→[DockQ](03-the-toolchain.md#41-dockq-213--two-flags-that-both-default-wrong) link to **−0.167**.
 
 Three passes, three different answers, converging. That is what a working correction process looks
 like — and note that the *second* pass erred in the opposite direction from the first, which is
@@ -282,7 +282,7 @@ the matched control barely moves. That is a dose–response against a matched co
 as close to a clean positive as this kind of experiment gets, and the monotonicity is doing real work:
 a single knockout arm could be explained by any disruption, while a graded response is hard to fake.
 
-And the sting. **[PRODIGY](03-the-toolchain.md#42-prodigy-240-δg-and-contacts) ΔG is blind — and it carries the largest single share of the ranking
+And the sting. **[PRODIGY](03-the-toolchain.md#42-prodigy-240--δg-and-contacts) ΔG is blind — and it carries the largest single share of the ranking
 variance.** The metric the selection leaned on hardest fails the specificity check outright.
 
 ### 4.2 The composition-matched scramble null
@@ -324,7 +324,7 @@ the identical cached alignment, and passed through the campaign's five hard viab
 result, run on day 9 of 9 (`results/negative_control.md`):
 
 **HyHEL-10 — an anti-hen-egg-lysozyme antibody, which has no business binding a human immune
-receptor — cleared all five cutoffs** on `model_0`: [ipSAE](03-the-toolchain.md#43-ipsae-interface-confidence-from-the-pae) **0.609**, ΔG **−12.4**, **77** contacts,
+receptor — cleared all five cutoffs** on `model_0`: [ipSAE](03-the-toolchain.md#43-ipsae--interface-confidence-from-the-pae) **0.609**, ΔG **−12.4**, **77** contacts,
 interface pLDDT **85.0**, CDR SASA **1084 Å²**. Its **median over five diffusion samples is ipSAE
 0.219**, which tells you exactly what happened and is the subject of
 [the order-statistics section of the next chapter](06-allocation-and-selection.md).

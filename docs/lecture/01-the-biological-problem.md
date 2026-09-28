@@ -138,7 +138,7 @@ the VH/VL elbow angle**, so a bare Fv has an under-constrained wobble that a Fab
 not a theoretical worry: in the project's very first prediction, the VH/VL interface was the
 *worst*-scoring part of the model (`:57-58`), and the wobble later showed up as raw measurement
 noise — see [the Fv-versus-Fab reliability measurement](04-measurement-theory.md) , where
-Fv [ipSAE](03-the-toolchain.md#43-ipsae-interface-confidence-from-the-pae)
+Fv [ipSAE](03-the-toolchain.md#43-ipsae--interface-confidence-from-the-pae)
 seed [reliability](04-measurement-theory.md#13-reliability) is 0.607 against the Fab's 0.965.
 
 ### 2.2 The six CDR loops
@@ -180,7 +180,7 @@ Both bind PD-1; both work in patients. The reading the project takes from this i
 encouraging for de novo design: **PD-1 can be bound by radically different loop architectures**, so
 there is not one narrow correct answer to find.
 
-(For completeness, pembrolizumab's light-chain CDRs as measured by [ANARCII](03-the-toolchain.md#45-anarcii-208-imgt-numbering-and-the-antigen-it-numbered-as-an-antibody) on both 5GGS copies:
+(For completeness, pembrolizumab's light-chain CDRs as measured by [ANARCII](03-the-toolchain.md#45-anarcii-208--imgt-numbering-and-the-antigen-it-numbered-as-an-antibody) on both 5GGS copies:
 CDR-L1 `KGVSTSGYSY`, CDR-L2 `LAS`, CDR-L3 `QHSRDLPLT` — `docs/sessions/2026-09-15-...:133`.)
 
 The genetic story also explains why structure prediction struggles here, which becomes central in
@@ -291,7 +291,7 @@ across to 5GGS numbering by **explicit pairwise sequence alignment**, and all 26
 cleanly.
 
 Assuming transferability would have produced a wrong epitope with no error raised anywhere — one of
-the project's catalogued "[silent failures](08-what-broke.md#class-1-silent-failures)". It also carries a caveat the project states rather than
+the project's catalogued "[silent failures](08-what-broke.md#class-1--silent-failures)". It also carries a caveat the project states rather than
 buries: if 5IUS uses an engineered or stabilised PD-1 variant, its PD-L1 binding mode may differ
 subtly from wild type.
 
@@ -361,12 +361,12 @@ non-binding**: binding 0.60, developability 0.20, novelty 0.20.
 
 Six requirements, and what the project could and could not measure against each:
 
-1. **Affinity** — bind tightly. Proxied by [PRODIGY](03-the-toolchain.md#42-prodigy-240-δg-and-contacts) ΔG and, indirectly, by ipSAE and heavy-atom
+1. **Affinity** — bind tightly. Proxied by [PRODIGY](03-the-toolchain.md#42-prodigy-240--δg-and-contacts) ΔG and, indirectly, by ipSAE and heavy-atom
    contact counts. §7 shows how badly these proxies track measured affinity.
 2. **Specificity** — bind *only* PD-1. Not in the rubric at all. The project added a five-antigen
    panel (§6.4) and failed it.
 3. **Functional mechanism** — occlude the PD-L1 site. Also not in the rubric. Added as §3.5.
-4. **Developability** — solubility and aggregation propensity ([NetSolP](03-the-toolchain.md#44-netsolp-10-sequence-only-solubility-and-a-positive-control-that-chose-the-model)), no N-glycosylation sequons
+4. **Developability** — solubility and aggregation propensity ([NetSolP](03-the-toolchain.md#44-netsolp-10--sequence-only-solubility-and-a-positive-control-that-chose-the-model)), no N-glycosylation sequons
    in the Fv, no NG/DG deamidation–isomerisation motifs in CDRs, no exposed Met/Trp in CDRs, sane pI
    and net charge (`src/locksmith/metrics/liabilities.py:34-48`).
 5. **Manufacturability** — NetSolP is the only proxy, and it is trained for solubility **in
@@ -409,7 +409,7 @@ no longer editing a known good answer; you are proposing one."*
 Challenge 1 hands you the answer to the hardest question: what shape the antibody should be, how it
 should be oriented against PD-1, which patch of PD-1 to touch. But the scoring builds in a real
 conflict. **Novelty** wants CDR-H3 rewritten as much as possible (top marks below 70% identity)
-while **[DockQ](03-the-toolchain.md#41-dockq-213-two-flags-that-both-default-wrong)** wants the pose unchanged (top marks at ≥0.80) — and CDR-H3 supplies 30–50% of the
+while **[DockQ](03-the-toolchain.md#41-dockq-213--two-flags-that-both-default-wrong)** wants the pose unchanged (top marks at ≥0.80) — and CDR-H3 supplies 30–50% of the
 contact surface. *"So you are being asked to rewrite the most important part of the interface while
 leaving the interface intact. That tension is Challenge 1"* (`:64-73`).
 
@@ -436,7 +436,7 @@ Four independent reasons, all documented:
    correlated mutation across homologous sequences; a junctionally randomised loop has no
    homologues, so *"there is no evolutionary family of related sequences for the model to learn
    from"* (`knowledge/De Novo Design...:89-93`).
-3. **Measured, not assumed.** Five complexes released clear of [Boltz-2](03-the-toolchain.md#31-boltz-2-the-primary-predictor)'s verified **2023-06-01**
+3. **Measured, not assumed.** Five complexes released clear of [Boltz-2](03-the-toolchain.md#31-boltz-2--the-primary-predictor)'s verified **2023-06-01**
    PDB-*release*-date cutoff, each with CDR-H3 ≤44.4% identical to anything pre-cutoff, gave a
    **median Fab DockQ of 0.157** against 5GGS's 0.818. That result was **partly withdrawn** when an
    input bug was found (antigen sequences built from coordinates had internal loops spliced out);

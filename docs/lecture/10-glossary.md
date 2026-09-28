@@ -80,7 +80,7 @@ project's Challenge 2 sequons were in the paratope.
 chain contributes CDR-H3 and usually dominates binding.
 
 **[IgV fold](01-the-biological-problem.md#25-the-igv-fold-and-the-trap-it-set)** — the immunoglobulin variable domain fold. PD-1 has one, which is
-why the antibody-numbering tool [ANARCII](03-the-toolchain.md#45-anarcii-208-imgt-numbering-and-the-antigen-it-numbered-as-an-antibody) cheerfully numbers PD-1 *as an antibody*.
+why the antibody-numbering tool [ANARCII](03-the-toolchain.md#45-anarcii-208--imgt-numbering-and-the-antigen-it-numbered-as-an-antibody) cheerfully numbers PD-1 *as an antibody*.
 
 **IMGT** — a standardised antibody residue-numbering scheme. Numbering schemes
 matter more than they look: IMGT and [Kabat](01-the-biological-problem.md#24-numbering-schemes-and-why-the-novelty-gate-depends-on-one) disagree on CDR-H3 boundaries, which
@@ -112,7 +112,7 @@ mutation (ΔΔG). The only external ground truth this project touched, and the
 source of its most damaging result.
 
 **Specificity** — binding the intended target and not others. The named Challenge
-1 design failed its own pre-declared specificity condition against **[TIM-3](01-the-biological-problem.md#64-tim-3-cross-reactivity-a-specificity-failure)**.
+1 design failed its own pre-declared specificity condition against **[TIM-3](01-the-biological-problem.md#64-tim-3-cross-reactivity--a-specificity-failure)**.
 
 **TIM-3** — another immune checkpoint receptor, used here as a decoy antigen.
 
@@ -120,15 +120,15 @@ source of its most damaging result.
 
 ## 2. Structure prediction
 
-**AlphaFold2 / [ColabFold](03-the-toolchain.md#32-colabfold-alphafold2-multimer)** — the original high-accuracy folding model and a
+**AlphaFold2 / [ColabFold](03-the-toolchain.md#32-colabfold--alphafold2-multimer)** — the original high-accuracy folding model and a
 convenient wrapper. Qualified and dropped here: it **cannot fold designed
 antibodies without an MSA**, giving pLDDT 37 and interpenetrating chains.
 
 **[B-factor](03-the-toolchain.md#47-gemmi-freesasa-and-the-interface-definition) column** — a PDB field that holds crystallographic disorder in an
 experimental structure and **per-residue confidence in a predicted one**. Same
-column, two incompatible meanings. A classic [silent failure](08-what-broke.md#class-1-silent-failures).
+column, two incompatible meanings. A classic [silent failure](08-what-broke.md#class-1--silent-failures).
 
-**[Boltz-2](03-the-toolchain.md#31-boltz-2-the-primary-predictor)** — the folding model used for essentially everything here, version
+**[Boltz-2](03-the-toolchain.md#31-boltz-2--the-primary-predictor)** — the folding model used for essentially everything here, version
 2.2.1. Training cutoff **2023-06-01 on PDB release date** — release, not
 deposition.
 
@@ -147,13 +147,13 @@ alignment is misleading.
 
 **PAE (predicted aligned error)** — a matrix estimating, for each residue pair,
 how wrong their relative position is likely to be, in ångströms. The only source
-of inter-chain positional confidence, and the input to [ipSAE](03-the-toolchain.md#43-ipsae-interface-confidence-from-the-pae).
+of inter-chain positional confidence, and the input to [ipSAE](03-the-toolchain.md#43-ipsae--interface-confidence-from-the-pae).
 
 **pLDDT** — predicted local distance difference test: per-residue confidence,
 0–100. A statement about the model's certainty, not about correctness. One design
 here carried pLDDT **90.5** on a loop moving **4.31 Å** between seeds.
 
-**PTX vs [SASS](03-the-toolchain.md#62-sass-versus-ptx-the-mechanism-you-need)** — SASS is machine code compiled for one specific GPU
+**PTX vs [SASS](03-the-toolchain.md#62-sass-versus-ptx--the-mechanism-you-need)** — SASS is machine code compiled for one specific GPU
 architecture; PTX is an intermediate representation the driver can just-in-time
 compile for a *newer* one. A wheel shipping SASS but no PTX cannot run on a newer
 chip at all. `get_arch_list()` showing `PTX entries: NONE` is why the Blackwell
@@ -190,7 +190,7 @@ cutoff. Measured [ICC](04-measurement-theory.md#2-the-intraclass-correlation-and
 **CDR SASA** — solvent-accessible surface area of the CDR loops, in Å². Measured
 ICC: **0.000**.
 
-**[DockQ](03-the-toolchain.md#41-dockq-213-two-flags-that-both-default-wrong)** — a 0–1 measure of how close a predicted complex is to a reference
+**[DockQ](03-the-toolchain.md#41-dockq-213--two-flags-that-both-default-wrong)** — a 0–1 measure of how close a predicted complex is to a reference
 structure, with CAPRI quality bands. Version 2.1.3. **At its defaults it refuses
 to score a redesigned antibody**, exiting 1 with no output; it needs
 `--allowed_mismatches` and a pinned chain mapping. Note also that DockQ requires
@@ -205,11 +205,11 @@ write an empty table and exit 0.
 shown to respond to the epitope (64.0× its seed standard deviation under
 knockout).
 
-**[NetSolP](03-the-toolchain.md#44-netsolp-10-sequence-only-solubility-and-a-positive-control-that-chose-the-model)** — a sequence-only solubility predictor. Ships **three** model
+**[NetSolP](03-the-toolchain.md#44-netsolp-10--sequence-only-solubility-and-a-positive-control-that-chose-the-model)** — a sequence-only solubility predictor. Ships **three** model
 variants scoring a licensed antibody at 0.379 / 0.463 / 0.733 against a 0.50
 cutoff. Aggregated here as `min(VH, VL)`.
 
-**[PRODIGY](03-the-toolchain.md#42-prodigy-240-δg-and-contacts)** — predicts binding free energy ΔG in kcal/mol from a structure. It is
+**[PRODIGY](03-the-toolchain.md#42-prodigy-240--δg-and-contacts)** — predicts binding free energy ΔG in kcal/mol from a structure. It is
 a **contact-count regression over an unminimised predicted pose**, with no
 solvation term. Shown here to be **blind to the epitope** (0.9× its own seed sd
 against a 527-contact deletion) while carrying the largest share of the ranking

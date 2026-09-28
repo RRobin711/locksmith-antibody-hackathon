@@ -71,7 +71,7 @@ must also be **specific** (it must not bind other human proteins), **developable
 (soluble, stable, expressible, free of chemical liabilities that degrade in a
 vial), **manufacturable**, and **non-immunogenic**. The project measured the
 first two and found problems in both: its named Challenge 1 design turned out to
-be cross-reactive against [TIM-3](01-the-biological-problem.md#64-tim-3-cross-reactivity-a-specificity-failure), and both designs carried chemical liabilities in
+be cross-reactive against [TIM-3](01-the-biological-problem.md#64-tim-3-cross-reactivity--a-specificity-failure), and both designs carried chemical liabilities in
 the binding site itself.
 
 ### 1.3 The programming question
@@ -117,27 +117,27 @@ on a scheme choice nobody thinks to record.
 
 **Antibody architecture.** Heavy and light chains; variable versus constant
 domains; Fv versus Fab versus full IgG; the six complementarity-determining
-regions (CDRs) that form the binding surface; why [CDR-H3 dominates](01-the-biological-problem.md#23-why-cdr-h3-dominates-and-the-reason-is-genetic-not-structural), being the
+regions (CDRs) that form the binding surface; why [CDR-H3 dominates](01-the-biological-problem.md#23-why-cdr-h3-dominates--and-the-reason-is-genetic-not-structural), being the
 only loop built by V(D)J recombination with junctional diversity.
 
 **Machine learning for structure.** What a folding model does; multiple sequence
 alignments and co-evolution, and the counter-intuitive fact that **antibody
 chains want no alignment** because their diversity is somatic rather than
-evolutionary; pLDDT, PAE, ipTM and [ipSAE](03-the-toolchain.md#43-ipsae-interface-confidence-from-the-pae), and that these are not interchangeable;
+evolutionary; pLDDT, PAE, ipTM and [ipSAE](03-the-toolchain.md#43-ipsae--interface-confidence-from-the-pae), and that these are not interchangeable;
 `recycling_steps` and `diffusion_samples` as first-class scientific parameters
-rather than defaults; training cutoffs, and that [Boltz-2](03-the-toolchain.md#31-boltz-2-the-primary-predictor)'s is **2023-06-01 on PDB
+rather than defaults; training cutoffs, and that [Boltz-2](03-the-toolchain.md#31-boltz-2--the-primary-predictor)'s is **2023-06-01 on PDB
 release date** — release, not deposition, and read from the paper rather than a
 summary.
 
 **Statistics.** This is the deepest requirement and the one that separates a
 working pipeline from a trustworthy one. Reliability and the intraclass
-correlation; [attenuation](04-measurement-theory.md#4-attenuation-why-correlations-between-noisy-things-look-weak); [range restriction](04-measurement-theory.md#5-range-restriction-and-the-insight-that-selection-is-the-restricting-operation); [Spearman–Brown](04-measurement-theory.md#3-spearmanbrown-what-averaging-buys); [partial correlation](05-experiment-design.md#3-partial-correlation-and-a-result-that-half-reversed);
+correlation; [attenuation](04-measurement-theory.md#4-attenuation-why-correlations-between-noisy-things-look-weak); [range restriction](04-measurement-theory.md#5-range-restriction--and-the-insight-that-selection-is-the-restricting-operation); [Spearman–Brown](04-measurement-theory.md#3-spearmanbrown-what-averaging-buys); [partial correlation](05-experiment-design.md#3-partial-correlation-and-a-result-that-half-reversed);
 resampling nulls; statistical power and the [detectable-effect standard](05-experiment-design.md#1-sampling-error-and-the-detectable-effect-standard); order
 statistics; the [winner's curse](06-allocation-and-selection.md#3-winners-curse). Three chapters of this course are devoted to it.
 
 **Software engineering and systems.** Isolated Python environments; subprocess
 orchestration; multiprocessing start methods; GPU architecture compatibility,
-including the distinction between [SASS](03-the-toolchain.md#62-sass-versus-ptx-the-mechanism-you-need) (compiled for one chip) and PTX
+including the distinction between [SASS](03-the-toolchain.md#62-sass-versus-ptx--the-mechanism-you-need) (compiled for one chip) and PTX
 (intermediate code the driver can just-in-time compile for a newer chip);
 determinism; testing.
 
@@ -151,11 +151,11 @@ turn on it.
   designs are good" from "my gates do not bite."
 - **A confidence metric is not a truth metric.** The predictor's certainty is a
   statement about the predictor.
-- **Tool defaults are frequently wrong for your case.** [NetSolP](03-the-toolchain.md#44-netsolp-10-sequence-only-solubility-and-a-positive-control-that-chose-the-model) ships three model
+- **Tool defaults are frequently wrong for your case.** [NetSolP](03-the-toolchain.md#44-netsolp-10--sequence-only-solubility-and-a-positive-control-that-chose-the-model) ships three model
   variants that score a licensed antibody at 0.379, 0.463 and 0.733 against a
   0.50 cutoff — a spread wider than the distance from cutoff to "good". The CLI
   default would have failed every design and looked exactly like a design
-  problem. Separately, [DockQ](03-the-toolchain.md#41-dockq-213-two-flags-that-both-default-wrong) at its defaults **refuses to score the submission at
+  problem. Separately, [DockQ](03-the-toolchain.md#41-dockq-213--two-flags-that-both-default-wrong) at its defaults **refuses to score the submission at
   all**, exiting 1 with no output.
 - **Full-chain identity is a useless novelty screen for antibodies.** Framework
   conservation puts every antibody at 86–94% identity to something. You must
@@ -295,7 +295,7 @@ measurement stack:
    estimators*; a pass rate is a property of the estimator, so neither is quotable
    without it.
 3. Five of eight rubric metrics are constants across the design pool; the harness
-   ranks on three; one of those three ([PRODIGY](03-the-toolchain.md#42-prodigy-240-δg-and-contacts) ΔG) is blind to the epitope while
+   ranks on three; one of those three ([PRODIGY](03-the-toolchain.md#42-prodigy-240--δg-and-contacts) ΔG) is blind to the epitope while
    carrying the largest share of the ranking variance.
 4. On genuinely novel antibody–antigen pairs released after the predictor's
    training cutoff, median DockQ is **0.291**, against **0.818** on the memorised

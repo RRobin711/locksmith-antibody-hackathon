@@ -37,7 +37,7 @@ flattering condition.
 
 ### The measurement
 
-From `results/msa_silently_discarded.md`, a 2×2 on [ipSAE](03-the-toolchain.md#43-ipsae-interface-confidence-from-the-pae):
+From `results/msa_silently_discarded.md`, a 2×2 on [ipSAE](03-the-toolchain.md#43-ipsae--interface-confidence-from-the-pae):
 
 | | antigen MSA used | antigen MSA absent |
 |---|---|---|
@@ -84,17 +84,17 @@ the condition every prior fold was run in.
   **Narrowed 2026-09-26:** this bullet originally ended "Every Challenge 1 number in this
   course stands", which is true of *this defect* and false as a blanket assurance —
   Challenge 1's composite changed 96.0 → 94.0 on 2026-09-24 for an unrelated reason. See
-  [C3](CORRECTIONS.md#c3-challenge-1s-composite-is-940-not-960). *A correction scoped
+  [C3](CORRECTIONS.md#c3--challenge-1s-composite-is-940-not-960). *A correction scoped
   to one defect should not be worded as a general clearance.*
 - **Everything in [measurement theory](04-measurement-theory.md),
   [experiment design](05-experiment-design.md) and
   [allocation and selection](06-allocation-and-selection.md)** that is derived from the
-  Challenge 1 pool of 239 designs — [reliability](04-measurement-theory.md#13-reliability), [ICC](04-measurement-theory.md#2-the-intraclass-correlation-and-metrics-that-turn-out-to-be-constants), [range restriction](04-measurement-theory.md#5-range-restriction-and-the-insight-that-selection-is-the-restricting-operation), allocation, the
+  Challenge 1 pool of 239 designs — [reliability](04-measurement-theory.md#13-reliability), [ICC](04-measurement-theory.md#2-the-intraclass-correlation-and-metrics-that-turn-out-to-be-constants), [range restriction](04-measurement-theory.md#5-range-restriction--and-the-insight-that-selection-is-the-restricting-operation), allocation, the
   [winner's curse](06-allocation-and-selection.md#3-winners-curse), the band-grid result. None of it touches Challenge 2.
 - ~~**The `N→Q` versus `S→A` contact-count finding.**~~ **This bullet was wrong and is
   withdrawn 2026-09-26.** It argued the comparison survives because both arms were measured
   within a single condition, and told the reader to "treat the 60-fold ratio as intact".
-  [C2, immediately below in this same file](CORRECTIONS.md#c2-the-contact-count-rule-is-refuted-and-three-of-its-four-instances-are-void),
+  [C2, immediately below in this same file](CORRECTIONS.md#c2--the-contact-count-rule-is-refuted-and-three-of-its-four-instances-are-void),
   raised the same day, refutes the finding outright — so C1 and C2 contradicted each other
   for three days. A within-condition comparison is not rescued by being internally
   consistent when the condition itself is the thing that moved: under a correct alignment
@@ -107,7 +107,7 @@ the condition every prior fold was run in.
 ### Why it belongs in the course rather than just being fixed
 
 This is the course's own thesis landing on the course while it was being written. It is a
-**[silent failure](08-what-broke.md#class-1-silent-failures) of exactly the catalogued kind**: nothing errored, the fold completed, the
+**[silent failure](08-what-broke.md#class-1--silent-failures) of exactly the catalogued kind**: nothing errored, the fold completed, the
 structure was confident, a plausible number came back — computed on an input the tool had
 quietly changed. The one diagnostic that would have caught it, a warning on stdout, was
 discarded by the harness.
@@ -180,7 +180,7 @@ not a solubility artefact.
 
 **And three of the rule's four instances are void.** Both original measurements — `N→Q`
 fatal at 10 and 19 contacts, `S→A` free at 0 — came from `runs/sequon_fix`, which folded
-with the antigen alignment silently discarded (see [C1](CORRECTIONS.md#c1-challenge-2s-computational-evidence-is-withdrawn)).
+with the antigen alignment silently discarded (see [C1](CORRECTIONS.md#c1--challenge-2s-computational-evidence-is-withdrawn)).
 Under a correct alignment that design scores **0.012 regardless of its sequence**. They are
 therefore two readings of a *condition*, not of a substitution.
 

@@ -122,7 +122,7 @@ in the protein but disordered in the lattice are simply absent from the file. If
 sequence by walking the residues in the coordinate block, the flanking residues on either side
 of a disordered loop concatenate, and you produce a sequence describing **a protein with a loop
 excised and its ends fused** — a chimera. Nothing errors. The fold completes, the structure is
-confident, [DockQ](03-the-toolchain.md#41-dockq-213-two-flags-that-both-default-wrong) returns a plausible number. Measured: 9W43's antigen was folded as **83 aa
+confident, [DockQ](03-the-toolchain.md#41-dockq-213--two-flags-that-both-default-wrong) returns a plausible number. Measured: 9W43's antigen was folded as **83 aa
 against a true 115**, losing 32 residues *across the epitope face*; 9BQW's lost 19 across its
 epitope. Re-folding 9BQW from SEQRES moved DockQ **0.064 → 0.370** and flipped a milestone
 verdict. The fix distinguishes two cases that look alike and are not: `seq_for_folding()`
@@ -132,8 +132,8 @@ Both are detectable from author numbering alone, without fetching SEQRES. The tr
 form: **a large interface at near-zero DockQ is as easily your input preparation as the model's
 error — check the question you asked before you doubt the answer.**
 
-**A tool's default encodes its author's use case, not yours (S5, S6, S24, and [NetSolP](03-the-toolchain.md#44-netsolp-10-sequence-only-solubility-and-a-positive-control-that-chose-the-model)'s model
-variant).** [PRODIGY](03-the-toolchain.md#42-prodigy-240-δg-and-contacts) run on a three-chain file without `--selection` does not fail; it *chooses*,
+**A tool's default encodes its author's use case, not yours (S5, S6, S24, and [NetSolP](03-the-toolchain.md#44-netsolp-10--sequence-only-solubility-and-a-positive-control-that-chose-the-model)'s model
+variant).** [PRODIGY](03-the-toolchain.md#42-prodigy-240--δg-and-contacts) run on a three-chain file without `--selection` does not fail; it *chooses*,
 and on 5GGS it chose the heavy–light interface inside the antibody and returned **−16.3
 kcal/mol**, a value entirely plausible for an antibody–antigen interface and therefore
 undetectable by inspection. DockQ's `--allowed_mismatches` defaults to **0** because DockQ's
@@ -197,7 +197,7 @@ host-RAM kill in its own four-item list. **The host-RAM kill did not exit 0.** T
 session doc records attempt 1 as *killed* — the kernel's OOM killer sends `SIGKILL`, which is
 emphatically a non-zero status and is the one failure in that evening that announced itself
 honestly. The session index for 2026-09-16 states the membership correctly: *"Four fold
-failures — host RAM, missing CUDA kernel, GPU VRAM, and [ipSAE](03-the-toolchain.md#43-ipsae-interface-confidence-from-the-pae)'s filename coupling — three of
+failures — host RAM, missing CUDA kernel, GPU VRAM, and [ipSAE](03-the-toolchain.md#43-ipsae--interface-confidence-from-the-pae)'s filename coupling — three of
 which exited 0."* Subtract the one that was killed and the three genuine exit-0 cases are the
 missing `cuequivariance_torch` import, the CUDA VRAM OOM, and **ipSAE's empty-table failure**
 (S11) — which is the member the docstring drops.

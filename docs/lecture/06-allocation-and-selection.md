@@ -282,7 +282,7 @@ Apply (6.3):
 Predicted 94.963; measured 94.962. One thousandth of a point apart.
 
 An earlier, cleaner instance is worth copying as a technique: on re-seeding, the seed-1 top design
-regressed **−0.0123** [DockQ](03-the-toolchain.md#41-dockq-213-two-flags-that-both-default-wrong) while the average of all 8 re-seeded designs regressed **−0.0045**, so the
+regressed **−0.0123** [DockQ](03-the-toolchain.md#41-dockq-213--two-flags-that-both-default-wrong) while the average of all 8 re-seeded designs regressed **−0.0045**, so the
 **selection excess is −0.0079 DockQ**. Subtracting the shared drift from the winner's drift isolates
 the selection bias from whatever the re-run did to everything — that decomposition is the right way to
 measure a winner's curse empirically.
@@ -346,7 +346,7 @@ reliabilities fall below their [Spearman–Brown](04-measurement-theory.md#3-spe
 [the measurement-theory chapter](04-measurement-theory.md).
 
 Measured (`results/m3_plan_review.md` §3.2): **22 of 40 designs (55%)** change their single-seed
-composite across 3 seeds; the flipping sub-scores are **[ipSAE](03-the-toolchain.md#43-ipsae-interface-confidence-from-the-pae) (16 designs)** and **ΔG (17 designs)**;
+composite across 3 seeds; the flipping sub-scores are **[ipSAE](03-the-toolchain.md#43-ipsae--interface-confidence-from-the-pae) (16 designs)** and **ΔG (17 designs)**;
 single-seed reliability **0.602**; and — the cost that no amount of extra compute repairs — the
 **40 designs collapse onto three distinct values, {82.5, 85.0, 87.5}**. *"Scaling generation to 200
 does not add resolution, because banding is what removed it."*
