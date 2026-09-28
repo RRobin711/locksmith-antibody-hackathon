@@ -254,17 +254,81 @@ Every occurrence of Challenge 1 at `final 96.0`, and the convention triple
 `84.0 / 90.0 / 96.0`, which is now **81.0 / 87.5 / 94.0** across the three readings §5.2
 permits. Known live in this course:
 
-| file | line |
+**This index was 4 rows until 2026-09-28 and is now 32.** The short version was not a
+judgement that the rest did not matter — it was never completed, and an index that looks
+authoritative while being 12% complete spends a reader's scepticism in the wrong direction,
+which is the same defect C3's own "every Challenge 1 number stands" clause had.
+
+Regenerate it rather than trusting these line numbers:
+
+```bash
+cd docs/lecture && grep -n "96\.0" *.md | grep -v "^CORRECTIONS.md" | awk -F: '$2!=9'
+```
+
+**A — Challenge 1's composite asserted as 96.0.** Read **94.0**.
+
+| file | line(s) |
 |---|---|
-| `01-the-biological-problem.md` | 701 |
-| `02-the-engineering-problem.md` | 234, 730 |
+| `00-orientation.md` | 307 |
+| `01-the-biological-problem.md` | 19, 553, 573, 596, 602, 701 |
+| `02-the-engineering-problem.md` | 283, 756 |
+| `07-the-campaign.md` | 638, 640 |
+| `09-critique.md` | 214, 343, 434 |
+
+**B — envelopes with 96.0 as an endpoint.** The upper endpoint was the misbanded value; the
+envelope has not been recomputed, so treat the *width* as reported and the *top* as 94.0.
+
+| file | line(s) |
+|---|---|
+| `01-the-biological-problem.md` | 704 |
+| `03-the-toolchain.md` | 213, 223, 224 |
+| `06-allocation-and-selection.md` | 543, 613 |
+| `07-the-campaign.md` | 601, 602, 681 |
+
+**C — the band→score convention triple `84.0 / 90.0 / 96.0`.** Read **81.0 / 87.5 / 94.0**.
+
+| file | line(s) |
+|---|---|
+| `02-the-engineering-problem.md` | 260 |
+| `06-allocation-and-selection.md` | 388 |
 | `07-the-campaign.md` | 466 |
 
-`02-the-engineering-problem.md:730` additionally quotes Challenge 2 at `final 91.2`, which
-C1 supersedes; the current figure is `bb_8_0` at **93.6**.
+**D — Challenge 2 seed composites `93.6 / 96.0 / 93.6`.** Superseded by **C1**, not by C3:
+these folds used the discarded alignment. The packaged Challenge 2 design is `bb_8_0` at
+**93.6**.
 
-Chapters are not rewritten, per this file's standing policy — the correction lives here and
-the chapters are indexed above.
+| file | line(s) |
+|---|---|
+| `03-the-toolchain.md` | 212 |
+| `06-allocation-and-selection.md` | 612 |
+| `07-the-campaign.md` | 592, 593 |
+
+**E — historical incident records.** The number is correct *as the record of what the
+package said at the time* and is left alone; it is listed so a reader does not mistake it
+for a current score.
+
+| file | line(s) | what it records |
+|---|---|---|
+| `02-the-engineering-problem.md` | 771 | the deck/zip divergence |
+| `08-what-broke.md` | 426 | defect P13, same incident |
+
+Eight further mentions are **self-describing** — they already say the number is stale
+(`00-orientation.md:266`, `02-the-engineering-problem.md:182, 252`, `09-critique.md:327, 431`,
+`README.md:91, 95, 129`) and need nothing.
+
+### One exception to the no-rewrite policy
+
+`02-the-engineering-problem.md` §3.3 **was rewritten** on 2026-09-28, and it is the only
+place in the course that has been. It is a *worked derivation* — a reader reruns the
+arithmetic — and it did not merely carry a stale total: its `dockq` row read
+`0.800 | good | 10.0`, so it presented the rounding defect itself as correct working and
+taught `binding = 60/6 = 10.000`. Indexing that would have left the course teaching a wrong
+operation behind a pointer. It now reads `0.799579 | medium | 8.0`, `binding = 58/6 =
+9.667`, `final = 94.0`, and carries the C3 pointer inline.
+
+The distinction is the policy's actual boundary: **prose that quotes a number is indexed;
+arithmetic that produces one is corrected.** Everything else in this course remains as
+written.
 
 ### The mechanism
 

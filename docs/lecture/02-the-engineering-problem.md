@@ -177,7 +177,14 @@ is dragged down by its worst member. **Optimise the minimum**, not the average. 
 improving a metric that is not the current argmin of its category is wasted, and effort on the argmin
 is wasted past the point where it stops being the argmin.
 
-### 3.3 Worked arithmetic: how a design reaches 96.0
+### 3.3 Worked arithmetic: how a design reaches 94.0
+
+> **Recomputed 2026-09-28.** This section derived **96.0** from a `dockq` row reading
+> `0.800 | good | 10.0`, until the rounding defect in
+> [C3](CORRECTIONS.md#c3--challenge-1s-composite-is-940-not-960) was found. It is the
+> **one** place in this course rewritten rather than indexed, because a worked derivation
+> is arithmetic a reader reruns — leaving it would have taught both the wrong sum *and*
+> the rounded parse that produced it. Prose elsewhere is unchanged and indexed in C3.
 
 Challenge 1, design `mpnn_T0.5_s104_036` with the `N55Q` [deamidation](01-the-biological-problem.md#62-the-ng-deamidation-motif-in-challenge-1s-cdr-h2) fix, folded on the handbook
 §4.2.2 constructs under conventions `band_value=top`, `dockq_interface_agg=global`,
@@ -189,25 +196,42 @@ Challenge 1, design `mpnn_T0.5_s104_036` with the `N55Q` [deamidation](01-the-bi
 | `cdrh3_identity` | 38.500 % | good | 10.0 |
 | `contacts` | 97 | good | 10.0 |
 | `dg` | −13.300 kcal/mol | good | 10.0 |
-| `dockq` | 0.800 | good | 10.0 |
+| `dockq` | 0.799579 | **medium** | 8.0 |
 | `iface_plddt` | 88.630 | good | 10.0 |
 | `ipsae` | 0.821 | good | 10.0 |
 | `netsolp` | 0.569 | **medium** | 8.0 |
 
-Category means:
+Category means. `binding` is the six metrics `[ipsae, dockq, dg, contacts, iface_plddt,
+cdr_sasa]` (`config/metrics.yaml:181`), so the `dockq` band change moves one term of six:
 
-- binding = (10.0 + 10.0 + 10.0 + 10.0 + 10.0 + 10.0) / 6 = 60/6 = **10.000**
+- binding = (10.0 + **8.0** + 10.0 + 10.0 + 10.0 + 10.0) / 6 = 58/6 = **9.667**
 - developability = 8.0 / 1 = **8.000**
 - novelty = 10.0 / 1 = **10.000**
 
 Composite:
 
 ```
-final = (0.60 × 10.000 + 0.20 × 8.000 + 0.20 × 10.000) × 10
-      = (6.00        + 1.60         + 2.00        ) × 10
-      = 9.60 × 10
-      = 96.0
+final = (0.60 × 9.667 + 0.20 × 8.000 + 0.20 × 10.000) × 10
+      = (5.800       + 1.600        + 2.000        ) × 10
+      = 9.400 × 10
+      = 94.0
 ```
+
+**Read the `dockq` row carefully — it is why this section changed.** The true
+`GlobalDockQ` is `0.7995794972281312`, which is **0.00042 below** the §5.2 Good edge at
+0.80 and therefore bands `medium`. `dockq.compute` used to parse DockQ's *printed* summary
+line, which the tool formats to 3 dp, and `0.800` bands `good`. Two of this design's points
+came from a `printf`, in a course whose central argument is that the rubric is gameable by
+whoever controls the structure. The value is printed at 6 dp here for the same reason the
+packaged `scores.md` prints it that way: *when a number sits within its display precision of
+a decision boundary, print more digits, not fewer.*
+
+> **The Challenge 2 half below is superseded, and is left as written.** Its arithmetic is
+> correct for the design it names; the *design* is withdrawn. `bb_2_0_dldesign_1` was folded
+> against a silently discarded antigen alignment and falls from ipSAE 0.864 to 0.013 under a
+> correct one — see [C1](CORRECTIONS.md#c1--challenge-2s-computational-evidence-is-withdrawn).
+> The packaged Challenge 2 design is now `bb_8_0` at **93.6**. Unlike §3.3's Challenge 1
+> derivation, nothing here teaches a wrong operation, so it is indexed rather than rewritten.
 
 And the Challenge 2 design, `bb_2_0_dldesign_1` with the S→A sequon fix, on **seven** metrics:
 `cdr_sasa` 1066.500 good 10.0 · `cdrh3_identity` 30.000 (germline) good 10.0 · `contacts` 97 good
@@ -224,7 +248,9 @@ final = (0.60 × 9.200 + 0.20 × 8.000 + 0.20 × 10.000) × 10
 ```
 
 Notice what you can read off the arithmetic. One metric slipping from Good to Medium inside
-Challenge 1's *binding* category costs (10−8)/6 × 0.60 × 10 = **2.0 points**. The same slip on
+Challenge 1's *binding* category costs (10−8)/6 × 0.60 × 10 = **2.0 points** — which is
+exactly the 96.0 → 94.0 this section was recomputed to, and a useful check that the
+correction is the one term it claims to be, not a rescore. The same slip on
 `netsolp` costs (10−8)/1 × 0.20 × 10 = **4.0 points**, and on `cdrh3_identity` likewise 4.0 — twice
 as much, because those categories have one member each. This is not a quirk; it is the rubric's
 stated priorities made visible by doing the division.
