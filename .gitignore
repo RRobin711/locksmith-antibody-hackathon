@@ -29,3 +29,13 @@ source/antibody-design-hackathon-handbook.*
 # about an employer' unpublished commercial thesis. Fine as personal notes; not something
 # to attach permanently to a public repo under my own name. Kept locally, not published.
 knowledge/Locksmith Bio — Company Context.md
+
+# --- RFdiffusion / Hydra run artefacts (added 2026-09-28) -------------------
+# The decoy control runs with cwd = repo root, so Hydra writes run logs to
+# outputs/ and RFdiffusion caches its noise schedules beside them. A `git add -A`
+# during a live run swept a 7.8 MB generated .pkl and 12 Hydra logs into three
+# commits. Generated caches are not source; they are also the kind of file a
+# reader of a published repo has to stop and wonder about.
+outputs/
+cached_schedules/
+T_*_omega_*_schedule_*.pkl
