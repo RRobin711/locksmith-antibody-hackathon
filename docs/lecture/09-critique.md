@@ -493,8 +493,12 @@ MHC-II immunogenicity scoring.
    it.** A day of plumbing, amortised over at least four manual propagation
    passes, one of which failed.
 9. **Spend the last 10% of budget on the control that could falsify, not on the
-   score.** The decoy-patch control remains unrun and is still the only design
-   that could falsify the conditioning result.
+   score.** ~~The decoy-patch control remains unrun and is still the only design
+   that could falsify the conditioning result.~~ **Run 2026-09-28 and it passed** —
+   decoy-conditioned backbones land at 0.803 on the decoy face and 0.000 on the PD-L1
+   epitope, against an unconditioned baseline of 0/18 on that face.
+   [The control](../../results/decoy_patch_control.md). The recommendation stands; the
+   status line was stale.
 10. **Lead with the negative results; put the score in an appendix.** Free.
 11. **Cross-check any ranking metric against a second predictor family before
     ranking on it.** One install and one panel refold.

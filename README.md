@@ -45,6 +45,26 @@ truncated antigen construct silently produces a flattering negative control**: t
 control, which is why a control that fails is worth more than one that passes.
 → [`results/negative_control.md`](results/negative_control.md)
 
+![ipSAE against DockQ across the 40-crystal calibration panel, with the ipSAE ≥ 0.60 gate drawn horizontally, the DockQ Acceptable (0.23) and Medium (0.49) thresholds vertically, and the six known-wrong antibodies shown on a separate strip because no DockQ exists for them](figures/calibration_ipsae_vs_dockq.png)
+
+*What this shows:* across **40 real antibody–antigen crystals**, Boltz-2's interface
+confidence tracks pose accuracy at Spearman **ρ = +0.702** — which is the reason any ipSAE
+number in this repo is worth reading. The six known-wrong antibodies sit on their own strip
+because **no DockQ exists for them**: each is docked onto PD-1, which is not its target, so
+there is no reference complex to score a pose against. Plotting them at a fabricated x
+would invent the quantity the panel exists to measure. Their values are medians over five
+diffusion samples on the **repaired 119-residue** construct.
+
+*What it does not show:* **this is pose accuracy against predictor confidence, not
+affinity.** Nothing on either axis is a binding measurement, and this project's SKEMPI work
+found no metric in the stack tracks measured ΔΔG. The gate's error rates are a property of
+**which vertical line you read it at** — 0% FP / 58.3% FN at Acceptable+, 12.5% FP / 25.0%
+FN at Medium+ — and quoting one number from each is the mistake that survived four audits
+here. At n=40 the 95% CI on ρ is roughly **±0.32**, so this establishes direction and rough
+magnitude, not a precise value. Regenerate with
+[`scripts/98_calibration_figure.py`](scripts/98_calibration_figure.py); it reads
+`runs/calibration/scores.json`, so if the numbers change the figure does.
+
 **2. A silently discarded input inverted a ranking — it did not merely add noise.**
 Boltz compares an MSA's query length against the input chain and, on mismatch, **discards
 the alignment and folds single-sequence**, announcing it only on stdout, which the harness
@@ -121,6 +141,20 @@ Stated plainly, because the rest of the repo is an argument for stating it plain
   each, reachable at neither. It survived four audits.
 - **The scores are self-reported** against a rubric this repo demonstrates is weak on four
   of five gates.
+- **The design campaign is thin, we measured that it was thin, and we spent the budget on
+  measurement anyway.** Challenge 2 rests on **18 backbones**. The depth sweep
+  ([results/depth_sweep.md](results/depth_sweep.md)) established that viability arrives at
+  a **constant 8.3% per sequence (12 of 144)** with no detectable difference between
+  backbones (χ² = 22.91 on 17 df, p = 0.152), and that eight times the sequences produced
+  **nothing better** than the first pass found — 0.859 at depth 1 against 0.854 at depth 8.
+  That result points at *generating more backbones*, and we did not. Instead this project
+  ran roughly **1,380 scored folds**, the bulk of them re-measuring designs we already had.
+  At our own measured rate that budget corresponds to on the order of **100 viable
+  candidates rather than 12**. The sharpest version is in the critique chapter's own words:
+  the negative control that produced the most-cited finding here cost **eight folds against
+  roughly eight hundred** spent on scoring.
+
+  We are stating this rather than waiting for a reviewer to, and we are not rebutting it.
 
 ---
 
