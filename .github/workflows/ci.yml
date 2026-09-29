@@ -25,11 +25,14 @@
 # one, and no test launches a kernel. Verified 2026-09-28 by running the suite with
 # CUDA_VISIBLE_DEVICES="" -- 34 passed in 9.2 s.
 #
-# UNVERIFIED, AND STATED PLAINLY. The install is ~7.1 GB on disk plus ~2.5 GB of
-# downloaded wheels, against roughly 14 GB free on a GitHub-hosted runner. That fits
-# with little room, so the reclaim step below is insurance that has never been observed
-# to run out of space -- because this workflow has never run. There is no remote (see
-# STATE.md ss0). The first push is also this file's first real test.
+# THE DISK CLAIM WAS WRONG, AND THE FIRST RUN SAID SO. This header used to warn that
+# ~7.1 GB of install against "roughly 14 GB free" on a GitHub runner was tight, and
+# justified the reclaim step as insurance. First real run, 2026-09-29: the runner
+# reports `/dev/root 72G, 31G avail` AFTER reclaim, so there was never a shortage and
+# the step is not load-bearing. It is kept because it is cheap and because a future
+# larger runner image could change that -- but the justification is now "cheap
+# insurance", not "this would otherwise fail". Measured beats assumed, including when
+# the assumption was mine and was labelled as an assumption.
 
 name: CI
 
@@ -44,7 +47,7 @@ concurrency:
 
 jobs:
   tests:
-    name: clean-clone install + 34 invariant tests
+    name: clean-clone install + the invariant tests
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
