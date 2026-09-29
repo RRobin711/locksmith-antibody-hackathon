@@ -328,37 +328,68 @@ def analyse(bb_dir: Path) -> int:
     print(f"reference — conditioned arm: 0.712 on its own target, 0.000 on this decoy")
     print(f"reference — unconditioned arm: 0.500 on the epitope; shape-matched null: 0.172")
 
-    # ---- PRE-REGISTERED DECISION RULE ------------------------------------------
-    # Fixed 2026-09-28, BEFORE any decoy backbone existed, so the verdict is read off
-    # the data rather than chosen after seeing it. The bar is BAR = 0.500 for both
-    # quantities, symmetric, and it is not arbitrary: 0.500 is the measured
-    # UNCONDITIONED arm's frac_iface_on_epitope (scripts/96, n=18). So each test asks
-    # the same question — "did the interface land on this face more than an
-    # unconditioned backbone would?" — against a floor the project already measured.
-    # For context the shape-matched random-patch null is 0.172 and the conditioned arm
-    # reaches 0.712 on its own target.
-    BAR = 0.500
-    follows_decoy   = md > BAR
-    still_epitope   = me > BAR
-    if follows_decoy and not still_epitope:
-        row, verdict = 1, ("CONDITIONING WORKS. The interfaces followed the hotspots to a "
-                           "different face, so the published result is about our conditioning.")
-    elif still_epitope and not follows_decoy:
-        row, verdict = 3, ("REFUTED. Decoy-conditioned backbones still land on the PD-L1 "
-                           "epitope, so frac_iface_on_epitope = 0.712 was reading "
-                           "RFdiffusion's prior, not our hotspots. Propagate to every place "
-                           "0.712 appears.")
-    elif not follows_decoy and not still_epitope:
-        row, verdict = 2, ("INCONCLUSIVE. Both below the unconditioned baseline: the decoy "
-                           "face is not dockable and the experiment has NOT tested "
-                           "conditioning. This must NOT be read as specificity for the real "
-                           "epitope.")
+    # ---- PRE-REGISTERED DECISION RULE, AMENDED 2026-09-28 ----------------------
+    # AMENDMENT, made BEFORE any decoy backbone was read and justified ONLY by the
+    # UNCONDITIONED arm, which already existed:
+    #
+    #   The first version used BAR = 0.500 for both faces and called it "symmetric, and
+    #   not arbitrary". It is symmetric in NUMBER and badly asymmetric in EVIDENCE,
+    #   because the unconditioned baselines differ enormously. Measured over the 18
+    #   unconditioned backbones (scripts/96 and the check below):
+    #
+    #       unconditioned frac_iface_on_epitope = 0.500   (sd 0.168, max 0.714)
+    #       unconditioned frac_iface_on_decoy   = 0.000   (0 of 18, max 0.000)
+    #
+    #   RFdiffusion left to itself NEVER touches the decoy face. So "decoy > 0.500"
+    #   demanded that conditioning beat a baseline of zero by half the interface, while
+    #   "epitope > 0.500" only demanded it match a baseline it already sits at. A real
+    #   but partial steering effect would have been scored as failure.
+    #
+    # Each bar is now tied to the reference that makes it mean something:
+    #   DECOY_NULL   0.172  the shape-matched random-patch null -- the SAME bar the
+    #                       original conditioning claim had to beat (results/…_shape_matched)
+    #   DECOY_STRONG 0.500  half the interface, i.e. comparable to what conditioning
+    #                       achieved on its own target (0.712)
+    #   EPI_BASE     0.500  the unconditioned arm's own epitope occupancy: at or above
+    #                       this, conditioning did NOT move the interface off the default
+    DECOY_NULL, DECOY_STRONG, EPI_BASE = 0.172, 0.500, 0.500
+
+    import statistics as _st
+    def ci95(xs):
+        if len(xs) < 2: return 0.0
+        return 1.96 * _st.stdev(xs) / (len(xs) ** 0.5)
+    dvals = [r[2] for r in rows]; evals = [r[3] for r in rows]
+    print(f"  95% CI on decoy   ±{ci95(dvals):.3f}")
+    print(f"  95% CI on epitope ±{ci95(evals):.3f}")
+    print(f"  backbones with ANY decoy contact: {sum(1 for x in dvals if x > 0)}/{len(dvals)}"
+          f"   (unconditioned arm: 0/18)")
+
+    if md >= DECOY_STRONG and me < EPI_BASE:
+        row, verdict = 1, ("CONDITIONING WORKS, strongly. The interfaces followed the "
+                           "hotspots onto a face the unconditioned arm never touches (0/18). "
+                           "The published result is about our conditioning.")
+    elif md > DECOY_NULL and me < EPI_BASE:
+        row, verdict = 2, ("PARTIAL. Decoy occupancy beats the random-patch null (0.172) but "
+                           "falls short of what conditioning achieved on its own target "
+                           "(0.712). Conditioning steers, but weakly, and the headline "
+                           "should say so rather than claim clean targeting.")
+    elif me >= EPI_BASE and md <= DECOY_NULL:
+        row, verdict = 3, ("REFUTED. Asked for a different face, the backbones still land on "
+                           "the PD-L1 epitope at or above the UNCONDITIONED baseline (0.500), "
+                           "and never on the decoy. frac_iface_on_epitope = 0.712 was reading "
+                           "RFdiffusion's prior, not our hotspots. Propagate everywhere.")
+    elif md <= DECOY_NULL and me < EPI_BASE:
+        row, verdict = 4, ("INCONCLUSIVE / third region. The interfaces left the default "
+                           "epitope but did not arrive at the decoy. Conditioning perturbed "
+                           "something, but this cannot separate 'steers imprecisely' from "
+                           "'the decoy face is undockable' -- the unconditioned arm never "
+                           "docks there either (0/18). NOT specificity for the real epitope.")
     else:
-        row, verdict = 4, ("AMBIGUOUS, not pre-registered. Both faces score above the bar — "
-                           "consistent with docks straddling the 4.9 A shared edge between "
-                           "the patches (the limitation recorded in results/decoy_patch.md). "
-                           "Report as such; do not pick the flattering half.")
-    print(f"\nPRE-REGISTERED ROW {row} FIRED (bar = {BAR:.3f}, the unconditioned baseline)")
+        row, verdict = 5, ("AMBIGUOUS, unregistered. Both faces above their bars -- consistent "
+                           "with docks straddling the 4.9 A shared edge between the patches. "
+                           "Report as ambiguous; do not pick the flattering half.")
+    print(f"\nPRE-REGISTERED ROW {row} FIRED")
+    print(f"  bars: decoy null {DECOY_NULL}, decoy strong {DECOY_STRONG}, epitope baseline {EPI_BASE}")
     print(f"  {verdict}")
     return 0
 
