@@ -520,6 +520,69 @@ executed; its first push is its first real test.
 
 ---
 
+## 8b. The decoy control ran, and it passed
+
+Written after the rest of this doc, because when §8 was drafted the backbones were still
+diffusing and the honest thing was to describe a prepared experiment rather than a finished
+one.
+
+**It did not need the rented GPU.** RFantibody's CPU route already existed on this machine
+and had been validated on 2026-09-21 (Gate 0b PASS, `gate0b_0.pdb` on disk); the decoy
+control measures targeting on *backbones*, so it needs RFdiffusion alone — no ProteinMPNN,
+no RF2. 18 backbones, ~6 h of CPU, **$0**. The rental was only ever required for the GPU
+path and for the sequencing arm, which is still open.
+
+### Result: pre-registered ROW 1
+
+| | decoy-conditioned | conditioned arm | unconditioned arm |
+|---|---|---|---|
+| mean `frac_iface_on_decoy` | **0.803** (CI ±0.133) | 0.000 | **0.000** (0/18) |
+| mean `frac_iface_on_epitope` | **0.000** | 0.712 | 0.500 |
+| any decoy contact | **15 / 16** | 0 / 18 | 0 / 18 |
+
+Asked for a face 165.9° away, 15 of 16 backbones went there and **all 16 read exactly
+0.000** on the PD-L1 epitope. The unconditioned baseline on the decoy face is not low, it
+is **zero across 18 backbones** — so this is motion from nothing rather than a shift in a
+distribution, and `frac_iface_on_epitope = 0.712` is a property of the conditioning rather
+than of RFdiffusion's prior. Full write-up:
+[the control](../../results/decoy_patch_control.md).
+
+### Three things the run taught that the result does not
+
+**A guard I wrote to catch silent exclusion silently excluded.** The analysis printed
+`n = 16` from 18 backbones with no explanation. Two (`dec_0`, `dec_7`) produced **no
+antigen contact at all**, making the fraction 0/0 — a real observation, not a parse
+failure. The script `continue`d past them. I caught it only by asking why n wasn't 18. It
+now names exclusions. *This is the fourth instance this session of a check that could not
+see part of its own corpus, and the first where the blind spot was in code written that
+same day to fix exactly that class of bug.*
+
+**My pre-registered bar was wrong, and "it uses a measured number" is what disguised it.**
+The first rule used `BAR = 0.500` for both faces and called it "symmetric, and not
+arbitrary". It is symmetric in *number* and badly asymmetric in *evidence*: the
+unconditioned baselines are **0.500 on the epitope and 0.000 on the decoy**, so the decoy
+side demanded conditioning beat zero by half an interface while the epitope side only
+demanded it match a baseline it already sat at. A genuine partial effect would have been
+filed as failure. Amended before any decoy backbone was read, on the strength of the
+unconditioned arm alone. *Using data does not make a threshold principled; using the right
+comparison does.*
+
+**The plan written in advance was wrong about where the answer goes.** The ROW 1 branch of
+`docs/decoy_result_propagation_plan.md` said to add a register entry "under B
+(confirmations)". `results/retractions.md` has no confirmations section — A through D are
+all withdrawals and every B entry is WITHDRAWN or REFUTED. A passing control does not
+belong in a retraction register. Corrected on execution and left visible in the plan,
+because a plan written in advance is only useful if you can see where it missed.
+
+### What it does not buy
+
+Targeting, not binding. Interfaces smaller than the conditioned arm's (median 6 vs 9), one
+at a single residue, and 2 of 18 docking nowhere — conditioning steers, but it cannot make
+an arbitrary surface as good a docking site as the one PD-L1 evolved to use. One arm, one
+seed set, no replication.
+
+---
+
 ## 9. Glossary
 
 | term | meaning |
