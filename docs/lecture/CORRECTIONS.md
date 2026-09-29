@@ -535,13 +535,48 @@ for where that boundary falls). Each site now carries an inline pointer here.
 | `07-the-campaign.md` | 608 | "cleared all five §7.2 hard cutoffs" |
 | `07-the-campaign.md` | 614 | cetuximab "0.006 under the cutoff" |
 
-**Three sweeps were needed, and the third found a site the first two marked clean.**
-`05-experiment-design.md:327` was scored "construct named nearby: yes" by the first sweep's
-proximity heuristic, because the word *construct* appeared within ±400 characters of an
-unrelated sentence. **Proximity is not qualification** — a lesson written down after the
-first sweep and then walked into on the second. The third sweep required the claim's
-*subject* (HyHEL-10, cetuximab, "wrong antibody") to be present, which is what a claim
-actually is, and that is what caught it.
+### Five sweeps, and what each one found the last had marked clean
+
+| sweep | scope | claim-bearing | flagged | genuine finds |
+|---|---|---|---|---|
+| 1 | named files, **proximity** heuristic | 50 | 33 | **13**, fixed |
+| 2 | verification after those fixes | 22 | 0 | — |
+| 3 | repo-wide incl. `.pptx`, then rescoped to require the **subject** | 150 → 76 | 79 → 17 | **1** (`05-experiment-design.md:327`) |
+| 4 | after that fix | 79 | 5 | 0 (all verified false positives) |
+| 5 | after the `negative_control.md` inline qualifier | 79 | 5 | 0 |
+
+**The claim this file makes is therefore "no known unqualified occurrences after five
+sweeps", not "zero".** Three consecutive sweeps each found something the previous one had
+marked clean. That is a converging series, not a proof of termination, and the difference
+matters: the next sweep with a better-chosen subject list could find a sixth.
+
+**`05-experiment-design.md:327` is why.** The first sweep scored it "construct named
+nearby: yes" because the word *construct* appeared within ±400 characters of an unrelated
+sentence. **Proximity is not qualification** — a lesson written down after sweep 1 and then
+relied on again in sweep 2. Sweep 3 required the claim's *subject* to be present
+(HyHEL-10, cetuximab, "wrong antibody"), which is what a claim actually is.
+
+### Two stated exceptions, so they are not implied
+
+**`results/negative_control.md`, the `model_0` table.** Sweep 4 cleared its HyHEL-10 row on
+the grounds that the file "names the 113-mer in its §Design section". *That is the same
+invalid argument as above at a weaker scale* — file-level proximity instead of
+paragraph-level — and it was relied on a few screens below the note declaring it invalid.
+Resolved by qualifying inline: the table now carries its own construct banner, because the
+§Design sentence sat **above the subsection heading**, which is not where a reader of a
+table looks.
+
+**`results/negative_control.md:27` is cleared on SUBJECT, not proximity.** That row is
+`| Challenge 1 design | PD-1 (ours) | test | … | 5/5 ✅ ALL |` — *our own design* clearing
+the gates. C9 is about a **wrong** antibody clearing them, so this is not the claim at all.
+The sweep flags it only because "hen egg lysozyme" sits two rows below, inside the ±260
+character subject window. The earlier justification for clearing it was wrong even though
+the conclusion survives.
+
+The other standing false positives, each read individually rather than pattern-matched:
+`results/ablation.md:18–19` (`0.006` is an alanine-scan **delta**, `(+0.006)`, not
+cetuximab's margin) and `scripts/105_package_bb8.py:32` ("all five **samples**" — diffusion
+samples, not gates).
 
 *Transferable, and stated three times in three variables now: a rate is a property of every
 parameter it was computed under — threshold, estimator, input construct. Fixing one axis is

@@ -18,6 +18,8 @@ The point estimate is the **median over the five diffusion samples**, fixed in a
 
 `diffusion_samples=1` is Boltz's default and was this project's setting for most of its life. Boltz ranks its diffusion outputs by its own confidence, so the model it returns is the **argmax of a distribution that was never drawn**. This table is that column: `model_0` of five, scored against every §7.2 hard cutoff.
 
+> ⚠️ **Every row in this table is on the truncated 113-residue construct** (§Design above). That qualifier sat above this subsection's heading, which is not where a reader of the table looks — so it is repeated here. On the repaired 119-mer, HyHEL-10's `5/5 ✅ ALL` below becomes **4/5**, best of five **0.409**. Register [§C9](retractions.md), course [C6](../docs/lecture/CORRECTIONS.md).
+
 | antibody | its real target | arm | ipSAE | ΔG | contacts | iface pLDDT | CDR SASA | §7.2 cutoffs cleared |
 |---|---|---|---|---|---|---|---|---|
 | pembrolizumab | PD-1 | positive | 0.876 | -12.6 | 106 | 94.8 | 1507 | **5/5** ✅ ALL |
