@@ -529,10 +529,19 @@ for where that boundary falls). Each site now carries an inline pointer here.
 | `01-the-biological-problem.md` | 821 | "cleared all five hard cutoffs as a PD-1 binder" |
 | `01-the-biological-problem.md` | 752 | cetuximab "0.006 under the cutoff" |
 | `02-the-engineering-problem.md` | 403 | "cleared all five hard cutoffs on `model_0`" |
+| `05-experiment-design.md` | 327 | "cleared all five cutoffs", ipSAE 0.609 — **added on the third sweep**, see note below |
 | `05-experiment-design.md` | 649 | "sweeping all five viability gates" |
 | `06-allocation-and-selection.md` | 562 | "cleared all five hard viability cutoffs" |
 | `07-the-campaign.md` | 608 | "cleared all five §7.2 hard cutoffs" |
 | `07-the-campaign.md` | 614 | cetuximab "0.006 under the cutoff" |
+
+**Three sweeps were needed, and the third found a site the first two marked clean.**
+`05-experiment-design.md:327` was scored "construct named nearby: yes" by the first sweep's
+proximity heuristic, because the word *construct* appeared within ±400 characters of an
+unrelated sentence. **Proximity is not qualification** — a lesson written down after the
+first sweep and then walked into on the second. The third sweep required the claim's
+*subject* (HyHEL-10, cetuximab, "wrong antibody") to be present, which is what a claim
+actually is, and that is what caught it.
 
 *Transferable, and stated three times in three variables now: a rate is a property of every
 parameter it was computed under — threshold, estimator, input construct. Fixing one axis is

@@ -328,6 +328,10 @@ receptor — cleared all five cutoffs** on `model_0`: [ipSAE](03-the-toolchain.m
 interface pLDDT **85.0**, CDR SASA **1084 Å²**. Its **median over five diffusion samples is ipSAE
 0.219**, which tells you exactly what happened and is the subject of
 [the order-statistics section of the next chapter](06-allocation-and-selection.md).
+*(⚠️ **113-mer only** — see [C6](CORRECTIONS.md). On the repaired 119-residue antigen
+HyHEL-10's best of five is **0.409** and it clears nothing; that panel's own positive
+control failed on the 113-mer and it was pre-registered INCONCLUSIVE. What survives on
+both constructs: four of five gates reject 0 of 6.)*
 
 Across the panel, **four of the five hard cutoffs reject 0 of 6 known-wrong antibodies**: viability
 rests on ipSAE alone, and ipSAE was itself read off a maximum. *"It costs eight folds and nobody ran
