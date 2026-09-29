@@ -34,6 +34,22 @@ RFAB="$HOME/.cache/rfantibody"
 V="$HOME/.venvs/rfab-cpu"
 OUT="${OUT:-runs/challenge2_decoy}"
 K="${K:-18}"
+# PARALLEL MODE (added 2026-09-28 after measuring the serial run): one worker reached
+# only 1140% CPU on a 24-core box -- load average 11.35, so ~12 cores sat idle for the
+# whole run. RFdiffusion's own intra-op parallelism plateaus well short of the machine.
+# Three workers on DISJOINT design ranges, 8 threads each, use all 24 and cost 3 x 2.2 GB
+# of RSS against 8 GB available.
+#   START  first design index this worker owns (maps to inference.design_startnum)
+#   NUM    how many it makes  (maps to inference.num_designs)
+#   THREADS torch intra-op threads; unset = torch grabs everything and workers contend
+# Ranges must not overlap: two workers writing the same dec_N.pdb is a silent corruption,
+# not an error.
+START="${START:-}"
+NUM="${NUM:-}"
+THREADS="${THREADS:-}"
+if [ -n "$THREADS" ]; then
+  export OMP_NUM_THREADS="$THREADS" MKL_NUM_THREADS="$THREADS" TORCH_NUM_THREADS="$THREADS"
+fi
 # Decoy hotspots from scripts/95_decoy_patch_control.py: 26 residues on the far face of
 # PD-1, RMS spread 10.15 A against the epitope's 9.85, ZERO overlap, 165.9 deg apart, and
 # the 18 existing conditioned backbones score 0.000 on this patch.
@@ -43,9 +59,13 @@ LOOPS="H1:7,H2:6,H3:5-13,L1:8-13,L2:7,L3:9-11"
 mkdir -p "$OUT"/{bb,logs}
 log() { echo "[$(date +%H:%M:%S)] $*" | tee -a "$OUT/heartbeat.log"; }
 
-HAVE=$(ls "$OUT"/bb/dec_*.pdb 2>/dev/null | wc -l)
-if [ "$HAVE" -ge "$K" ]; then log "already have $HAVE/$K backbones, nothing to do"; exit 0; fi
-TODO=$(( K - HAVE ))
+if [ -n "$START" ] && [ -n "$NUM" ]; then
+  HAVE="$START"; TODO="$NUM"; TAG="w${START}"
+else
+  HAVE=$(ls "$OUT"/bb/dec_*.pdb 2>/dev/null | wc -l)
+  if [ "$HAVE" -ge "$K" ]; then log "already have $HAVE/$K backbones, nothing to do"; exit 0; fi
+  TODO=$(( K - HAVE )); TAG="serial"
+fi
 
 log "=== DECOY CONTROL (CPU): $TODO backbone(s), $HAVE already on disk ==="
 log "target=$RFAB/inputs/pd1_T.pdb  decoy hotspots=26  out=$OUT/bb"
@@ -58,12 +78,12 @@ S=$(date +%s)
     inference.ckpt_override_path="$RFAB/weights/RFdiffusion_Ab.pt" \
     "ppi.hotspot_res=[$HOT]" "antibody.design_loops=[$LOOPS]" \
     inference.num_designs="$TODO" inference.design_startnum="$HAVE" \
-    inference.output_prefix="$PWD/$OUT/bb/dec" > "$OUT/logs/run_$(date +%H%M%S).log" 2>&1
+    inference.output_prefix="$PWD/$OUT/bb/dec" > "$OUT/logs/run_${TAG}_$(date +%H%M%S).log" 2>&1
 RC=$?
 D=$(( $(date +%s) - S ))
 
 GOT=$(ls "$OUT"/bb/dec_*.pdb 2>/dev/null | wc -l)
-LAST=$(ls -t "$OUT"/logs/run_*.log | head -1)
+LAST=$(ls -t "$OUT"/logs/run_${TAG}_*.log | head -1)
 # `26/26 resolved` proves the tool RECEIVED the conditioning, not that it changed the
 # output -- but unmatched hotspots are SILENTLY ignored, so assert the count.
 HS=$(grep -c "as a hotspot" "$LAST" 2>/dev/null || true)
@@ -71,8 +91,9 @@ log "rfdiffusion exit=$RC, ${D}s ($((D/60)) min), artefacts now $GOT/$K, hotspot
 
 # Exit code is NOT evidence: RFdiffusion's CPU failure modes are silent truncation and NaN
 # output, and the first version of this script exited 0 having produced nothing.
-if [ "$GOT" -lt "$K" ]; then
-  log "INCOMPLETE: $GOT/$K backbones. Last error lines:"
+NEED="$K"; [ "$TAG" != "serial" ] && NEED=$(( START + NUM ))
+if [ "$GOT" -lt "$NEED" ]; then
+  log "[$TAG] INCOMPLETE: $GOT on disk, needed $NEED. Last error lines:"
   grep -iE "error|not in struct|Traceback|Killed|OOM" "$LAST" | tail -5 | tee -a "$OUT/heartbeat.log"
   exit 1
 fi
