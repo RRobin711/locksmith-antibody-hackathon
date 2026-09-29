@@ -156,6 +156,12 @@ flattering half of each; see [§C1 of the register](results/retractions.md).
   [the checksum pass](results/checksum_pass_2026-09-22.md).
 - 42 invariant tests, most mutation-verified.
 - The harness scores pembrolizumab itself correctly (the standing canary).
+- **Hotspot conditioning actually steers RFdiffusion** — the decoy-patch control, the only
+  experiment that could have falsified it, run 2026-09-28 and **passed**. Conditioned onto
+  a patch 165.9° away, 15 of 16 backbones follow it (mean **0.803** of their interface) and
+  **all 16 read 0.000** on the PD-L1 epitope, against an unconditioned baseline on that face
+  of **0 / 18**. [The control](results/decoy_patch_control.md). *Targeting only — it says
+  nothing about binding, and 2 of 18 docked nowhere at all.*
 
 **Taken on trust.**
 
@@ -213,29 +219,24 @@ flattering half of each; see [§C1 of the register](results/retractions.md).
 [that session's doc](docs/sessions/2026-09-28-clearing-the-backlog-and-three-guards-that-could-not-see.md).
 Two remain and **both need a decision rather than an hour**:
 
-1. **The two validity controls.** **Prepared 2026-09-28 and ready to run** — see
-   [the run brief](docs/gpu-run-brief-2026-09-28.md). Everything possible without a GPU is
-   already done, so this is one pod session with the analysis pre-written and the outcome
-   pre-registered.
-   - **Cost, now measured rather than bracketed: ≈1 GPU-hour, ≈$0.50.** The old "~2–4
-     GPU-hours" was never measured. Per-backbone time from the previous run is **161 s**
-     (median 148, max 288), so 18 backbones is **0.81 GPU-h** — and the decoy control needs
-     **RFdiffusion only**, because targeting is measured on backbones, so no ProteinMPNN and
-     no RF2 for that arm.
-   - **The decoy-patch control** — [selected and verified on CPU](results/decoy_patch.md):
-     26 residues, RMS spread **10.15 Å** against the epitope's 9.85 Å, **zero overlap**,
-     **165.9°** around the centroid, and the 18 existing conditioned backbones score
-     **0.000** on it against 0.712 on the real epitope, so the faces separate in practice.
-     Limitation recorded: the nearest pair is 4.9 Å, i.e. the patches share an edge. It is
-     the only outstanding way to be wrong — the observational route is exhausted now that
-     the result strengthened to **18/18** under a shape-matched null
-     ([§D4](results/retractions.md)).
-   - **The unconditioned arm** — its [targeting baseline is already computed
-     locally](results/unconditioned_baseline.md): **0.500** (n=18) against the conditioned
-     **0.712**, reproducing the pilot's 0.501. What is missing is *scores*, which needs
-     ProteinMPNN on the pod and then Boltz **locally, free**.
-   - Why rent at all: the local RTX 5070 Ti is too **new**. RFantibody pins `torch==2.3.*`,
-     DGL ships no matching ABI, and those wheels carry no PTX, so nothing JITs to `sm_120`.
+1. ~~**The two validity controls.**~~ **The decoy-patch control is DONE — 2026-09-28,
+   and it PASSED.** Run locally on CPU in ~6 h for **$0**, not on a rented GPU: RFantibody's
+   CPU route already existed here (`~/.venvs/rfab-cpu`, validated 2026-09-21 at Gate 0b) and
+   the decoy control needs RFdiffusion only, so renting was never required for this block.
+   - **Result: pre-registered ROW 1.** Decoy-conditioned backbones land at **0.803** on the
+     decoy face and **0.000** on the PD-L1 epitope; the unconditioned arm touches the decoy
+     face **0 / 18** times. So `frac_iface_on_epitope = 0.712` is a property of our
+     conditioning, not of RFdiffusion's prior — the live alternative explanation is
+     excluded. [The control](results/decoy_patch_control.md).
+   - **Caveats, in the data rather than the footnotes:** 2 of 18 produced no antigen contact
+     at all and are excluded (n=16, named); interfaces are smaller than the conditioned
+     arm's (median 6 vs 9); one arm, one seed set, 95% CI ±0.133; and this is **targeting,
+     not binding**.
+   - **Still open: sequencing the 18 unconditioned backbones.** Needs ProteinMPNN, which is
+     the one step that does need a rented card (RFantibody pins `torch==2.3.*`, no PTX, so
+     nothing reaches `sm_120`). Folding and scoring afterwards run locally and free. This
+     separates range restriction from a dead `interaction_pae`; it does not bear on the
+     conditioning result above.
 2. **Republish.** Recreate the repo private, push, verify old SHAs 404 **against the
    remote** (a fresh clone structurally cannot answer this — see §0), read the rendered
    README / PROJECT-STORY / retractions, then flip public. `.github/workflows/ci.yml` now

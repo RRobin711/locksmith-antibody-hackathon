@@ -56,3 +56,10 @@ The matched null is **less variable** (sd 0.185 → 0.155) but its extreme quant
 
 *Read this as a robustness check that passed, and nothing more.* §D4's diagnosis was correct — the old patches really were too compact (7.76 Å against the epitope's 10.09 Å) and the null's mean really was too low. The correction is worth **+0.019** against a real value of 0.712, i.e. the flagged defect was never carrying the result. What it does change is the one marginal backbone, and it changes it in our favour, which is the direction that deserves the most suspicion — hence the full distribution table above rather than a single summary number.
 
+---
+
+**Followed up 2026-09-28 by the experiment this one cannot be:** every null on this page is
+resampled from the *same* structures, so it can only confirm. [The decoy-patch
+control](decoy_patch_control.md) changed the hotspots instead and asked RFdiffusion for a
+different face. It went — 0.803 on the decoy, 0.000 on the epitope, against an
+unconditioned baseline of 0/18 on that face.

@@ -290,6 +290,7 @@ def analyse(bb_dir: Path) -> int:
         "_pn", Path(__file__).resolve().parent / "70_epitope_patch_null.py")
     pn = importlib.util.module_from_spec(spec); spec.loader.exec_module(pn)
     meta = json.loads(OUT_JSON.read_text())
+    nodock: list[str] = []
     # Accept BOTH naming schemes. The pod ran one invocation per backbone, giving
     # `bb_7_0.pdb`; the local CPU run uses a single invocation with num_designs=K, giving
     # `dec_0.pdb` ... `dec_17.pdb`. A `*_0.pdb` glob silently matches ONE of eighteen --
@@ -309,6 +310,11 @@ def analyse(bb_dir: Path) -> int:
             if (((pts[:, None, :] - loop_pts[None, :, :]) ** 2).sum(-1) <= pn.CUTOFF2).any():
                 contacted.add(n)
         if not contacted:
+            # NOT a parse failure: the antibody docked nowhere on the antigen, so
+            # frac_iface_on_* is undefined (0/0). Recorded and reported rather than
+            # skipped -- an unexplained drop from n=18 to n=16 is how a silent
+            # exclusion looks exactly like a working analysis.
+            nodock.append(p.name)
             continue
         dec = {tnums[i] for i in meta["decoy_ordinals_chainT"] if i < len(tnums)}
         epi = {tnums[i] for i in meta["epitope_ordinals_chainT"] if i < len(tnums)}
@@ -322,7 +328,15 @@ def analyse(bb_dir: Path) -> int:
         print(f"{n:<18}{c:>6}{d:>10.3f}{e:>12.3f}")
     md = sum(r[2] for r in rows) / len(rows)
     me = sum(r[3] for r in rows) / len(rows)
-    print(f"\nn = {len(rows)} decoy-conditioned backbones")
+    total = len(rows) + len(nodock)
+    print(f"\nbackbones generated        {total}")
+    if nodock:
+        print(f"no antigen contact at all  {len(nodock)}  ({', '.join(nodock)})"
+              f"  -- frac undefined, EXCLUDED")
+    print(f"n analysed                 {len(rows)}")
+    sizes = [r[1] for r in rows]
+    print(f"interface size, analysed   median {sorted(sizes)[len(sizes)//2]}, "
+          f"range {min(sizes)}-{max(sizes)}  (conditioned arm: median 9, range 4-15)")
     print(f"mean frac_iface_on_decoy    {md:.3f}")
     print(f"mean frac_iface_on_epitope  {me:.3f}")
     print(f"reference — conditioned arm: 0.712 on its own target, 0.000 on this decoy")

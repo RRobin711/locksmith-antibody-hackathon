@@ -38,7 +38,13 @@ across 39 files** (some are false positives; the list is a starting point, not a
 
 1. Write `results/decoy_patch_control.md`: both means, per-backbone table, the row that
    fired, and the 4.9 Å shared-edge limitation restated.
-2. Add a register entry under **B** (confirmations), not C or D — nothing is withdrawn.
+2. ~~Add a register entry under **B** (confirmations), not C or D.~~ **Wrong, corrected on
+   execution 2026-09-28.** `results/retractions.md` has no confirmations section — A, B, C
+   and D are *all* withdrawals, and every B entry is WITHDRAWN or REFUTED. A passing control
+   does not belong in a retraction register at all. It goes to
+   `results/decoy_patch_control.md`, to `STATE.md` §4 *"Verified on this machine"*, and as a
+   forward pointer from the patch-null results. Left visible rather than edited away: a plan
+   written in advance is only useful if you can see where it was wrong.
 3. Update `STATE.md` §7 item 1: control **passed**, and say what it does and does not buy —
    it establishes *targeting*, never *binding*.
 4. One line in `results/challenge2_patch_null_shape_matched.md` pointing forward to it.
