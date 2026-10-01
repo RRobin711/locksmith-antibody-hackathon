@@ -300,7 +300,7 @@ Two different DockQ thresholds, quoted as though they shared one. Recomputed fro
 
 The quoted pair takes the flattering half of each and **is reachable at neither**. The 0%
 also rests on **4 negatives** — Clopper–Pearson 95% upper bound **0.602**, i.e.
-uninformative. It was live in a shipped document and had survived **four** independent
+uninformative. It was live in a shipped `methods_and_limitations.md` and had survived **four** independent
 audits, found only because the figure was recomputed for a deck slide instead of copied from
 an earlier message.
 

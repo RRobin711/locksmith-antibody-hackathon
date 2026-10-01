@@ -899,3 +899,75 @@ def test_prepublish_auditor_sees_through_markdown_emphasis():
     # emphasis, and stripping it would invent false positives.
     assert aud._strip_markup("runs/calibration/scores_v2.json") == \
         "runs/calibration/scores_v2.json"
+
+
+# --------------------------------------------------------------------------------
+# 14. A tool default that decides viability.
+# --------------------------------------------------------------------------------
+# PROMOTED FROM LEARNINGS.md 2026-09-30. The mechanism IS the memory.
+#
+# NetSolP ships three solubility predictors and they DISAGREE ACROSS THE 0.50 CUTOFF on
+# pembrolizumab -- a licensed antibody that must pass developability, and therefore the
+# positive control for this metric. Measured 2026-09-16, per chain (VH / VL):
+#
+#   convention        ESM1b (5-fold)   ESM1b-distilled   ESM12 (5-fold)
+#   VH                     0.733            0.637            0.379
+#   VL                     0.569            0.463            0.346
+#   Fab heavy              0.623            0.491            0.352
+#   Fab light              0.626            0.448            0.312
+#
+# On the **Fab** chains `ESM12` (0.35 / 0.31) and `Distilled` (0.49 / 0.45) both FAIL the
+# 0.50 cutoff while the `ESM1b` 5-fold ensemble passes everywhere at 0.57-0.73. So THE
+# VARIANT, NOT THE DESIGN, DECIDED VIABILITY -- a false negative that would have silently
+# discarded good designs and looked exactly like a design problem.
+#
+# Two things this test also pins, because they were wrong once and are invisible when
+# wrong. `CONSTRUCT = "fv"`: the handbook specifies the Fv twice and this project fed the
+# **Fab** until 2026-09-20; on Fv pembrolizumab reads VH 0.733 / VL 0.569, which INVERTS
+# which chain limits `min(VH, VL)`. And `CHAIN_AGG = "min"`: under a min aggregator, effort
+# spent on anything but the current argmin is wasted.
+#
+# NOT pinned here, deliberately: the numbers above. Asserting them would require running
+# NetSolP (~4.7 GB of ONNX, ~11 s/sequence over 24 threads), which no other test needs.
+# The constants are what drift silently; the measurements are in the module docstring and
+# in `config/metrics.yaml` with their evidence.
+
+def test_netsolp_conventions_match_the_positive_control_that_chose_them():
+    """Three constants, each of which moved a verdict across a threshold once."""
+    from locksmith.metrics import netsolp
+
+    assert netsolp.MODEL_TYPE == "ESM1b", (
+        f"MODEL_TYPE is {netsolp.MODEL_TYPE!r}. On pembrolizumab's Fab chains ESM12 scores "
+        "0.35/0.31 and Distilled 0.49/0.45 — both FAIL the 0.50 cutoff that a licensed "
+        "antibody must pass. Only the ESM1b 5-fold ensemble clears it (0.57–0.73). "
+        "Changing this makes the predictor variant, not the design, decide viability."
+    )
+    assert netsolp.CONSTRUCT == "fv", (
+        f"CONSTRUCT is {netsolp.CONSTRUCT!r}. The handbook specifies the Fv twice; feeding "
+        "Fab inverts which chain limits min(VH, VL) — on Fv pembrolizumab is VH 0.733 / "
+        "VL 0.569."
+    )
+    assert netsolp.CHAIN_AGG == "min", (
+        f"CHAIN_AGG is {netsolp.CHAIN_AGG!r}. A design is only as soluble as its worst chain."
+    )
+
+
+def test_netsolp_config_and_module_agree():
+    """A config value and a hardcoded constant encoding one convention WILL diverge — the
+    defect this suite already pins for the surrogate's band anchors and DockQ's aggregator.
+    `config/metrics.yaml` and `metrics/netsolp.py` are that pair for solubility."""
+    cfg = load()
+    conv = getattr(cfg, "conventions", None) or {}
+    from locksmith.metrics import netsolp
+
+    pairs = [("netsolp_model_type", netsolp.MODEL_TYPE),
+             ("netsolp_construct", netsolp.CONSTRUCT),
+             ("netsolp_chain_agg", netsolp.CHAIN_AGG)]
+    for key, module_value in pairs:
+        declared = conv.get(key) if isinstance(conv, dict) else getattr(conv, key, None)
+        if declared is None:
+            continue          # config does not declare it; the module is then the only source
+        assert str(declared) == str(module_value), (
+            f"config/metrics.yaml declares {key}={declared!r} but "
+            f"metrics/netsolp.py uses {module_value!r}"
+        )
