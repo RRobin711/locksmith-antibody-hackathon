@@ -601,7 +601,7 @@ The patch null's expected value is **0.154**, over four times lower, precisely b
 to the geometry of the alternative. Improving the null did more for the result than tripling the
 sample size would have.
 
-Finally, the strongest available control remains conceded and unrun: a **decoy-patch control**, with
+Finally, ~~the strongest available control remains conceded and unrun~~ — **run 2026-09-28 and it passed**: 0.803 on the decoy face, 0.000 on the epitope, against an unconditioned baseline of 0/18 ([the control](../../results/decoy_patch_control.md)). As written: a **decoy-patch control**, with
 the generator aimed at the *opposite* face of the target. It costs a GPU run.
 
 ---

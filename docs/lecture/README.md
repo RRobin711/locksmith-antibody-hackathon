@@ -95,7 +95,7 @@ main result, and it is why the course is worth reading.
 > (see [C1](CORRECTIONS.md)). The course body still derives 96.0 in places; those are
 > indexed in C3 rather than rewritten.
 
-**21,367 lines of Python** (src 3,699 · scripts 16,834 · tests 710), 34 tests,
+**21,367 lines of Python** (src 3,699 · scripts 16,834 · tests 710), 34 tests *(42 as of 2026-09-29)*,
 13 pre-registrations, 5 adversarial audits, and ~280,000 words of tracked Markdown
 (the twelve chapters here are 75,166 of it).
 

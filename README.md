@@ -183,7 +183,7 @@ indistinguishable from a measurement a week later.
 |---|---|
 | `src/locksmith/` | The library — folding, metrics, scoring, selection, packaging (**34** modules). |
 | `scripts/` | **102** numbered drivers, one per experiment, in the order they were run. |
-| `tests/` | Invariant suite (34 tests). Several exist because the bug they pin actually happened. |
+| `tests/` | Invariant suite (**42 tests**). Several exist because the bug they pin actually happened. |
 | `results/` | **73** result write-ups, including **13** pre-registrations. |
 | `docs/lecture/` | A 12-chapter course (~79k words) teaching the project from first principles. |
 | `docs/sessions/` | **25** self-contained session docs — what was built, and what broke. |

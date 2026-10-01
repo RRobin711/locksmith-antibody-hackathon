@@ -1,4 +1,4 @@
-# Project state — 2026-09-28
+# Project state — 2026-09-29
 
 **For a cold reader.** This is the single place to find out where the project is: what is
 **verified**, what is **taken on trust**, what is **blocked**, and what is left. Every
@@ -15,31 +15,53 @@ pipeline honestly, and the deliverable is the whole record, not the score.
 
 ## 0. Publication status — read this first
 
-**There is no remote.** The repository was created on GitHub (private) on 2026-09-26,
-found to be serving pre-scrub history, and **deleted**. Nothing is public and nothing has
-ever been public.
+**It is public.** <https://github.com/RRobin711/locksmith-antibody-hackathon> — public
+since 2026-09-29, 107 commits, CI green. Owned by `RRobin711`, which is the account that
+authored every commit (`79134609+RRobin711@users.noreply.github.com`) and the one holding
+the `workflow` scope GitHub requires to push `.github/workflows/`.
 
-**Why it was deleted rather than force-pushed.** `git filter-repo` scrubbed a copyrighted
-handbook and three organisers' email addresses from local history, and the force-push made
-the old commits unreachable — but GitHub retains unreachable objects and serves them by
-SHA. Three organiser emails and a 727 KB PDF were retrievable from the remote for ~3 hours
-*after* a fresh-clone verification reported five zeros. A clone performs a reachability
-walk, so it structurally cannot distinguish "deleted" from "orphaned".
+**The September attempt was deleted, and this is a different repository.** The first repo
+(2026-09-26, private) was found serving pre-scrub history and destroyed. `git filter-repo`
+had scrubbed a copyrighted handbook and three organisers' email addresses from local
+history, and the force-push made the old commits unreachable — but **GitHub retains
+unreachable objects and serves them by SHA**. Three emails and a 727 KB PDF were
+retrievable for ~3 hours *after* a fresh-clone verification reported five zeros, because a
+clone performs a **reachability walk** and so structurally cannot distinguish "deleted"
+from "orphaned".
 
-**Before any future push, verify against the remote, not a clone:**
+**What was verified before this push, with controls in both directions:**
 
 ```bash
-gh api repos/<owner>/<repo>/commits/<old-sha>       # 200 = still retained
-gh api repos/<owner>/<repo>/commits/<never-pushed>  # 422 = control works
+gh api repos/<owner>/<repo>/commits/<old-sha>        # 200 = still retained
+gh api repos/<owner>/<repo>/commits/<never-pushed>   # 404 = NEGATIVE control works
+gh api repos/<owner>/<repo>/commits/<known-present>  # 200 = POSITIVE control works
 ```
 
-Old SHAs come from `.git/filter-repo/commit-map`. After the deletion both probes return
-404. Local history is clean: 0 handbook blobs, 0 full email addresses, all commits authored
-`Ryan Robin <79134609+RRobin711@users.noreply.github.com>`.
+The positive control was added on 2026-09-29 and September had only the negative one. Two
+404s prove nothing unless the probe can be shown to return 200 for something — otherwise
+"nothing retained" and "the probe is broken" are the same observation.
 
-**Do not push this repository with `--mirror` or `--all`** without re-checking
-`refs/original/*` first — that namespace held all 34 work-email commits after an earlier
-rewrite.
+| check | result |
+|---|---|
+| handbook blobs / full email addresses in history | **0** — only `@users.noreply.github.com` survives |
+| commit identity, all 107 | single author, as above |
+| `scripts/59_prepublish_audit.py` | clean (history paths, all blobs incl. unreachable, case collisions, authors) |
+| run artefacts (`outputs/`, `cached_schedules/`, a 7.8 MB `.pkl`) | removed from **history** before the first push; 0 additions in any commit |
+| anonymous fetch of README / PROJECT-STORY / retractions | HTTP 200 |
+
+A full-history bundle was taken and verified restorable before that rewrite.
+
+**Two standing cautions.** Do not push with `--mirror` or `--all` without re-checking
+`refs/original/*` — that namespace held all 34 work-email commits after an earlier rewrite.
+And `gh`'s active account flips between the two configured logins; the remote is pinned to
+`https://RRobin711@github.com/...` so the credential helper cannot silently authenticate as
+the wrong one.
+
+**Still open:** an empty stray repo at `RyanB-raekis/locksmith-antibody-hackathon` from a
+push rejected for missing the `workflow` scope. Probed with both controls: `isEmpty: true`,
+no retained objects — the pre-receive hook rejected before anything was kept. Deleting it
+needs `gh auth refresh -h github.com -s delete_repo`, which only the user can grant. It is
+tidiness, not exposure.
 
 ---
 
@@ -56,8 +78,8 @@ no cached score, and re-derives every metric from the three files per design. Ti
 inside the tree are within seconds of each other, which is the healthy signature; a day's
 gap is the orphan tell that caught a stale document here once.
 
-Working tree is **clean**, **42/42** tests pass, and the 2026-09-28 session is committed
-(9 commits). *Commit SHAs are deliberately not quoted here: the history was rewritten on 2026-09-26 to scrub a copyrighted PDF and third-party emails, which re-hashed every commit. An earlier version of this line cited `4241bb6..d5cf334`, neither of which resolves.*
+Working tree is **clean**, **42/42** tests pass, CI is green on the public remote, and the
+2026-09-29 session is committed (**107 commits** total).
 
 ---
 
@@ -195,7 +217,10 @@ flattering half of each; see [§C1 of the register](results/retractions.md).
 
 - `tests/test_invariants.py` — **42 tests**, all passing (`uv run pytest`, ~7 s), and
   `.github/workflows/ci.yml` runs them on a clean clone.
-- Git: `master`, no remote, linear history, one commit per unit of work.
+- Git: `master`, linear history, one commit per unit of work. **Public remote since
+  2026-09-29** — `RRobin711/locksmith-antibody-hackathon`, pinned in `origin` as
+  `https://RRobin711@github.com/...` so a flipped `gh` account cannot authenticate as the
+  wrong user. See §0.
 - `pytest` and `python-pptx` are now declared in `pyproject.toml`. Both had been
   undeclared; the suite could not be run at all, and `scripts/57` crashed at the deck step
   *after* writing the package files, so a failed build looked like a successful one.
@@ -237,10 +262,14 @@ Two remain and **both need a decision rather than an hour**:
      nothing reaches `sm_120`). Folding and scoring afterwards run locally and free. This
      separates range restriction from a dead `interaction_pae`; it does not bear on the
      conditioning result above.
-2. **Republish.** Recreate the repo private, push, verify old SHAs 404 **against the
-   remote** (a fresh clone structurally cannot answer this — see §0), read the rendered
-   README / PROJECT-STORY / retractions, then flip public. `.github/workflows/ci.yml` now
-   exists and its first push is also its first real test.
+2. ~~**Republish.**~~ **DONE 2026-09-29 — it is public.** See §0 for the verification and
+   its controls. `.github/workflows/ci.yml` ran for the first time on that push and passed
+   (3m20s, 42 tests); its header had warned that ~7.1 GB of install against "roughly 14 GB
+   free" was tight, and the run reported `/dev/root 72G, 31G avail` — the warning was
+   wrong and has been corrected rather than left standing on a false premise.
+
+   **Still open, and it needs you:** deleting the empty stray repo requires
+   `gh auth refresh -h github.com -s delete_repo`.
 
 ### Cleared 2026-09-28
 
