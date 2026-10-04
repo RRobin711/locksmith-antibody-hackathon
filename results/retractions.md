@@ -322,10 +322,13 @@ observed statistic is 0.132 rather than 0.152. And the design that would settle 
 prereg's own **stratum C** (+8 sequences per backbone, 144 folds, power 0.802), which was
 declined on the strength of the null it would have corrected.
 
-**This is the sixth instance of a small-sample null read as evidence of absence** (§B5, §B8,
-§D5 and the two withdrawn in `depth_sweep.md` itself are the others) — and the first where
-the error carried a *spending decision* rather than a rule. The project's lecture notes
-already listed this as its most repeated error before this entry was written.
+**This is another instance of the project's most repeated error** — a small-sample null read
+as evidence of absence. `docs/lecture/08-what-broke.md:512` already tallied **≥6** of them
+*before* this entry was written (W4, W5, W19, the `interaction_pae` ICC, the pilot's two-arm
+conditioning test, and the "no code-path difference" chain), so this is at least the seventh,
+not the sixth as first written here. **It is the first to carry a spending decision rather
+than a rule.** Note also that §B8 and "the two claims withdrawn in `depth_sweep.md`" are the
+*same* two claims — an earlier draft of this entry counted them twice.
 
 Note what is *not* claimed: nothing here shows the backbones are heterogeneous, and ~0.86
 may well be the generator's ceiling. The point is that the evidence offered cannot
@@ -360,12 +363,12 @@ copy. This *is* that copy — same entry point as `pod/01_run.sh:69`, same weigh
 code, weights or flags; worth stating on any result, but not an uncontrolled difference.
 
 **The project had already proved it, five days before writing down that it was impossible.**
-`prereg_2026-09-23_depth_sweep.md:22` costs sequence generation at *"~8 s per 8 draws per
+`prereg_2026-09-23_depth_sweep.md:24` costs sequence generation at *"~8 s per 8 draws per
 backbone — ~10 minutes total for all 576"*, and `scripts/101_constrained_redesign_yield.py`
 ends its docstring *"Sequence-only, CPU, no folds, no GPU, no money."* The GPU brief was
 written on 2026-09-28 without checking either.
 
-**Second instance of the same failure in six days.** On 2026-09-28 the decoy-patch control
+**Second instance of the same failure in five days.** On 2026-09-28 the decoy-patch control
 was also believed to need a rented card and ran locally on CPU for $0 — found only by
 checking whether it *could* run before reporting that it could not. That discovery was never
 carried across to the sibling blocker one row below it in the same `STATE.md` table.

@@ -243,7 +243,7 @@ flattering half of each; see [§C1 of the register](results/retractions.md).
 | item | blocked on | cost |
 |---|---|---|
 | ~~**The decoy-patch control**~~ | ~~a GPU run~~ | **DONE 2026-09-28 and it PASSED** — ran locally on CPU for $0, not on a rented card. [The control](results/decoy_patch_control.md) |
-| ~~**Sequencing the 18 unconditioned backbones**~~ | ~~a GPU run~~ | **NOT BLOCKED — the blocker was false.** ProteinMPNN runs on this laptop's CPU (verified 2026-10-03; ~10 min for all 144 sequences, $0). Only the folding costs anything, and that is local. [Register §B12](results/retractions.md) |
+| ~~**Sequencing the 18 unconditioned backbones**~~ | ~~a GPU run~~ | **NOT BLOCKED — the blocker was false.** ProteinMPNN runs on this laptop's CPU (verified 2026-10-03; **~2.4 min** for all 144 sequences at the prereg's measured 8 s per 8 draws per backbone, $0). Only the folding costs anything, and that is local. [Register §B12](results/retractions.md) |
 | ~~**Shape-matching the patch null**~~ | ~~nothing — it is cheap~~ | **DONE 2026-09-28** (`scripts/94_shape_matched_patch_null.py`). Worth **+0.019** on the null mean (0.153 → 0.172) against a real 0.712; conditioning result goes **17/18 → 18/18**. [Register §D4](results/retractions.md) |
 | ~~**The reliability figure 0.629**~~ | ~~the original script~~ | **RESOLVED 2026-09-28** — it reproduces as a *7-seed-mean* reliability (1 − 0.176²/0.290² = 0.6317), and `scripts/35_winner.py:202-206` was tracked all along. See [register §D2](results/retractions.md) |
 
@@ -272,8 +272,10 @@ Two remain and **both need a decision rather than an hour**:
      This was listed as rental-blocked from 2026-09-22 to 2026-10-03 on the grounds that
      RFantibody pins `torch==2.3.*` with no PTX, so nothing reaches `sm_120`. The pin is
      real; the conclusion was not. RFantibody's own bundled ProteinMPNN falls back to CPU
-     (`proteinmpnn_interface_design.py:85-90`) and generates all 144 sequences in ~10
-     minutes for $0 — verified by running it. Folding and scoring were already local. The
+     (`proteinmpnn_interface_design.py:85-90`) and generates all 144 sequences in about
+     **2.4 minutes** for $0 — 18 backbones at the prereg's measured 8 s per 8 draws, and
+     the tool itself verified at 2 sequences in 1 second. (An earlier draft of this line
+     said "~10 minutes", which is the prereg's figure for **576** sequences, not 144.) Folding and scoring were already local. The
      whole experiment is free. See [register §B12](results/retractions.md), which also
      records that the project had proved this five days *before* writing down that it was
      impossible. It separates range restriction from a dead `interaction_pae`; it does not

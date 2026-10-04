@@ -3,8 +3,8 @@
 > **SUPERSEDED 2026-10-03. Neither control needed a rented GPU, and this brief is the
 > document that said they did.** Control 1 (the decoy patch) **ran locally on CPU for $0**
 > on 2026-09-28, hours after this was written. Control 2's sequencing step is **also free**:
-> RFantibody's bundled ProteinMPNN falls back to CPU and does all 144 sequences in ~10
-> minutes — verified 2026-10-03 by running it. §2 below is wrong and is kept, struck
+> RFantibody's bundled ProteinMPNN falls back to CPU and does all 144 sequences in about
+> **2.4 minutes** — verified 2026-10-03 by running it (2 sequences in 1 second). §2 below is wrong and is kept, struck
 > through, because *how* it was wrong is the lesson: the pin it cites is real, the
 > conclusion drawn from it is not, and the project had already proved so five days earlier.
 > See [register §B12](../results/retractions.md).

@@ -245,12 +245,12 @@ weights or flags. Worth stating on any result; not an uncontrolled difference.
 
 ### The part worth keeping
 
-`results/prereg_2026-09-23_depth_sweep.md:22` costs sequence generation at *"~8 s per 8
+`results/prereg_2026-09-23_depth_sweep.md:24` costs sequence generation at *"~8 s per 8
 draws per backbone — ~10 minutes total for all 576"*, and
 `scripts/101_constrained_redesign_yield.py` closes its docstring *"Sequence-only, CPU, no
 folds, no GPU, no money."* **Both predate the GPU brief by five days.**
 
-And this is the **second instance in six days**. On 2026-09-28 the decoy-patch control was
+And this is the **second instance in five days**. On 2026-09-28 the decoy-patch control was
 also believed to need a rented card and ran locally on CPU for $0 — discovered only because
 someone checked whether it *could* run before reporting that it could not. That discovery
 was never carried across to the sibling blocker **one row below it in the same table**.

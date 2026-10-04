@@ -21,7 +21,7 @@ pipeline honestly** — which means the most useful thing in it is the list of t
 wrong and how each was caught.
 
 That list is [`results/retractions.md`](../results/retractions.md): every claim the project
-withdrew, with the recomputation that killed it. Twenty-odd entries. A few samples:
+withdrew, with the recomputation that killed it. **31 entries.** A few samples:
 
 - **Two points came from a `printf`.** Challenge 1 scored 96.0 for nine days because the
   DockQ parser read a summary rounded to 3 decimal places. The true value is
@@ -31,9 +31,15 @@ withdrew, with the recomputation that killed it. Twenty-odd entries. A few sampl
   alignment and folds single-sequence — announcing it only on stdout, which the harness
   threw away. Re-screening with a correct alignment nearly **inverted the ranking**: the
   design that clears had ranked 29th of 30; the packaged one fell from 1st.
-- **A negative control that cut against us.** An anti-lysozyme antibody — the wrong
-  antibody for this target entirely — clears all five hard cutoffs. That result is in the
-  shipped submission, not buried.
+- **A negative control that cuts against the rubric — with the three qualifiers it took
+  three attempts to get right.** HyHEL-10, raised against hen egg lysozyme, clears all five
+  hard cutoffs **on `model_0`** (the argmax of five diffusion draws, which is what the
+  tool's default hands a grader) **on the truncated 113-residue antigen**. On the *median*
+  of those five it fails — ipSAE **0.219** against a 0.609 gate — and on the repaired
+  119-residue antigen its best of five is **0.409** and it clears nothing. What survives:
+  four of the five gates reject **0 of 6** wrong antibodies, so the gate set rests on ipSAE
+  alone. What does not: *"the rubric accepts an antibody that cannot bind"* — it accepts one
+  only on a construct whose own positive control it also fails. Register §C8, §C9.
 
 ## The two findings from the final audit (2026-10-03)
 
