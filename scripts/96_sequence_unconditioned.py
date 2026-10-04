@@ -15,13 +15,27 @@ past the backbone stage. Two live questions cannot be answered without them:
   2. **The unconditioned arm's targeting baseline**, which this script computes now, for
      free, and which the 2026-09-21 pilot reported as ≈0.501.
 
-WHAT NEEDS A GPU, AND WHAT DOES NOT. Splitting this honestly matters, because only one
-step needs renting:
+WHAT NEEDS A GPU, AND WHAT DOES NOT. **Nothing here needs renting, and this docstring
+asserted otherwise for eleven days.** RFantibody's bundled ProteinMPNN branches on
+`torch.cuda.is_available()` and falls back to CPU (`proteinmpnn_interface_design.py:85-90`);
+in `~/.venvs/rfab-cpu` (torch 2.2.1+cpu) that is False, and it generated 2 sequences in 1
+second on 2026-10-03. The torch/PTX pin cited below is real but says nothing about the CPU
+path. The only true obstacle is that the CLI subprocesses a bare `python`
+(`cli/inference.py:294`), so the venv's `bin` must be on PATH:
+
+    PATH="$HOME/.venvs/rfab-cpu/bin:$PATH" proteinmpnn -i bb -o seq -n 8 -t 0.2
+
+This is also the TOOL-MATCHED copy -- same entry point as `pod/01_run.sh:69`, same weights
+(ProteinMPNN_v48_noise_0.2.pt), same temperature. The arms would differ in device, not in
+code, weights or flags; state that on the result. See results/retractions.md B12, which
+records that the project proved this on 2026-09-23 and wrote down the opposite on 09-28.
+
+The original (wrong) split follows:
 
     backbones           DONE — 18 already on disk from the 2026-09-21 pod run
     frac_iface_on_epitope   CPU, runs here, no GPU (this script, no flags)
-    sequences           ProteinMPNN → **rented sm_86** (RFantibody pins torch==2.3.*,
-                        no PTX, so it cannot run on this Blackwell card)
+    sequences           ProteinMPNN → **local CPU, free** (CORRECTED 2026-10-03; this
+                        docstring said "rented sm_86" from 2026-09-22 and was wrong)
     fold + score        Boltz-2 → **local, free**; torch 2.11+cu128 runs on sm_120
 
 STUBBED, STATED PLAINLY. This script does NOT drive the fold. That path already exists

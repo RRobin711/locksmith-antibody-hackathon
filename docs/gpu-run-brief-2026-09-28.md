@@ -1,5 +1,14 @@
 # GPU run brief — the two validity controls
 
+> **SUPERSEDED 2026-10-03. Neither control needed a rented GPU, and this brief is the
+> document that said they did.** Control 1 (the decoy patch) **ran locally on CPU for $0**
+> on 2026-09-28, hours after this was written. Control 2's sequencing step is **also free**:
+> RFantibody's bundled ProteinMPNN falls back to CPU and does all 144 sequences in ~10
+> minutes — verified 2026-10-03 by running it. §2 below is wrong and is kept, struck
+> through, because *how* it was wrong is the lesson: the pin it cites is real, the
+> conclusion drawn from it is not, and the project had already proved so five days earlier.
+> See [register §B12](../results/retractions.md).
+
 **Written 2026-09-28. Nothing here has been run. Everything that could be done without a
 GPU already has been**, so this is a single pod session with the analysis pre-written and
 the outcome pre-registered.
@@ -36,11 +45,19 @@ ships `libgraphbolt_pytorch_<v>.so` for 2.0.0–2.2.1 only, and those wheels car
 so there is no forward-JIT to `sm_120`. Verified in the pod logs: RFdiffusion, ProteinMPNN
 and RF2 all come from that stack. Boltz-2 is unaffected and runs locally on Blackwell.
 
-| step | tool | where | why |
+| step | tool | where this brief said | **where it actually runs** |
 |---|---|---|---|
-| decoy backbones | RFdiffusion | **rented sm_86** | pinned torch 2.3, no PTX |
-| sequences for the unconditioned arm | ProteinMPNN | **rented sm_86** | same stack |
-| fold + score | Boltz-2 | **local, free** | torch 2.11+cu128 runs on sm_120 |
+| decoy backbones | RFdiffusion | ~~rented sm_86~~ | **local CPU, $0** — `~/.venvs/rfab-cpu`, ~26 min/backbone. Done 2026-09-28 |
+| sequences for the unconditioned arm | ProteinMPNN | ~~rented sm_86~~ | **local CPU, $0** — falls back at `proteinmpnn_interface_design.py:85-90`; 2 sequences in 1 s |
+| fold + score | Boltz-2 | local, free | local, free ✅ the only row that was right |
+
+**Why the error was plausible, and why that is not an excuse.** The pin is real:
+RFantibody requires `torch==2.3.*`, DGL ships no matching ABI, and those wheels carry no
+PTX, so nothing reaches `sm_120`. Every clause is true and the conclusion still does not
+follow, because *CPU* was never in the comparison. The one genuine obstacle is unrelated to
+the device — the CLI subprocesses a bare `python` (`cli/inference.py:294`), so without the
+venv's `bin` on `PATH` it dies with `FileNotFoundError: 'python'`, which looks nothing like
+a device problem.
 
 **One option worth pricing first.** The *standalone* ProteinMPNN builds on modern torch and
 would make the sequencing step free. The cost is that the conditioned arm used RFantibody's

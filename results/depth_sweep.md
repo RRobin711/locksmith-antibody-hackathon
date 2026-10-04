@@ -39,8 +39,19 @@ Two tests of whether that spread exceeds one shared rate:
 | Beta-binomial LRT vs binomial | LR = 0.696, fitted ρ = **0.0446** | **0.202** | no overdispersion |
 
 **Neither rejects a homogeneous binomial.** The fitted intra-backbone correlation is 0.045,
-i.e. indistinguishable from zero. **These 18 backbones are exchangeable: there are no good
-or bad ones in this pool, only draws.**
+i.e. indistinguishable from zero.
+
+> **CORRECTION, 2026-10-03 — the sentence that stood here is withdrawn.** It read: *"These
+> 18 backbones are exchangeable: there are no good or bad ones in this pool, only draws."*
+> That is evidence of absence drawn from an underpowered null. At n=18, k=8 and an 8.3%
+> rate, this test has **23% power at the ρ it fitted** and reaches 80% only at **ρ ≈ 0.24**.
+> Three of eighteen backbones being five times better than the rest would have been missed
+> **three times in five**. What the data support is: *no backbone in this pool is detectably
+> more than about four times the pool rate.* The statistics were right; the sentence was
+> too strong, and it carried the spending decision below.
+> See [the power analysis](heterogeneity_power.md) and [register §B11](retractions.md).
+> Note the irony recorded there: **two claims are withdrawn further down this very file for
+> exactly this error**, and the section immediately below names it as such.
 
 ## Two claims from the interim readout, both withdrawn
 
@@ -81,6 +92,18 @@ Renting is justified only if the backbones themselves are the ceiling — and th
 heterogeneity test says the backbones are not distinguishable from each other at all, so
 "generate more backbones" and "draw more sequences" are the same experiment with different
 price tags. One of them is free.
+
+> **AMENDED 2026-10-03.** The decision stands; its stated justification does not. "Not
+> distinguishable" was a 23%-power null (see the correction above), so this paragraph
+> claimed support it never had. **The decision survives on the other leg of the argument** —
+> eight times the sequences produced nothing better than the first pass found — which is a
+> direct observation rather than a null. Two further corrections to the economics: stratum C
+> costs **144 folds** and would take the heterogeneity test to **0.802** power, and the
+> sequencing step was never rental-blocked at all ([register §B12](retractions.md)). At
+> equal cost depth beats breadth here — 18×16 reaches 0.802 where 36×8 reaches 0.699 —
+> because the estimator is a within-backbone dispersion, which needs replicates on the same
+> backbone to exist. **So "more backbones" and "more sequences" are *not* the same
+> experiment for this question**, which is the opposite of what this section asserts.
 
 If a *panel* of viable designs is wanted rather than a single best one, depth delivers that
 at a predictable ~8% per sequence, locally and for nothing. If a *better* design is wanted,

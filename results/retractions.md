@@ -286,6 +286,93 @@ reaches the register whose purpose is enumerating withdrawals. Propagated 2026-0
 
 ---
 
+### B11 — "these 18 backbones are exchangeable" · **SUPERSEDED**
+
+`results/depth_sweep.md` concluded, from 18 backbones × 8 sequences and 12 clears:
+
+> These 18 backbones are exchangeable: there are no good or bad ones in this pool, only draws.
+
+and on that basis decided **"No stratum C. No rental."** The test was sound — Pearson
+dispersion X² = 22.91 on 17 df, p = 0.152; beta-binomial LRT 0.696, fitted ρ = 0.0446,
+p = 0.202, all reproduced to 3 dp by `scripts/110_heterogeneity_power.py`. It was simply
+**underpowered, and the detectable effect was never stated.**
+
+| | power at n=18, k=8, α=0.05 calibrated |
+|---|---|
+| at the **fitted** ρ = 0.0446 | **0.231** |
+| at ρ = 0.10 | 0.474 |
+| **80% power arrives at** | **ρ ≈ 0.24**, five times the fitted value |
+
+In terms the campaign decision was actually taken in — g of 18 backbones clearing at
+`p_good`, the rest at `p_bad`, pool mean held at the observed 8.3%:
+
+| good backbones | p_good | p_bad | power |
+|---|---|---|---|
+| 3 | 20% | 6.0% | **0.198** |
+| 3 | 25% | 5.0% | **0.399** |
+| 2 | 40% | 4.2% | 0.758 |
+
+**A pool in which three of eighteen backbones were five times better than the rest would
+have been missed three times in five.** The claim is replaced by the weaker one the data
+support: *no backbone in this pool is detectably more than about four times the pool rate.*
+
+Two riders. The original test was mildly **conservative**, not liberal — the asymptotic
+χ²₁₇ cutoff carries a real type-I rate of 0.042, and the simulation-calibrated p for the
+observed statistic is 0.132 rather than 0.152. And the design that would settle it is the
+prereg's own **stratum C** (+8 sequences per backbone, 144 folds, power 0.802), which was
+declined on the strength of the null it would have corrected.
+
+**This is the sixth instance of a small-sample null read as evidence of absence** (§B5, §B8,
+§D5 and the two withdrawn in `depth_sweep.md` itself are the others) — and the first where
+the error carried a *spending decision* rather than a rule. The project's lecture notes
+already listed this as its most repeated error before this entry was written.
+
+Note what is *not* claimed: nothing here shows the backbones are heterogeneous, and ~0.86
+may well be the generator's ceiling. The point is that the evidence offered cannot
+distinguish that from a pool containing good backbones.
+Evidence: [the power analysis](heterogeneity_power.md), `scripts/110_heterogeneity_power.py`.
+
+### B12 — "sequencing the unconditioned arm needs a rented `sm_86` card" · **WITHDRAWN**
+
+Carried in `STATE.md` §6–§7, `docs/gpu-run-brief-2026-09-28.md` §2 and
+`scripts/96_sequence_unconditioned.py`'s docstring since 2026-09-22. The stated reason is
+true — RFantibody pins `torch==2.3.*`, DGL ships no matching ABI, and those wheels carry no
+PTX, so nothing reaches `sm_120`. **The conclusion does not follow.** Verified 2026-10-03 by
+running the tool rather than reasoning about it:
+
+```
+$ PATH="$HOME/.venvs/rfab-cpu/bin:$PATH" proteinmpnn -i bb -o seq -n 2 -t 0.2
+No GPU found, running ProteinMPNN on CPU
+MPNN generated 2 sequences in 1 seconds
+```
+
+`proteinmpnn_interface_design.py:85-90` branches on `torch.cuda.is_available()` and falls
+back to CPU; in `~/.venvs/rfab-cpu` (torch **2.2.1+cpu**) that is `False`. The one real
+obstacle is not the card: the CLI subprocesses a bare `python` (`cli/inference.py:294`), so
+the venv's `bin` must be on `PATH` or it dies with `FileNotFoundError: 'python'` — which
+looks nothing like a device problem and is the likely reason the CPU route was never
+pursued.
+
+**The tool-matching objection dissolves with it.** The brief's reason for renting rather
+than using standalone ProteinMPNN was that the conditioned arm used RFantibody's bundled
+copy. This *is* that copy — same entry point as `pod/01_run.sh:69`, same weights
+(`ProteinMPNN_v48_noise_0.2.pt`), same `-t 0.2`. The arms would differ in **device**, not in
+code, weights or flags; worth stating on any result, but not an uncontrolled difference.
+
+**The project had already proved it, five days before writing down that it was impossible.**
+`prereg_2026-09-23_depth_sweep.md:22` costs sequence generation at *"~8 s per 8 draws per
+backbone — ~10 minutes total for all 576"*, and `scripts/101_constrained_redesign_yield.py`
+ends its docstring *"Sequence-only, CPU, no folds, no GPU, no money."* The GPU brief was
+written on 2026-09-28 without checking either.
+
+**Second instance of the same failure in six days.** On 2026-09-28 the decoy-patch control
+was also believed to need a rented card and ran locally on CPU for $0 — found only by
+checking whether it *could* run before reporting that it could not. That discovery was never
+carried across to the sibling blocker one row below it in the same `STATE.md` table.
+*A blocker inherited from a neighbouring task is not evidence; re-run the check per task.*
+Cost of checking: one minute. Cost of assuming: ten days of a false blocker on the roadmap,
+and two offers to spend money that did not need spending.
+
 ## C. Numbers in shipped or published prose
 
 ### C1 — "0% false-positive rate against a 25% false-negative rate" · **WITHDRAWN**

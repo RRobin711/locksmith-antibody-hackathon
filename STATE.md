@@ -1,4 +1,4 @@
-# Project state — 2026-09-29
+# Project state — 2026-10-03
 
 **For a cold reader.** This is the single place to find out where the project is: what is
 **verified**, what is **taken on trust**, what is **blocked**, and what is left. Every
@@ -153,12 +153,23 @@ MSA width 123 = antigen length 123), pinned by tests.
 
 **The ceiling is measured, and it is the generator's.** 144 folds over 18 backbones × 8
 constrained sequences: viability arrives at a **constant ~8% per sequence** with no
-backbone heterogeneity (χ² = 22.91 on 17 df, p = 0.152; beta-binomial LRT p = 0.202), and
-eight times the sequences produced **nothing better than the first pass found** — best
-0.859 at depth 1, 0.854 at depth 8. So more backbones and more sequences are the same
-experiment at different prices, and **renting a GPU is not justified**. Reaching past ~0.86
-needs a different generator, not more samples from this one. See
+**no *detectable*** backbone heterogeneity (χ² = 22.91 on 17 df, p = 0.152; beta-binomial
+LRT p = 0.202), and eight times the sequences produced **nothing better than the first pass
+found** — best 0.859 at depth 1, 0.854 at depth 8. See
 [the depth sweep](results/depth_sweep.md).
+
+**Read the heterogeneity null with its power attached — it is weak.** That test had **23%
+power against the effect it itself fitted**, and 80% power only at ρ ≈ 0.24, five times
+larger. A pool in which three of the eighteen backbones were five times better than the
+rest would have been missed **three times in five**. So the supportable claim is *no
+backbone is detectably more than about four times the pool rate* — **not** that the
+backbones are exchangeable, which is how it was written and how it carried the decision not
+to spend. The "more backbones and more sequences are the same experiment" conclusion is
+therefore **unsupported rather than refuted**: ~0.86 may well be the generator's ceiling,
+but this evidence cannot separate that from a pool containing good backbones. The design
+that would settle it is the prereg's own stratum C (+144 folds, power 0.802), **declined on
+the strength of the null it would have corrected**, and now free — see §6.
+[Register §B11](results/retractions.md), [the power analysis](results/heterogeneity_power.md).
 
 **What the 0.904 does and does not mean.** It is Boltz's confidence, not an affinity
 measurement. What the 40-crystal calibration panel buys is that this confidence tracks pose
@@ -231,8 +242,8 @@ flattering half of each; see [§C1 of the register](results/retractions.md).
 
 | item | blocked on | cost |
 |---|---|---|
-| **The decoy-patch control** — hotspots on the opposite face of PD-1 | a GPU run | still the only control that could falsify the conditioning result |
-| **Sequencing the 18 unconditioned backbones** | a GPU run | ~2–4 GPU-hours (~$1–2); separates range restriction from a dead `interaction_pae` |
+| ~~**The decoy-patch control**~~ | ~~a GPU run~~ | **DONE 2026-09-28 and it PASSED** — ran locally on CPU for $0, not on a rented card. [The control](results/decoy_patch_control.md) |
+| ~~**Sequencing the 18 unconditioned backbones**~~ | ~~a GPU run~~ | **NOT BLOCKED — the blocker was false.** ProteinMPNN runs on this laptop's CPU (verified 2026-10-03; ~10 min for all 144 sequences, $0). Only the folding costs anything, and that is local. [Register §B12](results/retractions.md) |
 | ~~**Shape-matching the patch null**~~ | ~~nothing — it is cheap~~ | **DONE 2026-09-28** (`scripts/94_shape_matched_patch_null.py`). Worth **+0.019** on the null mean (0.153 → 0.172) against a real 0.712; conditioning result goes **17/18 → 18/18**. [Register §D4](results/retractions.md) |
 | ~~**The reliability figure 0.629**~~ | ~~the original script~~ | **RESOLVED 2026-09-28** — it reproduces as a *7-seed-mean* reliability (1 − 0.176²/0.290² = 0.6317), and `scripts/35_winner.py:202-206` was tracked all along. See [register §D2](results/retractions.md) |
 
@@ -257,11 +268,16 @@ Two remain and **both need a decision rather than an hour**:
      at all and are excluded (n=16, named); interfaces are smaller than the conditioned
      arm's (median 6 vs 9); one arm, one seed set, 95% CI ±0.133; and this is **targeting,
      not binding**.
-   - **Still open: sequencing the 18 unconditioned backbones.** Needs ProteinMPNN, which is
-     the one step that does need a rented card (RFantibody pins `torch==2.3.*`, no PTX, so
-     nothing reaches `sm_120`). Folding and scoring afterwards run locally and free. This
-     separates range restriction from a dead `interaction_pae`; it does not bear on the
-     conditioning result above.
+   - **Still open: sequencing the 18 unconditioned backbones — and it needs no rental.**
+     This was listed as rental-blocked from 2026-09-22 to 2026-10-03 on the grounds that
+     RFantibody pins `torch==2.3.*` with no PTX, so nothing reaches `sm_120`. The pin is
+     real; the conclusion was not. RFantibody's own bundled ProteinMPNN falls back to CPU
+     (`proteinmpnn_interface_design.py:85-90`) and generates all 144 sequences in ~10
+     minutes for $0 — verified by running it. Folding and scoring were already local. The
+     whole experiment is free. See [register §B12](results/retractions.md), which also
+     records that the project had proved this five days *before* writing down that it was
+     impossible. It separates range restriction from a dead `interaction_pae`; it does not
+     bear on the conditioning result above.
 2. ~~**Republish.**~~ **DONE 2026-09-29 — it is public.** See §0 for the verification and
    its controls. `.github/workflows/ci.yml` ran for the first time on that push and passed
    (3m20s, 42 tests); its header had warned that ~7.1 GB of install against "roughly 14 GB
