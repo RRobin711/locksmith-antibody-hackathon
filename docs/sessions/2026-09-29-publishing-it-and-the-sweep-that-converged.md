@@ -337,10 +337,17 @@ confidence; **nothing in it is a binding measurement**.
 1. **Delete the stray `RyanB-raekis/locksmith-antibody-hackathon`** — blocked on
    `gh auth refresh -h github.com -s delete_repo`, which only the user can run. Probed and
    confirmed empty (`isEmpty: true`, no retained objects), so this is tidiness, not exposure.
-2. **Sequence the 18 unconditioned backbones** — needs ProteinMPNN on a rented sm_86 card
-   (RFantibody pins `torch==2.3.*`, no PTX, so nothing reaches `sm_120`). Folding and
+2. **Sequence the 18 unconditioned backbones** — ~~needs ProteinMPNN on a rented sm_86
+   card~~ (RFantibody pins `torch==2.3.*`, no PTX, so nothing reaches `sm_120`). Folding and
    scoring then run locally for free. Separates range restriction from a dead
    `interaction_pae`; does not bear on the conditioning result.
+   > **Corrected 2026-10-03: no rental is needed and this line was wrong when written.**
+   > The pin is real; the conclusion is not, because the CPU was never in the comparison.
+   > RFantibody's bundled ProteinMPNN falls back to CPU and does all 144 sequences in ~10
+   > minutes for $0. Note what this session *did* discover one item earlier — that the decoy
+   > control, believed GPU-blocked on identical reasoning, ran locally for $0 — and then
+   > failed to apply to the very next line.
+   > [Register §B12](../../results/retractions.md).
 3. **`/migrate-learnings`** — `LEARNINGS.md` is at its 40-bullet cap with at least three
    promotable entries waiting. Deliberately not started at session end.
 

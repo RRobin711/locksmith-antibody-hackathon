@@ -38,10 +38,17 @@ The unconditioned mean is not zero and should not be: the epitope is 26 of 113 r
 |---|---|---|---|
 | backbones | RFdiffusion | pod, 2026-09-21 | **done**, 18 on disk |
 | targeting baseline | this script | local CPU | **done**, above |
-| sequences | ProteinMPNN | **rented sm_86** | missing |
+| sequences | ProteinMPNN | **local CPU, free** | missing |
 | fold + score | Boltz-2 | **local, free** | missing |
 
-ProteinMPNN is the only step that needs renting, and not for capability reasons: RFantibody pins `torch==2.3.*`, DGL ships no matching ABI, and those wheels carry no PTX, so there is no forward-JIT to `sm_120`. The local RTX 5070 Ti is too **new**, not too small.
+**Nothing here needs renting.** This table said `rented sm_86` for the sequencing row from 2026-09-22 to 2026-10-03, on reasoning that is true in every clause and false in its conclusion: RFantibody pins `torch==2.3.*`, DGL ships no matching ABI, and those wheels carry no PTX, so nothing reaches `sm_120` -- all correct, and the CPU was never in the comparison. RFantibody's bundled ProteinMPNN branches on `torch.cuda.is_available()` (`proteinmpnn_interface_design.py:85-90`) and generated 2 sequences in 1 second on `~/.venvs/rfab-cpu` (torch 2.2.1+cpu):
 
-*Option worth pricing before spending anything:* the **standalone** ProteinMPNN builds on modern torch and would make this step free. The cost is that the conditioned arm used RFantibody's bundled copy, so a standalone run is no longer tool-matched — and a two-arm comparison where the arms were sequenced by different code is exactly the kind of uncontrolled difference this project keeps finding in other people's work. Matched and rented is the defensible choice; free and unmatched is defensible only if stated on the result.
+```
+$ PATH="$HOME/.venvs/rfab-cpu/bin:$PATH" proteinmpnn -i bb -o seq -n 8 -t 0.2
+No GPU found, running ProteinMPNN on CPU
+```
+
+The one real obstacle is not a device problem and reads exactly like one: the CLI subprocesses a bare `python` (`cli/inference.py:294`), so without the venv's `bin` on PATH it dies `FileNotFoundError: 'python'`. See [register B12](retractions.md).
+
+**The tool-matching objection goes with it.** The reason to rent rather than use standalone ProteinMPNN was that the conditioned arm used RFantibody's bundled copy. This *is* that copy -- same entry point as `pod/01_run.sh:69`, same weights (`ProteinMPNN_v48_noise_0.2.pt`), same `-t 0.2`. The arms would differ in **device**, not in code, weights or flags; state that on the result.
 
