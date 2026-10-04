@@ -333,6 +333,8 @@ company-context note; `config/metrics.yaml`'s withdrawn values and refuted ranki
 
 ## 8. Reading order for a cold reader
 
+0. [The short version](docs/the-short-version.md) if you have five minutes rather than an
+   hour — it links back here for everything it compresses.
 1. This file.
 2. [The retraction register](results/retractions.md) — everything the project withdrew, and
    the five figures flagged as not reproducing. Read before trusting a number found

@@ -16,6 +16,10 @@ interesting thing in this repository**, and the reason why is the point of the p
 So the first thing built was not a design. It was the evaluator — and then the controls
 that try to break it.
 
+**In five minutes:** [the short version](docs/the-short-version.md) — what the project is,
+the two findings from the final audit, and what is verified against what is taken on trust,
+with every number linked to the file that produced it.
+
 ---
 
 ## The three findings worth your time
