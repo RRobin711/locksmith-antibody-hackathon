@@ -190,11 +190,28 @@ complexes with **Boltz-2** and scored with the handbook's stack. Selection used 
 continuous surrogate because the rubric composite takes only three distinct values across
 our pool. The named design was re-scored on fresh seeds.
 
-**Predictor deviation (§8.1).** The handbook lists AlphaFold-Multimer as required for PAE.
-We used Boltz-2 and convert its PAE to the AlphaFold-style JSON in `structures/`. We
-verified AlphaFold2 could not be used here: without an MSA it cannot fold these complexes
-(pLDDT 37, ipTM 0.11, interpenetrating chains), and a public-server MSA would disclose an
-unpublished design.
+**Predictor choice (§8.1) — permitted, and corrected 2026-10-05.** We used **Boltz-2** and
+convert its PAE to the AlphaFold-style JSON `structures/` requires. **This is not a
+deviation.** §8 is headed *"Recommended Computational Toolkit"* and opens *"While you're
+free to use any computational approach, these tools have been validated for the evaluation
+pipeline."* The requirement in §4.2.1 is a file in **AlphaFold *style*** — a format — and
+that is met; the converter round-trips to five decimals. *(An earlier version of this
+paragraph called this a deviation, on the strength of the parenthetical "(required for
+PAE)" inside the AlphaFold-Multimer row of §8.1's table. That phrase contradicts the
+section's own preamble, and we had quoted the cell without reading the section.)*
+
+**Why not AlphaFold2, stated in full.** Two reasons, and the second is a cost we chose not
+to pay rather than an impossibility. (1) Without an MSA, AF2 cannot fold these complexes —
+measured: pLDDT **37**, ipTM **0.11**, interpenetrating chains. (2) An MSA needs either the
+public MMseqs2 server, which would disclose an unpublished design, **or a local sequence
+database — `LocalColabFold`, which §8.1's own Access column lists.** That route was costed
+at ColabFoldDB ~**1 TB+** (UniRef30 alone ~150 GB), not installed, and declined. AF2 was
+therefore used only on **published** molecules, where the public server is legitimate: see
+`results/predictor_crosscalibration.md`, which reports Boltz−AF2 ipSAE **+0.187** on
+heavy–antigen and rules the scale question **unresolved at n=1**, because AF2's pose was
+also genuinely worse (DockQ 0.690 vs 0.820) and the two effects are confounded. The
+standing rule from that file is that Boltz ipSAE is **provisional and probably
+optimistic**.
 
 **Construct.** Chains are the handbook's §4.2.2 sequences exactly — which are 5GGS's
 SEQRES, including the His-tag on the heavy chain. Our earlier folds used 5GGS's
