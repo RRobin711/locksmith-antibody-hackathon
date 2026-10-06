@@ -25,6 +25,41 @@ demonstrates.
 
 Pick the one that matches why you are here.
 
+### 1.0 The straight-through pass — "I am reading 00 to 12 in order"
+
+*Added 2026-10-05, because this is what people actually do and the three passes below all
+assume you have already decided to skip something.*
+
+**It works.** No chapter declares a prerequisite on a later one, and
+[Chapter 12](12-the-audit.md) is deliberately last: it is the only chapter written after
+corrections [C1–C8](CORRECTIONS.md) and incorporates them, so reading it last turns the
+corrections into a resolution rather than an interruption. **87,815 words, 13 chapters,
+roughly 12–15 hours** at a careful technical pace.
+
+Four things are not linear prose, and knowing which is which before you start saves the
+frustration of reading them as though they were:
+
+| chapter | words | what it actually is | how to take it |
+|---|---|---|---|
+| **03** The toolchain | 10,124 | a **reference** — versions, flags, install gotchas | **Skim or skip on the first pass.** Return when you install something. It is the one chapter that is a manual, and hitting it third is a wall. |
+| **10** Glossary | 2,467 | a **lookup table** | Open it in a second tab at chapter 01 and consult it, rather than reading it at position 10. |
+| **11** Study plan | 2,782 | **this file** — it tells you how to read the course | Its §1 is useless to you by the time you arrive. Its **§3 self-tests and §4 exercises are not** — that is the right moment for them. |
+| **`CORRECTIONS.md`** | 6,096 | what the course got **wrong**, and the fixes | Unnumbered, so it has no place in the sequence. Read it **after chapter 02**, once you know what a composite and a gate are. Every chapter's banner points at it. |
+
+So the practical order is:
+
+```
+00 → 01 → 02 → CORRECTIONS.md → (03, skim) → 04 → 05 → 06
+   → 07 → 08 → 09 → 11 §3–§4 → 12
+```
+
+with **10** open alongside throughout.
+
+**The load is not evenly distributed.** 00, 09, 10 and 11 are short (2.5–5k). The six long
+chapters — **01, 02, 03, 07, 08, 12**, all 8–10k — are where the hours go. If you have one
+evening rather than a week, read **00, 04, 05, 06, 12** and stop: that is the
+field-independent spine and it needs none of the biology.
+
 ### 1.1 The nine-hour pass — "I want to understand what happened"
 
 Read in this order, roughly one hour each:
@@ -38,9 +73,12 @@ Read in this order, roughly one hour each:
 7. [Allocation and selection](06-allocation-and-selection.md)
 8. [What broke](08-what-broke.md)
 9. [The critique](09-critique.md)
+10. [The audit](12-the-audit.md) — the eleven days after the campaign
 
 Skip [the toolchain](03-the-toolchain.md) on a first pass and return when you need
-to actually install something.
+to actually install something. **Chapter 12 is the one not to skip**: the campaign
+chapter stops on 2026-09-22, and most of what this course treats as established was
+established after that date.
 
 ### 1.2 The transferable pass — "I do not care about antibodies"
 
@@ -52,14 +90,20 @@ design, hiring, or any setting where you rank noisy candidates and pick the best
 2. [Measurement theory](04-measurement-theory.md) — all of it
 3. [Experiment design](05-experiment-design.md) — all of it
 4. [Allocation and selection](06-allocation-and-selection.md) — all of it
-5. [The critique](09-critique.md) §2 and §6
+5. **[The audit](12-the-audit.md) — all of it.** Chapters 04–06 are the mathematics of
+   measuring well; 12 is the epistemics of *checking* well, and it stands alone. Its
+   thesis — every check answers a narrower question than the one you asked, and answers
+   it truthfully — is demonstrated on `grep`, on `git`, on a preflight, on a null and on
+   a budget, none of which are about antibodies.
+6. [The critique](09-critique.md) §2 and §6
 
-That is four to five hours and it is where the compounding knowledge lives.
+That is five to six hours and it is where the compounding knowledge lives.
 
 ### 1.3 The practitioner pass — "I am going to build something like this"
 
-Add [the toolchain](03-the-toolchain.md) and [what broke](08-what-broke.md) to the
-transferable pass, then work the Track B exercises in §4. Read
+Add [the toolchain](03-the-toolchain.md), [what broke](08-what-broke.md) and
+[the audit](12-the-audit.md) §2 (documents are owned by their generators) and §4 (guards
+that cannot fail) to the transferable pass, then work the Track B exercises in §4. Read
 [the engineering problem](02-the-engineering-problem.md) with `config/metrics.yaml`
 open beside it.
 
@@ -213,6 +257,36 @@ file. Find its provenance, its n, and its estimand. Decide whether it is stated
 at the right resolution. The project's own auditors found errors at roughly one
 per twenty claims; see whether you can match that rate.
 
+**A6 — Price a null that already closed a decision.** *Added 2026-10-03; this one
+actually happened, eleven days late, and it is the exercise most likely to change how
+you work.* `results/depth_sweep.md` concluded "these 18 backbones are exchangeable"
+from 18 backbones × 8 sequences with 12 clears, and on that basis declined a 144-fold
+follow-up. The per-backbone counts are **10 zeros, 5 ones, 2 twos, one three**.
+
+Do it in this order, and do not skip the first step:
+
+1. **Reproduce the recorded statistics before computing anything new** — Pearson
+   X² = **22.91**, p = **0.152**, beta-binomial LRT **0.696**, fitted ρ = **0.0446**,
+   p = **0.202**. If your implementation does not reproduce all five to 3 dp, your power
+   curve measures *your* test, not theirs. (`scripts/110_heterogeneity_power.py` exits
+   non-zero if any drifts — copy that discipline.)
+2. **Simulate the critical value under ρ = 0** rather than trusting χ²₁₇, since the
+   expected successes per cell are `8 × 0.083 = 0.67`. You should find the asymptotic
+   cutoff is *conservative* — real type-I **0.042** — and the calibrated p is **0.132**.
+   Note that this does **not** change the conclusion, and work out why that matters.
+3. **Compute power at the fitted ρ.** You should get **0.231**, with 80% power arriving
+   only at ρ ≈ **0.24**.
+4. **Restate it in decision units**: g of 18 backbones clearing at `p_good`, the rest at
+   `p_bad`, pool mean held at 8.3%. Three backbones at 25% against 5% → power **0.399**.
+   Write the one sentence you would have put in front of the person about to decline the
+   follow-up.
+
+*The point of step 4 is that steps 1–3 are the easy part and persuade nobody.*
+See [§1.4](05-experiment-design.md#14-when-the-formula-will-not-do-simulate-the-critical-value-and-report-power-in-decision-units)
+and [C7](CORRECTIONS.md#c7--the-course-undercounts-its-own-most-repeated-error-and-the-newest-instance-bought-something).
+**No GPU, no folds, no money** — which is exactly why there was never an excuse for
+running it after the decision instead of before.
+
 ### Track B — with compute
 
 **B1 — The eight-fold negative control.** Fold a known-wrong antibody against
@@ -227,11 +301,20 @@ about to spend assuming it was fine.
 with five. Fifty-four extra seconds. Report the range rather than the point
 estimate, forever afterwards.
 
-**B4 — The decoy-patch control.** This is the experiment the project never ran
-and still needs: condition backbone generation on hotspots on the *opposite face*
+**B4 — The decoy-patch control.** ~~This is the experiment the project never ran
+and still needs~~ — **run 2026-09-28, and it passed** ([C8](CORRECTIONS.md#c8--the-decoy-patch-control-has-been-run-and-no-arm-of-this-project-needs-a-rented-card)).
+Condition backbone generation on hotspots on the *opposite face*
 of the target and compare epitope coverage. It is the only design that separates
 "conditioning steers the interface" from "the geometry would have gone there
-anyway." A few GPU-hours and a few dollars.
+anyway." ~~A few GPU-hours and a few dollars.~~ **It cost \$0 and no GPU: ~26 min/backbone
+on CPU.** Do it anyway — then compare your numbers to **0.803** on the decoy face and
+**0.000** on the real epitope, against an unconditioned baseline of **0/18**.
+
+*Design the decoy before you need it.* The patch here was matched to the real epitope on
+size (26 residues), RMS spread (**10.15 Å** vs **9.85 Å**), surface exposure (≥15 Å² SASA)
+and zero overlap, and chosen maximally opposite (**165.9°**). An unmatched decoy tests
+nothing: if it is more compact or more buried than the epitope, a difference in coverage is
+a difference in geometry, not in steering.
 
 ### Track C — rebuild it
 

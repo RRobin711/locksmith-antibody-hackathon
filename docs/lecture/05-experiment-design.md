@@ -35,15 +35,17 @@ full in [the failure catalogue](08-what-broke.md); terms are in [the glossary](1
 Correlations are awkward to reason about because their sampling distribution is skewed and bounded:
 a sample ρ near 1 cannot wander far upward. Fisher's transform fixes this. For a correlation ρ,
 
-```
-z  =  artanh(ρ)  =  ½ ln((1 + ρ)/(1 − ρ))                                    (5.1)
-```
+$$
+z \;=\; \operatorname{artanh}(\rho) \;=\; \tfrac{1}{2}\ln\!\left(\frac{1+\rho}{1-\rho}\right)
+\tag{5.1}
+$$
 
 is approximately normally distributed with a standard error that **does not depend on ρ at all**:
 
-```
-SE(z)  =  1 / √(n − 3)                                                       (5.2)
-```
+$$
+\mathrm{SE}(z) \;=\; \frac{1}{\sqrt{n-3}}
+\tag{5.2}
+$$
 
 *n* is the number of independent items, dimensionless; `z` is dimensionless. A 95% confidence
 interval for ρ is `tanh(z ± 1.96·SE)`, which is asymmetric on the ρ scale — correctly so.
@@ -52,9 +54,10 @@ Now invert it for power. To detect a true effect `ρ_true` at 80% power with a t
 test, the true `z` must exceed the sum of the critical value and the power quantile, both in SE
 units: `z_detect = (1.96 + 0.84)/√(n−3) = 2.80/√(n−3)`, hence
 
-```
-ρ_detect  =  tanh( 2.80 / √(n − 3) )                                         (5.3)
-```
+$$
+\rho_{\text{detect}} \;=\; \tanh\!\left(\frac{2.80}{\sqrt{n-3}}\right)
+\tag{5.3}
+$$
 
 This is the single most useful formula in the chapter and it takes ten seconds to evaluate. The
 campaign states it verbatim at `results/ensemble_power.md` §Allocation.
@@ -97,6 +100,11 @@ do — the campaign applied it, pre-registered, in at least four places:
   effect'**."*
 - `results/prereg_2026-09-20_ensemble_wide.md` §3 — the bound written *before* the data existed,
   which is the only version that cannot be reverse-engineered to flatter the result.
+- **Added 2026-10-03, and it is the fifth:** `results/heterogeneity_power.md` priced a null the
+  project had already acted on, by simulation rather than by formula —
+  **23% power at the ρ the data themselves fitted.** Unlike the four above, this one was
+  computed *after* the decision it should have informed, which is why it appears in §2 as well
+  as here. See [C7](CORRECTIONS.md#c7--the-course-undercounts-its-own-most-repeated-error-and-the-newest-instance-bought-something).
 
 A related discipline, and a cheap one: **compute the smallest p your design can produce before you
 read its output.** With 3 versus 3 observations a two-sided Mann–Whitney test has exactly
@@ -105,6 +113,89 @@ two-tailed **0.100** — and 0.100 is precisely what the cross-reactivity experi
 (`results/audit_2026-09-20.md` Check D). *The test was at its ceiling before it began.* At 8 versus 8
 the floor is `2/C(16,8) = 2/12870 = 1.554e−4`, which is room to breathe; re-run at n = 8 the same
 comparison gave p = 0.038.
+
+---
+
+### 1.4 When the formula will not do: simulate the critical value, and report power in decision units
+
+*Added 2026-10-03. §1.1's Fisher-z machinery covers correlations. Two situations break it, and
+both appeared in the same audit — see [C7](CORRECTIONS.md#c7--the-course-undercounts-its-own-most-repeated-error-and-the-newest-instance-bought-something).*
+
+**The setting.** 18 [RFdiffusion](03-the-toolchain.md#22-rfdiffusion-via-rfantibody) backbones, 8 constrained [ProteinMPNN](03-the-toolchain.md#21-proteinmpnn) sequences each, 12 of the
+144 folds clearing the viability gates (pool rate 8.3%). The question is whether backbones
+*differ* — whether some are worth generating more of — which is a question about **dispersion
+between groups**, not about a mean. The test used was Pearson's dispersion statistic,
+`X² = Σ (O − E)²/E`, referred to χ² on 17 df: **22.91, p = 0.152**. Read as "no difference", it
+closed a 144-fold follow-up experiment.
+
+#### The first trap: an asymptotic cutoff you have not checked
+
+χ² is the *limiting* distribution of that statistic as counts grow. At **k = 8 trials per group
+and p̂ = 0.083**, the expected successes per cell are `8 × 0.083 = 0.67` — well under the
+conventional rule of thumb of 5, so the approximation is doing work it was never licensed to do.
+
+The fix costs nothing and is mechanical: **generate the null yourself.** Simulate many datasets
+with the same n, k and pool rate under ρ = 0, compute the statistic on each, and read the
+critical value off the resulting distribution.
+
+Doing that here produced the opposite of the expected finding:
+
+| | asymptotic χ²₁₇ | simulated under ρ = 0 |
+|---|---|---|
+| nominal α | 0.050 | — |
+| **real type-I rate** | **0.042** | 0.050 by construction |
+| p for the observed 22.909 | 0.152 | **0.132** |
+
+The asymptotic test was **conservative, not liberal** — it rejected *less* often than advertised.
+The conclusion did not change.
+
+**That non-change is the lesson, and it is easy to miss.** The instinct on finding a dubious
+approximation is to suspect the result was a false positive. Here the approximation was fine and
+the design was the problem. *Calibrating the critical value is how you tell "the test was wrong"
+apart from "the test was underpowered" — two diagnoses with completely different fixes, which an
+uncalibrated p-value cannot distinguish.*
+
+#### The second trap: ρ is not a unit anyone can act in
+
+With the cutoff calibrated, power follows by simulating under non-zero effects. The intraclass
+correlation ρ governs how much the per-backbone clear-rate varies:
+
+| ρ | sd of per-backbone rate | 10th–90th pct | power |
+|---|---|---|---|
+| 0.000 | 0.0000 | 8.3% – 8.3% | 0.053 |
+| **0.0446** *(fitted)* | 0.0584 | 2.1% – 16.3% | **0.231** |
+| 0.100 | 0.0874 | 0.5% – 20.4% | 0.474 |
+| **0.240** | 0.1354 | 0.0% – 26.5% | **0.801** |
+
+**80% power arrives at ρ ≈ 0.24, five times the value the data themselves fitted.** At the fitted
+ρ the test would have rejected **23% of the time**. A non-rejection at 23% power is close to no
+evidence at all.
+
+Now notice what that table cannot do: **nobody runs a campaign in units of ρ.** No reader, and no
+version of yourself at 2 a.m. deciding whether to spend 144 folds, has an intuition for whether
+ρ = 0.0446 is large. State power in the terms the decision is actually taken in — here, *are
+there backbones worth generating more of?*
+
+| good backbones | p_good | p_bad | pool mean | power |
+|---|---|---|---|---|
+| 3 | 20% | 6.0% | 8.3% | **0.198** |
+| 3 | 25% | 5.0% | 8.3% | **0.399** |
+| 2 | 40% | 4.2% | 8.2% | 0.758 |
+
+**A world in which three of the eighteen backbones were five times better than the rest would
+have been missed three times in five.** That sentence ends an argument. "ρ = 0.0446, power 0.231"
+does not, and they are the same fact.
+
+> **Transferable, and it is two rules.** *When your test's reference distribution is asymptotic
+> and your counts are small, simulate the critical value — it tells you whether a disappointing
+> result was mis-tested or merely under-sampled.* And *express the detectable effect in the units
+> the decision is taken in. A bound nobody can picture will not stop anybody acting on a null,
+> which is the entire job of stating it.*
+
+**The honest coda.** This analysis cost no folds, no GPU and no money, used only counts already on
+disk, and would have been equally free **before** the decision it should have informed. It was run
+eleven days later. The machinery in this chapter is not expensive; it is just easy to skip when
+the answer already looks settled.
 
 ---
 
@@ -162,9 +253,11 @@ mildly reassuring: the process is not simply regressing toward whatever the auth
 
 Given variables X and Y and a control Z, the partial correlation of X and Y holding Z fixed is
 
-```
-ρ_{XY·Z}  =  (ρ_XY − ρ_XZ·ρ_YZ) / √((1 − ρ_XZ²)(1 − ρ_YZ²))                  (5.4)
-```
+$$
+\rho_{XY \cdot Z} \;=\; \frac{\rho_{XY} - \rho_{XZ}\,\rho_{YZ}}
+                              {\sqrt{(1-\rho_{XZ}^2)(1-\rho_{YZ}^2)}}
+\tag{5.4}
+$$
 
 Derivation in one line: regress X on Z and Y on Z, then correlate the residuals; (5.4) is that
 correlation written out. Dimensionless, in [−1, 1].
@@ -277,7 +370,7 @@ contacts        :  −4.667  =   1.2× seed sd                     → BLIND
                    check: 4.667 / 4.000   =  1.167
 ```
 
-Two metrics fall **monotonically** with the number of epitope contacts removed (0 → 349 → 527) while
+Two metrics fall **monotonically** with the number of [epitope](01-the-biological-problem.md#3-the-epitope-which-26-residues) contacts removed (0 → 349 → 527) while
 the matched control barely moves. That is a dose–response against a matched control, which is about
 as close to a clean positive as this kind of experiment gets, and the monotonicity is doing real work:
 a single knockout arm could be explained by any disruption, while a graded response is hard to fake.
@@ -458,9 +551,11 @@ report that the survivors include the best design. How impressive is that?
 By exchangeability, **a uniformly random subset retaining fraction *f* contains the pool maximum with
 probability exactly *f***, and contains at least one of the top *m* with probability
 
-```
-P(top-m retained)  =  1 − C(n − m, fn)/C(n, fn)  ≈  1 − (1 − f)^m            (5.5)
-```
+$$
+P(\text{top-}m\text{ retained}) \;=\; 1 - \frac{\binom{n-m}{fn}}{\binom{n}{fn}}
+  \;\approx\; 1 - (1-f)^m
+\tag{5.5}
+$$
 
 At f = 0.5 and m = 5 that is `1 − 0.5⁵ = 0.96875`, about **97%**. So "our filter kept one of the top
 five" is a claim a coin passes 97 times in 100. A gate worded around top-end quality *"would be
@@ -534,7 +629,7 @@ designs the predictor finds easy, which is the definition of a metric gaming its
 gate flipped from PASS to **REFUTED**.
 
 Two details worth copying. First, the refutation was **checked downstream rather than assumed**: the
-shortlisting script sorts on the surrogate score at `scripts/32_shortlist_and_reseed.py:76`, with
+shortlisting script sorts on the [surrogate](06-allocation-and-selection.md#43-the-surrogate-reorders-under-a-change-of-anchors) score at `scripts/32_shortlist_and_reseed.py:76`, with
 aromatic count appearing only in a reporting line, so the filter was never a selection step and
 refuting it does not disturb the shipped winner. Second — the winner carries aromatic count **2** and
 would have been **discarded** by the filter at its own pre-registered threshold of ≤1.
@@ -602,7 +697,11 @@ to the geometry of the alternative. Improving the null did more for the result t
 sample size would have.
 
 Finally, ~~the strongest available control remains conceded and unrun~~ — **run 2026-09-28 and it passed**: 0.803 on the decoy face, 0.000 on the epitope, against an unconditioned baseline of 0/18 ([the control](../../results/decoy_patch_control.md)). As written: a **decoy-patch control**, with
-the generator aimed at the *opposite* face of the target. It costs a GPU run.
+the generator aimed at the *opposite* face of the target. ~~It costs a GPU run.~~ **It cost
+\$0 and no GPU** — it ran locally on CPU at ~26 min/backbone. See
+[C8](CORRECTIONS.md#c8--the-decoy-patch-control-has-been-run-and-no-arm-of-this-project-needs-a-rented-card):
+this clause survived the amendment four words above it, so the paragraph asserted both that
+the control ran and that it was unaffordable.
 
 ---
 
@@ -633,7 +732,7 @@ What pre-registration did **not** do here is worth naming too. The `prereg_*` fi
 effect for every planned test — but the rule was **never applied to numbers computed outside a
 pre-registered experiment**, and every one of the campaign's nine withdrawals came from exactly there.
 The cheap fix, proposed in [the critique chapter](09-critique.md), is a four-field stamp on every number
-that enters a results file: **its n; its estimand in words ("single seed", "7-seed mean", "median of
+that enters a results file: **its n; its [estimand](04-measurement-theory.md#6-the-0629-that-does-not-reproduce-an-estimand-mismatch-and-a-residual-inconsistency) in words ("single seed", "7-seed mean", "median of
 five samples"); the effect it could have detected at that n; and its provenance.** Each of the four
 fields kills at least one of the nine withdrawals on its own.
 

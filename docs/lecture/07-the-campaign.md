@@ -6,7 +6,7 @@ status: review
 
 # 07 — The Campaign: nine days, 1,266 folds, in order
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C6](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight), **C5** (the NetSolP triple) and **C6** were added 2026-09-28 — and **C6 applies to this course's most-quoted finding**: "an anti-lysozyme antibody cleared all five cutoffs" holds on the **truncated 113-mer only**; on the repaired 119-mer it clears nothing.
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C8](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight), **C5** (the NetSolP triple) and **C6** were added 2026-09-28 — and **C6 applies to this course's most-quoted finding**: "an anti-lysozyme antibody cleared all five cutoffs" holds on the **truncated 113-mer only**; on the repaired 119-mer it clears nothing. **C7** and **C8** were added 2026-10-05 from work done after this course was written: **C7** corrects this course's count of its own most repeated error (a small-*n* null read as evidence of absence) from **≥6 to ≥7**, the seventh being the first to carry a **spending decision**; **C8** records that the decoy-patch control **has been run and passed**, on CPU for **\$0**, and that no arm of this project needs a rented card.
 
 ## What this chapter teaches
 
@@ -57,16 +57,18 @@ fail a build."*
 The whole day went into the organisers' handbook, read from the PDF rather than a summary.
 Output: a 497-line session doc, no code, no compute.
 
-```
-Final Score (0–100) = [ 0.60 × Binding_struct + 0.20 × Developability
-                        + 0.20 × Novelty ] × 10
-```
+$$
+\text{Final Score}_{(0\text{--}100)} \;=\;
+\big[\, 0.60 \times \text{Binding}_{\text{struct}}
+      + 0.20 \times \text{Developability}
+      + 0.20 \times \text{Novelty} \,\big] \times 10
+$$
 
 Each category term is 0–10. `Binding_struct` is the **mean** of six sub-scores for Challenge 1
 ([ipSAE](03-the-toolchain.md#43-ipsae--interface-confidence-from-the-pae), [DockQ](03-the-toolchain.md#41-dockq-213--two-flags-that-both-default-wrong), ΔG, interface contacts, interface pLDDT, CDR SASA) and of five for Challenge 2,
 which has no DockQ because a de novo design has no reference structure. `Developability` is
 one metric ([NetSolP](03-the-toolchain.md#44-netsolp-10--sequence-only-solubility-and-a-positive-control-that-chose-the-model) solubility); `Novelty` is one (CDR-H3 identity). Each of the eight metrics
-maps a raw value onto 0–10 through three bands and carries a hard cutoff below which the
+maps a raw value onto 0–10 through three [bands](06-allocation-and-selection.md#4-banding-what-a-step-function-costs-and-what-changes-when-you-relabel-it) and carries a hard [cutoff](02-the-engineering-problem.md#31-the-eight-metrics) below which the
 design is not penalised but **non-viable**. Challenge 1 redesigns pembrolizumab's heavy-chain
 CDRs on PDB entry **5GGS**; Challenge 2 designs a VH/VL de novo. 100 + 100 + 50 presentation =
 250 points.
@@ -143,7 +145,7 @@ on your first test file has been tested once, not validated.*
 of the labels is wrong: **A/B binds Z and C/D binds Y**. The first extracted "complex" had
 **zero** antibody–antigen contacts, caught because PRODIGY refused with `No contacts found for
 selection`. Worse, the largest non-heavy/light interface in the crystal is **B–D, 64 contacting
-residues between the two light chains** — lattice packing, larger than either real epitope (A–Z
+residues between the two light chains** — lattice packing, larger than either real [epitope](01-the-biological-problem.md#3-the-epitope-which-26-residues) (A–Z
 41, B–Z 26; C–Y 39, D–Y 25), so a "biggest interface that isn't heavy–light" heuristic would have
 picked a crystal artefact as the binding site. `extract_complex()` now takes explicit chains and
 **returns the mapping it applied**, which is unrecoverable from the file afterwards.
@@ -189,7 +191,7 @@ a memorisation test.
 
 **A fourth failure, downstream.** ipSAE locates its pLDDT array by *string-substituting the PAE
 path*: `pae_file.replace("pae", "plddt")`. Files had been renamed, the sibling was unfindable,
-and `ipsae.py` **wrote a zero-byte table and exited 0**. Caught by luck — the project's own parser
+and `ipsae.py` **wrote a zero-byte table and [exited 0](02-the-engineering-problem.md#9-the-recurring-failure-mode-programs-that-exit-0-having-done-the-wrong-thing)**. Caught by luck — the project's own parser
 crashed reading a header from an empty file.
 
 **NetSolP, and the positive control that changed the answer.** NetSolP-1.0 predicts solubility
@@ -309,7 +311,7 @@ running, and **measured at 0.727**. Single-seed ranking resolves tiers but not n
 top two differed by **0.001 DockQ**, one eighteenth of the 0.018 seed sd, and the winner changed
 with the seed. Winner's curse **−0.0079 DockQ**.
 
-**The CDR-H3 ensemble.** Across 8 designs *identical on the rubric* — same composite, all gates
+**The CDR-H3 ensemble.** Across 8 designs *identical on the rubric* — same [composite](02-the-engineering-problem.md#32-the-composite-formula), all gates
 passed — CDR-H3 backbone RMSD between seeds spanned **0.33–1.45 Å (4.4×)**, maximum deviation
 **4.31 Å**. One design carried mean loop pLDDT **90.5**, nominally very high confidence, on a
 loop moving 4.31 Å. Mean loop pLDDT was reported **blind** to this: Spearman **−0.168, p=0.69,
@@ -374,7 +376,7 @@ leaving a file that looks complete: permanent silent data loss, avoided by readi
 existing.
 
 The rest of the day built what the next three sessions reason about. The continuous ranking
-**surrogate** was written — the banded composite with the step replaced by interpolation,
+**[surrogate](06-allocation-and-selection.md#43-the-surrogate-reorders-under-a-change-of-anchors)** was written — the banded [composite](02-the-engineering-problem.md#32-the-composite-formula) with the step replaced by interpolation,
 reliability **0.689** against `final`'s 0.602 — and here `select/surrogate.py:46` hardcoded the
 band anchors `2.5, 7.0, 9.5`, which on day 9 turns out to have changed the winner. The G3
 aromatic filter **PASSED** its [equal-budget](05-experiment-design.md#6-equal-budget-resampling-and-varying-the-outcome) null at **+0.0241, p<0.0001**. The winner was named
@@ -509,7 +511,7 @@ build. Measured: **19.5 min/backbone** diffusion, **7.1 min/design** RF2, **~48 
 to end, projecting 20 backbones at **16 hours** — a projection itself 1.75× wrong on RF2, which
 had been *derived* at ~4 min/sequence rather than measured.
 
-**Renting deleted all of it.** An `sm_86` RTX 3090 at **$2.82 for 5.5 hours** runs upstream's own
+**Renting deleted all of it.** An `sm_86` RTX 3090 at **\$2.82 for 5.5 hours** runs upstream's own
 pins **untouched** at **2.5–2.7 min/backbone**. The full pilot — 18 hotspot-conditioned plus **18
 unconditioned control** backbones, 30 ProteinMPNN sequences, 30 RF2 predictions — finished in one
 sitting with zero failures. *Before porting a pinned stack, price an hour of the hardware it was
@@ -520,7 +522,11 @@ pinned for.* The decision rule should have fired at the Gate 0 failure, not afte
 **[optional stopping](05-experiment-design.md#7-optional-stopping)**: an interim look at n = 10 v 5 (d = 0.96, ambiguous) extended to n = 18 v
 18 and tested at nominal α with no pre-registered rule, so the p is not the true type-I rate and
 d is upward-biased, CI **[0.733, 2.216]**. And the null arm is the wrong one: the decoy-patch
-control, hotspots on the opposite face of PD-1, **was never run and is still open**.
+control, hotspots on the opposite face of PD-1, ~~**was never run and is still open**~~ —
+**run 2026-09-28 on CPU for \$0, and it passed**: 0.803 on the decoy face, 0.000 on the real
+epitope, against an unconditioned baseline of 0/18
+([C8](CORRECTIONS.md#c8--the-decoy-patch-control-has-been-run-and-no-arm-of-this-project-needs-a-rented-card)).
+The criticism was correct when written; it is now historical rather than open.
 `interaction_pae` **cannot rank docks** (ICC 0.000, F = 0.70 against a detectable floor of 0.32),
 and RF2's own prediction sits **24.9 Å** from the designed pose.
 
@@ -547,7 +553,7 @@ own TIM-3 result.
 **And the pod was stopped without retrieving the data.** 36 backbones, 30 sequences, 30 RF2
 predictions — **443 MB** — left on a stopped volume, so d = 1.47, ICC 0.000 and the 24.9 Å existed
 only as prose for a day; nothing could be re-analysed or checked. Two adjacent losses: **~2.5
-hours of idle pod billing ≈ $1.25** because the session waited to be prompted instead of polling
+hours of idle pod billing ≈ \$1.25** because the session waited to be prompted instead of polling
 — **42% of the entire cloud spend, more than the pilot's own compute** — and `pgrep -f`
 self-matching for the fifth time, **1 h 22 min** of idle GPU, exit code 144.
 
@@ -722,3 +728,11 @@ test file started to fix, eight days late.
 
 Continue with [the failure catalogue, organised by generating mechanism](08-what-broke.md), then
 [the adversarial reading of what the nine days established](09-critique.md).
+
+> **The narrative in this chapter stops on 2026-09-22, and the project did not.**
+> Eleven further days followed in which **no design changed and no metric was recomputed
+> from a structure** — the scores moved exactly once, *downward*, when a DockQ value was
+> read unrounded. That period is where most of what this course calls its findings were
+> actually established, and it has its own chapter:
+> **[12 — The audit](12-the-audit.md)**. If this chapter is the story of making the
+> numbers, that one is the story of finding out what they were numbers of.

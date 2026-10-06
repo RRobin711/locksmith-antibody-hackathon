@@ -585,4 +585,174 @@ looking.*
 
 ---
 
+## C7 — the course undercounts its own most repeated error, and the newest instance bought something
+
+**Raised 2026-10-05. Status: the count is corrected; the underlying claim is SUPERSEDED
+project-wide as [register §B11](../../results/retractions.md). Unrelated to C1.**
+
+### What the course says
+
+[Chapter 08's frequency table](08-what-broke.md#frequency-analysis-where-the-systematic-weakness-was)
+puts generator 1 — *a small-n null read as evidence of absence* — at **≥6**, and
+[the glossary](10-glossary.md) and [README](README.md) both say **"Four claims"** were
+published as findings of absence and reversed. The course is right that this is the
+project's single most repeated error. It is short on how many times.
+
+### What happened after the course was written
+
+On 2026-10-03 the project audited a null it had never examined.
+`results/depth_sweep.md` concluded, from 18 backbones × 8 constrained sequences and 12
+clears:
+
+> These 18 backbones are exchangeable: there are no good or bad ones in this pool, only draws.
+
+and on that basis decided **"No stratum C. No rental."** The test itself was sound and
+reproduces to 3 dp — Pearson dispersion **X² = 22.91** on 17 df, p = **0.152**;
+beta-binomial LRT 0.696, fitted **ρ = 0.0446**, p = 0.202. It was simply **underpowered,
+and the detectable effect was never stated.**
+
+### The measurement
+
+`scripts/110_heterogeneity_power.py`. No folds, no GPU, no money.
+
+| | power at n = 18, k = 8, α = 0.05 calibrated |
+|---|---|
+| at the **fitted** ρ = 0.0446 | **0.231** |
+| at ρ = 0.10 | 0.474 |
+| **80% power arrives at** | **ρ ≈ 0.24**, five times the fitted value |
+
+Expressed in the units the decision was actually taken in — *g* of 18 backbones clearing at
+`p_good`, the rest at `p_bad`, pool mean held at the observed 8.3%:
+
+| good backbones | p_good | p_bad | power |
+|---|---|---|---|
+| 3 | 20% | 6.0% | **0.198** |
+| 3 | 25% | 5.0% | **0.399** |
+| 2 | 40% | 4.2% | 0.758 |
+
+**A pool in which three of eighteen backbones were five times better than the rest would
+have been missed three times in five.** The claim is replaced by the weaker one the data
+support: *no backbone in this pool is detectably more than about four times the pool rate.*
+
+### Two riders, both of which cut against the obvious reading
+
+**The original test was mildly conservative, not liberal.** At p = 0.083 and k = 8 the χ²
+approximation is suspect, so critical values were simulated under ρ = 0: the asymptotic
+χ²₁₇ cutoff carries a real type-I rate of **0.042**, not 0.050, and the calibrated p for the
+observed statistic is **0.132** rather than 0.152. The conclusion is unchanged — which is
+the point. *The test was not wrong. It was underpowered, and those are different diagnoses
+with different fixes.*
+
+**The design that would have settled it was declined on the strength of the null it would
+have corrected.** `prereg_2026-09-23_depth_sweep.md`'s own **stratum C** — +8 sequences per
+backbone, 144 new folds, 7.0 h locally — reaches power **0.802**.
+
+### Why it belongs in this file rather than only in the register
+
+Because the course states the count, and a reader checking the course against the project
+would find them disagreeing. Corrected to **≥7** at
+[`08-what-broke.md:512`](08-what-broke.md#frequency-analysis-where-the-systematic-weakness-was),
+with the instance added to the evidence cell.
+
+**Mind which set each count refers to — they are not interchangeable.** "Four were
+corrected in a single day" (2026-09-20) remains **true and unchanged**; it counts a day's
+corrections, not the lifetime total. The lifetime total is what moves to ≥7. Conflating
+them would be this project's own *"a rate is a property of every parameter it was computed
+under"* error committed inside its own correction file.
+
+### What is NOT claimed
+
+- Nothing here shows the backbones **are** heterogeneous. No new data were generated.
+- It does **not** refute the ceiling. ~0.86 may well be the generator's ceiling; the point
+  is that the evidence offered cannot distinguish that from a pool containing good
+  backbones.
+
+*Transferable, and this is the seventh time: **a null is only meaningful as "no effect larger
+than x."** What is new in this instance is the stake. The previous six cost a rule each.
+This one carried a **spending decision** — it closed a 144-fold experiment and justified not
+renting hardware. **Compute the detectable effect before a null is allowed to close a
+budget line, not after.** And express it in the units the decision is taken in: ρ = 0.0446
+persuades nobody, "three of eighteen at 25% versus 5%, missed three times in five" ends the
+argument.*
+
+---
+
+## C8 — the decoy-patch control HAS been run, and no arm of this project needs a rented card
+
+**Raised 2026-10-05. Status: the control is DONE and it passed (2026-09-28); the rental
+blocker is WITHDRAWN as [register §B12](../../results/retractions.md).**
+
+### What the course says
+
+Two chapters and the study plan describe the decoy-patch control as the experiment the
+project never ran, and price it in GPU time. [Chapter 05 §7.3](05-experiment-design.md) and
+[the critique's recommendation 9](09-critique.md) were amended in place on 2026-09-28 and
+are correct; **three other sites and one trailing clause were not**, and still read as open.
+
+### What is wrong with it
+
+**The control ran on 2026-09-28 and it passed.** Decoy-conditioned backbones land at
+**0.803** on the decoy face and **0.000** on the real epitope, against an unconditioned
+baseline on that face of **0 of 18**. Motion from nothing
+([the control](../../results/decoy_patch_control.md)).
+
+**It cost \$0 and no GPU.** It ran locally on CPU at ~26 min/backbone. The course's standing
+advice — *"before porting a pinned stack, price an hour of the hardware it was pinned for"*
+([Chapter 03 §6.5](03-the-toolchain.md)) — is **correct and stays**, and C8 does not
+contradict it. What C8 adds is its missing half, because that advice silently assumes the
+only two options are *port it* or *rent the chip it was pinned for*:
+
+> **The argument that a pinned stack cannot run on your GPU says nothing about your CPU,
+> which was never in the comparison.** Check whether you *can* before reporting that you
+> cannot. Cost of checking: one minute.
+
+Verified again 2026-10-03 on the sibling arm, by running the tool instead of reasoning
+about it:
+
+```
+$ PATH="$HOME/.venvs/rfab-cpu/bin:$PATH" proteinmpnn -i bb -o seq -n 2 -t 0.2
+No GPU found, running ProteinMPNN on CPU
+MPNN generated 2 sequences in 1 seconds
+```
+
+`proteinmpnn_interface_design.py:85-90` branches on `torch.cuda.is_available()` and falls
+back to CPU; in `~/.venvs/rfab-cpu` (torch **2.2.1+cpu**) that is `False`. **The one real
+obstacle is not a device problem and looks nothing like one:** the CLI subprocesses a bare
+`python` (`cli/inference.py:294`), so without the venv's `bin` on `PATH` it dies with
+`FileNotFoundError: 'python'` — a traceback whose plausible reading is "the environment is
+broken, as predicted", which is probably why the CPU route went unexplored for eleven days.
+
+### Where it is live in this course
+
+Indexed and struck through rather than rewritten, per this file's standing policy. Each
+site now carries an inline pointer here.
+
+| file | line | claim |
+|---|---|---|
+| `07-the-campaign.md` | 523 | decoy-patch control "**was never run and is still open**" |
+| `08-what-broke.md` | 341 | the decoy-patch arm "costs the same and **was never run**" |
+| `11-study-plan.md` | 230 | exercise B4: "the experiment the project never ran", "**A few GPU-hours and a few dollars**" |
+| `05-experiment-design.md` | 605 | trailing "**It costs a GPU run**" — survived the 2026-09-28 amendment four words above it |
+
+That last row is the instructive one. The sentence was corrected on 2026-09-28 and the
+clause **immediately after the correction** was left standing, so the paragraph now asserts
+both that the control ran and that it costs a GPU run. *An amendment is a change to a
+sentence; staleness is a property of the paragraph.*
+
+### What still stands
+
+Everything the control was for. The conditioning result is **strengthened**, not weakened:
+the decoy arm is the experiment that separates *"conditioning steers the interface"* from
+*"the geometry would have gone there anyway"*, and it came back on the steering side. The
+course's criticism that **the no-hotspots arm is the wrong null** was correct when written
+and is now historical rather than open.
+
+*Transferable: **a blocker inherited from a neighbouring task is not evidence.** The decoy
+control was believed rental-blocked and was not; the discovery was never carried one row
+down the same table, so the sibling arm stayed falsely blocked for a further five days. Cost
+of assuming: eleven days of a phantom blocker on the roadmap and two offers to spend money
+that did not need spending. Re-run the check per task.*
+
+---
+
 *No further corrections at this time.*

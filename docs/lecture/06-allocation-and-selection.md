@@ -6,7 +6,7 @@ status: review
 
 # 06 — Allocation and Selection
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C6](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight), **C5** (the NetSolP triple) and **C6** were added 2026-09-28 — and **C6 applies to this course's most-quoted finding**: "an anti-lysozyme antibody cleared all five cutoffs" holds on the **truncated 113-mer only**; on the repaired 119-mer it clears nothing.
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C8](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight), **C5** (the NetSolP triple) and **C6** were added 2026-09-28 — and **C6 applies to this course's most-quoted finding**: "an anti-lysozyme antibody cleared all five cutoffs" holds on the **truncated 113-mer only**; on the repaired 119-mer it clears nothing. **C7** and **C8** were added 2026-10-05 from work done after this course was written: **C7** corrects this course's count of its own most repeated error (a small-*n* null read as evidence of absence) from **≥6 to ≥7**, the seventh being the first to carry a **spending decision**; **C8** records that the decoy-patch control **has been run and passed**, on CPU for **\$0**, and that no arm of this project needs a rented card.
 
 **What this chapter teaches.** You have a noisy instrument, a pool of candidates, and a budget. Where
 does the next measurement go — a new candidate, or another replicate of an old one? The answer is not
@@ -34,9 +34,10 @@ Formulas are derived; arithmetic is shown. [The glossary](10-glossary.md) carrie
 
 For a mean of *k* independent, identically distributed replicates with per-replicate sd σ,
 
-```
-SE(x̄)  =  σ / √k                                                            (6.1)
-```
+$$
+\mathrm{SE}(\bar{x}) \;=\; \frac{\sigma}{\sqrt{k}}
+\tag{6.1}
+$$
 
 Units: whatever σ is in. The consequence everyone knows: halving your error costs **four times** the
 measurements. The consequence fewer people internalise: the *marginal* return is brutal, because
@@ -48,9 +49,12 @@ Now suppose the quantity you care about is not a design's mean score but its **v
 how much a flexible loop moves between independent folds, a direct read on conformational
 heterogeneity. You are estimating an sd, and an sd obeys a different law. For roughly normal data,
 
-```
-SE(s²)  ≈  s² · √(2/(k − 1)),        so       SE(s)/s  ≈  1 / √(2(k − 1))    (6.2)
-```
+$$
+\mathrm{SE}(s^2) \;\approx\; s^2 \sqrt{\frac{2}{k-1}},
+\qquad\text{so}\qquad
+\frac{\mathrm{SE}(s)}{s} \;\approx\; \frac{1}{\sqrt{2(k-1)}}
+\tag{6.2}
+$$
 
 The second expression follows from the delta method applied to `s = √(s²)`: if `g(x) = √x` then
 `SE(g) ≈ |g'(x)|·SE(x) = SE(s²)/(2s)`, and substituting the first expression gives
@@ -133,7 +137,52 @@ concrete: at a 120-fold budget the detectable `ρ_true` at 80% power is **0.327*
 against **0.591** for k = 7 / n = 20.
 
 **Breadth wins, decisively** — for estimating a correlation. One week earlier, for *ranking*, depth had
-won. Both conclusions stand. The estimand changed.
+won. Both conclusions stand. The [estimand](04-measurement-theory.md#6-the-0629-that-does-not-reproduce-an-estimand-mismatch-and-a-residual-inconsistency) changed.
+
+### 1.5 And a third time, in the other direction — the inversion that proves the rule
+
+*Added 2026-10-03.* The project then met a **third** estimand and the answer flipped back.
+
+The question was whether 18 [RFdiffusion](03-the-toolchain.md#22-rfdiffusion-via-rfantibody) backbones differ in how often their sequences clear the
+viability gates. Given a budget of 288 folds, spend them on more sequences per backbone, or on
+more backbones?
+
+| spend 288 folds as | power at ρ = 0.10 | at ρ = 0.15 |
+|---|---|---|
+| **18 backbones × 16 sequences** | **0.802** | 0.908 |
+| 36 backbones × 8 sequences | 0.699 | 0.872 |
+| *(54 × 8 = 432 folds, for scale)* | *0.824* | *0.947* |
+
+**Depth wins at equal cost** — and §1.4 directly above concluded the opposite on the same
+hardware, the same tools and the same budget.
+
+Both are right, and the reason is now familiar enough to state as a procedure. Ask what the
+estimator *is*:
+
+- **Choosing the single best design** estimates a **maximum over designs**. Each candidate needs
+  only rough measurement; more candidates means more chances at a good one. *Breadth.*
+- **Estimating a correlation across designs** estimates a **population parameter**, whose standard
+  error falls as `1/√n` in the number of designs. *Breadth.*
+- **Asking whether backbones differ** estimates a **within-backbone dispersion**. That quantity
+  **does not exist without replicates on the same backbone** — one sequence per backbone yields a
+  variance of nothing. Adding backbones adds more poorly-characterised units; adding depth
+  characterises each one. *Depth.*
+
+The third case is qualitatively different from the first two, and that is the tell: it is not that
+depth is *better* here, it is that below k = 2 the estimand is undefined. **When your target
+quantity is a spread, replicates are not precision — they are the measurement.**
+
+> **The transferable principle, now stated for the third time in this project because it was
+> re-derived three times: an optimal-allocation result is a property of the ESTIMATOR, not of the
+> pipeline.** Same budget, same hardware, opposite answer. Re-derive the allocation whenever the
+> target quantity changes — and treat "we established this last week" as a reason to check which
+> estimand that week was about, not as a reason to skip the derivation.
+
+**What it cost to learn the third time.** The depth-versus-breadth answer here was never
+computed before the decision; the project declined the 144-fold follow-up (`stratum C`) on the
+strength of an underpowered null, and the design that would have settled the question was the one
+being declined. See [§1.4 of the experiment-design chapter](05-experiment-design.md#14-when-the-formula-will-not-do-simulate-the-critical-value-and-report-power-in-decision-units)
+and [C7](CORRECTIONS.md#c7--the-course-undercounts-its-own-most-repeated-error-and-the-newest-instance-bought-something).
 
 ---
 
@@ -142,7 +191,7 @@ won. Both conclusions stand. The estimand changed.
 ### 2.1 The setup
 
 `results/m3_shortlist_depth.md` §3–§5. Inputs, all measured rather than assumed: 239 designs,
-single-seed surrogate reliability **0.689**, seed noise sd **0.529** surrogate points, implied true
+single-seed [surrogate](06-allocation-and-selection.md#43-the-surrogate-reorders-under-a-change-of-anchors) reliability **0.689**, seed noise sd **0.529** surrogate points, implied true
 between-design sd **0.562**. Four thousand simulated pools; true scores drawn `N(0, 0.562)`, one
 observation each at `N(true, 0.529)`.
 
@@ -248,9 +297,10 @@ maximum of more draws is more extreme.
 
 The empirical-Bayes (Kelley regression) correction is:
 
-```
-corrected  =  pool_mean  +  reliability × (observed − pool_mean)             (6.3)
-```
+$$
+\text{corrected} \;=\; \text{pool mean} \;+\; r \times (\text{observed} - \text{pool mean})
+\tag{6.3}
+$$
 
 Read it as: *trust a design's deviation from the pool mean only as far as the measurement is reliable.*
 At r = 1 it does nothing; at r = 0 it shrinks everything to the mean. Units are the score's units.
@@ -432,10 +482,14 @@ Write the composite in closed form. The rubric's weights sum to 1: six binding m
 places in each band**, with `w_g + w_m + w_p = 1`, and let the anchors be `(a, b, c)` for
 Good/Medium/Poor. Because the composite is a **weighted mean of sub-scores**,
 
-```
-final  =  10·[ a·w_g + b·w_m + c·w_p ]
-       =  10·[ c + (a − c)·w_g + (b − c)·w_m ]        using w_p = 1 − w_g − w_m    (6.4)
-```
+$$
+\begin{aligned}
+\text{final} &\;=\; 10\,[\, a\,w_g + b\,w_m + c\,w_p \,] \\
+             &\;=\; 10\,[\, c + (a-c)\,w_g + (b-c)\,w_m \,]
+\qquad \text{using } w_p = 1 - w_g - w_m
+\end{aligned}
+\tag{6.4}
+$$
 
 Two designs are ordered by the sign of `(a − c)·Δw_g + (b − c)·Δw_m`. The additive constant `10c`
 cancels; what survives is the **direction of the vector `(a − c, b − c)`**:
