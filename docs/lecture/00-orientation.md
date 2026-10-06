@@ -6,7 +6,7 @@ status: review
 
 # Chapter 00 — Orientation: the four questions, answered
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C6](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight), **C5** (the NetSolP triple) and **C6** were added 2026-09-28 — and **C6 applies to this course's most-quoted finding**: "an anti-lysozyme antibody cleared all five cutoffs" holds on the **truncated 113-mer only**; on the repaired 119-mer it clears nothing.
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C8](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight), **C5** (the NetSolP triple) and **C6** were added 2026-09-28 — and **C6 applies to this course's most-quoted finding**: "an anti-lysozyme antibody cleared all five cutoffs" holds on the **truncated 113-mer only**; on the repaired 119-mer it clears nothing. **C7** and **C8** were added 2026-10-05 from work done after this course was written: **C7** corrects this course's count of its own most repeated error (a small-*n* null read as evidence of absence) from **≥6 to ≥7**, the seventh being the first to carry a **spending decision**; **C8** records that the decoy-patch control **has been run and passed**, on CPU for **\$0**, and that no arm of this project needs a rented card.
 
 ## What this chapter teaches
 
@@ -41,7 +41,7 @@ pressing an inhibitory receptor on the T-cell surface called **PD-1**
 (programmed cell death protein 1). A tumour cell displaying **PD-L1**, PD-1's
 natural ligand, engages that receptor and applies the brake. Block the contact
 and the brake is never applied — this is **checkpoint blockade**, and the
-antibody that does it best, pembrolizumab (Keytruda), earns over $25bn a year.
+antibody that does it best, pembrolizumab (Keytruda), earns over \$25bn a year.
 
 So the target is real, clinically validated, and comes with a known-good answer
 to measure against. That last property is what makes it a good teaching problem:
@@ -51,7 +51,7 @@ The brief had two parts.
 
 **Challenge 1 — redesign.** Take pembrolizumab's structure, rewrite the loops
 that do the binding, keep it binding, but make it genuinely new. This is editing
-a known good answer. The backbone geometry that makes binding work is given to
+a known good answer. The [backbone](03-the-toolchain.md#22-rfdiffusion-via-rfantibody) geometry that makes binding work is given to
 you; you are changing the sequence that decorates it.
 
 **Challenge 2 — de novo.** No template. Design an anti-PD-1 antibody from
@@ -61,7 +61,7 @@ not work.
 The gap between these is not one of degree. In Challenge 1 the binding geometry
 is guaranteed by the native backbone, which is why — as the project discovered —
 **20 of 20** baseline designs at default settings cleared all eight quality
-gates. The gates do not bite when the answer is handed to you. In Challenge 2
+gates. The [gates](02-the-engineering-problem.md#31-the-eight-metrics) do not bite when the answer is handed to you. In Challenge 2
 nothing is guaranteed, and **1 of 30** designs cleared.
 
 ### 1.2 What a design has to achieve to be a drug
@@ -116,15 +116,15 @@ CDR-H3 identity **denominator from 11 to 13** — so a novelty gate's value depe
 on a scheme choice nobody thinks to record.
 
 **Antibody architecture.** Heavy and light chains; variable versus constant
-domains; Fv versus Fab versus full IgG; the six complementarity-determining
+domains; [Fv versus Fab](01-the-biological-problem.md#21-fv-fab-igg) versus full IgG; the six complementarity-determining
 regions (CDRs) that form the binding surface; why [CDR-H3 dominates](01-the-biological-problem.md#23-why-cdr-h3-dominates--and-the-reason-is-genetic-not-structural), being the
 only loop built by V(D)J recombination with junctional diversity.
 
 **Machine learning for structure.** What a folding model does; multiple sequence
 alignments and co-evolution, and the counter-intuitive fact that **antibody
 chains want no alignment** because their diversity is somatic rather than
-evolutionary; pLDDT, PAE, ipTM and [ipSAE](03-the-toolchain.md#43-ipsae--interface-confidence-from-the-pae), and that these are not interchangeable;
-`recycling_steps` and `diffusion_samples` as first-class scientific parameters
+evolutionary; [pLDDT](10-glossary.md#2-structure-prediction), [PAE](03-the-toolchain.md#43-ipsae--interface-confidence-from-the-pae), [ipTM](10-glossary.md#2-structure-prediction) and [ipSAE](03-the-toolchain.md#43-ipsae--interface-confidence-from-the-pae), and that these are not interchangeable;
+[`recycling_steps`](06-allocation-and-selection.md#6-compression-versus-noise-in-an-under-converged-sampler) and [`diffusion_samples`](06-allocation-and-selection.md#5-order-statistics-when-your-prediction-is-silently-a-maximum) as first-class scientific parameters
 rather than defaults; training cutoffs, and that [Boltz-2](03-the-toolchain.md#31-boltz-2--the-primary-predictor)'s is **2023-06-01 on PDB
 release date** — release, not deposition, and read from the paper rather than a
 summary.
@@ -197,7 +197,7 @@ instances of a bug that had already been written down.
 | numbering            | ANARCII 2.0.8                | numbers PD-1 *as an antibody* — shared IgV fold                 |
 
 Hardware: a laptop RTX 5070 Ti (Blackwell, `sm_120`) for everything Boltz, plus
-one rented RTX 3090 at **$2.82 for 5.5 hours** for the backbone generation the
+one rented RTX 3090 at **\$2.82 for 5.5 hours** for the backbone generation the
 laptop could not run.
 
 ### 3.2 Methods and lines of reasoning
@@ -215,7 +215,7 @@ The intellectual core. Reliability as a variance ratio and the intraclass
 correlation; Spearman–Brown for the [reliability](04-measurement-theory.md#13-reliability) of a k-replicate mean;
 attenuation of correlations by unreliability; range restriction, and the
 realisation that **shortlisting is itself the range-restricting operation**;
-Fisher-z standard errors and the detectable-effect standard for nulls; partial
+[Fisher-z](05-experiment-design.md#11-the-fisher-z-machinery) standard errors and the [detectable-effect standard](05-experiment-design.md#13-the-standard-stated) for nulls; partial
 correlation; resampling; optimal allocation of a noisy measurement budget,
 including the fact that the error of a *mean* falls as `1/√k` while the error of
 a *spread* falls as `1/√(2(k−1))`, so the same budget inverts when the target
@@ -294,7 +294,7 @@ measurement stack:
 1. Four of five hard cutoffs reject **0 of 6** known-wrong antibodies (measured on
    the **median of five** diffusion draws). Viability rests on ipSAE alone.
 2. **HyHEL-10, an anti-lysozyme antibody, cleared all five cutoffs as a PD-1 binder
-   on `model_0`** — the argmax of five draws, and the default a grader gets. On the
+   on `model_0`** — the [argmax of five draws](06-allocation-and-selection.md#5-order-statistics-when-your-prediction-is-silently-a-maximum), and the default a grader gets. On the
    **median** it fails (ipSAE 0.219 vs 0.609).
    *(⚠️ **113-mer only** — see [C6](CORRECTIONS.md). On the repaired 119-residue antigen HyHEL-10's best of five is **0.409** and it clears nothing; that panel's own positive control failed on the 113-mer, and it was pre-registered INCONCLUSIVE. What survives on both constructs: four of five gates reject 0 of 6.)*
    Note points 1 and 2 use *different

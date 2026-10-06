@@ -6,7 +6,7 @@ status: review
 
 # 01 — The Biological Problem
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C6](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight), **C5** (the NetSolP triple) and **C6** were added 2026-09-28 — and **C6 applies to this course's most-quoted finding**: "an anti-lysozyme antibody cleared all five cutoffs" holds on the **truncated 113-mer only**; on the repaired 119-mer it clears nothing.
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C8](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight), **C5** (the NetSolP triple) and **C6** were added 2026-09-28 — and **C6 applies to this course's most-quoted finding**: "an anti-lysozyme antibody cleared all five cutoffs" holds on the **truncated 113-mer only**; on the repaired 119-mer it clears nothing. **C7** and **C8** were added 2026-10-05 from work done after this course was written: **C7** corrects this course's count of its own most repeated error (a small-*n* null read as evidence of absence) from **≥6 to ≥7**, the seventh being the first to carry a **spending decision**; **C8** records that the decoy-patch control **has been run and passed**, on CPU for **\$0**, and that no arm of this project needs a rented card.
 
 **What this chapter teaches.** Why anyone would want to design an anti-PD-1 antibody at all, and
 what "designing" one has to mean if the result is to be a drug rather than a number. We start from
@@ -16,8 +16,7 @@ project aimed at, to the six chemical liabilities that decide whether a molecule
 with a manufacturing plant. Then we look at what the campaign actually found: two glycosylation
 sequons sitting on the binding residues, a sixty-fold difference between two textbook-equivalent
 fixes, and a cross-reactivity failure. The chapter ends with the uncomfortable part — a careful
-account of what a score of 96.0 out of 100 does and does not tell you about whether the molecule
-binds. It does not tell you much. Companion chapters:
+account of what a score of 96.0 out of 100 does and does not tell you about whether the molecule binds. It does not tell you much. Companion chapters:
 [how the scoring harness that produced those numbers was built](02-the-engineering-problem.md)
 and [which tool computed which number and how it lies](03-the-toolchain.md) .
 
@@ -41,10 +40,7 @@ is a type-I transmembrane protein of the CD28/immunoglobulin superfamily: a sing
 **IgV domain** (a β-sandwich fold we will meet again in §4.5), a transmembrane helix, and a
 cytoplasmic tail carrying two signalling motifs, an ITIM and an ITSM. When PD-1's ligand engages
 it, the ITSM recruits the phosphatase SHP-2, which strips phosphate groups off the T cell's own
-activating machinery — most importantly CD28 — damping the PI3K/AKT and Ras/ERK pathways. The
-project's own notes stop at "the T cell calms down", which is correct but coarse; the intracellular
-detail is supplied here because you need it to understand why blocking the *outside* of the
-receptor is sufficient.
+activating machinery — most importantly CD28 — damping the PI3K/AKT and Ras/ERK pathways. The project's own notes stop at "the T cell calms down", which is correct but coarse; the intracellular detail is supplied here because you need it to understand why blocking the *outside* of the receptor is sufficient.
 
 The ligand is **PD-L1** (*Programmed Death-Ligand 1*). Healthy cells display PD-L1 as a
 "stand down" signal. The system works.
@@ -74,8 +70,7 @@ physically get in the way of the brake being applied. In the project's words: *"
 molecule that sticks to PD-1 and covers the exact patch where PD-L1 would attach, PD-L1 can no
 longer reach it. The brake is never applied"* (`:55-64`).
 
-The framing that matters, and that beginners consistently get wrong: **the drug does not attack the
-tumour; it attacks the tumour's defence.** All the killing is done by the patient's own immune
+The framing that matters, and that beginners consistently get wrong: **the drug does not attack the tumour; it attacks the tumour's defence.** All the killing is done by the patient's own immune
 system. This is why responses to checkpoint inhibitors can be durable in a way that cytotoxic
 chemotherapy responses are not — you are not depleting a drug, you are restoring a capability.
 
@@ -92,15 +87,15 @@ argument (`knowledge/PD-1 and Checkpoint Blockade.md:66-78`):
 - **Kd ≈ 29 pM.** Kd is the *dissociation constant*: the concentration of free drug at which half
   the target molecules are occupied. Lower means tighter. To calibrate: a weak protein–protein
   interaction might be micromolar (µM), which is a *millionfold* looser than 29 picomolar.
-- **Over $25 billion a year in sales.** It is one of the most commercially and clinically successful
+- **Over \$25 billion a year in sales.** It is one of the most commercially and clinically successful
   drugs ever made.
 
-Format matters too. Pembrolizumab is a **humanised IgG4κ** antibody, made by **CDR grafting** —
+Format matters too. Pembrolizumab is a **humanised IgG4κ** antibody, made by **[CDR](01-the-biological-problem.md#22-the-six-cdr-loops) grafting** —
 mouse binding loops transplanted onto a human framework, then the framework optimised
 (`docs/sessions/2026-09-14-...:61-63, 99-102`). That classical humanisation route is precisely what
 the de novo challenge is asking us to replace. The IgG4 isotype is chosen because IgG4 is poor at
 Fc effector functions: you do not want to kill the T cells you are trying to unleash. (The project
-works only on Fv and Fab fragments and never discusses isotype, so this is context rather than
+works only on [Fv and Fab](01-the-biological-problem.md#21-fv-fab-igg) fragments and never discusses isotype, so this is context rather than
 finding.)
 
 A second approved anti-PD-1 antibody, **nivolumab** (PDB entry 5WT9), is used throughout as an
@@ -212,7 +207,7 @@ identity moves in exact steps of 1/13 ≈ 7.7%:
 - four substitutions → 69.2%, which clears the `<70%` Good-band edge.
 
 With 11 residues the steps are 1/11 ≈ 9.1% and the thresholds fall in different places. A scheme
-choice made in a config file therefore decides whether a given design passes a gate. This is the
+choice made in a config file therefore decides whether a given design passes a [gate](02-the-engineering-problem.md#31-the-eight-metrics). This is the
 first instance of a theme that runs through
 [the engineering chapter](02-the-engineering-problem.md) : conventions the specification
 leaves open
@@ -432,7 +427,7 @@ Four independent reasons, all documented:
    consequence flatly: *"DockQ was the only metric that compares the prediction to anything
    external… A confidently wrong pose scores exactly like a right one."*
 2. **Antibody–antigen prediction is the documented weak spot of folding models, and the reason is
-   the same genetics that makes CDR-H3 powerful.** MSA-based predictors learn contacts from
+   the same genetics that makes CDR-H3 powerful.** [MSA](03-the-toolchain.md#32-colabfold--alphafold2-multimer)-based predictors learn contacts from
    correlated mutation across homologous sequences; a junctionally randomised loop has no
    homologues, so *"there is no evolutionary family of related sequences for the model to learn
    from"* (`knowledge/De Novo Design...:89-93`).
@@ -740,7 +735,7 @@ default `diffusion_samples=1` run returns — **HyHEL-10 cleared all five §7.2 
 0.609, ΔG −12.4 kcal/mol, 77 contacts, interface pLDDT 85.0, CDR SASA 1084 Å². Its **median over
 five samples is 0.219**, so it fails comfortably once you actually sample.
 
-The mechanism is the argmax. Boltz orders its diffusion outputs by its own confidence, so `model_0`
+The mechanism is the [argmax](06-allocation-and-selection.md#5-order-statistics-when-your-prediction-is-silently-a-maximum). Boltz orders its diffusion outputs by its own confidence, so `model_0`
 is the *maximum* of five draws, and the maximum of five draws from a broad low distribution
 routinely lands above a threshold the distribution's centre is nowhere near. **The gate is not
 broken. Reading the gate off a single diffusion sample is.** (See

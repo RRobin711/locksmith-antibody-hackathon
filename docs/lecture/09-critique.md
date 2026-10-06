@@ -6,7 +6,7 @@ status: review
 
 # Chapter 09 — Critique: a rigorous project, badly ordered
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C6](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight), **C5** (the NetSolP triple) and **C6** were added 2026-09-28 — and **C6 applies to this course's most-quoted finding**: "an anti-lysozyme antibody cleared all five cutoffs" holds on the **truncated 113-mer only**; on the repaired 119-mer it clears nothing.
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C8](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight), **C5** (the NetSolP triple) and **C6** were added 2026-09-28 — and **C6 applies to this course's most-quoted finding**: "an anti-lysozyme antibody cleared all five cutoffs" holds on the **truncated 113-mer only**; on the repaired 119-mer it clears nothing. **C7** and **C8** were added 2026-10-05 from work done after this course was written: **C7** corrects this course's count of its own most repeated error (a small-*n* null read as evidence of absence) from **≥6 to ≥7**, the seventh being the first to carry a **spending decision**; **C8** records that the decoy-patch control **has been run and passed**, on CPU for **\$0**, and that no arm of this project needs a rented card.
 
 ## What this chapter teaches
 
@@ -258,7 +258,7 @@ stack, the project spent a session building a **CPU port**: seven dedicated
 scripts, three dependency walls worked around including an NVTX shim in
 `sitecustomize.py`, and a measured throughput projecting 20 backbones at 16
 hours. The whole thing was obsoleted the same day by renting an `sm_86` RTX 3090
-for **$2.82 over 5.5 hours**, on which upstream's own pins install and run
+for **\$2.82 over 5.5 hours**, on which upstream's own pins install and run
 untouched. The decision rule should fire at the Gate 0 failure, not after the
 port: read the pin, read the architecture, spend three dollars.
 
@@ -272,7 +272,7 @@ window where every shortcut is forced.
 **Idle GPU from a bug already written down.** `pgrep -f` self-matching cost
 **4 h 22 m** of idle GPU across three separate instances. Every one of them
 occurred *after* the rule had been recorded in `LEARNINGS.md`. Separately, idle
-pod billing consumed roughly **$1.25 — 42% of the entire cloud spend**, more than
+pod billing consumed roughly **\$1.25 — 42% of the entire cloud spend**, more than
 the pilot that produced Challenge 2.
 
 I reproduced this bug myself while writing this chapter. Verifying the claim in

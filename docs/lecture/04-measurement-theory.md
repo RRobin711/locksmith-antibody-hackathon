@@ -6,16 +6,16 @@ status: review
 
 # 04 — Measurement Theory
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C6](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight), **C5** (the NetSolP triple) and **C6** were added 2026-09-28 — and **C6 applies to this course's most-quoted finding**: "an anti-lysozyme antibody cleared all five cutoffs" holds on the **truncated 113-mer only**; on the repaired 119-mer it clears nothing.
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C8](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight), **C5** (the NetSolP triple) and **C6** were added 2026-09-28 — and **C6 applies to this course's most-quoted finding**: "an anti-lysozyme antibody cleared all five cutoffs" holds on the **truncated 113-mer only**; on the repaired 119-mer it clears nothing. **C7** and **C8** were added 2026-10-05 from work done after this course was written: **C7** corrects this course's count of its own most repeated error (a small-*n* null read as evidence of absence) from **≥6 to ≥7**, the seventh being the first to carry a **spending decision**; **C8** records that the decoy-patch control **has been run and passed**, on CPU for **\$0**, and that no arm of this project needs a rented card.
 
 **What this chapter teaches.** How good is my measurement? Not "is it accurate" — that question
 needs a truth to compare against, and this project never had one — but the prior question: *does
 this number carry any information about the thing I am ranking, or is it the instrument talking to
 itself?* We build classical test theory from zero: the decomposition `observed = true + error`, the
-variance identity it implies, and reliability as a **ratio** of variances. From that one ratio
-everything else in the chapter falls out — the intraclass correlation and its estimation from
-replicates, the Spearman–Brown prophecy formula for what averaging buys you, the attenuation of
-correlations by measurement error, and the collapse of reliability under range restriction. Each is
+variance identity it implies, and [reliability](04-measurement-theory.md#13-reliability) as a **ratio** of variances. From that one ratio
+everything else in the chapter falls out — the [intraclass correlation](04-measurement-theory.md#2-the-intraclass-correlation-and-metrics-that-turn-out-to-be-constants) and its estimation from
+replicates, the [Spearman–Brown](04-measurement-theory.md#3-spearmanbrown-what-averaging-buys) prophecy formula for what averaging buys you, the [attenuation](04-measurement-theory.md#4-attenuation-why-correlations-between-noisy-things-look-weak) of
+correlations by measurement error, and the collapse of reliability under [range restriction](04-measurement-theory.md#5-range-restriction--and-the-insight-that-selection-is-the-restricting-operation). Each is
 derived, then worked against numbers this campaign actually measured.
 
 The chapter is the load-bearing one for the two that follow, because
@@ -41,9 +41,13 @@ but unobservable **true score** `τ_i`. We cannot read `τ_i`. What we can do is
 which in this project means folding the design with a structure predictor at a particular random
 seed *j* and reading a number off the result. Write that observation
 
-```
-x_ij = τ_i + ε_ij ,        ε_ij ~ (0, σ²_noise),   ε ⫫ τ,   ε_ij ⫫ ε_ij'      (4.1)
-```
+$$
+x_{ij} \;=\; \tau_i + \varepsilon_{ij},
+\qquad \varepsilon_{ij} \sim (0,\ \sigma^2_{\text{noise}}),
+\qquad \varepsilon \perp\!\!\!\perp \tau,
+\qquad \varepsilon_{ij} \perp\!\!\!\perp \varepsilon_{ij'}
+\tag{4.1}
+$$
 
 Three assumptions are packed in there and all three are testable, so name them:
 
@@ -56,7 +60,7 @@ Three assumptions are packed in there and all three are testable, so name them:
    replicates. This is the one that fails quietly. Section 4 shows the campaign's own evidence that
    it fails here.
 
-Units: `x`, `τ` and `ε` all carry the metric's units — surrogate points on a 0–100 scale, ångströms
+Units: `x`, `τ` and `ε` all carry the metric's units — [surrogate](06-allocation-and-selection.md#43-the-surrogate-reorders-under-a-change-of-anchors) points on a 0–100 scale, ångströms
 of RMSD, kcal/mol of predicted free energy, or dimensionless in the case of [ipSAE](03-the-toolchain.md#43-ipsae--interface-confidence-from-the-pae) and [DockQ](03-the-toolchain.md#41-dockq-213--two-flags-that-both-default-wrong).
 `σ²_noise` carries the square of those units.
 
@@ -65,9 +69,10 @@ of RMSD, kcal/mol of predicted free energy, or dimensionless in the case of [ipS
 Take the variance of (4.1) over the population of items *and* over the measurement error. Because
 `ε ⫫ τ`, the cross term vanishes:
 
-```
-σ²_obs = σ²_true + σ²_noise                                                  (4.2)
-```
+$$
+\sigma^2_{\text{obs}} \;=\; \sigma^2_{\text{true}} + \sigma^2_{\text{noise}}
+\tag{4.2}
+$$
 
 This is the whole of classical test theory in one line. The spread you see across designs is the
 spread that is really there, plus the spread the instrument invents. You never observe either term
@@ -76,9 +81,11 @@ directly from the pool, and then get `σ²_true` by subtraction.
 
 ### 1.3 Reliability
 
-```
-r  =  σ²_true / σ²_obs  =  σ²_true / (σ²_true + σ²_noise)                    (4.3)
-```
+$$
+r \;=\; \frac{\sigma^2_{\text{true}}}{\sigma^2_{\text{obs}}}
+  \;=\; \frac{\sigma^2_{\text{true}}}{\sigma^2_{\text{true}} + \sigma^2_{\text{noise}}}
+\tag{4.3}
+$$
 
 Dimensionless, in [0, 1]. It is the **share of observed variance that is signal**. At `r = 1` the
 observed ordering *is* the true ordering. At `r = 0` your ranking is a lottery whose tickets happen
@@ -96,7 +103,7 @@ The project states (4.1)–(4.3) in its own words as equations 2.1–2.3 of
 
 ### 1.4 First worked example: two ways to fold the same molecule
 
-An antibody can be folded as a small construct (**Fv**, the two variable domains only) or a larger
+An antibody can be folded as a small construct (**[Fv](01-the-biological-problem.md#21-fv-fab-igg)**, the two variable domains only) or a larger
 one (**Fab**, variable plus one constant domain each). The Fv is cheaper. Is it as good?
 
 From 3 variants × 3 seeds each (`results/panel_g1c_g1d.md` §1), pooling the within-variant variance
@@ -142,9 +149,11 @@ a **239-design single-seed pool**, then formed `ICC = 1 − within/total` (`resu
 **ANOVA form.** For a balanced one-way design with *k* groups and *m* replicates per group, the
 mean squares between and within give
 
-```
-ICC = (MS_between − MS_within) / (MS_between + (m − 1)·MS_within)            (4.4)
-```
+$$
+\mathrm{ICC} \;=\; \frac{\mathrm{MS}_{\text{between}} - \mathrm{MS}_{\text{within}}}
+                      {\mathrm{MS}_{\text{between}} + (m-1)\,\mathrm{MS}_{\text{within}}}
+\tag{4.4}
+$$
 
 This is the classical ICC(1,1). It too can go negative, whenever `MS_between < MS_within` — that is,
 whenever items differ from each other by *less* than replicates of the same item differ.
@@ -187,7 +196,7 @@ on `contacts`" — "was comparing two noise draws" (`results/metric_validity.md`
 
 There is a second, wholly independent way for a metric to be useless, and confusing the two is a
 classic error. A metric can have **excellent** ICC and still contribute nothing, if its entire
-observed range sits inside a single band of the scoring rubric — then it adds the same constant to
+observed range sits inside a single [band](06-allocation-and-selection.md#4-banding-what-a-step-function-costs-and-what-changes-when-you-relabel-it) of the scoring rubric — then it adds the same constant to
 every design's score. From `results/metric_validity.md` §2: `dockq` spans 0.596–0.777 (0% of designs
 reach the Good band), `contacts` 88–120 (100% Good), `iface_plddt` 83.2–94.11 (100%), `cdr_sasa`
 1383.4–1648.3 (100%), `cdrh3_identity` 15.4–46.2 (100%), `netsolp` 0.562–0.619 (0% Good, pinned at
@@ -242,23 +251,27 @@ roughly 85% of the complex is fixed framework, not because it fails to discrimin
 Average *k* independent replicates of the same item. Truth is unchanged; the noise variance divides
 by *k*:
 
-```
-r_k  =  σ²_true / (σ²_true + σ²_noise / k)                                   (4.5)
-```
+$$
+r_k \;=\; \frac{\sigma^2_{\text{true}}}{\sigma^2_{\text{true}} + \sigma^2_{\text{noise}}/k}
+\tag{4.5}
+$$
 
 Divide numerator and denominator by `σ²_obs = σ²_true + σ²_noise`, substitute `r₁ = σ²_true/σ²_obs`
 and hence `σ²_noise/σ²_obs = 1 − r₁`:
 
-```
-r_k  =  r₁ / (r₁ + (1 − r₁)/k)  =  k·r₁ / (1 + (k − 1)·r₁)                   (4.6)
-```
+$$
+r_k \;=\; \frac{r_1}{r_1 + (1 - r_1)/k}
+    \;=\; \frac{k\,r_1}{1 + (k-1)\,r_1}
+\tag{4.6}
+$$
 
 That is the **Spearman–Brown prophecy formula**. Invert it for the replicates needed to reach a
 target `r_k`:
 
-```
-k  =  r_k (1 − r₁) / (r₁ (1 − r_k))                                          (4.7)
-```
+$$
+k \;=\; \frac{r_k\,(1 - r_1)}{r_1\,(1 - r_k)}
+\tag{4.7}
+$$
 
 Both are dimensionless. Note the shape: (4.6) is concave in *k*, so every additional replicate buys
 less than the one before, and `r_k → 1` only in the limit.
@@ -284,7 +297,7 @@ the Fab cost already" — is the cheaper target `r_k = 0.96`, giving `k = 0.96 �
 
 ### 3.3 Worked: the composite score, and a crack in the model
 
-The campaign's headline score is a banded composite called `final`, on a 0–100 scale. From
+The campaign's headline score is a banded [composite](02-the-engineering-problem.md#32-the-composite-formula) called `final`, on a 0–100 scale. From
 `results/m3_plan_review.md` §3.2:
 
 | quantity | value |
@@ -345,9 +358,10 @@ sd(x) = sd(ξ)/√r₁ ,  sd(y) = sd(υ)/√r₂     from (4.3), since σ_obs = 
 so the observed correlation is the true correlation shrunk by the geometric mean of the two
 reliabilities:
 
-```
-ρ_obs  ≈  ρ_true · √(r₁ · r₂)                                                (4.8)
-```
+$$
+\rho_{\text{obs}} \;\approx\; \rho_{\text{true}} \cdot \sqrt{r_1 \, r_2}
+\tag{4.8}
+$$
 
 and the **disattenuated** estimate is `ρ_true = ρ_obs / √(r₁ r₂)`. The quantity `√r` is called the
 **attenuation ceiling**: it is the largest correlation a perfectly-predicting instrument could show
@@ -412,9 +426,11 @@ the instrument knows which items you put in front of it.
 So take a subpool whose true sd is `s` instead of the full pool's `S`, with `s < S`. The noise term
 is unchanged, and
 
-```
-r_sub  =  s² / (s² + σ²_noise)   <   S² / (S² + σ²_noise)  =  r_full        (4.9)
-```
+$$
+r_{\text{sub}} \;=\; \frac{s^2}{s^2 + \sigma^2_{\text{noise}}}
+  \;<\; \frac{S^2}{S^2 + \sigma^2_{\text{noise}}} \;=\; r_{\text{full}}
+\tag{4.9}
+$$
 
 strictly, for any `s < S`. This is the standard truncation result and it has a brutal practical
 reading: **reliability is not a property of a measurement. It is a property of a measurement applied
@@ -459,7 +475,7 @@ picks `..._003`), `results/reseed_ensemble.md` §2 and §5.1.
 
 This is the sharpest version and the one to take away. A shortlist is, by construction, the
 narrow-range subpool of (4.9). You created it deliberately. It therefore degrades every downstream
-measurement's discriminating power, as a matter of arithmetic, before any of the measuring happens.
+measurement's discriminating [power](05-experiment-design.md#1-sampling-error-and-the-detectable-effect-standard), as a matter of arithmetic, before any of the measuring happens.
 
 | quantity | value | source |
 |---|---|---|

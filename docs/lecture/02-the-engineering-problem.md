@@ -6,12 +6,12 @@ status: review
 
 # 02 — The Engineering Problem
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C6](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight), **C5** (the NetSolP triple) and **C6** were added 2026-09-28 — and **C6 applies to this course's most-quoted finding**: "an anti-lysozyme antibody cleared all five cutoffs" holds on the **truncated 113-mer only**; on the repaired 119-mer it clears nothing.
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C8](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight), **C5** (the NetSolP triple) and **C6** were added 2026-09-28 — and **C6 applies to this course's most-quoted finding**: "an anti-lysozyme antibody cleared all five cutoffs" holds on the **truncated 113-mer only**; on the repaired 119-mer it clears nothing. **C7** and **C8** were added 2026-10-05 from work done after this course was written: **C7** corrects this course's count of its own most repeated error (a small-*n* null read as evidence of absence) from **≥6 to ≥7**, the seventh being the first to carry a **spending decision**; **C8** records that the decoy-patch control **has been run and passed**, on CPU for **\$0**, and that no arm of this project needs a rented card.
 
 **What this chapter teaches.** How to build a system that turns a prose rubric into a number you can
 defend. We work through the five-stage pipeline and the contract each stage signs; then we spend the
 bulk of the chapter on the scoring harness, which is the project's central artefact — the eight
-metrics, their bands, the composite formula with the arithmetic worked out digit by digit, and the
+metrics, their [bands](06-allocation-and-selection.md#4-banding-what-a-step-function-costs-and-what-changes-when-you-relabel-it), the [composite](02-the-engineering-problem.md#32-the-composite-formula) formula with the arithmetic worked out digit by digit, and the
 twelve-point ambiguity hiding inside a phrase like "Good (9-10)". Then two engineering lessons that
 generalise far beyond antibodies: **programs that exit 0 having done the wrong thing**, catalogued
 with mechanisms; and **a configuration value and a hardcoded constant encoding the same convention**,
@@ -42,7 +42,7 @@ eight numbers and combine them.
 One structural observation determines the whole architecture (`PLAN.md:19-23`):
 
 > **Six of the eight scored metrics are computed from the two files we hand over.**
-> `design_X_complex.pdb` and `design_X_pae.json` are the sole inputs to ipSAE, DockQ, ΔG, contacts,
+> `design_X_complex.pdb` and `design_X_pae.json` are the sole inputs to [ipSAE](03-the-toolchain.md#43-ipsae--interface-confidence-from-the-pae), [DockQ](03-the-toolchain.md#41-dockq-213--two-flags-that-both-default-wrong), ΔG, contacts,
 > interface pLDDT and CDR SASA. **The organisers do not re-fold our designs.** Only NetSolP and
 > CDR-H3 identity are derived from sequence.
 
@@ -152,9 +152,12 @@ ways. That asymmetry drives everything in §5.
 
 Handbook §5.2, transcribed at `docs/sessions/2026-09-14-...:144-146`:
 
-```
-Final Score (0–100) = [ 0.60 × Binding_struct + 0.20 × Developability + 0.20 × Novelty ] × 10
-```
+$$
+\text{Final Score}_{(0\text{--}100)} \;=\;
+\big[\, 0.60 \times \text{Binding}_{\text{struct}}
+      + 0.20 \times \text{Developability}
+      + 0.20 \times \text{Novelty} \,\big] \times 10
+$$
 
 Each category is the **unweighted mean of its members' 0–10 sub-scores**. Challenge 1's binding mean
 is over **six** metrics; Challenge 2's over **five**, because [DockQ](03-the-toolchain.md#41-dockq-213--two-flags-that-both-default-wrong) is excluded. Implemented at
@@ -473,7 +476,7 @@ steps. And [banding](06-allocation-and-selection.md#4-banding-what-a-step-functi
 `final`**, {82.5, 85.0, 87.5}. A wider pool then adds candidates without adding any ordering.
 
 Two properties of a step function are at work and both are worth internalising. A step function does
-not *attenuate* measurement noise — it **concentrates it at the band edges and delivers it as a full
+not *[attenuate](04-measurement-theory.md#4-attenuation-why-correlations-between-noisy-things-look-weak)* measurement noise — it **concentrates it at the band edges and delivers it as a full
 2.5-point jump**. And a metric pinned in the same band for every live design contributes a constant:
 it adds no signal, but it also injects no noise. Whether banding helps or hurts therefore depends
 entirely on where your designs sit relative to the edges.
@@ -874,7 +877,7 @@ both do measurement rather than production.
 
 One nuance worth noting: the *test file* is small — 518 lines, 2.8% — because most of the checking
 lives in **assertions inside the pipeline**: `assert_artefacts`, `seq_for_folding`'s internal-gap
-guard, `_stage`'s space check, `cdr_residues`'s numbering cross-check, `write_pae_json`'s CA-count
+[guard](12-the-audit.md#4-guards-that-could-not-see-their-own-corpus), `_stage`'s space check, `cdr_residues`'s numbering cross-check, `write_pae_json`'s CA-count
 assertion, `select.rank`'s structural gating, and `75_challenge2_package.py`'s refusal to build a
 folder unless a design clears every §7.2 cutoff. The test file is reserved, by its own stated rule,
 for invariants whose violation would otherwise be invisible. That refusal guard is worth quoting as

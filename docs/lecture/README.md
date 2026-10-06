@@ -6,13 +6,19 @@ status: living
 
 # Designing a cancer drug on a laptop — a complete course
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C6](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight), **C5** (the NetSolP triple) and **C6** were added 2026-09-28 — and **C6 applies to this course's most-quoted finding**: "an anti-lysozyme antibody cleared all five cutoffs" holds on the **truncated 113-mer only**; on the repaired 119-mer it clears nothing.
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C8](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight), **C5** (the NetSolP triple) and **C6** were added 2026-09-28 — and **C6 applies to this course's most-quoted finding**: "an anti-lysozyme antibody cleared all five cutoffs" holds on the **truncated 113-mer only**; on the repaired 119-mer it clears nothing. **C7** and **C8** were added 2026-10-05 from work done after this course was written: **C7** corrects this course's count of its own most repeated error (a small-*n* null read as evidence of absence) from **≥6 to ≥7**, the seventh being the first to carry a **spending decision**; **C8** records that the decoy-patch control **has been run and passed**, on CPU for **\$0**, and that no arm of this project needs a rented card.
 
-A twelve-chapter lecture course built from the nine-day Locksmith Bio antibody
-design campaign (2026-09-14 → 2026-09-22). It teaches the whole thing from first
+A thirteen-chapter lecture course built from the nine-day Locksmith Bio antibody
+design campaign (2026-09-14 → 2026-09-22) **and the eleven-day audit period that
+followed it** (2026-09-23 → 2026-10-03). It teaches the whole thing from first
 principles: the biology, the engineering, the mathematics, the nine-day
-narrative, everything that broke, and an adversarial re-evaluation of the process
-itself.
+narrative, everything that broke, an adversarial re-evaluation of the process
+itself, and — in [Chapter 12](12-the-audit.md), added 2026-10-05 — what happened
+after the scores existed.
+
+**The audit period is not an appendix.** The campaign produced two numbers; the eleven days
+after it produced the knowledge of what those numbers are numbers *of*, and that is what
+this course calls its main result. Chapter 12 is where that work is taught.
 
 **Written for** a reader with a general CS or maths background and no prior
 exposure to structural biology. Every term is defined on first use. The stated
@@ -43,22 +49,69 @@ main result, and it is why the course is worth reading.
 | 09 | [The critique](09-critique.md) | The adversarial re-evaluation — what was excellent, what was mis-sequenced, and three findings that contradict the project's own record |
 | 10 | [Glossary](10-glossary.md) | Every term, acronym and metric defined |
 | 11 | [Study plan](11-study-plan.md) | Reading orders, prerequisite curriculum, self-tests, exercises, and a checklist |
+| 12 | [The audit](12-the-audit.md) | **Added 2026-10-05.** The eleven days after the campaign, in which no design changed and the scores moved once, downward — generated documents, the three ways a search under-reports, five guards that could not see their own corpus, and why convergence is not termination |
 
 ---
 
 ## Where to start
 
+- **Reading 00 → 12 in order?** That works, and [Chapter 11 §1.0](11-study-plan.md#10-the-straight-through-pass--i-am-reading-00-to-12-in-order)
+  is written for exactly that: 87,815 words, ~12–15 hours, and which four files are
+  reference rather than prose (**03** is a manual, **10** is a lookup table, **11** tells
+  you how to read the course, and `CORRECTIONS.md` is unnumbered — read it after 02).
+- **Got five minutes, not twenty?** [The short version](../the-short-version.md) — the
+  whole project on one page, written 2026-10-03 for walking someone through it verbally.
 - **Just want the answers?** [Chapter 00](00-orientation.md) alone, about twenty minutes.
 - **Want the story?** [Chapter 07](07-the-campaign.md), then follow its links.
 - **Don't care about antibodies?** Chapters [04](04-measurement-theory.md),
-  [05](05-experiment-design.md) and [06](06-allocation-and-selection.md) are
-  field-independent and are where the compounding knowledge lives. This is the
-  recommendation for most readers.
+  [05](05-experiment-design.md), [06](06-allocation-and-selection.md) and
+  [12](12-the-audit.md) are field-independent and are where the compounding knowledge
+  lives. This is the recommendation for most readers. 04–06 are the mathematics;
+  **12 is the epistemics**, and needs none of the other three to make sense.
+- **Want the single most transferable chapter?** [Chapter 12](12-the-audit.md). Its thesis —
+  *every check you run answers a narrower question than the one you asked, and answers it
+  truthfully* — is demonstrated eight times on eight different tools, and none of the
+  instances are about biology.
 - **Going to build something like this?** [Chapter 02](02-the-engineering-problem.md)
   with `config/metrics.yaml` open beside it, then
   [Chapter 08](08-what-broke.md), then the Track C exercises in
   [Chapter 11](11-study-plan.md).
 - **Want to know what went wrong?** [Chapter 09](09-critique.md).
+
+---
+
+## How the maths is set, and why it is set two ways
+
+*Convention introduced 2026-10-05.* Two kinds of mathematics appear in this course and they
+are deliberately typeset differently, because they ask different things of you.
+
+**Typeset, numbered, in LaTeX — a definition.** The eighteen numbered equations
+(4.1–4.9, 5.1–5.5, 6.1–6.4) are the course's load-bearing formulas. They render as real
+fractions and subscripts, and prose refers back to them by number:
+
+$$
+r \;=\; \frac{\sigma^2_{\text{true}}}{\sigma^2_{\text{true}} + \sigma^2_{\text{noise}}}
+\tag{4.3}
+$$
+
+**Monospace, in a code block — arithmetic you are meant to re-run.** Every worked
+computation stays in a fixed-width block with its columns aligned, because the point of it is
+that you can check it with a calculator and see where a number came from:
+
+```
+r  =  1 − (0.0209 / 0.0401)²  =  1 − 0.27165  =  0.7284      (reported 0.727)
+```
+
+*That split is itself one of the course's lessons —
+[prose that quotes a number is indexed; arithmetic that produces one is corrected](CORRECTIONS.md).
+The same boundary decides how a thing is set: a formula is a claim, a computation is
+evidence.* Short values inside sentences stay in backticks (`0.629`, `n = 239`) so the text
+remains greppable, which chapter [12](12-the-audit.md) explains at some length is not a
+small thing.
+
+LaTeX renders in both GitHub and Obsidian. If an equation shows as raw `\frac{...}` in some
+other viewer, that viewer has no maths support — the numbered equations are the only place
+it matters.
 
 ---
 
@@ -75,9 +128,14 @@ main result, and it is why the course is worth reading.
    constants, that it was really ranking on three, and that the largest
    contributor of those three was blind to the interface it was supposed to score.
 
-3. **A null is only meaningful as "no effect larger than x."** Four claims were
-   published here as findings of absence and later reversed — all from the same
-   error, all at small n, all in the direction of the more interesting story.
+3. **A null is only meaningful as "no effect larger than x."** This is the project's
+   single most repeated error: **at least seven** claims were published as findings of
+   absence and later reversed — all at small *n*, all in the direction of the more
+   interesting story. *(This bullet read "Four" until 2026-10-05, and was already
+   inconsistent with [Chapter 08's own frequency table](08-what-broke.md#frequency-analysis-where-the-systematic-weakness-was),
+   which counted ≥6. The seventh, added 2026-10-03, is the first to carry a **spending
+   decision** rather than a rule — see [register §B11](../../results/retractions.md)
+   and [the power audit](../../results/heterogeneity_power.md).)*
 
 ---
 
@@ -95,13 +153,23 @@ main result, and it is why the course is worth reading.
 > (see [C1](CORRECTIONS.md)). The course body still derives 96.0 in places; those are
 > indexed in C3 rather than rewritten.
 
-**21,367 lines of Python** (src 3,699 · scripts 16,834 · tests 710), 34 tests *(42 as of 2026-09-29)*,
-13 pre-registrations, 5 adversarial audits, and ~280,000 words of tracked Markdown
-(the twelve chapters here are 75,166 of it).
+**23,080 lines of Python** (src 3,731 · scripts 18,376 · tests 973), **44 tests**,
+13 pre-registrations, 5 adversarial audits, and ~321,000 words of Markdown in the
+repository (the thirteen chapters here are **87,596** of it, of which
+[Chapter 12](12-the-audit.md) is 8,236).
 
 *These were frozen at 2026-09-23 and were wrong by 2026-09-26 — the block previously
 claimed 18,020 lines, 30 tests, 11 pre-registrations and 165,333 words. A count in prose
 is a claim like any other; these were recomputed from `git ls-files` on 2026-09-26.*
+*Recomputed again 2026-10-05, and they had drifted a third time: the block then read
+21,367 lines, "34 tests (42 as of 2026-09-29)" and ~280,000 words. The word total says
+"in the repository" rather than "tracked" because Chapter 12 was written the same day and
+is not yet committed — 312,770 words are tracked, plus 8,236 that are not. The test count is now
+taken from `pytest --collect-only` (**44**) rather than from `grep -c "def test_"` (**40**),
+because four tests are parametrised and the grep undercounts them — a count is a claim about
+its own method as well as its subject. `5 adversarial audits` is left unchanged and
+unverified: it counts work that is not identifiable from filenames, so recomputing it would
+have meant inventing a number.*
 
 And five results that matter more than either score:
 
@@ -117,7 +185,7 @@ And five results that matter more than either score:
 ## Provenance and known defects
 
 This course was assembled on 2026-09-23 from the project's own record — at the time
-62 results files, 23 session documents and 14 knowledge notes; today 73, 25 and 13 — `config/metrics.yaml`, `PLAN.md`,
+62 results files, 23 session documents and 14 knowledge notes; today 78, 29 and 12 — `config/metrics.yaml`, `PLAN.md`,
 `STATE.md`, and the source. Every figure is cited to a file so you can check it.
 
 Three findings in [the critique](09-critique.md) contradict statements in the
@@ -147,6 +215,8 @@ the shipped submission package and says so.
 
 ## Related reading in this project
 
+[The short version](../the-short-version.md) (five minutes, the fastest way in) ·
 [The project story](../../PROJECT-STORY.md) (stale in places — see above) ·
 [Current state](../../STATE.md) · [The knowledge notes](../../knowledge/README.md) ·
-[Session logs](../sessions/README.md) · [The delivery plan](../../PLAN.md)
+[Session logs](../sessions/README.md) · [The delivery plan](../../PLAN.md) ·
+[The project-wide retraction register](../../results/retractions.md)

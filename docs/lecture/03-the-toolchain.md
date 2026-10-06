@@ -6,7 +6,7 @@ status: review
 
 # 03 — The Toolchain
 
-> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C6](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight), **C5** (the NetSolP triple) and **C6** were added 2026-09-28 — and **C6 applies to this course's most-quoted finding**: "an anti-lysozyme antibody cleared all five cutoffs" holds on the **truncated 113-mer only**; on the repaired 119-mer it clears nothing.
+> ⚠️ **Challenge 2's computational evidence was withdrawn on 2026-09-23** — every Challenge 2 fold used a silently discarded antigen alignment. See [corrections C1–C8](CORRECTIONS.md) — C2 also refutes the contact-count rule this course calls its best finding, and **C3 applies to Challenge 1**: its composite is **94.0**, not the 96.0 this course derives in several places. Challenge 1 is unaffected *by the alignment defect*, which is narrower than "unaffected". **C4** (the preflight), **C5** (the NetSolP triple) and **C6** were added 2026-09-28 — and **C6 applies to this course's most-quoted finding**: "an anti-lysozyme antibody cleared all five cutoffs" holds on the **truncated 113-mer only**; on the repaired 119-mer it clears nothing. **C7** and **C8** were added 2026-10-05 from work done after this course was written: **C7** corrects this course's count of its own most repeated error (a small-*n* null read as evidence of absence) from **≥6 to ≥7**, the seventh being the first to carry a **spending decision**; **C8** records that the decoy-patch control **has been run and passed**, on CPU for **\$0**, and that no arm of this project needs a rented card.
 
 **What this chapter teaches.** Every piece of third-party software the campaign depended on: what it
 computes, exactly how it was invoked, and the specific way it goes wrong. The organising claim is
@@ -716,7 +716,7 @@ the GPU path to die on `sm_120`. The CPU wheel makes `is_available()` False *by 
 
 ### 6.5 The resolution
 
-Rent an `sm_86` RTX 3090. **Upstream's own pins install and run untouched. $2.82 for 5.5 hours.** The
+Rent an `sm_86` RTX 3090. **Upstream's own pins install and run untouched. \$2.82 for 5.5 hours.** The
 entire workaround stack — the torch downgrade, the `torchdata` pin, the NVTX shim — was unnecessary.
 
 **The transferable principle: before porting a pinned stack, price an hour of the hardware it was
@@ -744,7 +744,7 @@ reference PDBs present.
 
 ## 7. Cloud infrastructure and data integrity
 
-The Challenge 2 generation ran on a RunPod RTX 3090 at about $0.50/hour. Three lessons came back with
+The Challenge 2 generation ran on a RunPod RTX 3090 at about \$0.50/hour. Three lessons came back with
 the artefacts, and all three are about *transfers*, not about GPUs.
 
 **Verify what a "start without a GPU" fallback actually gives you.** RunPod's "Start Pod using CPUs"
@@ -770,7 +770,7 @@ manifest written incrementally with an `fsync` per record so a crash cannot lose
 done. Details and the exit criteria are in
 [the reproducibility section of the engineering chapter](02-the-engineering-problem.md).
 
-One cost lesson: the pod was left idle for about 2.5 hours (≈ $1.25) and, worse, was **stopped without
+One cost lesson: the pod was left idle for about 2.5 hours (≈ \$1.25) and, worse, was **stopped without
 retrieving 443 MB of artefacts**, which left every Challenge 2 headline number temporarily
 unfalsifiable prose. Retrieval then became its own multi-day sub-project.
 
@@ -900,8 +900,8 @@ machine load.
 | RFdiffusion on CPU, per backbone | ≈19.5 min (50 steps) + ~4 min one-off model load | |
 | RF2 on CPU, per design | **7.1 min** (4 designs in 28 m 23 s) | a projection of "~4 min/sequence" was **1.75× optimistic** and moved a 20-backbone estimate 12 h → 16 h |
 | Full local CPU pipeline, per backbone | ≈48 min (19.5 diffusion + 0.03 MPNN + 28.4 RF2) | 20 backbones ⇒ ~16 h |
-| **Rented RTX 3090 (RunPod, `sm_86`)** | **$2.82 for 5.5 h** at ~$0.50/h | 18 conditioned + 18 unconditioned backbones, 30 sequences, 30 RF2 predictions, **zero failures** |
-| Idle pod billing | ≈ $1.25 for ~2.5 h | avoidable, and avoided thereafter |
+| **Rented RTX 3090 (RunPod, `sm_86`)** | **\$2.82 for 5.5 h** at ~\$0.50/h | 18 conditioned + 18 unconditioned backbones, 30 sequences, 30 RF2 predictions, **zero failures** |
+| Idle pod billing | ≈ \$1.25 for ~2.5 h | avoidable, and avoided thereafter |
 | Blackwell feasibility probe | **25–30 min**, no install | versus a ~10 GB install that would have taken hours to fail |
 | **Total GPU budget** | ~**45 GPU-hours** = 162,000 s (5 batch nights × ~9 h) | |
 | Fold budget at the planning figure (34 s) | ~4,700 folds | **wrong** — 34 s was the fold, not the invocation |
@@ -930,7 +930,7 @@ schedule.*
 3. **Isolation is architecture, not a workaround.** The numpy 2.0 split forced `uv tool install` per
    tool with subprocess boundaries; that same design independently bought version-pinning against
    whatever the grader runs, and absorbed a third conflicting tool without a change.
-4. **Before porting a pinned stack, price an hour of the hardware it was pinned for.** $2.82 deleted a
+4. **Before porting a pinned stack, price an hour of the hardware it was pinned for.** \$2.82 deleted a
    workaround stack that had already cost days.
 5. **Gate long jobs on artefacts, never on process tables.** `pgrep -f` self-matches in at least six
    distinct ways, including from the heredoc that wrote your script. A file on disk is the signal.
